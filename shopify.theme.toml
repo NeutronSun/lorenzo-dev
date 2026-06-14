@@ -1,0 +1,7 @@
+[environments.store]
+store = "lorenzo-dev"
+ignore = ["package.json","package-lock.json"]
+
+[environments.prod]
+theme = "129904967726"
+store = "lorenzo-dev"
