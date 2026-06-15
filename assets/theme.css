@@ -1,0 +1,44 @@
+@layer theme {
+  :root {
+    --hover-l: 0.06;
+    --active-l: 0.12;
+
+    --disabled-l: 0.88;
+    --disabled-c: 0.015;
+
+    --red: #dc2626;
+    --yellow: #f59e0b;
+    --green: #16a34a;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --gray: #6b7280;
+    --black: #1f2937;
+    --white: #f9fafb;
+  }
+
+  .red { --color: var(--red); }
+  .yellow { --color: var(--yellow); }
+  .green { --color: var(--green); }
+  .blue { --color: var(--blue); }
+  .purple { --color: var(--purple); }
+  .pink { --color: var(--pink); }
+  .orange { --color: var(--orange); }
+  .gray { --color: var(--gray); }
+  .black { --color: var(--black); }
+  .white { --color: var(--white);}
+
+
+  .font-body {
+    font-family: var(--font-body--family);
+    font-style: var(--font-body--style);
+    font-weight: var(--font-body--weight);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+  }
+}

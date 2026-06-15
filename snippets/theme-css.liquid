@@ -1,3 +1,7 @@
 {% render 'variables-css' %}
 
 {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+{{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'main.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'components.css' | asset_url | stylesheet_tag: preload: true }}

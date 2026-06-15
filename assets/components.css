@@ -1,0 +1,33 @@
+@layer components {
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    background: var(--color);
+    border: none;
+    color: var(--white);
+
+    &:hover {
+      background: oklch(from var(--color) calc(l - var(--hover-l)) c h);
+    }
+
+    &:disabled {
+      background: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
+      color: oklch(from var(--color) 0.55 0.02 h);
+      cursor: not-allowed;
+    }
+
+    &.button-primary {
+      --color: var(--blue);
+      color: var(--white);
+    }
+
+    &.button-secondary {
+      --color: var(--gray);
+      color: var(--white);
+    }
+  }
+}
