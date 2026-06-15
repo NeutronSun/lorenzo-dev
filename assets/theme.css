@@ -30,6 +30,16 @@
   .black { --color: var(--black); }
   .white { --color: var(--white);}
 
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--black);
+    border-radius: 4px;
+  }
+
 
   body {
     &:has(sticky-header) main {
