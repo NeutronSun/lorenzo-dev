@@ -1,0 +1,43 @@
+
+<product-card>
+  <div class="image-wrapper">
+    {% render 'product-card-media', product: product %}
+  </div>
+  <div class="info-wrapper">
+    <h2>{{ product.title }}</h2>
+    <div>
+      {{ product.price | money }}
+    </div>
+  </div>
+</product-card>
+
+
+{% stylesheet %}
+  product-card {
+    position: relative;
+    .image-wrapper {
+      aspect-ratio: 251 / 376;
+      .main-image,
+      .hover-image {
+        height: 100%;
+      }
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+    .info-wrapper {
+      z-index: 2;
+      background-color: var(--black);
+      color: var(--white);
+      padding: 4px;
+    }
+
+    &:hover {
+      .info-wrapper {
+      }
+    }
+  }
+{% endstylesheet %}
