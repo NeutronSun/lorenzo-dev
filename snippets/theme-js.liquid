@@ -1,0 +1,21 @@
+{% render 'variables-js' %}
+
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/utilities": "{{ 'utilities.js' | asset_url }}"
+    }
+  }
+</script>
+
+
+<link
+  rel="modulepreload"
+  href="{{ 'utilities.js' | asset_url }}"
+  fetchpriority="low"
+>
+<script
+    src="{{ 'global.js' | asset_url }}"
+    defer="defer"
+    type="module"
+></script>
