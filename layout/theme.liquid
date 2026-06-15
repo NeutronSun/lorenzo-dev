@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+    {% if settings.favicon %}
+      <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
+    {% endif %}
 
     {% render 'theme-css' %}
     {% render 'theme-js' %}

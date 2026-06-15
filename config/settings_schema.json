@@ -95,5 +95,20 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Logos",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
   }
 ]
