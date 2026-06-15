@@ -3,7 +3,9 @@
 <script type="importmap">
   {
     "imports": {
-      "@theme/utilities": "{{ 'utilities.js' | asset_url }}"
+      "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
+      "@theme/header": "{{ 'header.js' | asset_url }}",
+      "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}"
     }
   }
 </script>
@@ -12,6 +14,16 @@
 <link
   rel="modulepreload"
   href="{{ 'utilities.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'header.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'HTMLComponent.js' | asset_url }}"
   fetchpriority="low"
 >
 <script
