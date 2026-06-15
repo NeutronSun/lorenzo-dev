@@ -1,7 +1,6 @@
 @layer theme {
   :root {
     --hover-l: 0.06;
-    --active-l: 0.12;
 
     --disabled-l: 0.88;
     --disabled-c: 0.015;
@@ -34,6 +33,10 @@
     &:has(sticky-header) main {
       --header-height: 5rem;
       margin-top: calc(var(--header-height) * -1) !important;
+    }
+
+    &:has(dialog[open]) {
+      overflow: hidden;
     }
   }
 

@@ -1,173 +1,540 @@
-<dialog-component name="hello-world-left-{{ section.id }}">
-  <dialog ref="dialog" class="drawer from-left">
-    <h1>Hello, World!</h1>
-  </dialog>
-</dialog-component>
+{% liquid
+  assign color_tokens = 'red,yellow,green,blue,purple,pink,orange,gray,black,white' | split: ','
+  assign drawer_id = section.id
+  assign drawer_directions = 'left,right,top,bottom' | split: ','
+%}
 
-<dialog-component name="hello-world-right-{{ section.id }}" class="drawer from-right">
-  <dialog ref="dialog" class="drawer from-right">
-    <h1>Hello, World!</h1>
-  </dialog>
-</dialog-component>
+{% comment %} Drawers — height auto {% endcomment %}
+{% for direction in drawer_directions %}
+  <dialog-component name="style-guide-{{ direction }}-auto-{{ drawer_id }}">
+    <dialog ref="dialog" class="drawer from-{{ direction }}">
+      <div class="style-guide__drawer">
+        <h2 class="font-heading">From {{ direction }}</h2>
+        <p class="font-body"><code>drawer from-{{ direction }}</code></p>
+        <p class="font-body style-guide__drawer-note">Height auto.{% if direction == 'top' or direction == 'bottom' %} Full width.{% else %} Side spacing on left/right.{% endif %}</p>
+        <form method="dialog">
+          <button class="button button-secondary" type="submit">Close</button>
+        </form>
+      </div>
+    </dialog>
+  </dialog-component>
+{% endfor %}
 
-<dialog-component name="hello-world-top-{{ section.id }}" class="drawer from-top">
-  <dialog ref="dialog" class="drawer from-top">
-    <h1>Hello, World!</h1>
-  </dialog>
-</dialog-component>
-
-<dialog-component name="hello-world-bottom-{{ section.id }}" class="drawer from-bottom">
-  <dialog ref="dialog" class="drawer from-bottom">
-    <h1>Hello, World!</h1>
-  </dialog>
-</dialog-component>
-
-<dialog-opener name="hello-world-left-{{ section.id }}" class="button button-primary">
-  <button on:click="publish">FROM LEFT</button>
-</dialog-opener>
-<dialog-opener name="hello-world-right-{{ section.id }}" class="button button-primary">
-  <button on:click="publish">FROM RIGHT</button>
-</dialog-opener>
-<dialog-opener name="hello-world-top-{{ section.id }}" class="button button-primary">
-  <button on:click="publish">FROM TOP</button>
-</dialog-opener>
-<dialog-opener name="hello-world-bottom-{{ section.id }}" class="button button-primary">
-  <button on:click="publish">FROM BOTTOM</button>
-</dialog-opener>
+{% comment %} Drawers — full height {% endcomment %}
+{% for direction in drawer_directions %}
+  <dialog-component name="style-guide-{{ direction }}-full-{{ drawer_id }}">
+    <dialog ref="dialog" class="drawer from-{{ direction }} full-height">
+      <div class="style-guide__drawer style-guide__drawer--full-height">
+        <h2 class="font-heading">From {{ direction }}</h2>
+        <p class="font-body"><code>drawer from-{{ direction }} full-height</code></p>
+        <p class="font-body style-guide__drawer-note">Full viewport height.{% if direction == 'top' or direction == 'bottom' %} Full width.{% else %} Side spacing on left/right.{% endif %}</p>
+        <form method="dialog">
+          <button class="button button-secondary" type="submit">Close</button>
+        </form>
+      </div>
+    </dialog>
+  </dialog-component>
+{% endfor %}
 
 <div class="section">
-  <div class="welcome page-full">
-    <div class="page-width welcome-content">
-      <div>
-        <h1>Hello, World!</h1>
+  <div class="page-width style-guide">
+    <header class="style-guide__intro">
+      <p class="style-guide__eyebrow font-body">Theme reference</p>
+      <h1 class="style-guide__title font-heading">Style Guide</h1>
+      <p class="style-guide__lead font-body">
+        Tokens, utilities and components available in this theme.
+      </p>
+    </header>
 
-        <p class="welcome-description">
-          The Skeleton theme is a minimal, carefully structured Shopify theme designed to help you quickly get started.
-          Designed with modularity, maintainability, and Shopify's best practices in mind.
-        </p>
-
-        <p class="welcome-description">
-          Themes shape the online store experience for merchants and their customers. Build fast, flexible themes at scale
-          using Liquid, Shopify's theme templating language, along with HTML, CSS, JavaScript, and JSON.
+    <section class="style-guide__block" aria-labelledby="colors-heading">
+      <div class="style-guide__block-header">
+        <h2 id="colors-heading" class="font-heading">Colors</h2>
+        <p class="font-body">
+          Utility class sets <code>--color</code>. States are derived with
+          <code>oklch(from var(--color) …)</code> — relative color syntax that reads
+          the base color and outputs a new one.
         </p>
       </div>
-      <div class="icon">
-        <img src="{{ 'shoppy-x-ray.svg' | asset_url }}" width="300" height="300">
+
+      <div class="style-guide__oklch-note font-body">
+        <p><strong>OKLCH</strong> = Lightness · Chroma · Hue</p>
+        <ul class="style-guide__token-list">
+          <li><code>L</code> (lightness) — hover darkens by lowering <code>L</code>. Disabled sets a fixed <code>L</code>.</li>
+          <li><code>C</code> (chroma) — color intensity. Disabled lowers it for a washed-out look.</li>
+          <li><code>H</code> (hue) — the color angle. Kept on every state so the family stays recognizable.</li>
+        </ul>
       </div>
-    </div>
-  </div>
 
-  <div class="page-width highlights">
-    <div class="highlight">
-      <h3>Key Concepts</h3>
-      <p class="highlight-description">
-        Shopify themes are a package of template files, building blocks, and supporting assets. Use these building blocks
-        to create modular, customizable themes.
-      </p>
-      <p>{{ 'Learn more about key concepts' | link_to: 'https://shopify.dev/docs/storefronts/themes/architecture' }}</p>
-    </div>
+      <ul class="style-guide__swatches">
+        {% for token in color_tokens %}
+          <li class="style-guide__swatch {{ token }}">
+            <div class="style-guide__swatch-meta font-body">
+              <strong>.{{ token }}</strong>
+              <code>--{{ token }}</code> → <code>--color</code>
+            </div>
 
-    <div class="highlight">
-      <h3>Liquid</h3>
-      <p class="highlight-description">
-        The Liquid templating language is the backbone of Shopify themes, and is used to load dynamic content on
-        storefronts. Extend Liquid objects to store and present custom data using metafields.
-      </p>
-      <p>{{ 'View the Liquid reference' | link_to: 'https://shopify.dev/docs/api/liquid' }}</p>
-    </div>
+            <ul class="style-guide__scale">
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--default" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Default</span>
+                <p class="style-guide__scale-detail font-body">
+                  <code>var(--color)</code><br>
+                  <span>L C H</span> unchanged
+                </p>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--hover" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Hover</span>
+                <p class="style-guide__scale-detail font-body">
+                  <code>calc(l − var(--hover-l))</code><br>
+                  <span>L ↓</span> · C · H
+                </p>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--disabled" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Disabled</span>
+                <p class="style-guide__scale-detail font-body">
+                  <code>L var(--disabled-l)</code> · <code>C var(--disabled-c)</code><br>
+                  <span>L ↑</span> · <span>C ↓↓</span> · H
+                </p>
+              </li>
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
 
-    <div class="highlight">
-      <h3>Best Practices</h3>
-      <p class="highlight-description">
-        To optimize your theme development experience, Shopify has established a set of best practices that you can refer
-        to when developing your theme and setting up your toolchains and processes.
-      </p>
-      <p>{{ 'Follow best practices' | link_to: 'https://shopify.dev/docs/storefronts/themes/best-practices' }}</p>
-    </div>
+      <details class="style-guide__formula font-body">
+        <summary>CSS formulas</summary>
+        <ul class="style-guide__token-list">
+          <li><strong>Default</strong> — <code>background: var(--color)</code></li>
+          <li><strong>Hover</strong> — <code>oklch(from var(--color) calc(l - var(--hover-l)) c h)</code></li>
+          <li><strong>Disabled</strong> — <code>oklch(from var(--color) var(--disabled-l) var(--disabled-c) h)</code></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="style-guide__block" aria-labelledby="typography-heading">
+      <div class="style-guide__block-header">
+        <h2 id="typography-heading" class="font-heading">Typography</h2>
+        <p class="font-body">Font families from theme settings.</p>
+      </div>
+
+      <div class="style-guide__type-samples">
+        <article class="style-guide__type-card">
+          <p class="style-guide__type-label font-body"><code>.font-heading</code></p>
+          <p class="font-heading style-guide__type-preview">The quick brown fox jumps over the lazy dog</p>
+        </article>
+        <article class="style-guide__type-card">
+          <p class="style-guide__type-label font-body"><code>.font-body</code></p>
+          <p class="font-body style-guide__type-preview">The quick brown fox jumps over the lazy dog</p>
+        </article>
+      </div>
+
+      <ul class="style-guide__token-list font-body">
+        <li><code>--font-heading--family</code></li>
+        <li><code>--font-body--family</code></li>
+        <li><code>--color-background</code></li>
+        <li><code>--color-foreground</code></li>
+      </ul>
+    </section>
+
+    <section class="style-guide__block" aria-labelledby="buttons-heading">
+      <div class="style-guide__block-header">
+        <h2 id="buttons-heading" class="font-heading">Buttons</h2>
+        <p class="font-body">Base class <code>.button</code> with variants and color utilities.</p>
+      </div>
+
+      <div class="style-guide__button-row">
+        <button class="button button-primary" type="button">.button-primary</button>
+        <button class="button button-secondary" type="button">.button-secondary</button>
+        <button class="button button-primary" type="button" disabled>.button:disabled</button>
+      </div>
+
+      <ul class="style-guide__button-grid">
+        {% for token in color_tokens %}
+          <li>
+            <button class="button {{ token }}" type="button">.button.{{ token }}</button>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="style-guide__block" aria-labelledby="layout-heading">
+      <div class="style-guide__block-header">
+        <h2 id="layout-heading" class="font-heading">Layout</h2>
+        <p class="font-body">Page structure utilities.</p>
+      </div>
+
+      <ul class="style-guide__token-list font-body">
+        <li><code>.section</code> — grid container</li>
+        <li><code>.page-width</code> — centered content column</li>
+        <li><code>.page-full</code> — full-bleed within a section</li>
+        <li><code>--page-width</code> — max content width (theme setting)</li>
+        <li><code>--page-margin</code> — side spacing (theme setting)</li>
+      </ul>
+    </section>
+
+    <section class="style-guide__block" aria-labelledby="drawers-heading">
+      <div class="style-guide__block-header">
+        <h2 id="drawers-heading" class="font-heading">Drawers</h2>
+        <p class="font-body">
+          <code>dialog.drawer</code> + direction modifier. Add <code>full-height</code> for viewport height.
+          <code>from-top</code> and <code>from-bottom</code> are always full width.
+        </p>
+      </div>
+
+      <ul class="style-guide__token-list font-body">
+        <li><code>--drawer-spacing</code> — default <code>20px</code></li>
+        <li><code>--drawer-top-spacing</code> · <code>--drawer-right-spacing</code> · <code>--drawer-bottom-spacing</code> · <code>--drawer-left-spacing</code></li>
+        <li><code>.full-height</code> — <code>height: 100dvh</code>, top/bottom spacing <code>0</code></li>
+      </ul>
+
+      <ul class="style-guide__drawer-meta font-body">
+        <li><strong>.from-left</strong> / <strong>.from-right</strong> — side spacing, <code>33%</code> width from 750px</li>
+        <li><strong>.from-top</strong> / <strong>.from-bottom</strong> — full width, vertical spacing on entry edge</li>
+        <li>Without <code>full-height</code> — height follows content</li>
+        <li>With <code>full-height</code> — panel fills viewport height</li>
+      </ul>
+
+      <div class="style-guide__drawer-groups">
+        <div class="style-guide__drawer-group">
+          <h3 class="font-heading">Height auto</h3>
+          <ul class="style-guide__drawer-grid">
+            {% for direction in drawer_directions %}
+              <li>
+                <dialog-opener name="style-guide-{{ direction }}-auto-{{ drawer_id }}">
+                  <button class="button button-primary" type="button" on:click="publish">.from-{{ direction }}</button>
+                </dialog-opener>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="style-guide__drawer-group">
+          <h3 class="font-heading">Full height</h3>
+          <ul class="style-guide__drawer-grid">
+            {% for direction in drawer_directions %}
+              <li>
+                <dialog-opener name="style-guide-{{ direction }}-full-{{ drawer_id }}">
+                  <button class="button button-secondary" type="button" on:click="publish">.from-{{ direction }}.full-height</button>
+                </dialog-opener>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </section>
   </div>
 </div>
 
 {% stylesheet %}
-  .welcome {
-    background-color: #f6f6f7;
-    padding: 72px 0;
-  }
-
-  .welcome-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-  }
-
-  .welcome-description {
-    max-width: 80ch;
-    line-height: 1.4;
-    margin-top: 1.5rem;
-  }
-
-  .icon {
-    width: 300px;
-  }
-
-  .highlights {
+  .style-guide {
     display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: 50px;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
   }
 
-  @media (max-width: 1100px) {
-    .highlights {
-      grid-template-columns: 1fr;
+  .style-guide__intro {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .style-guide__eyebrow {
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .style-guide__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+  }
+
+  .style-guide__lead {
+    max-width: 60ch;
+    line-height: 1.5;
+    color: var(--gray);
+  }
+
+  .style-guide__block {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-block-start: 1px solid oklch(from var(--black) l c h / 0.1);
+  }
+
+  .style-guide__block-header {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .style-guide__block-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .style-guide__block-header p,
+  .style-guide__token-list {
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  .style-guide__block-header code,
+  .style-guide__token-list code,
+  .style-guide__swatch-meta code,
+  .style-guide__type-label code,
+  .style-guide__oklch-note code,
+  .style-guide__formula code {
+    font-size: 0.875em;
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+    background: oklch(from var(--black) l c h / 0.06);
+  }
+
+  .style-guide__oklch-note {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    background: oklch(from var(--black) l c h / 0.03);
+    line-height: 1.5;
+    color: var(--gray);
+  }
+
+  .style-guide__oklch-note strong {
+    color: var(--black);
+  }
+
+  .style-guide__formula {
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid oklch(from var(--black) l c h / 0.08);
+    line-height: 1.6;
+    color: var(--gray);
+  }
+
+  .style-guide__formula summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--black);
+  }
+
+  .style-guide__formula .style-guide__token-list {
+    margin-top: 0.75rem;
+  }
+
+  .style-guide__swatches {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .style-guide__swatch {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid oklch(from var(--black) l c h / 0.08);
+    background: oklch(from var(--black) l c h / 0.02);
+  }
+
+  .style-guide__swatch-meta {
+    display: grid;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .style-guide__scale {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .style-guide__scale-item {
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+  }
+
+  .style-guide__scale-step {
+    min-height: 2.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid oklch(from var(--black) l c h / 0.08);
+  }
+
+  .style-guide__scale-step--default {
+    background: var(--color);
+  }
+
+  .style-guide__scale-step--hover {
+    background: oklch(from var(--color) calc(l - var(--hover-l)) c h);
+  }
+
+  .style-guide__scale-step--disabled {
+    background: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
+  }
+
+  .style-guide__scale-label {
+    font-size: 0.6875rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray);
+  }
+
+  .style-guide__scale-detail {
+    font-size: 0.625rem;
+    text-align: center;
+    line-height: 1.4;
+    color: var(--gray);
+  }
+
+  .style-guide__scale-detail code {
+    font-size: 1em;
+    padding: 0;
+    background: none;
+    word-break: break-word;
+  }
+
+  .style-guide__scale-detail span {
+    letter-spacing: 0.02em;
+  }
+
+  .style-guide__type-samples {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .style-guide__type-card {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    background: oklch(from var(--black) l c h / 0.03);
+  }
+
+  .style-guide__type-preview {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    line-height: 1.3;
+  }
+
+  .style-guide__token-list {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .style-guide__button-row,
+  .style-guide__drawer-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .style-guide__button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .style-guide__drawer {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    min-height: 12rem;
+    padding: 1.5rem;
+    background: var(--white);
+    color: var(--black);
+  }
+
+  .style-guide__drawer--full-height {
+    min-height: 100%;
+  }
+
+  .style-guide__drawer-note {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--gray);
+  }
+
+  .style-guide__drawer-groups {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .style-guide__drawer-group {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .style-guide__drawer-group h3 {
+    font-size: 1rem;
+  }
+
+  .style-guide__drawer-meta {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 1rem 1.25rem;
+    margin: 0;
+    border-radius: 0.5rem;
+    background: oklch(from var(--black) l c h / 0.03);
+    line-height: 1.5;
+    color: var(--gray);
+  }
+
+  @media (min-width: 750px) {
+    .style-guide__drawer-groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  .highlight {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 24px;
-    border-radius: 8px;
-    background-color: #eef3ff;
-    color: rgb(92, 95, 98);
-    line-height: 1.4;
+  @media (min-width: 750px) {
+    .style-guide__swatches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .style-guide__type-samples {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .style-guide__button-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
-  .highlight > * + * {
-    margin-top: 1rem;
-  }
+  @media (min-width: 1100px) {
+    .style-guide__swatches {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 
-  .highlight h3 {
-    font-size: 1rem;
-    color: rgb(32, 34, 35);
-  }
-
-  .highlight-description {
-    flex: 1 1;
-  }
-
-  .highlight a {
-    display: flex;
-    width: fit-content;
-    background-color: rgb(250, 251, 251);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px -3px 0px 0px inset, rgba(255, 255, 255, 0.9) 0px 2px 0px 0px inset;
-    border: 1px solid rgb(140, 145, 150);
-    border-radius: 4px;
-    color: rgb(92, 95, 98);
-    padding: 3px 10px 5px;
-    text-decoration: none;
+    .style-guide__button-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hello World",
+  "name": "Style Guide",
   "settings": [],
   "presets": [
     {
-      "name": "Hello World Template",
+      "name": "Style Guide",
       "category": "Demo"
     }
   ]

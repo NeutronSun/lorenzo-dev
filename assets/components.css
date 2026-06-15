@@ -32,7 +32,6 @@
   }
 
   dialog-component {
-
     dialog {
       position: fixed;
       max-width: none;
@@ -40,58 +39,103 @@
       margin: 0;
       padding: 0;
       border: 0;
+      opacity: 0;
+
       transition:
         transform 0.3s ease,
         opacity 0.3s ease,
         overlay 0.3s allow-discrete,
         display 0.3s allow-discrete;
 
-      &:is(.drawer) {
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        transform: translateX(var(--origin-x, 0)) translateY(var(--origin-y, 0));
-       
-        @media (min-width: 750px) {
-          width: 33%;
-        }
-
-        &:is(.from-left) {
-          inset: 0 auto 0 0;
-          --origin-x: -100%;
-          --origin-y: 0;
-        }
-        &:is(.from-right) {
-          inset: 0 0 0 auto;
-          --origin-x: 100%;
-          --origin-y: 0;
-        }
-
-        &:is(.from-top) {
-          inset: 0 0 auto 0;
+        &:is(.drawer) {
+          --drawer-spacing: 20px;
+          --drawer-top-spacing: var(--drawer-spacing);
+          --drawer-right-spacing: var(--drawer-spacing);
+          --drawer-bottom-spacing: var(--drawer-spacing);
+          --drawer-left-spacing: var(--drawer-spacing);
+          --drawer-width: auto;
+          --drawer-height: auto;
           --origin-x: 0;
-          --origin-y: -100%;
-        }
-
-        &:is(.from-bottom) {
-          inset: auto 0 0 0;
-          --origin-x: 0;
-          --origin-y: 100%;
-        }
-
-        &[open] {
-          opacity: 1;
-          transform: translateX(0) translateY(0);
-          @starting-style {
-            opacity: 0;
-            transform: translateX(var(--origin-x, 0)) translateY(var(--origin-y, 0));
+          --origin-y: 0;
+        
+          box-sizing: border-box;
+          width: var(--drawer-width);
+          height: var(--drawer-height);
+          max-width: calc(100dvw - var(--drawer-left-spacing) - var(--drawer-right-spacing));
+          max-height: calc(100dvh - var(--drawer-top-spacing) - var(--drawer-bottom-spacing));
+          overflow: auto;
+        
+          transform: translateX(var(--origin-x)) translateY(var(--origin-y));
+        
+          &:is(.full-height) {
+            --drawer-height: calc(100dvh - var(--drawer-top-spacing) - var(--drawer-bottom-spacing));
+          }
+        
+          &:is(.from-left, .from-right, .from-top, .from-bottom) {
+            --drawer-width: min(100%, calc(100dvw - var(--drawer-left-spacing) - var(--drawer-right-spacing)));
+            @media (min-width: 750px) {
+              --drawer-width: min(33%, calc(100dvw - var(--drawer-left-spacing) - var(--drawer-right-spacing)));
+            }
+          }
+                
+          &:is(.from-left) {
+            inset:
+              var(--drawer-top-spacing)
+              auto
+              auto
+              var(--drawer-left-spacing);
+        
+            --origin-x: calc(-100% - var(--drawer-left-spacing));
+            --origin-y: 0;
+          }
+        
+          &:is(.from-right) {
+            inset:
+              var(--drawer-top-spacing)
+              var(--drawer-right-spacing)
+              auto
+              auto;
+        
+            --origin-x: calc(100% + var(--drawer-right-spacing));
+            --origin-y: 0;
+          }
+        
+          &:is(.from-top) {
+            inset:
+              var(--drawer-top-spacing)
+              auto
+              auto
+              var(--drawer-left-spacing);
+        
+            --origin-x: 0;
+            --origin-y: calc(-100% - var(--drawer-top-spacing));
+          }
+        
+          &:is(.from-bottom) {
+            inset:
+              auto
+              auto
+              var(--drawer-bottom-spacing)
+              var(--drawer-left-spacing);
+        
+            --origin-x: 0;
+            --origin-y: calc(100% + var(--drawer-bottom-spacing));
+          }
+        
+          &[open] {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        
+            @starting-style {
+              opacity: 0;
+              transform: translateX(var(--origin-x)) translateY(var(--origin-y));
+            }
+          }
+        
+          &::backdrop {
+            background: rgb(0 0 0 / 0.4);
           }
         }
-
-        &::backdrop {
-          background: rgb(0 0 0 / 0.4);
-        }
-      }
     }
   }
 }
