@@ -1,6 +1,39 @@
-{% comment %}
-  Welcome to Shopify theme development!
-{% endcomment %}
+<dialog-component name="hello-world-left-{{ section.id }}">
+  <dialog ref="dialog" class="drawer from-left">
+    <h1>Hello, World!</h1>
+  </dialog>
+</dialog-component>
+
+<dialog-component name="hello-world-right-{{ section.id }}" class="drawer from-right">
+  <dialog ref="dialog" class="drawer from-right">
+    <h1>Hello, World!</h1>
+  </dialog>
+</dialog-component>
+
+<dialog-component name="hello-world-top-{{ section.id }}" class="drawer from-top">
+  <dialog ref="dialog" class="drawer from-top">
+    <h1>Hello, World!</h1>
+  </dialog>
+</dialog-component>
+
+<dialog-component name="hello-world-bottom-{{ section.id }}" class="drawer from-bottom">
+  <dialog ref="dialog" class="drawer from-bottom">
+    <h1>Hello, World!</h1>
+  </dialog>
+</dialog-component>
+
+<dialog-opener name="hello-world-left-{{ section.id }}" class="button button-primary">
+  <button on:click="publish">FROM LEFT</button>
+</dialog-opener>
+<dialog-opener name="hello-world-right-{{ section.id }}" class="button button-primary">
+  <button on:click="publish">FROM RIGHT</button>
+</dialog-opener>
+<dialog-opener name="hello-world-top-{{ section.id }}" class="button button-primary">
+  <button on:click="publish">FROM TOP</button>
+</dialog-opener>
+<dialog-opener name="hello-world-bottom-{{ section.id }}" class="button button-primary">
+  <button on:click="publish">FROM BOTTOM</button>
+</dialog-opener>
 
 <div class="section">
   <div class="welcome page-full">

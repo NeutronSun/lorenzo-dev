@@ -30,4 +30,68 @@
       color: var(--white);
     }
   }
+
+  dialog-component {
+
+    dialog {
+      position: fixed;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease,
+        overlay 0.3s allow-discrete,
+        display 0.3s allow-discrete;
+
+      &:is(.drawer) {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transform: translateX(var(--origin-x, 0)) translateY(var(--origin-y, 0));
+       
+        @media (min-width: 750px) {
+          width: 33%;
+        }
+
+        &:is(.from-left) {
+          inset: 0 auto 0 0;
+          --origin-x: -100%;
+          --origin-y: 0;
+        }
+        &:is(.from-right) {
+          inset: 0 0 0 auto;
+          --origin-x: 100%;
+          --origin-y: 0;
+        }
+
+        &:is(.from-top) {
+          inset: 0 0 auto 0;
+          --origin-x: 0;
+          --origin-y: -100%;
+        }
+
+        &:is(.from-bottom) {
+          inset: auto 0 0 0;
+          --origin-x: 0;
+          --origin-y: 100%;
+        }
+
+        &[open] {
+          opacity: 1;
+          transform: translateX(0) translateY(0);
+          @starting-style {
+            opacity: 0;
+            transform: translateX(var(--origin-x, 0)) translateY(var(--origin-y, 0));
+          }
+        }
+
+        &::backdrop {
+          background: rgb(0 0 0 / 0.4);
+        }
+      }
+    }
+  }
 }

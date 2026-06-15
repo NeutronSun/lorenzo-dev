@@ -81,8 +81,8 @@ export class HTMLComponent extends HTMLElement {
   }
 
   unbindGlobalEvents() {
-    window.removeEventListener('scroll', this.boundEvents.get('window:scroll'));
-    window.removeEventListener('resize', this.boundEvents.get('window:resize'));
+    window.removeEventListener('scroll', this.boundEvents.get('window:scroll') ?? (() => {}));
+    window.removeEventListener('resize', this.boundEvents.get('window:resize') ?? (() => {}));
   }
 
   /**
