@@ -123,11 +123,9 @@
           }
         
           &[open] {
-            opacity: 1;
             transform: translateX(0) translateY(0);
         
             @starting-style {
-              opacity: 0;
               transform: translateX(var(--origin-x)) translateY(var(--origin-y));
             }
           }
