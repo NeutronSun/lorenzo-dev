@@ -31,7 +31,7 @@ class StickyHeader extends HTMLComponent {
   }
 
   onResize() {
-    CSSUtils.setValue('--header-height', this.offsetHeight + 'px');
+    CSSUtils.setValue('--header-height', this.offsetHeight);
   }
 
 

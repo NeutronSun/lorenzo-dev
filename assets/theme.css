@@ -15,6 +15,8 @@
     --gray: #6b7280;
     --black: #1f2937;
     --white: #f9fafb;
+
+    --header-spacing-top: 20px;
   }
 
   .red { --color: var(--red); }
@@ -31,7 +33,6 @@
 
   body {
     &:has(sticky-header) main {
-      --header-height: 5rem;
       margin-top: calc(var(--header-height) * -1) !important;
     }
 
@@ -40,12 +41,12 @@
     }
   }
 
-
-  .font-body {
-    font-family: var(--font-body--family);
-    font-style: var(--font-body--style);
-    font-weight: var(--font-body--weight);
-  }
+    body *,
+    .font-body {
+      font-family: var(--font-body--family);
+      font-style: var(--font-body--style);
+      font-weight: var(--font-body--weight);
+    }
 
   .font-heading {
     font-family: var(--font-heading--family);
