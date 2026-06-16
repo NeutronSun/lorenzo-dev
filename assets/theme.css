@@ -24,6 +24,7 @@
     --white: #f9fafb;
 
     --header-spacing-top: 20px;
+    --header-spacing: var(--header-spacing-top);
 
   }
   body {
@@ -53,11 +54,14 @@
 
 
   body {
-    &:has(sticky-header) main {
-      margin-top: calc(var(--header-height) * -1) !important;
+    @media screen and (min-width: 750px) {
+      &:has(sticky-header) main {
+        margin-top: calc(var(--header-height) * -1) !important;
+      }
     }
 
-    &:has(dialog[open]) {
+    &:has(dialog[open]),
+    &:has(.header-nav-toggle:checked) {
       overflow: hidden;
     }
   }
@@ -74,7 +78,7 @@
     font-style: var(--font-mono--style);
     font-weight: 100;
     letter-spacing: 0.25em;
-    color: var(--color, --secondary-black);
+    color: var(--color, var(--secondary-black));
   }
 
   .font-heading {
@@ -89,5 +93,21 @@
 
   .font-14 {
     font-size: 14px;
+  }
+
+  .mobile-hidden {
+    display: none;
+
+    @media screen and (min-width: 750px) {
+      display: block;
+    }
+  }
+
+  .mobile-only {
+    display: block;
+
+    @media screen and (min-width: 750px) {
+      display: none;
+    }
   }
 }

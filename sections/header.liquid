@@ -1,32 +1,113 @@
 <sticky-header>
   <header ref="header">
-    <div class="header-left">
+    {%- liquid
+      assign home_active = false
+      assign account_active = false
+      assign cart_active = false
+      assign menu_active = false
+
+      if request.page_type == 'index'
+        assign home_active = true
+      endif
+
+      if request.page_type contains 'customers/'
+        assign account_active = true
+      endif
+
+      if request.page_type == 'cart'
+        assign cart_active = true
+      endif
+
+      if home_active == false and account_active == false and cart_active == false
+        assign menu_active = true
+      endif
+    -%}
+
+    <div class="header-left mobile-hidden">
       <a href="{{ routes.root_url }}" class="header-logo">
         <img src="{{ settings.logo | image_url: width: 100 }}" alt="{{ shop.name }}" width="100" height="100">
       </a>
     </div>
     <div class="header-center">
-      {% render 'header-menu', menu: section.settings.menu %}
+      <div class="header-mobile-menu-header mobile-only" ref="mobileMenuHeader">
+        <a href="{{ routes.root_url }}" class="header-mobile-menu-brand header-link font-mono font-12 black">
+          {{ shop.name | upcase }}
+        </a>
+        <span class="header-mobile-menu-title font-mono font-12">NAVIGATION</span>
+        <label for="header-nav-{{ section.id }}" class="header-mobile-menu-close" aria-label="Close navigation">
+          {% render 'icon-close', size: 16 %}
+        </label>
+      </div>
+      <div class="header-menu-list">
+        {% render 'header-menu', menu: section.settings.menu %}
+      </div>
+      <nav class="header-mobile-menu-footer mobile-only" ref="mobileMenuFooter" aria-label="Mobile shortcuts">
+        <a href="{{ routes.account_url }}" class="header-mobile-menu-footer-item header-link">
+          {% render 'icon-account', size: 18 %}
+          <span class="font-mono font-12">ACCOUNT</span>
+        </a>
+        <a href="{{ routes.cart_url }}" class="header-mobile-menu-footer-item header-link">
+          {% render 'icon-bag', size: 18 %}
+          <span class="font-mono font-12">BAG · {{ cart.item_count }}</span>
+        </a>
+      </nav>
     </div>
     <div class="header-right header-group">
-      oid
+      <nav class="header-mobile-bar mobile-only" ref="mobileBar" aria-label="Mobile navigation">
+        <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link{% if home_active %} header-mobile-bar-item-active{% endif %}" aria-label="Home">
+          {% render 'icon-home', size: 22 %}
+        </a>
+        <a href="{{ routes.account_url }}" class="header-mobile-bar-item header-link{% if account_active %} header-mobile-bar-item-active{% endif %}" aria-label="Account">
+          {% render 'icon-account', size: 22 %}
+        </a>
+        <a href="{{ routes.cart_url }}" class="header-mobile-bar-item header-link{% if cart_active %} header-mobile-bar-item-active{% endif %}" aria-label="Bag">
+          {% render 'icon-bag', size: 22 %}
+        </a>
+        <label for="header-nav-{{ section.id }}" class="header-mobile-bar-item header-nav-trigger{% if menu_active %} header-mobile-bar-item-active{% endif %}" aria-label="Menu">
+          <input
+            type="checkbox"
+            id="header-nav-{{ section.id }}"
+            class="header-nav-toggle"
+            hidden
+          >
+          {% render 'icon-menu', size: 22 %}
+        </label>
+      </nav>
+      <a href="{{ routes.search_url }}" class="header-mobile-search-button header-link mobile-only" aria-label="Search">
+        {% render 'icon-search', size: 22 %}
+      </a>
     </div>
   </header>
 </sticky-header>
 
 {% stylesheet %}
   .uyn-header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 100;
     background-color: transparent;
 
+    @media screen and (min-width: 750px) {
+      position: sticky;
+      top: 0;
+      right: auto;
+      bottom: auto;
+      left: auto;
+    }
+
     sticky-header {
-      margin-top: var(--header-spacing-top);
+      margin-bottom: var(--header-spacing);
       padding: 6px 12px;
       background-color: var(--white);
       border: 1px solid var(--border-color);
       position: relative;
+
+      @media screen and (min-width: 750px) {
+        margin-top: var(--header-spacing);
+        margin-bottom: 0;
+      }
 
       header {
         display: flex;
@@ -43,11 +124,6 @@
         }
 
         .header-center {
-          /* position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%); */
           display: flex;
           align-items: center;
           flex: 1 1 auto;
@@ -56,20 +132,229 @@
           padding-inline: 16px;
         }
 
+        .header-menu-list {
+          display: flex;
+          align-items: center;
+        }
+
         .header-link {
           text-decoration: none;
           color: var(--black);
         }
 
-        .header-group:has(.header-link:hover) {
-          .header-link {
-            color: oklch(from var(--white) var(--disabled-l) var(--disabled-c) h);
+        .header-nav-trigger {
+          cursor: pointer;
+        }
 
-            &:hover {
+        @media screen and (max-width: 749px) {
+          gap: 0;
+
+          .header-left {
+            display: none;
+          }
+
+          .header-right {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: var(--header-mobile-menu-gap);
+            width: 100%;
+          }
+
+          .header-mobile-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 100%;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+          }
+
+          .header-mobile-search-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: var(--header-mobile-bar-height);
+            height: var(--header-mobile-bar-height);
+            color: var(--black);
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            transition:
+              var(--animation-transition-header-color),
+              var(--animation-transition-header-background);
+
+            svg {
+              width: 22px;
+              height: 22px;
+            }
+          }
+
+          .header-mobile-bar-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding: 16px 0 18px;
+            color: var(--secondary-black);
+            background-color: transparent;
+            border-inline-start: 1px solid var(--border-color);
+            cursor: pointer;
+            transition:
+              var(--animation-transition-header-color),
+              var(--animation-transition-header-background);
+
+            &:first-child {
+              border-inline-start: none;
+            }
+
+            svg {
+              width: 22px;
+              height: 22px;
+            }
+          }
+
+          .header-mobile-bar-item-active {
+            color: var(--white);
+            background-color: var(--black);
+          }
+
+          .header-center {
+            position: absolute;
+            bottom: calc(var(--header-mobile-bar-height) + var(--header-mobile-menu-gap));
+            left: 0;
+            right: 0;
+            flex: none;
+            width: 100%;
+            height: calc(100dvh - var(--header-spacing) * 2 - var(--header-mobile-bar-height) - var(--header-mobile-menu-gap));
+            max-height: 760px;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(calc(100% + var(--header-mobile-bar-height) + var(--header-mobile-menu-gap)));
+            transition: var(--animation-transition-mobile-menu-close);
+            pointer-events: none;
+          }
+
+          .header-menu-list {
+            display: block;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            position: static;
+          }
+
+          .header-mobile-menu-header {
+            position: relative;
+            z-index: 3;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(44px, 1fr);
+            align-items: center;
+            padding-block: 15px;
+            border-bottom: 1px solid var(--border-color);
+          }
+
+          .header-mobile-menu-brand {
+            min-width: 0;
+            padding-inline: 14px;
+            overflow: hidden;
+            color: var(--black);
+            letter-spacing: 0.14em;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .header-mobile-menu-title {
+            color: var(--black);
+            letter-spacing: 0.16em;
+            text-align: center;
+            white-space: nowrap;
+          }
+
+          .header-mobile-menu-close {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            align-self: stretch;
+            padding-inline: 14px;
+            cursor: pointer;
+            pointer-events: auto;
+
+            svg {
+              width: 16px;
+              height: 16px;
+            }
+          }
+
+          .header-mobile-menu-footer {
+            position: relative;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border-top: 1px solid var(--border-color);
+          }
+
+          .header-mobile-menu-footer-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 0;
+            padding: 14px 8px;
+            border-inline-start: 1px solid var(--border-color);
+
+            &:first-child {
+              border-inline-start: none;
+            }
+
+            .font-mono {
+              color: currentColor;
+              letter-spacing: 0.08em;
+              white-space: nowrap;
+            }
+          }
+
+          .header-center:has(.header-menu-item[open]) {
+            .header-mobile-menu-header {
+              z-index: 6;
+              pointer-events: none;
+            }
+
+            .header-mobile-menu-brand,
+            .header-mobile-menu-title {
+              visibility: hidden;
+            }
+          }
+
+          &:has(.header-nav-toggle:checked) {
+            .header-center {
+              transform: translateY(0);
+              opacity: 1;
+              visibility: visible;
+              transition: var(--animation-transition-mobile-menu-open);
+              pointer-events: auto;
+            }
+
+            .header-mobile-bar-item-active:not(.header-nav-trigger) {
+              color: var(--secondary-black);
+              background-color: transparent;
+            }
+
+            .header-nav-trigger {
               color: var(--white);
+              background-color: var(--black);
             }
           }
         }
+      }
+
+      @media screen and (max-width: 749px) {
+        padding: 0;
+        background-color: transparent;
+        border: none;
       }
     }
   }

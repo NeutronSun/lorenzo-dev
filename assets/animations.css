@@ -1,0 +1,68 @@
+@layer animation {
+  :root {
+    --animation-duration-instant: 0s;
+    --animation-duration-fast: 100ms;
+    --animation-duration-short: 150ms;
+    --animation-duration-standard: 200ms;
+    --animation-duration-medium: 300ms;
+    --animation-duration-slow: 450ms;
+
+    --animation-easing-linear: linear;
+    --animation-easing-standard: ease;
+    --animation-easing-standard-in: ease-in;
+    --animation-easing-standard-out: ease-out;
+    --animation-easing-standard-in-out: ease-in-out;
+    --animation-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+    --animation-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+    --animation-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+    --animation-delay-none: 0s;
+    --animation-delay-fast: 100ms;
+    --animation-delay-standard: 200ms;
+    --animation-delay-medium: 300ms;
+
+    --animation-duration-header-color: var(--animation-duration-standard);
+    --animation-duration-header-background: var(--animation-duration-standard);
+    --animation-duration-header-icon: var(--animation-duration-fast);
+    --animation-duration-mobile-menu-panel: var(--animation-duration-medium);
+    --animation-duration-mobile-menu-fade: var(--animation-duration-standard);
+    --animation-duration-mobile-menu-visibility: var(--animation-duration-instant);
+
+    --animation-easing-header-color: var(--animation-easing-standard);
+    --animation-easing-header-background: var(--animation-easing-standard);
+    --animation-easing-header-icon: var(--animation-easing-standard-in-out);
+    --animation-easing-mobile-menu-panel: var(--animation-easing-standard);
+    --animation-easing-mobile-menu-fade: var(--animation-easing-standard);
+    --animation-easing-mobile-menu-visibility: var(--animation-easing-linear);
+
+    --animation-delay-mobile-menu-open: var(--animation-delay-none);
+    --animation-delay-mobile-menu-close-panel: var(--animation-delay-none);
+    --animation-delay-mobile-menu-close-fade: var(--animation-delay-none);
+    --animation-delay-mobile-menu-close-visibility: var(--animation-delay-medium);
+
+    --animation-transition-header-color: color var(--animation-duration-header-color) var(--animation-easing-header-color);
+    --animation-transition-header-background: background-color var(--animation-duration-header-background) var(--animation-easing-header-background);
+    --animation-transition-header-icon: transform var(--animation-duration-header-icon) var(--animation-easing-header-icon);
+    --animation-transition-mobile-menu-open:
+      transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-open),
+      opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-open),
+      visibility var(--animation-duration-mobile-menu-visibility) var(--animation-easing-mobile-menu-visibility) var(--animation-delay-mobile-menu-open);
+    --animation-transition-mobile-menu-close:
+      transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-close-panel),
+      opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-close-fade),
+      visibility var(--animation-duration-mobile-menu-visibility) var(--animation-easing-mobile-menu-visibility) var(--animation-delay-mobile-menu-close-visibility);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --animation-duration-fast: 1ms;
+      --animation-duration-short: 1ms;
+      --animation-duration-standard: 1ms;
+      --animation-duration-medium: 1ms;
+      --animation-duration-slow: 1ms;
+      --animation-delay-fast: 0s;
+      --animation-delay-standard: 0s;
+      --animation-delay-medium: 0s;
+    }
+  }
+}
