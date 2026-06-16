@@ -1,0 +1,104 @@
+@layer animation {
+  @media screen and (max-width: 749px) and (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+
+    @keyframes header-mobile-dock-out {
+      to {
+        filter: blur(8px) saturate(1.28);
+        opacity: 0.7;
+        transform: scaleX(0.96) scaleY(0.98);
+      }
+    }
+
+    @keyframes header-mobile-dock-in {
+      from {
+        filter: blur(8px) saturate(1.28);
+        opacity: 0.7;
+        transform: scaleX(1.04) scaleY(0.98);
+      }
+    }
+
+    @keyframes header-mobile-dock-item-in {
+      from {
+        filter: blur(6px) saturate(1.2);
+        opacity: 0;
+        transform: scale(0.86);
+      }
+    }
+
+    @keyframes header-mobile-dock-item-out {
+      to {
+        filter: blur(6px) saturate(1.2);
+        opacity: 0;
+        transform: scale(0.86);
+      }
+    }
+
+    ::view-transition-group(header-mobile-dock),
+    ::view-transition-group(header-mobile-dock-search),
+    ::view-transition-group(header-mobile-dock-filter),
+    ::view-transition-group(header-mobile-dock-buy),
+    ::view-transition-group(header-mobile-dock-product),
+    ::view-transition-group(header-mobile-dock-gear) {
+      animation-duration: var(--motion-dock);
+      animation-timing-function: var(--ease-dock);
+      overflow: hidden;
+    }
+
+    ::view-transition-image-pair(header-mobile-dock),
+    ::view-transition-image-pair(header-mobile-dock-search),
+    ::view-transition-image-pair(header-mobile-dock-filter),
+    ::view-transition-image-pair(header-mobile-dock-buy),
+    ::view-transition-image-pair(header-mobile-dock-product),
+    ::view-transition-image-pair(header-mobile-dock-gear) {
+      isolation: isolate;
+    }
+
+    ::view-transition-old(header-mobile-dock) {
+      animation: header-mobile-dock-out var(--motion-dock) var(--ease-dock) both;
+      object-fit: fill;
+    }
+
+    ::view-transition-new(header-mobile-dock) {
+      animation: header-mobile-dock-in var(--motion-dock) var(--ease-dock) both;
+      object-fit: fill;
+    }
+
+    ::view-transition-old(header-mobile-dock-search),
+    ::view-transition-new(header-mobile-dock-search),
+    ::view-transition-old(header-mobile-dock-filter),
+    ::view-transition-new(header-mobile-dock-filter),
+    ::view-transition-old(header-mobile-dock-buy),
+    ::view-transition-new(header-mobile-dock-buy),
+    ::view-transition-old(header-mobile-dock-product),
+    ::view-transition-new(header-mobile-dock-product),
+    ::view-transition-old(header-mobile-dock-gear),
+    ::view-transition-new(header-mobile-dock-gear) {
+      mix-blend-mode: normal;
+      object-fit: fill;
+      transform-origin: center;
+    }
+
+    ::view-transition-old(header-mobile-dock-filter):only-child,
+    ::view-transition-old(header-mobile-dock-buy):only-child,
+    ::view-transition-old(header-mobile-dock-product):only-child,
+    ::view-transition-old(header-mobile-dock-gear):only-child {
+      animation: header-mobile-dock-item-out var(--motion-dock) var(--ease-dock) both;
+    }
+
+    ::view-transition-new(header-mobile-dock-filter):only-child,
+    ::view-transition-new(header-mobile-dock-buy):only-child,
+    ::view-transition-new(header-mobile-dock-product):only-child,
+    ::view-transition-new(header-mobile-dock-gear):only-child {
+      animation: header-mobile-dock-item-in var(--motion-dock) var(--ease-dock) both;
+    }
+  }
+}

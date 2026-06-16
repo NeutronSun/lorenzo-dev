@@ -247,7 +247,7 @@
           }
 
           .header-right-product {
-            --header-mobile-dock-size: var(--header-mobile-bar-height, 58px);
+            --size: var(--header-mobile-bar-height, 58px);
 
             display: flex;
             align-items: stretch;
@@ -263,17 +263,17 @@
           }
 
           .header-mobile-bar-product {
-            flex: 0 0 var(--header-mobile-dock-size);
-            grid-template-columns: var(--header-mobile-dock-size) 0 0 0;
+            flex: 0 0 var(--size);
+            grid-template-columns: var(--size) 0 0 0;
             margin-inline-end: var(--header-mobile-menu-gap);
             min-width: 0;
-            width: var(--header-mobile-dock-size);
+            width: var(--size);
             overflow: hidden;
             transition:
-              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              grid-template-columns var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              margin-inline-end var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+              flex-basis var(--motion-dock) var(--ease-dock),
+              grid-template-columns var(--motion-dock) var(--ease-dock),
+              margin-inline-end var(--motion-dock) var(--ease-dock),
+              width var(--motion-dock) var(--ease-dock);
 
             .header-mobile-bar-item:not(.header-mobile-product-home) {
               opacity: 0;
@@ -290,15 +290,13 @@
           }
 
           .header-mobile-dock-actions {
-            --header-mobile-dock-filter-opacity: 0;
-            --header-mobile-dock-filter-scale: 0.72;
-            --header-mobile-dock-icon-size: 22px;
-            --header-mobile-dock-size: var(--header-mobile-bar-height, 58px);
+            --icon-size: 22px;
+            --size: var(--header-mobile-bar-height, 58px);
 
             display: grid;
-            grid-template-columns: 0 var(--header-mobile-dock-size);
-            width: var(--header-mobile-dock-size);
-            height: var(--header-mobile-dock-size);
+            grid-template-columns: 0 var(--size);
+            width: var(--size);
+            height: var(--size);
             background-color: var(--white);
             border: 1px solid var(--border-color);
             border-radius: 0;
@@ -309,25 +307,19 @@
           }
 
           .header-mobile-dock-actions-collection {
-            --header-mobile-dock-filter-opacity: 1;
-            --header-mobile-dock-filter-scale: 1;
-
-            grid-template-columns: repeat(2, var(--header-mobile-dock-size));
-            width: calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
+            grid-template-columns: repeat(2, var(--size));
+            width: calc(var(--size) + var(--size));
           }
 
           .header-mobile-dock-actions-product {
-            --header-mobile-dock-product-opacity: 0;
-            --header-mobile-dock-product-scale: 0.72;
-
-            flex: 0 0 var(--header-mobile-dock-size);
-            grid-template-columns: 0 var(--header-mobile-dock-size) 0;
+            flex: 0 0 var(--size);
+            grid-template-columns: 0 var(--size) 0;
             min-width: 0;
-            width: var(--header-mobile-dock-size);
+            width: var(--size);
             transition:
-              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              grid-template-columns var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+              flex-basis var(--motion-dock) var(--ease-dock),
+              grid-template-columns var(--motion-dock) var(--ease-dock),
+              width var(--motion-dock) var(--ease-dock);
           }
 
           .header-mobile-dock-action {
@@ -342,16 +334,19 @@
             border: none;
             cursor: pointer;
             transition:
-              var(--animation-transition-header-color),
-              var(--animation-transition-header-background),
-              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+              color var(--motion-base) var(--ease-base),
+              background-color var(--motion-base) var(--ease-base),
+              opacity var(--motion-dock) var(--ease-dock),
+              transform var(--motion-dock) var(--ease-dock);
           }
 
           .header-mobile-filter-button {
-            opacity: var(--header-mobile-dock-filter-opacity);
+            --opacity: 0;
+            --scale: 0.72;
+
+            opacity: var(--opacity);
             pointer-events: none;
-            transform: scale(var(--header-mobile-dock-filter-scale));
+            transform: scale(var(--scale));
             transform-origin: center;
           }
 
@@ -359,10 +354,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex: 0 0 calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
+            flex: 0 0 calc(100% - var(--size) - var(--size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
             min-width: 0;
-            width: calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
-            height: var(--header-mobile-dock-size);
+            width: calc(100% - var(--size) - var(--size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
+            height: var(--size);
             margin-inline-end: var(--header-mobile-menu-gap);
             padding: 0 18px;
             color: var(--white);
@@ -375,21 +370,24 @@
             white-space: nowrap;
             transform-origin: center;
             transition:
-              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              margin-inline-end var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              padding var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              var(--animation-transition-header-color),
-              var(--animation-transition-header-background);
+              flex-basis var(--motion-dock) var(--ease-dock),
+              margin-inline-end var(--motion-dock) var(--ease-dock),
+              opacity var(--motion-dock) var(--ease-dock),
+              padding var(--motion-dock) var(--ease-dock),
+              transform var(--motion-dock) var(--ease-dock),
+              width var(--motion-dock) var(--ease-dock),
+              color var(--motion-base) var(--ease-base),
+              background-color var(--motion-base) var(--ease-base);
             view-transition-name: header-mobile-dock-buy;
           }
 
           .header-mobile-product-button {
-            opacity: var(--header-mobile-dock-product-opacity);
+            --opacity: 0;
+            --scale: 0.72;
+
+            opacity: var(--opacity);
             pointer-events: none;
-            transform: scale(var(--header-mobile-dock-product-scale));
+            transform: scale(var(--scale));
             transform-origin: center;
           }
 
@@ -406,6 +404,9 @@
 
           .header-mobile-dock-actions-collection {
             .header-mobile-filter-button {
+              --opacity: 1;
+              --scale: 1;
+
               pointer-events: auto;
               view-transition-name: header-mobile-dock-filter;
             }
@@ -426,9 +427,9 @@
             }
 
             .header-mobile-bar-product {
-              flex: 0 0 calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap));
+              flex: 0 0 calc(100% - var(--size) - var(--size) - var(--header-mobile-menu-gap));
               grid-template-columns: repeat(4, 1fr);
-              width: calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap));
+              width: calc(100% - var(--size) - var(--size) - var(--header-mobile-menu-gap));
 
               .header-mobile-bar-item {
                 opacity: 1;
@@ -450,15 +451,15 @@
             }
 
             .header-mobile-dock-actions-product {
-              --header-mobile-dock-product-opacity: 1;
-              --header-mobile-dock-product-scale: 1;
-
-              flex: 0 0 calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
-              grid-template-columns: var(--header-mobile-dock-size) var(--header-mobile-dock-size) 0;
-              width: calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
+              flex: 0 0 calc(var(--size) + var(--size));
+              grid-template-columns: var(--size) var(--size) 0;
+              width: calc(var(--size) + var(--size));
             }
 
             .header-mobile-product-button {
+              --opacity: 1;
+              --scale: 1;
+
               pointer-events: auto;
               view-transition-name: header-mobile-dock-product;
             }
@@ -479,7 +480,7 @@
             }
 
             .header-mobile-dock-actions-product {
-              grid-template-columns: 0 0 var(--header-mobile-dock-size);
+              grid-template-columns: 0 0 var(--size);
             }
 
             .header-mobile-product-button,
@@ -500,8 +501,8 @@
 
           .header-mobile-dock-action {
             svg {
-              width: var(--header-mobile-dock-icon-size);
-              height: var(--header-mobile-dock-icon-size);
+              width: var(--icon-size);
+              height: var(--icon-size);
               transform-origin: center;
             }
           }
@@ -524,10 +525,10 @@
             border-inline-start: 1px solid var(--border-color);
             cursor: pointer;
             transition:
-              var(--animation-transition-header-color),
-              var(--animation-transition-header-background),
-              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
-              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+              color var(--motion-base) var(--ease-base),
+              background-color var(--motion-base) var(--ease-base),
+              opacity var(--motion-dock) var(--ease-dock),
+              transform var(--motion-dock) var(--ease-dock);
 
             &:first-child {
               border-inline-start: none;
@@ -576,7 +577,10 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(calc(100% + var(--header-mobile-bar-height) + var(--header-mobile-menu-gap)));
-            transition: var(--animation-transition-mobile-menu-close);
+            transition:
+              transform var(--motion-panel) var(--ease-base),
+              opacity var(--motion-base) var(--ease-base),
+              visibility var(--motion-instant) var(--ease-linear) var(--motion-panel);
             pointer-events: none;
           }
 
@@ -675,7 +679,10 @@
               transform: translateY(0);
               opacity: 1;
               visibility: visible;
-              transition: var(--animation-transition-mobile-menu-open);
+              transition:
+                transform var(--motion-panel) var(--ease-base),
+                opacity var(--motion-base) var(--ease-base),
+                visibility var(--motion-instant) var(--ease-linear);
               pointer-events: auto;
             }
 
