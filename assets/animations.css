@@ -76,8 +76,9 @@
     --animation-duration-mobile-menu-panel: var(--animation-duration-medium);
     --animation-duration-mobile-menu-fade: var(--animation-duration-standard);
     --animation-duration-mobile-menu-visibility: var(--animation-duration-instant);
-    --animation-duration-mobile-dock-morph: 500ms;
-    --animation-duration-mobile-dock-content: 380ms;
+    --animation-duration-mobile-dock-morph: 360ms;
+    --animation-duration-mobile-dock-content: 280ms;
+    --animation-duration-view-transition: 220ms;
     --animation-duration-header-layout: var(--animation-duration-medium);
 
     --animation-easing-header-color: var(--animation-easing-standard);
@@ -94,9 +95,9 @@
     --animation-delay-mobile-menu-close-panel: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-fade: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-visibility: var(--animation-delay-medium);
-    --animation-delay-mobile-dock-content-enter: 60ms;
+    --animation-delay-mobile-dock-content-enter: 40ms;
     --animation-delay-mobile-dock-content-exit: 0ms;
-    --animation-delay-mobile-dock-morph-exit: 100ms;
+    --animation-delay-mobile-dock-morph-exit: 60ms;
 
     --animation-transition-header-color: color var(--animation-duration-header-color) var(--animation-easing-header-color);
     --animation-transition-header-background: background-color var(--animation-duration-header-background) var(--animation-easing-header-background);
@@ -157,6 +158,7 @@
       --animation-duration-slow: 1ms;
       --animation-duration-mobile-dock-morph: 1ms;
       --animation-duration-mobile-dock-content: 1ms;
+      --animation-duration-view-transition: 1ms;
       --animation-duration-header-layout: 1ms;
       --animation-delay-fast: 0s;
       --animation-delay-standard: 0s;
@@ -164,6 +166,101 @@
       --animation-delay-mobile-dock-content-enter: 0s;
       --animation-delay-mobile-dock-content-exit: 0s;
       --animation-delay-mobile-dock-morph-exit: 0s;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    @view-transition {
+      navigation: auto;
+    }
+  }
+}
+
+@layer view-transition {
+  @media screen and (max-width: 749px) {
+    .header-mobile-dock-actions {
+      view-transition-name: mobile-dock;
+    }
+
+    .header-mobile-bar {
+      view-transition-name: mobile-bar;
+    }
+
+    main {
+      view-transition-name: main-content;
+    }
+
+    ::view-transition-group(root) {
+      animation-duration: 0s;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+
+    ::view-transition-group(mobile-bar) {
+      animation-duration: 0s;
+    }
+
+    ::view-transition-old(mobile-bar),
+    ::view-transition-new(mobile-bar) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+
+    ::view-transition-group(mobile-dock) {
+      animation-duration: var(--animation-duration-mobile-dock-morph);
+      animation-timing-function: var(--animation-easing-mobile-dock-morph);
+      overflow: clip;
+    }
+
+    ::view-transition-old(mobile-dock),
+    ::view-transition-new(mobile-dock) {
+      mix-blend-mode: normal;
+      height: 100%;
+      overflow: clip;
+      object-fit: none;
+    }
+
+    ::view-transition-old(main-content) {
+      animation: view-transition-main-exit var(--animation-duration-view-transition) var(--animation-easing-exit) both;
+    }
+
+    ::view-transition-new(main-content) {
+      animation: view-transition-main-enter var(--animation-duration-view-transition) var(--animation-easing-enter) both;
+    }
+
+    @keyframes view-transition-main-exit {
+      to {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+    }
+
+    @keyframes view-transition-main-enter {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-mobile-dock-actions,
+    .header-mobile-bar,
+    main {
+      view-transition-name: none;
+    }
+
+    ::view-transition-old(main-content),
+    ::view-transition-new(main-content) {
+      animation: none;
     }
   }
 }

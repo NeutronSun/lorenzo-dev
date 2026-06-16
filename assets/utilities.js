@@ -1,3 +1,49 @@
+export class NavigationUtils {
+  /**
+   * Cross-document View Transition is reliable on Chromium; Safari iOS falls back to CSS morph.
+   * @returns {boolean}
+   */
+  static supportsCrossDocumentViewTransition() {
+    if (typeof CSS === 'undefined' || !CSS.supports('view-transition-name', 'none')) return false;
+
+    const ua = navigator.userAgent;
+    const isSafari = /Safari/.test(ua) && !/Chrom|CriOS|Edg|OPR|FxiOS/.test(ua);
+
+    return !isSafari;
+  }
+
+  /**
+   * Warms the browser cache for an upcoming same-origin navigation.
+   * @param {string} href
+   */
+  static prefetchPage(href) {
+    try {
+      const url = new URL(href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+
+      const canonicalHref = url.href;
+
+      const existingPrefetch = [...document.head.querySelectorAll('link[rel="prefetch"]')]
+        .some((link) => link.href === canonicalHref);
+
+      if (!existingPrefetch) {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = canonicalHref;
+        link.as = 'document';
+        document.head.append(link);
+      }
+
+      fetch(canonicalHref, {
+        credentials: 'same-origin',
+        priority: 'high',
+      }).catch(() => {});
+    } catch {
+      // invalid href
+    }
+  }
+}
+
 export class CSSUtils {
 
 

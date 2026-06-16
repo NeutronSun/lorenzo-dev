@@ -1,5 +1,5 @@
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { CSSUtils } from '@theme/utilities';
+import { CSSUtils, NavigationUtils } from '@theme/utilities';
 
 
 /**
@@ -23,9 +23,9 @@ class StickyHeader extends HTMLComponent {
   static MOBILE_NAV_MENU_VALUE = 'menu';
   static DOCK_MODE_SEARCH = 'search';
   static DOCK_MODE_FILTER_SEARCH = 'filter-search';
-  static DOCK_MORPH_ENTER_MS = 520;
-  static DOCK_MORPH_EXIT_MS = 600;
-  static DOCK_MORPH_FALLBACK_MS = 700;
+  static DOCK_MORPH_ENTER_MS = 380;
+  static DOCK_MORPH_EXIT_MS = 440;
+  static DOCK_MORPH_FALLBACK_MS = 520;
   static MOBILE_BAR_HOME = 'home';
   static MOBILE_BAR_ACCOUNT = 'account';
   static MOBILE_BAR_CART = 'cart';
@@ -145,7 +145,11 @@ class StickyHeader extends HTMLComponent {
 
       event.preventDefault();
       event.stopPropagation();
-      this.navigateWithDockMorph(url.href, targetDockMode);
+      NavigationUtils.prefetchPage(url.href);
+
+      NavigationUtils.supportsCrossDocumentViewTransition()
+        ? this.navigateWithDockViewTransition(url.href)
+        : this.navigateWithDockMorph(url.href, targetDockMode);
       return;
     }
 
@@ -304,6 +308,17 @@ class StickyHeader extends HTMLComponent {
   }
 
   /**
+   * Navigates immediately; the dock morph runs via cross-document View Transition.
+   * @param {string} href
+   */
+  navigateWithDockViewTransition(href) {
+    this.clearDockNavigation();
+    this.setDockNavigating(true);
+    window.location.assign(href);
+  }
+
+  /**
+   * Fallback for browsers without cross-document View Transition support.
    * @param {string} href
    * @param {'search' | 'filter-search'} mode
    */
