@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "type_heading_font": "inter_n4",
     "logo": "shopify://shop_images/UYN_LOGO_W.svg",
     "favicon": "shopify://shop_images/739b9257970851cb121f0f6b4dc7e5cb.jpg",
     "content_for_index": []
