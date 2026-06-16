@@ -1,3 +1,9 @@
+@media screen and (max-width: 749px) and (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 @layer animation {
   :root {
     --animation-duration-instant: 0s;
@@ -27,6 +33,7 @@
     --animation-duration-mobile-menu-panel: var(--animation-duration-medium);
     --animation-duration-mobile-menu-fade: var(--animation-duration-standard);
     --animation-duration-mobile-menu-visibility: var(--animation-duration-instant);
+    --animation-duration-mobile-dock-transition: 520ms;
 
     --animation-easing-header-color: var(--animation-easing-standard);
     --animation-easing-header-background: var(--animation-easing-standard);
@@ -34,6 +41,7 @@
     --animation-easing-mobile-menu-panel: var(--animation-easing-standard);
     --animation-easing-mobile-menu-fade: var(--animation-easing-standard);
     --animation-easing-mobile-menu-visibility: var(--animation-easing-linear);
+    --animation-easing-mobile-dock-transition: cubic-bezier(0.22, 1, 0.36, 1);
 
     --animation-delay-mobile-menu-open: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-panel: var(--animation-delay-none);
@@ -51,6 +59,105 @@
       transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-close-panel),
       opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-close-fade),
       visibility var(--animation-duration-mobile-menu-visibility) var(--animation-easing-mobile-menu-visibility) var(--animation-delay-mobile-menu-close-visibility);
+  }
+
+  @media screen and (max-width: 749px) and (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+
+    @keyframes header-mobile-dock-out {
+      to {
+        filter: blur(8px) saturate(1.28);
+        opacity: 0.7;
+        transform: scaleX(0.96) scaleY(0.98);
+      }
+    }
+
+    @keyframes header-mobile-dock-in {
+      from {
+        filter: blur(8px) saturate(1.28);
+        opacity: 0.7;
+        transform: scaleX(1.04) scaleY(0.98);
+      }
+    }
+
+    @keyframes header-mobile-dock-filter-in {
+      from {
+        filter: blur(6px) saturate(1.2);
+        opacity: 0;
+        transform: scale(0.86);
+      }
+    }
+
+    @keyframes header-mobile-dock-filter-out {
+      to {
+        filter: blur(6px) saturate(1.2);
+        opacity: 0;
+        transform: scale(0.86);
+      }
+    }
+
+    ::view-transition-group(header-mobile-dock),
+    ::view-transition-group(header-mobile-dock-search),
+    ::view-transition-group(header-mobile-dock-filter),
+    ::view-transition-group(header-mobile-dock-buy),
+    ::view-transition-group(header-mobile-dock-product),
+    ::view-transition-group(header-mobile-dock-gear) {
+      animation-duration: var(--animation-duration-mobile-dock-transition);
+      animation-timing-function: var(--animation-easing-mobile-dock-transition);
+      overflow: hidden;
+    }
+
+    ::view-transition-image-pair(header-mobile-dock),
+    ::view-transition-image-pair(header-mobile-dock-search),
+    ::view-transition-image-pair(header-mobile-dock-filter),
+    ::view-transition-image-pair(header-mobile-dock-buy),
+    ::view-transition-image-pair(header-mobile-dock-product),
+    ::view-transition-image-pair(header-mobile-dock-gear) {
+      isolation: isolate;
+    }
+
+    ::view-transition-old(header-mobile-dock) {
+      animation: header-mobile-dock-out var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition) both;
+      object-fit: fill;
+    }
+
+    ::view-transition-new(header-mobile-dock) {
+      animation: header-mobile-dock-in var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition) both;
+      object-fit: fill;
+    }
+
+    ::view-transition-old(header-mobile-dock-search),
+    ::view-transition-new(header-mobile-dock-search),
+    ::view-transition-old(header-mobile-dock-filter),
+    ::view-transition-new(header-mobile-dock-filter),
+    ::view-transition-old(header-mobile-dock-buy),
+    ::view-transition-new(header-mobile-dock-buy),
+    ::view-transition-old(header-mobile-dock-product),
+    ::view-transition-new(header-mobile-dock-product),
+    ::view-transition-old(header-mobile-dock-gear),
+    ::view-transition-new(header-mobile-dock-gear) {
+      mix-blend-mode: normal;
+      object-fit: fill;
+      transform-origin: center;
+    }
+
+    ::view-transition-old(header-mobile-dock-filter):only-child,
+    ::view-transition-old(header-mobile-dock-buy):only-child,
+    ::view-transition-old(header-mobile-dock-product):only-child,
+    ::view-transition-old(header-mobile-dock-gear):only-child {
+      animation: header-mobile-dock-filter-out var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition) both;
+    }
+
+    ::view-transition-new(header-mobile-dock-filter):only-child,
+    ::view-transition-new(header-mobile-dock-buy):only-child,
+    ::view-transition-new(header-mobile-dock-product):only-child,
+    ::view-transition-new(header-mobile-dock-gear):only-child {
+      animation: header-mobile-dock-filter-in var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition) both;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -1,28 +1,38 @@
+{%- liquid
+  assign home_active = false
+  assign account_active = false
+  assign cart_active = false
+  assign menu_active = false
+  assign collection_active = false
+  assign product_active = false
+
+  if request.page_type == 'index'
+    assign home_active = true
+  endif
+
+  if request.page_type == 'collection'
+    assign collection_active = true
+  endif
+
+  if request.page_type == 'product'
+    assign product_active = true
+  endif
+
+  if request.page_type contains 'customers/'
+    assign account_active = true
+  endif
+
+  if request.page_type == 'cart'
+    assign cart_active = true
+  endif
+
+  if home_active == false and account_active == false and cart_active == false and product_active == false
+    assign menu_active = true
+  endif
+-%}
+
 <sticky-header>
   <header ref="header">
-    {%- liquid
-      assign home_active = false
-      assign account_active = false
-      assign cart_active = false
-      assign menu_active = false
-
-      if request.page_type == 'index'
-        assign home_active = true
-      endif
-
-      if request.page_type contains 'customers/'
-        assign account_active = true
-      endif
-
-      if request.page_type == 'cart'
-        assign cart_active = true
-      endif
-
-      if home_active == false and account_active == false and cart_active == false
-        assign menu_active = true
-      endif
-    -%}
-
     <div class="header-left mobile-hidden">
       <a href="{{ routes.root_url }}" class="header-logo">
         <img src="{{ settings.logo | image_url: width: 100 }}" alt="{{ shop.name }}" width="100" height="100">
@@ -52,11 +62,60 @@
         </a>
       </nav>
     </div>
-    <div class="header-right header-group">
-      <nav class="header-mobile-bar mobile-only" ref="mobileBar" aria-label="Mobile navigation">
-        <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link{% if home_active %} header-mobile-bar-item-active{% endif %}" aria-label="Home">
-          {% render 'icon-home', size: 22 %}
-        </a>
+    <div class="header-right header-group{% if product_active %} header-right-product{% endif %}">
+      {% if home_active %}
+        <input
+          type="radio"
+          id="header-home-current-{{ section.id }}"
+          class="header-home-current-toggle"
+          checked
+          hidden
+        >
+      {% endif %}
+      {% if product_active %}
+        <input
+          type="radio"
+          id="header-product-dock-buy-{{ section.id }}"
+          name="header-product-dock-{{ section.id }}"
+          class="header-product-dock-mode header-product-dock-buy-toggle"
+          checked
+          hidden
+        >
+        <input
+          type="radio"
+          id="header-product-dock-menu-{{ section.id }}"
+          name="header-product-dock-{{ section.id }}"
+          class="header-product-dock-mode header-product-dock-menu-toggle"
+          hidden
+        >
+        <input
+          type="radio"
+          id="header-product-dock-config-{{ section.id }}"
+          name="header-product-dock-{{ section.id }}"
+          class="header-product-dock-mode header-product-dock-config-toggle"
+          hidden
+        >
+      {% endif %}
+      <nav class="header-mobile-bar mobile-only{% if product_active %} header-mobile-bar-product{% endif %}" ref="mobileBar" aria-label="Mobile navigation">
+        {% if product_active %}
+          <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-bar-item header-mobile-product-home header-mobile-product-home-open" aria-label="Open product dock">
+            {% render 'icon-home', size: 22 %}
+          </label>
+          <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link header-mobile-product-home header-mobile-product-home-close" aria-label="Home">
+            {% render 'icon-home', size: 22 %}
+          </a>
+          <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-bar-item header-mobile-product-home header-mobile-product-home-config" aria-label="Back to product dock">
+            {% render 'icon-home', size: 22 %}
+          </label>
+        {% elsif home_active %}
+          <label for="header-home-current-{{ section.id }}" class="header-mobile-bar-item header-mobile-bar-item-active" aria-label="Home">
+            {% render 'icon-home', size: 22 %}
+          </label>
+        {% else %}
+          <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link{% if home_active %} header-mobile-bar-item-active{% endif %}" aria-label="Home">
+            {% render 'icon-home', size: 22 %}
+          </a>
+        {% endif %}
         <a href="{{ routes.account_url }}" class="header-mobile-bar-item header-link{% if account_active %} header-mobile-bar-item-active{% endif %}" aria-label="Account">
           {% render 'icon-account', size: 22 %}
         </a>
@@ -73,9 +132,36 @@
           {% render 'icon-menu', size: 22 %}
         </label>
       </nav>
-      <a href="{{ routes.search_url }}" class="header-mobile-search-button header-link mobile-only" aria-label="Search">
-        {% render 'icon-search', size: 22 %}
-      </a>
+      {% if product_active %}
+        <button type="button" class="header-mobile-product-buy-button font-mono font-12 mobile-only" aria-label="Product action">
+          ADD TO BAG
+        </button>
+        <div class="header-mobile-dock-actions header-mobile-dock-actions-product mobile-only">
+          <label for="header-product-dock-config-{{ section.id }}" class="header-mobile-dock-action header-mobile-product-button" aria-label="Product">
+            {% render 'icon-product', size: 22 %}
+          </label>
+          <button type="button" class="header-mobile-dock-action header-mobile-search-button" aria-label="Search">
+            {% render 'icon-search', size: 22 %}
+          </button>
+          <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-dock-action header-mobile-gear-button" aria-label="Product settings">
+            {% render 'icon-gear', size: 22 %}
+          </label>
+        </div>
+      {% else %}
+        <div class="header-mobile-dock-actions mobile-only{% if collection_active %} header-mobile-dock-actions-collection{% endif %}">
+          <button
+            type="button"
+            class="header-mobile-dock-action header-mobile-filter-button"
+            aria-label="Filters"
+            {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+          >
+            {% render 'icon-filter', size: 22 %}
+          </button>
+          <a href="{{ routes.search_url }}" class="header-mobile-dock-action header-mobile-search-button header-link" aria-label="Search">
+            {% render 'icon-search', size: 22 %}
+          </a>
+        </div>
+      {% endif %}
     </div>
   </header>
 </sticky-header>
@@ -160,6 +246,14 @@
             width: 100%;
           }
 
+          .header-right-product {
+            --header-mobile-dock-size: var(--header-mobile-bar-height, 58px);
+
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+          }
+
           .header-mobile-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -168,23 +262,254 @@
             border: 1px solid var(--border-color);
           }
 
-          .header-mobile-search-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: var(--header-mobile-bar-height);
-            height: var(--header-mobile-bar-height);
-            color: var(--black);
+          .header-mobile-bar-product {
+            flex: 0 0 var(--header-mobile-dock-size);
+            grid-template-columns: var(--header-mobile-dock-size) 0 0 0;
+            margin-inline-end: var(--header-mobile-menu-gap);
+            min-width: 0;
+            width: var(--header-mobile-dock-size);
+            overflow: hidden;
+            transition:
+              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              grid-template-columns var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              margin-inline-end var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+
+            .header-mobile-bar-item:not(.header-mobile-product-home) {
+              opacity: 0;
+              pointer-events: none;
+              transform: scale(0.86);
+            }
+          }
+
+          .header-mobile-bar-product {
+            .header-mobile-product-home-close,
+            .header-mobile-product-home-config {
+              display: none;
+            }
+          }
+
+          .header-mobile-dock-actions {
+            --header-mobile-dock-filter-opacity: 0;
+            --header-mobile-dock-filter-scale: 0.72;
+            --header-mobile-dock-icon-size: 22px;
+            --header-mobile-dock-size: var(--header-mobile-bar-height, 58px);
+
+            display: grid;
+            grid-template-columns: 0 var(--header-mobile-dock-size);
+            width: var(--header-mobile-dock-size);
+            height: var(--header-mobile-dock-size);
             background-color: var(--white);
             border: 1px solid var(--border-color);
             border-radius: 0;
+            container: header-mobile-dock / size;
+            overflow: hidden;
+            contain: layout paint;
+            view-transition-name: header-mobile-dock;
+          }
+
+          .header-mobile-dock-actions-collection {
+            --header-mobile-dock-filter-opacity: 1;
+            --header-mobile-dock-filter-scale: 1;
+
+            grid-template-columns: repeat(2, var(--header-mobile-dock-size));
+            width: calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
+          }
+
+          .header-mobile-dock-actions-product {
+            --header-mobile-dock-product-opacity: 0;
+            --header-mobile-dock-product-scale: 0.72;
+
+            flex: 0 0 var(--header-mobile-dock-size);
+            grid-template-columns: 0 var(--header-mobile-dock-size) 0;
+            min-width: 0;
+            width: var(--header-mobile-dock-size);
+            transition:
+              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              grid-template-columns var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+          }
+
+          .header-mobile-dock-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding: 0;
+            overflow: hidden;
+            color: var(--black);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
             transition:
               var(--animation-transition-header-color),
-              var(--animation-transition-header-background);
+              var(--animation-transition-header-background),
+              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
+          }
 
+          .header-mobile-filter-button {
+            opacity: var(--header-mobile-dock-filter-opacity);
+            pointer-events: none;
+            transform: scale(var(--header-mobile-dock-filter-scale));
+            transform-origin: center;
+          }
+
+          .header-mobile-product-buy-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
+            min-width: 0;
+            width: calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap) - var(--header-mobile-menu-gap));
+            height: var(--header-mobile-dock-size);
+            margin-inline-end: var(--header-mobile-menu-gap);
+            padding: 0 18px;
+            color: var(--white);
+            background-color: var(--black);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            letter-spacing: 0.12em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transform-origin: center;
+            transition:
+              flex-basis var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              margin-inline-end var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              padding var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              width var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              var(--animation-transition-header-color),
+              var(--animation-transition-header-background);
+            view-transition-name: header-mobile-dock-buy;
+          }
+
+          .header-mobile-product-button {
+            opacity: var(--header-mobile-dock-product-opacity);
+            pointer-events: none;
+            transform: scale(var(--header-mobile-dock-product-scale));
+            transform-origin: center;
+          }
+
+          .header-mobile-gear-button {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.72);
+            transform-origin: center;
+          }
+
+          .header-mobile-search-button {
+            view-transition-name: header-mobile-dock-search;
+          }
+
+          .header-mobile-dock-actions-collection {
+            .header-mobile-filter-button {
+              pointer-events: auto;
+              view-transition-name: header-mobile-dock-filter;
+            }
+
+            .header-mobile-search-button {
+              border-inline-start: 1px solid var(--border-color);
+            }
+          }
+
+          .header-right-product:has(.header-product-dock-menu-toggle:checked) {
+            .header-mobile-product-home-open,
+            .header-mobile-product-home-config {
+              display: none;
+            }
+
+            .header-mobile-product-home-close {
+              display: flex;
+            }
+
+            .header-mobile-bar-product {
+              flex: 0 0 calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap));
+              grid-template-columns: repeat(4, 1fr);
+              width: calc(100% - var(--header-mobile-dock-size) - var(--header-mobile-dock-size) - var(--header-mobile-menu-gap));
+
+              .header-mobile-bar-item {
+                opacity: 1;
+                pointer-events: auto;
+                transform: scale(1);
+              }
+            }
+
+            .header-mobile-product-buy-button {
+              flex: 0 0 0;
+              width: 0;
+              min-width: 0;
+              margin-inline-end: 0;
+              padding-inline: 0;
+              opacity: 0;
+              pointer-events: none;
+              transform: scaleX(0.18);
+              view-transition-name: none;
+            }
+
+            .header-mobile-dock-actions-product {
+              --header-mobile-dock-product-opacity: 1;
+              --header-mobile-dock-product-scale: 1;
+
+              flex: 0 0 calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
+              grid-template-columns: var(--header-mobile-dock-size) var(--header-mobile-dock-size) 0;
+              width: calc(var(--header-mobile-dock-size) + var(--header-mobile-dock-size));
+            }
+
+            .header-mobile-product-button {
+              pointer-events: auto;
+              view-transition-name: header-mobile-dock-product;
+            }
+
+            .header-mobile-search-button {
+              border-inline-start: 1px solid var(--border-color);
+            }
+          }
+
+          .header-right-product:has(.header-product-dock-config-toggle:checked) {
+            .header-mobile-product-home-open,
+            .header-mobile-product-home-close {
+              display: none;
+            }
+
+            .header-mobile-product-home-config {
+              display: flex;
+            }
+
+            .header-mobile-dock-actions-product {
+              grid-template-columns: 0 0 var(--header-mobile-dock-size);
+            }
+
+            .header-mobile-product-button,
+            .header-mobile-search-button {
+              opacity: 0;
+              pointer-events: none;
+              transform: scale(0.72);
+              view-transition-name: none;
+            }
+
+            .header-mobile-gear-button {
+              opacity: 1;
+              pointer-events: auto;
+              transform: scale(1);
+              view-transition-name: header-mobile-dock-gear;
+            }
+          }
+
+          .header-mobile-dock-action {
             svg {
-              width: 22px;
-              height: 22px;
+              width: var(--header-mobile-dock-icon-size);
+              height: var(--header-mobile-dock-icon-size);
+              transform-origin: center;
+            }
+          }
+
+          @container header-mobile-dock (min-width: 1px) {
+            .header-mobile-dock-action svg {
+              width: clamp(18px, calc(22px - 7cqw + 7cqh), 22px);
+              height: clamp(18px, calc(22px - 7cqw + 7cqh), 22px);
             }
           }
 
@@ -200,7 +525,9 @@
             cursor: pointer;
             transition:
               var(--animation-transition-header-color),
-              var(--animation-transition-header-background);
+              var(--animation-transition-header-background),
+              opacity var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition),
+              transform var(--animation-duration-mobile-dock-transition) var(--animation-easing-mobile-dock-transition);
 
             &:first-child {
               border-inline-start: none;
@@ -209,6 +536,20 @@
             svg {
               width: 22px;
               height: 22px;
+            }
+          }
+
+          .header-mobile-bar-product {
+            .header-mobile-bar-item:not(.header-mobile-product-home) {
+              border-inline-start-color: transparent;
+            }
+          }
+
+          .header-right-product:has(.header-product-dock-menu-toggle:checked) {
+            .header-mobile-bar-product {
+              .header-mobile-bar-item:not(:first-child) {
+                border-inline-start-color: var(--border-color);
+              }
             }
           }
 
