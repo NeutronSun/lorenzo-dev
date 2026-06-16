@@ -1,7 +1,3 @@
-@view-transition {
-  navigation: auto;
-}
-
 @property --header-mobile-dock-filter-size {
   syntax: "<length>";
   inherits: true;
@@ -18,6 +14,36 @@
   syntax: "<number>";
   inherits: true;
   initial-value: 0.72;
+}
+
+@property --header-height {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 72px;
+}
+
+@property --header-mobile-menu-gap {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 8px;
+}
+
+@property --header-mobile-bar-height {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 56px;
+}
+
+@property --header-mobile-menu-header-height {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 48px;
+}
+
+@property --header-mobile-menu-footer-height {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 48px;
 }
 
 @layer animation {
@@ -37,6 +63,7 @@
     --animation-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
     --animation-easing-enter: cubic-bezier(0, 0, 0.2, 1);
     --animation-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+    --animation-easing-spring: cubic-bezier(0.32, 0.72, 0, 1);
 
     --animation-delay-none: 0s;
     --animation-delay-fast: 100ms;
@@ -49,8 +76,9 @@
     --animation-duration-mobile-menu-panel: var(--animation-duration-medium);
     --animation-duration-mobile-menu-fade: var(--animation-duration-standard);
     --animation-duration-mobile-menu-visibility: var(--animation-duration-instant);
-    --animation-duration-mobile-dock-morph: var(--animation-duration-slow);
-    --animation-duration-mobile-dock-content: var(--animation-duration-medium);
+    --animation-duration-mobile-dock-morph: 500ms;
+    --animation-duration-mobile-dock-content: 380ms;
+    --animation-duration-header-layout: var(--animation-duration-medium);
 
     --animation-easing-header-color: var(--animation-easing-standard);
     --animation-easing-header-background: var(--animation-easing-standard);
@@ -58,27 +86,43 @@
     --animation-easing-mobile-menu-panel: var(--animation-easing-standard);
     --animation-easing-mobile-menu-fade: var(--animation-easing-standard);
     --animation-easing-mobile-menu-visibility: var(--animation-easing-linear);
-    --animation-easing-mobile-dock-morph: var(--animation-easing-emphasized);
-    --animation-easing-mobile-dock-content: var(--animation-easing-standard-out);
+    --animation-easing-mobile-dock-morph: var(--animation-easing-spring);
+    --animation-easing-mobile-dock-content: var(--animation-easing-enter);
+    --animation-easing-header-layout: var(--animation-easing-emphasized);
 
     --animation-delay-mobile-menu-open: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-panel: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-fade: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-visibility: var(--animation-delay-medium);
+    --animation-delay-mobile-dock-content-enter: 60ms;
+    --animation-delay-mobile-dock-content-exit: 0ms;
+    --animation-delay-mobile-dock-morph-exit: 100ms;
 
     --animation-transition-header-color: color var(--animation-duration-header-color) var(--animation-easing-header-color);
     --animation-transition-header-background: background-color var(--animation-duration-header-background) var(--animation-easing-header-background);
     --animation-transition-header-icon: transform var(--animation-duration-header-icon) var(--animation-easing-header-icon);
+    --animation-transition-header-layout-main:
+      margin-top var(--animation-duration-header-layout) var(--animation-easing-header-layout);
     --animation-transition-mobile-dock:
       width var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph),
       --header-mobile-dock-filter-size var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph);
+    --animation-transition-mobile-dock-exit:
+      width var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph) var(--animation-delay-mobile-dock-morph-exit),
+      --header-mobile-dock-filter-size var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph) var(--animation-delay-mobile-dock-morph-exit);
     --animation-transition-mobile-dock-icon:
       width var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
       height var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
       transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content);
-    --animation-transition-mobile-dock-action:
-      opacity var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
-      transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content);
+    --animation-transition-mobile-dock-action-enter:
+      opacity var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-enter),
+      transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-enter);
+    --animation-transition-mobile-dock-action-exit:
+      opacity var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-exit),
+      transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-exit);
+    --animation-transition-mobile-dock-border-enter:
+      border-color var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-enter);
+    --animation-transition-mobile-dock-border-exit:
+      border-color var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content) var(--animation-delay-mobile-dock-content-exit);
     --animation-transition-mobile-menu-open:
       transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-open),
       opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-open),
@@ -87,31 +131,21 @@
       transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-close-panel),
       opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-close-fade),
       visibility var(--animation-duration-mobile-menu-visibility) var(--animation-easing-mobile-menu-visibility) var(--animation-delay-mobile-menu-close-visibility);
+
+    --header-height: 72px;
+    transition: --header-height var(--animation-duration-header-layout) var(--animation-easing-header-layout);
   }
 
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  @media screen and (max-width: 749px) {
-    ::view-transition-group(header-mobile-dock-actions) {
-      animation-duration: var(--animation-duration-mobile-dock-morph);
-      animation-timing-function: var(--animation-easing-mobile-dock-morph);
-    }
-
-    ::view-transition-image-pair(header-mobile-dock-actions) {
-      isolation: isolate;
-    }
-
-    ::view-transition-old(header-mobile-dock-actions),
-    ::view-transition-new(header-mobile-dock-actions) {
-      animation-duration: var(--animation-duration-mobile-dock-content);
-      animation-timing-function: var(--animation-easing-mobile-dock-content);
-      mix-blend-mode: normal;
-      object-fit: fill;
-    }
+  sticky-header {
+    --header-mobile-menu-gap: 8px;
+    --header-mobile-bar-height: 56px;
+    --header-mobile-menu-header-height: 48px;
+    --header-mobile-menu-footer-height: 48px;
+    transition:
+      --header-mobile-menu-gap var(--animation-duration-header-layout) var(--animation-easing-header-layout),
+      --header-mobile-bar-height var(--animation-duration-header-layout) var(--animation-easing-header-layout),
+      --header-mobile-menu-header-height var(--animation-duration-header-layout) var(--animation-easing-header-layout),
+      --header-mobile-menu-footer-height var(--animation-duration-header-layout) var(--animation-easing-header-layout);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -121,9 +155,15 @@
       --animation-duration-standard: 1ms;
       --animation-duration-medium: 1ms;
       --animation-duration-slow: 1ms;
+      --animation-duration-mobile-dock-morph: 1ms;
+      --animation-duration-mobile-dock-content: 1ms;
+      --animation-duration-header-layout: 1ms;
       --animation-delay-fast: 0s;
       --animation-delay-standard: 0s;
       --animation-delay-medium: 0s;
+      --animation-delay-mobile-dock-content-enter: 0s;
+      --animation-delay-mobile-dock-content-exit: 0s;
+      --animation-delay-mobile-dock-morph-exit: 0s;
     }
   }
 }
