@@ -5,6 +5,13 @@
     --disabled-l: 0.88;
     --disabled-c: 0.015;
 
+
+    --background: lab(96.5461% -.0119209 1.90754);
+    --background-darken: lab(93.0711% -.0121593 2.29042);
+    --border-color: lab(88.426% -.0113547 1.90792);
+    --secondary-black: lab(41.9663% -.489771 -3.71957);
+
+
     --red: #dc2626;
     --yellow: #f59e0b;
     --green: #16a34a;
@@ -17,6 +24,10 @@
     --white: #f9fafb;
 
     --header-spacing-top: 20px;
+
+  }
+  body {
+    background-color: var(--background);
   }
 
   .red { --color: var(--red); }
@@ -51,16 +62,32 @@
     }
   }
 
-    body *,
-    .font-body {
-      font-family: var(--font-body--family);
-      font-style: var(--font-body--style);
-      font-weight: var(--font-body--weight);
-    }
+  body *,
+  .font-body {
+    font-family: var(--font-body--family);
+    font-style: var(--font-body--style);
+    font-weight: var(--font-body--weight);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono--family);
+    font-style: var(--font-mono--style);
+    font-weight: 100;
+    letter-spacing: 0.25em;
+    color: var(--color, --secondary-black);
+  }
 
   .font-heading {
     font-family: var(--font-heading--family);
     font-style: var(--font-heading--style);
     font-weight: var(--font-heading--weight);
+  }
+
+  .font-12 {
+    font-size: 12px;
+  }
+
+  .font-14 {
+    font-size: 14px;
   }
 }

@@ -1,0 +1,101 @@
+
+{% for link in menu.links %}
+  {%- liquid
+      assign has_children = false
+      if link.links.size > 0
+        assign has_children = true
+      endif
+  -%}
+  <details class="header-menu-item" name="header-menu">
+    <summary class="font-mono font-12 black">
+      {{ link.title | upcase }}
+      {% render 'icon-chevron' %}
+    </summary>
+    <div class="header-menu-floating">
+      <div class="header-menu-floating-header">
+        <span class="font-mono font-12">&sect; {{ link.title | upcase }}</span>
+      </div>
+      <div class="header-menu-floating-content">
+        {% for child in link.links %}
+          <div class="header-menu-column">
+            <a href="{{ child.url }}" class="font-mono font-12">{{ child.title | upcase }}</a>
+            <ul>
+              {% for child in child.links %}
+                <li>
+                  <a href="{{ child.url }}" class="font-body font-14 header-menu-link">{{ child.title | upcase }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </details>
+{% endfor %}
+
+
+{% stylesheet %}
+  sticky-header {
+    .header-menu-item {
+      &[open] {
+        summary {
+          color: var(--black);
+          background-color: var(--background-darken);
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+      summary {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        letter-spacing: 1.6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 10px;
+
+        svg {
+          height: 12px;
+          width: 12px;
+          transition: transform 0.1s ease-in-out;
+        }
+      }
+      .header-menu-floating {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: 100%;
+        background-color: var(--white);
+        border: 1px solid var(--border-color);
+ 
+          .header-menu-floating-header {
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-color);
+          }
+          .header-menu-floating-content {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+          }
+          .header-menu-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+
+          .header-menu-link {
+            color: var(--black);
+
+            &:hover {
+              text-decoration: underline;
+              text-underline-offset: 2px;
+            }
+          }
+      }
+    }
+  }
+{% endstylesheet %}
+
+

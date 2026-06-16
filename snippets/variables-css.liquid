@@ -1,5 +1,7 @@
 {% style %}
   @layer theme, main, components, utilities;
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 
   {{ settings.type_heading_font | font_face: font_display: 'swap' }}
   {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
@@ -20,6 +22,10 @@
       --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
       --font-body--style: {{ settings.type_body_font.style }};
       --font-body--weight: {{ settings.type_body_font.weight }};
+
+      --font-mono--family: 'JetBrains Mono', monospace;
+      --font-mono--style: normal;
+      --font-mono--weight: 400;
 
       --page-width: {{ settings.max_page_width }};
 

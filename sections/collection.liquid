@@ -1,10 +1,17 @@
 <h1>{{ collection.title }}</h1>
 
+
+{% content_for 'block', type: 'filters', id: 'filters-and-sorting', source: collection %}
+
 <product-grid class="">
   {% paginate collection.products by 18 %}
-    {% for product in collection.products %}
-      {% render 'product-card', product: product %}
-    {% endfor %}
+    {% capture products %}
+      {% for product in collection.products %}
+        {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
+      {% endfor %}
+    {% endcapture %}
+
+    {{ products }}
 
     {{ paginate | default_pagination }}
   {% endpaginate %}
@@ -25,6 +32,7 @@
   "name": "t:general.collection",
   "class": "section page-width",
   "settings": [
+
 
   ]
 }
