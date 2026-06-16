@@ -1,3 +1,25 @@
+@view-transition {
+  navigation: auto;
+}
+
+@property --header-mobile-dock-filter-size {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --header-mobile-dock-filter-opacity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --header-mobile-dock-filter-scale {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.72;
+}
+
 @layer animation {
   :root {
     --animation-duration-instant: 0s;
@@ -27,6 +49,8 @@
     --animation-duration-mobile-menu-panel: var(--animation-duration-medium);
     --animation-duration-mobile-menu-fade: var(--animation-duration-standard);
     --animation-duration-mobile-menu-visibility: var(--animation-duration-instant);
+    --animation-duration-mobile-dock-morph: var(--animation-duration-slow);
+    --animation-duration-mobile-dock-content: var(--animation-duration-medium);
 
     --animation-easing-header-color: var(--animation-easing-standard);
     --animation-easing-header-background: var(--animation-easing-standard);
@@ -34,6 +58,8 @@
     --animation-easing-mobile-menu-panel: var(--animation-easing-standard);
     --animation-easing-mobile-menu-fade: var(--animation-easing-standard);
     --animation-easing-mobile-menu-visibility: var(--animation-easing-linear);
+    --animation-easing-mobile-dock-morph: var(--animation-easing-emphasized);
+    --animation-easing-mobile-dock-content: var(--animation-easing-standard-out);
 
     --animation-delay-mobile-menu-open: var(--animation-delay-none);
     --animation-delay-mobile-menu-close-panel: var(--animation-delay-none);
@@ -43,6 +69,16 @@
     --animation-transition-header-color: color var(--animation-duration-header-color) var(--animation-easing-header-color);
     --animation-transition-header-background: background-color var(--animation-duration-header-background) var(--animation-easing-header-background);
     --animation-transition-header-icon: transform var(--animation-duration-header-icon) var(--animation-easing-header-icon);
+    --animation-transition-mobile-dock:
+      width var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph),
+      --header-mobile-dock-filter-size var(--animation-duration-mobile-dock-morph) var(--animation-easing-mobile-dock-morph);
+    --animation-transition-mobile-dock-icon:
+      width var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
+      height var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
+      transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content);
+    --animation-transition-mobile-dock-action:
+      opacity var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content),
+      transform var(--animation-duration-mobile-dock-content) var(--animation-easing-mobile-dock-content);
     --animation-transition-mobile-menu-open:
       transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-open),
       opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-open),
@@ -51,6 +87,31 @@
       transform var(--animation-duration-mobile-menu-panel) var(--animation-easing-mobile-menu-panel) var(--animation-delay-mobile-menu-close-panel),
       opacity var(--animation-duration-mobile-menu-fade) var(--animation-easing-mobile-menu-fade) var(--animation-delay-mobile-menu-close-fade),
       visibility var(--animation-duration-mobile-menu-visibility) var(--animation-easing-mobile-menu-visibility) var(--animation-delay-mobile-menu-close-visibility);
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  @media screen and (max-width: 749px) {
+    ::view-transition-group(header-mobile-dock-actions) {
+      animation-duration: var(--animation-duration-mobile-dock-morph);
+      animation-timing-function: var(--animation-easing-mobile-dock-morph);
+    }
+
+    ::view-transition-image-pair(header-mobile-dock-actions) {
+      isolation: isolate;
+    }
+
+    ::view-transition-old(header-mobile-dock-actions),
+    ::view-transition-new(header-mobile-dock-actions) {
+      animation-duration: var(--animation-duration-mobile-dock-content);
+      animation-timing-function: var(--animation-easing-mobile-dock-content);
+      mix-blend-mode: normal;
+      object-fit: fill;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

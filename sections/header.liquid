@@ -1,28 +1,33 @@
-<sticky-header>
-  <header ref="header">
-    {%- liquid
-      assign home_active = false
-      assign account_active = false
-      assign cart_active = false
-      assign menu_active = false
+{%- liquid
+  assign home_active = false
+  assign account_active = false
+  assign cart_active = false
+  assign menu_active = false
+  assign collection_active = false
 
-      if request.page_type == 'index'
-        assign home_active = true
-      endif
+  if request.page_type == 'index'
+    assign home_active = true
+  endif
 
-      if request.page_type contains 'customers/'
-        assign account_active = true
-      endif
+  if request.page_type == 'collection'
+    assign collection_active = true
+  endif
 
-      if request.page_type == 'cart'
-        assign cart_active = true
-      endif
+  if request.page_type contains 'customers/'
+    assign account_active = true
+  endif
 
-      if home_active == false and account_active == false and cart_active == false
-        assign menu_active = true
-      endif
-    -%}
+  if request.page_type == 'cart'
+    assign cart_active = true
+  endif
 
+  if home_active == false and account_active == false and cart_active == false
+    assign menu_active = true
+  endif
+-%}
+
+<sticky-header data-dock-mode="{% if collection_active %}filter-search{% else %}search{% endif %}">
+  <header ref="header" data-dock-mode="{% if collection_active %}filter-search{% else %}search{% endif %}">
     <div class="header-left mobile-hidden">
       <a href="{{ routes.root_url }}" class="header-logo">
         <img src="{{ settings.logo | image_url: width: 100 }}" alt="{{ shop.name }}" width="100" height="100">
@@ -73,9 +78,19 @@
           {% render 'icon-menu', size: 22 %}
         </label>
       </nav>
-      <a href="{{ routes.search_url }}" class="header-mobile-search-button header-link mobile-only" aria-label="Search">
-        {% render 'icon-search', size: 22 %}
-      </a>
+      <div class="header-mobile-dock-actions mobile-only" ref="mobileDockActions">
+        <button
+          type="button"
+          class="header-mobile-dock-action header-mobile-filter-button"
+          aria-label="Filters"
+          {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+        >
+          {% render 'icon-filter', size: 22 %}
+        </button>
+        <a href="{{ routes.search_url }}" class="header-mobile-dock-action header-mobile-search-button header-link" aria-label="Search">
+          {% render 'icon-search', size: 22 %}
+        </a>
+      </div>
     </div>
   </header>
 </sticky-header>
@@ -168,23 +183,101 @@
             border: 1px solid var(--border-color);
           }
 
-          .header-mobile-search-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: var(--header-mobile-bar-height);
+          .header-mobile-dock-actions {
+            --header-mobile-dock-filter-size: 0px;
+            --header-mobile-dock-filter-opacity: 0;
+            --header-mobile-dock-filter-scale: 0.72;
+            --header-mobile-dock-icon-size: 22px;
+
+            display: grid;
+            grid-template-columns: var(--header-mobile-dock-filter-size) var(--header-mobile-bar-height);
+            width: calc(var(--header-mobile-bar-height) + var(--header-mobile-dock-filter-size));
             height: var(--header-mobile-bar-height);
-            color: var(--black);
             background-color: var(--white);
             border: 1px solid var(--border-color);
             border-radius: 0;
-            transition:
-              var(--animation-transition-header-color),
-              var(--animation-transition-header-background);
+            container: header-mobile-dock-actions / size;
+            overflow: hidden;
+            contain: layout paint;
+            view-transition-name: header-mobile-dock-actions;
+            transition: none;
+          }
 
+          &[data-dock-ready] {
+            .header-mobile-dock-actions {
+              transition:
+                var(--animation-transition-mobile-dock),
+                var(--animation-transition-header-background);
+            }
+          }
+
+          &[data-dock-mode="filter-search"] {
+            .header-mobile-dock-actions {
+              --header-mobile-dock-filter-size: var(--header-mobile-bar-height);
+              --header-mobile-dock-filter-opacity: 1;
+              --header-mobile-dock-filter-scale: 1;
+            }
+          }
+
+          .header-mobile-dock-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding: 0;
+            overflow: hidden;
+            color: var(--black);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transform-origin: center;
+            transition: none;
+          }
+
+          &[data-dock-ready] {
+            .header-mobile-dock-action {
+              transition:
+                var(--animation-transition-header-color),
+                var(--animation-transition-header-background),
+                var(--animation-transition-mobile-dock-action);
+            }
+          }
+
+          .header-mobile-filter-button {
+            opacity: var(--header-mobile-dock-filter-opacity);
+            pointer-events: none;
+            transform: scale(var(--header-mobile-dock-filter-scale));
+          }
+
+          .header-mobile-dock-action {
             svg {
-              width: 22px;
-              height: 22px;
+              width: var(--header-mobile-dock-icon-size);
+              height: var(--header-mobile-dock-icon-size);
+              transform-origin: center;
+              transition: none;
+            }
+          }
+
+          &[data-dock-ready] {
+            .header-mobile-dock-action svg {
+              transition: var(--animation-transition-mobile-dock-icon);
+            }
+          }
+
+          @container header-mobile-dock-actions (min-width: 1px) {
+            .header-mobile-dock-action svg {
+              width: clamp(18px, calc(22px - 7cqw + 7cqh), 22px);
+              height: clamp(18px, calc(22px - 7cqw + 7cqh), 22px);
+            }
+          }
+
+          &[data-dock-mode="filter-search"] {
+            .header-mobile-filter-button {
+              pointer-events: auto;
+            }
+
+            .header-mobile-search-button {
+              border-inline-start: 1px solid var(--border-color);
             }
           }
 
