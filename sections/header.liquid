@@ -132,36 +132,43 @@
           {% render 'icon-menu', size: 22 %}
         </label>
       </nav>
-      {% if product_active %}
-        <button type="button" class="header-mobile-product-buy-button font-mono font-12 mobile-only" aria-label="Product action">
-          ADD TO BAG
+      <button
+        type="button"
+        class="header-mobile-product-buy-button font-mono font-12 mobile-only"
+        aria-label="Product action"
+        {% unless product_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+      >
+        ADD TO BAG
+      </button>
+      <div class="header-mobile-dock-actions mobile-only{% if collection_active %} header-mobile-dock-actions-collection{% endif %}{% if product_active %} header-mobile-dock-actions-product{% endif %}">
+        <button
+          type="button"
+          class="header-mobile-dock-action header-mobile-filter-button"
+          aria-label="Filters"
+          {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+        >
+          {% render 'icon-filter', size: 22 %}
         </button>
-        <div class="header-mobile-dock-actions header-mobile-dock-actions-product mobile-only">
-          <label for="header-product-dock-config-{{ section.id }}" class="header-mobile-dock-action header-mobile-product-button" aria-label="Product">
-            {% render 'icon-product', size: 22 %}
-          </label>
-          <button type="button" class="header-mobile-dock-action header-mobile-search-button" aria-label="Search">
-            {% render 'icon-search', size: 22 %}
-          </button>
-          <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-dock-action header-mobile-gear-button" aria-label="Product settings">
-            {% render 'icon-gear', size: 22 %}
-          </label>
-        </div>
-      {% else %}
-        <div class="header-mobile-dock-actions mobile-only{% if collection_active %} header-mobile-dock-actions-collection{% endif %}">
-          <button
-            type="button"
-            class="header-mobile-dock-action header-mobile-filter-button"
-            aria-label="Filters"
-            {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
-          >
-            {% render 'icon-filter', size: 22 %}
-          </button>
-          <a href="{{ routes.search_url }}" class="header-mobile-dock-action header-mobile-search-button header-link" aria-label="Search">
-            {% render 'icon-search', size: 22 %}
-          </a>
-        </div>
-      {% endif %}
+        <label
+          {% if product_active %}for="header-product-dock-config-{{ section.id }}"{% endif %}
+          class="header-mobile-dock-action header-mobile-product-button"
+          aria-label="Product"
+          {% unless product_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+        >
+          {% render 'icon-product', size: 22 %}
+        </label>
+        <a href="{{ routes.search_url }}" class="header-mobile-dock-action header-mobile-search-button header-link" aria-label="Search">
+          {% render 'icon-search', size: 22 %}
+        </a>
+        <label
+          {% if product_active %}for="header-product-dock-menu-{{ section.id }}"{% endif %}
+          class="header-mobile-dock-action header-mobile-gear-button"
+          aria-label="Product settings"
+          {% unless product_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+        >
+          {% render 'icon-gear', size: 22 %}
+        </label>
+      </div>
     </div>
   </header>
 </sticky-header>
@@ -294,7 +301,7 @@
             --size: var(--header-mobile-bar-height, 58px);
 
             display: grid;
-            grid-template-columns: 0 var(--size);
+            grid-template-columns: 0 0 var(--size) 0;
             width: var(--size);
             height: var(--size);
             background-color: var(--white);
@@ -307,13 +314,12 @@
           }
 
           .header-mobile-dock-actions-collection {
-            grid-template-columns: repeat(2, var(--size));
+            grid-template-columns: var(--size) 0 var(--size) 0;
             width: calc(var(--size) + var(--size));
           }
 
           .header-mobile-dock-actions-product {
             flex: 0 0 var(--size);
-            grid-template-columns: 0 var(--size) 0;
             min-width: 0;
             width: var(--size);
             transition:
@@ -351,6 +357,10 @@
           }
 
           .header-mobile-product-buy-button {
+            display: none;
+          }
+
+          .header-right-product .header-mobile-product-buy-button {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -392,9 +402,12 @@
           }
 
           .header-mobile-gear-button {
-            opacity: 0;
+            --opacity: 0;
+            --scale: 0.72;
+
+            opacity: var(--opacity);
             pointer-events: none;
-            transform: scale(0.72);
+            transform: scale(var(--scale));
             transform-origin: center;
           }
 
@@ -452,7 +465,7 @@
 
             .header-mobile-dock-actions-product {
               flex: 0 0 calc(var(--size) + var(--size));
-              grid-template-columns: var(--size) var(--size) 0;
+              grid-template-columns: 0 var(--size) var(--size) 0;
               width: calc(var(--size) + var(--size));
             }
 
@@ -480,7 +493,7 @@
             }
 
             .header-mobile-dock-actions-product {
-              grid-template-columns: 0 0 var(--size);
+              grid-template-columns: 0 0 0 var(--size);
             }
 
             .header-mobile-product-button,
@@ -492,9 +505,12 @@
             }
 
             .header-mobile-gear-button {
-              opacity: 1;
+              --opacity: 1;
+              --scale: 1;
+
+              opacity: var(--opacity);
               pointer-events: auto;
-              transform: scale(1);
+              transform: scale(var(--scale));
               view-transition-name: header-mobile-dock-gear;
             }
           }
