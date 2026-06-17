@@ -1,5 +1,10 @@
 @layer components {
   .button {
+    --color: var(--blue);
+    --color-hover: oklch(from var(--color) calc(l - var(--hover-l)) c h);
+    --color-disabled: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
+    --color-disabled-text: oklch(from var(--color) 0.55 0.02 h);
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,17 +16,16 @@
     color: var(--white);
 
     &:hover {
-      background: oklch(from var(--color) calc(l - var(--hover-l)) c h);
+      background: var(--color-hover);
     }
 
     &:disabled {
-      background: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
-      color: oklch(from var(--color) 0.55 0.02 h);
+      background: var(--color-disabled);
+      color: var(--color-disabled-text);
       cursor: not-allowed;
     }
 
     &.button-primary {
-      --color: var(--blue);
       color: var(--white);
     }
 

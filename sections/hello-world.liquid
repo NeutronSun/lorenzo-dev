@@ -1,5 +1,6 @@
 {% liquid
   assign color_tokens = 'red,yellow,green,blue,purple,pink,orange,gray,black,white' | split: ','
+  assign hue_steps = '0,45,90,135,180,225,270,315,360' | split: ','
   assign drawer_id = section.id
   assign drawer_directions = 'left,right,top,bottom' | split: ','
 %}
@@ -50,7 +51,7 @@
       <div class="style-guide__block-header">
         <h2 id="colors-heading" class="font-heading">Colors</h2>
         <p class="font-body">
-          Utility class sets <code>--color</code>. States are derived with
+          Utility class <code>.color-*</code> sets <code>--color</code>. States are derived with
           <code>oklch(from var(--color) …)</code> — relative color syntax that reads
           the base color and outputs a new one.
         </p>
@@ -67,37 +68,63 @@
 
       <ul class="style-guide__swatches">
         {% for token in color_tokens %}
-          <li class="style-guide__swatch {{ token }}">
+          <li class="style-guide__swatch color-{{ token }}">
             <div class="style-guide__swatch-meta font-body">
-              <strong>.{{ token }}</strong>
+              <strong>.color-{{ token }}</strong>
               <code>--{{ token }}</code> → <code>--color</code>
             </div>
 
-            <ul class="style-guide__scale">
+            <ul class="style-guide__state-scale">
               <li class="style-guide__scale-item">
                 <span class="style-guide__scale-step style-guide__scale-step--default" aria-hidden="true"></span>
                 <span class="style-guide__scale-label font-body">Default</span>
-                <p class="style-guide__scale-detail font-body">
-                  <code>var(--color)</code><br>
-                  <span>L C H</span> unchanged
-                </p>
               </li>
               <li class="style-guide__scale-item">
                 <span class="style-guide__scale-step style-guide__scale-step--hover" aria-hidden="true"></span>
                 <span class="style-guide__scale-label font-body">Hover</span>
-                <p class="style-guide__scale-detail font-body">
-                  <code>calc(l − var(--hover-l))</code><br>
-                  <span>L ↓</span> · C · H
-                </p>
               </li>
               <li class="style-guide__scale-item">
                 <span class="style-guide__scale-step style-guide__scale-step--disabled" aria-hidden="true"></span>
                 <span class="style-guide__scale-label font-body">Disabled</span>
-                <p class="style-guide__scale-detail font-body">
-                  <code>L var(--disabled-l)</code> · <code>C var(--disabled-c)</code><br>
-                  <span>L ↑</span> · <span>C ↓↓</span> · H
-                </p>
               </li>
+            </ul>
+
+            <ul class="style-guide__tone-scale">
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--light" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Light</span>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--soft" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Soft</span>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--base" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Base</span>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--strong" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Strong</span>
+              </li>
+              <li class="style-guide__scale-item">
+                <span class="style-guide__scale-step style-guide__scale-step--dark" aria-hidden="true"></span>
+                <span class="style-guide__scale-label font-body">Dark</span>
+              </li>
+            </ul>
+
+            <ul class="style-guide__hue-scale">
+              {% for hue_step in hue_steps %}
+                <li class="style-guide__scale-item">
+                  <span class="style-guide__scale-step style-guide__hue-step style-guide__hue-step--{{ hue_step }}" aria-hidden="true"></span>
+                  <span class="style-guide__scale-label font-body">+{{ hue_step }}°</span>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <ul class="style-guide__token-list style-guide__swatch-formulas font-body">
+              <li><strong>Hover</strong> <code>l - var(--hover-l)</code></li>
+              <li><strong>Disabled</strong> <code>var(--disabled-l)</code> / <code>var(--disabled-c)</code></li>
+              <li><strong>Hue</strong> <code>calc(h + 45)</code> … <code>calc(h + 360)</code></li>
             </ul>
           </li>
         {% endfor %}
@@ -109,6 +136,8 @@
           <li><strong>Default</strong> — <code>background: var(--color)</code></li>
           <li><strong>Hover</strong> — <code>oklch(from var(--color) calc(l - var(--hover-l)) c h)</code></li>
           <li><strong>Disabled</strong> — <code>oklch(from var(--color) var(--disabled-l) var(--disabled-c) h)</code></li>
+          <li><strong>Tones</strong> — adjust <code>l</code> and <code>c</code>, keep <code>h</code></li>
+          <li><strong>Hue wheel</strong> — <code>oklch(from var(--color) l c calc(h + 45))</code></li>
         </ul>
       </details>
     </section>
@@ -153,7 +182,7 @@
       <ul class="style-guide__button-grid">
         {% for token in color_tokens %}
           <li>
-            <button class="button {{ token }}" type="button">.button.{{ token }}</button>
+            <button class="button color-{{ token }}" type="button">.button.color-{{ token }}</button>
           </li>
         {% endfor %}
       </ul>
@@ -334,7 +363,7 @@
 
   .style-guide__swatch {
     display: grid;
-    gap: 0.75rem;
+    gap: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
     border: 1px solid oklch(from var(--black) l c h / 0.08);
@@ -347,13 +376,26 @@
     font-size: 0.875rem;
   }
 
-  .style-guide__scale {
+  .style-guide__state-scale,
+  .style-guide__tone-scale,
+  .style-guide__hue-scale {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+
+  .style-guide__state-scale {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .style-guide__tone-scale {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .style-guide__hue-scale {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .style-guide__scale-item {
@@ -380,6 +422,62 @@
     background: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
   }
 
+  .style-guide__scale-step--light {
+    background: oklch(from var(--color) 92% calc(c * 0.35) h);
+  }
+
+  .style-guide__scale-step--soft {
+    background: oklch(from var(--color) 78% calc(c * 0.6) h);
+  }
+
+  .style-guide__scale-step--base {
+    background: var(--color);
+  }
+
+  .style-guide__scale-step--strong {
+    background: oklch(from var(--color) calc(l - 10%) c h);
+  }
+
+  .style-guide__scale-step--dark {
+    background: oklch(from var(--color) 34% c h);
+  }
+
+  .style-guide__hue-step--0 {
+    background: oklch(from var(--color) l c h);
+  }
+
+  .style-guide__hue-step--45 {
+    background: oklch(from var(--color) l c calc(h + 45));
+  }
+
+  .style-guide__hue-step--90 {
+    background: oklch(from var(--color) l c calc(h + 90));
+  }
+
+  .style-guide__hue-step--135 {
+    background: oklch(from var(--color) l c calc(h + 135));
+  }
+
+  .style-guide__hue-step--180 {
+    background: oklch(from var(--color) l c calc(h + 180));
+  }
+
+  .style-guide__hue-step--225 {
+    background: oklch(from var(--color) l c calc(h + 225));
+  }
+
+  .style-guide__hue-step--270 {
+    background: oklch(from var(--color) l c calc(h + 270));
+  }
+
+  .style-guide__hue-step--315 {
+    background: oklch(from var(--color) l c calc(h + 315));
+  }
+
+  .style-guide__hue-step--360 {
+    background: oklch(from var(--color) l c calc(h + 360));
+  }
+
   .style-guide__scale-label {
     font-size: 0.6875rem;
     text-align: center;
@@ -404,6 +502,10 @@
 
   .style-guide__scale-detail span {
     letter-spacing: 0.02em;
+  }
+
+  .style-guide__swatch-formulas {
+    font-size: 0.75rem;
   }
 
   .style-guide__type-samples {

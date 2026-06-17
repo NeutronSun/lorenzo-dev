@@ -6,42 +6,61 @@
     --disabled-c: 0.015;
 
 
-    --background: lab(96.5461% -.0119209 1.90754);
-    --background-darken: lab(93.0711% -.0121593 2.29042);
-    --border-color: lab(88.426% -.0113547 1.90792);
-    --secondary-black: lab(41.9663% -.489771 -3.71957);
+    --background: oklch(97% 0.005 89.87);
+    --background-darken: oklch(94% 0.006 89.89);
+    --border-color: oklch(90% 0.005 89.88);
+    --secondary-black: oklch(50% 0.01 260.01);
 
 
-    --red: #dc2626;
-    --yellow: #f59e0b;
-    --green: #16a34a;
-    --blue: #3b82f6;
-    --purple: #8b5cf6;
-    --pink: #ec4899;
-    --orange: #f97316;
-    --gray: #6b7280;
-    --black: #1f2937;
-    --white: #f9fafb;
+    --red: oklch(57.71% 0.2152 27.33);
+    --yellow: oklch(76.859% 0.1647 70.08);
+    --green: oklch(62.705% 0.1699 149.21);
+    --blue: oklch(62.308% 0.188 259.81);
+    --purple: oklch(60.563% 0.2189 292.72);
+    --pink: oklch(65.592% 0.2118 354.31);
+    --orange: oklch(70.487% 0.1867 47.6);
+    --gray: oklch(55.102% 0.0234 264.36);
+    --black: oklch(27.808% 0.0296 256.85);
+    --white: oklch(98.463% 0.0017 247.84);
 
     --spacing: 20px;
     --header-spacing-top: var(--spacing);
     --header-spacing: var(--header-spacing-top);
 
   }
+
+  :where(
+    .color,
+    .color-red,
+    .color-yellow,
+    .color-green,
+    .color-blue,
+    .color-purple,
+    .color-pink,
+    .color-orange,
+    .color-gray,
+    .color-black,
+    .color-white
+  ) {
+    --color-hover: oklch(from var(--color) calc(l - var(--hover-l)) c h);
+    --color-disabled: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
+    --color-disabled-text: oklch(from var(--color) 0.55 0.02 h);
+  }
+
   body {
     background-color: var(--background);
   }
 
-  .red { --color: var(--red); }
-  .yellow { --color: var(--yellow); }
-  .green { --color: var(--green); }
-  .blue { --color: var(--blue); }
-  .purple { --color: var(--purple); }
-  .pink { --color: var(--pink); }
-  .orange { --color: var(--orange); }
-  .gray { --color: var(--gray); }
-  .black { --color: var(--black); }
-  .white { --color: var(--white);}
+  .color-red { --color: var(--red); }
+  .color-yellow { --color: var(--yellow); }
+  .color-green { --color: var(--green); }
+  .color-blue { --color: var(--blue); }
+  .color-purple { --color: var(--purple); }
+  .color-pink { --color: var(--pink); }
+  .color-orange { --color: var(--orange); }
+  .color-gray { --color: var(--gray); }
+  .color-black { --color: var(--black); }
+  .color-white { --color: var(--white);}
 
   ::-webkit-scrollbar,
   ::-webkit-scrollbar {
