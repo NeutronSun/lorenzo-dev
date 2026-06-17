@@ -1,14 +1,38 @@
-{% render "product-card", product: product %}
+<product-card {{ block.shopify_attributes }}>
+  {% content_for 'block', type: 'product-card-media', id: 'media', product: product %}
+  {% content_for 'block', type: 'product-card-info', id: 'info', product: product %}
+  <a class="product-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
+</product-card>
 
+{% stylesheet %}
+  product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    box-shadow: 0 1px 10px rgb(0 0 0 / 0.03);
+  }
 
+  .product-card__link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    cursor: pointer;
+  }
 
-
+  product-card-labels,
+  product-card-swatches {
+    z-index: 3;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Product Card",
-  "settings": [
-  ],
+  "settings": [],
   "presets": [
     {
       "name": "Product Card",

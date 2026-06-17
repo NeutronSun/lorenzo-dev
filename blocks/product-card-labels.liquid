@@ -1,0 +1,110 @@
+{% liquid
+  assign rarity = product.metafields.valeverce.rarity.value
+  assign rarity_color = rarity.color.value | default: rarity.color
+  assign now = 'now' | date: '%s' | times: 1
+  assign created_at = product.created_at | date: '%s' | times: 1
+  assign new_in_threshold = 30 | times: 24 | times: 60 | times: 60
+  assign product_age = now | minus: created_at
+  assign is_new_in = false
+
+  if product_age <= new_in_threshold
+    assign is_new_in = true
+  endif
+%}
+
+{% if block.settings.show_new_in and is_new_in or block.settings.show_sold_out and product.available == false or block.settings.show_rarity and rarity != blank %}
+  <product-card-labels {{ block.shopify_attributes }}>
+    {% if block.settings.show_new_in and is_new_in %}
+      <span class="product-card-label">New in</span>
+    {% endif %}
+
+    {% if block.settings.show_sold_out and product.available == false %}
+      <span class="product-card-label product-card-label--sold-out">
+        <span class="product-card-label__swatch"></span>
+        Sold out
+      </span>
+    {% endif %}
+
+    {% if block.settings.show_rarity and rarity != blank %}
+      <span class="product-card-label product-card-label--rarity" style="--rarity-color: {{ rarity_color | default: 'var(--black)' }};">
+        <span class="product-card-label__swatch"></span>
+        {{ rarity.label | default: rarity.name | default: 'Rarity' }}
+      </span>
+    {% endif %}
+  </product-card-labels>
+{% endif %}
+
+{% stylesheet %}
+  product-card-labels {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    max-width: calc(100% - 20px);
+  }
+
+  .product-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 24px;
+    padding: 0 8px;
+    border: 1px solid rgb(0 0 0 / 0.08);
+    background: rgb(255 255 255 / 0.92);
+    color: var(--black);
+    font-family: var(--font-mono--family);
+    font-style: var(--font-mono--style);
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .product-card-label__swatch {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--rarity-color, var(--black));
+  }
+
+  .product-card-label--sold-out {
+    --rarity-color: var(--red);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Labels",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_new_in",
+      "label": "Show New in",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_out",
+      "label": "Show Sold out",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rarity",
+      "label": "Show rarity",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Labels",
+      "category": "Product card"
+    }
+  ]
+}
+{% endschema %}
