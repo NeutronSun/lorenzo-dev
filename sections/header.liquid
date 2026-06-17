@@ -26,7 +26,7 @@
     assign cart_active = true
   endif
 
-  if home_active == false and account_active == false and cart_active == false and product_active == false
+  if home_active == false and account_active == false and cart_active == false and collection_active == false and product_active == false
     assign menu_active = true
   endif
 -%}
@@ -141,14 +141,16 @@
         ADD TO BAG
       </button>
       <div class="header-mobile-dock-actions mobile-only{% if collection_active %} header-mobile-dock-actions-collection{% endif %}{% if product_active %} header-mobile-dock-actions-product{% endif %}">
-        <button
-          type="button"
+        <dialog-opener
+          name="filters-collection"
           class="header-mobile-dock-action header-mobile-filter-button"
           aria-label="Filters"
           {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
         >
-          {% render 'icon-filter', size: 22 %}
-        </button>
+          <button type="button" on:click="publish" aria-label="Filters">
+            {% render 'icon-filter', size: 22 %}
+          </button>
+        </dialog-opener>
         <label
           {% if product_active %}for="header-product-dock-config-{{ section.id }}"{% endif %}
           class="header-mobile-dock-action header-mobile-product-button"
@@ -346,6 +348,19 @@
               transform var(--motion-dock) var(--ease-dock);
           }
 
+          .header-mobile-dock-action > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            cursor: inherit;
+          }
+
           .header-mobile-filter-button {
             --opacity: 0;
             --scale: 0.72;
@@ -426,6 +441,13 @@
 
             .header-mobile-search-button {
               border-inline-start: 1px solid var(--border-color);
+            }
+          }
+
+          body:has(.filters-drawer[open]) & {
+            .header-mobile-filter-button {
+              color: var(--white);
+              background-color: var(--black);
             }
           }
 

@@ -3,15 +3,11 @@
 
 {% content_for 'block', type: 'filters', id: 'filters-and-sorting', source: collection %}
 
-<product-grid class="">
+<product-grid>
   {% paginate collection.products by 18 %}
-    {% capture products %}
-      {% for product in collection.products %}
-        {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
-      {% endfor %}
-    {% endcapture %}
-
-    {{ products }}
+    {% for product in collection.products %}
+      {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
+    {% endfor %}
 
     {{ paginate | default_pagination }}
   {% endpaginate %}

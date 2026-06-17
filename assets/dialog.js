@@ -34,7 +34,14 @@ export class DialogComponent extends HTMLComponent {
   }
 
   open() {
-    this.refs.dialog?.showModal();
+    if (!this.refs.dialog) return;
+
+    if (this.hasAttribute('non-modal')) {
+      this.refs.dialog.show();
+      return;
+    }
+
+    this.refs.dialog.showModal();
   }
 
   close() {

@@ -1,0 +1,396 @@
+{% doc %}
+  Renders collection filters and sorting.
+
+  @param {collection} source - Collection object
+  @param {string} drawer_id - Drawer id
+{% enddoc %}
+
+{% liquid
+  assign drawer_name = 'filters-' | append: drawer_id
+  assign current_sort = source.sort_by | default: source.default_sort_by
+%}
+
+<dialog-opener name="{{ drawer_name }}">
+  <button class="filters-trigger" type="button" on:click="publish">
+    Filter and sort
+  </button>
+</dialog-opener>
+
+<dialog-component name="{{ drawer_name }}" non-modal>
+  <dialog ref="dialog" class="drawer from-right filters-drawer">
+    <filters>
+      <form>
+        <header>
+          <p class="eyebrow font-mono">/Filter</p>
+          <h2 class="title font-heading">Refine</h2>
+          <button class="close" type="button" data-filters-close aria-label="Close">
+            {% render 'icon-close', icon_size: 18 %}
+          </button>
+        </header>
+
+        <div class="body">
+          <fieldset>
+            <legend class="font-mono">Sort by</legend>
+            <div class="sort-list">
+              {% for option in source.sort_options %}
+                <label class="sort-option">
+                  <input
+                    type="radio"
+                    name="sort_by"
+                    value="{{ option.value }}"
+                    {% if option.value == current_sort %}checked{% endif %}
+                  >
+                  <span>{{ option.name }}</span>
+                  {% render 'icon-chevron', icon_size: 16 %}
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          {% for filter in source.filters %}
+            {% if filter.type == 'price_range' %}
+              <fieldset>
+                <legend class="font-mono">{{ filter.label }}</legend>
+                <div class="price">
+                  <label>
+                    <input
+                      name="{{ filter.min_value.param_name }}"
+                      type="number"
+                      min="0"
+                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                      placeholder="Min €"
+                      aria-label="Minimum price"
+                    >
+                  </label>
+                  <label>
+                    <input
+                      name="{{ filter.max_value.param_name }}"
+                      type="number"
+                      min="0"
+                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                      placeholder="Max €"
+                      aria-label="Maximum price"
+                    >
+                  </label>
+                </div>
+              </fieldset>
+            {% endif %}
+          {% endfor %}
+
+          {% for filter in source.filters %}
+            {% liquid
+              assign filter_label = filter.label | downcase
+              assign is_color_filter = false
+
+              if filter_label contains 'color' or filter_label contains 'colour' or filter_label contains 'colore'
+                assign is_color_filter = true
+              endif
+            %}
+
+            {% unless filter.type == 'price_range' or is_color_filter %}
+              {% if filter.values.size > 1 %}
+                <fieldset>
+                  <legend class="font-mono">{{ filter.label }}</legend>
+                  <div class="values">
+                    {% for value in filter.values %}
+                      {% if value.active or value.count > 0 %}
+                        <label class="value{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          >
+                          <span>{{ value.label }}</span>
+                        </label>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
+        </div>
+
+        <footer>
+          <button class="clear" type="button" data-filters-clear>Clear</button>
+          <button class="apply" type="submit">Apply filters</button>
+        </footer>
+      </form>
+    </filters>
+  </dialog>
+</dialog-component>
+
+{% stylesheet %}
+  .filters-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--black);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .filters-drawer {
+    --drawer-width: min(420px, calc(100dvw - var(--drawer-left-spacing) - var(--drawer-right-spacing)));
+    z-index: 90;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--black);
+  }
+
+  body:has(.filters-drawer[open])::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: rgb(0 0 0 / 0.28);
+    backdrop-filter: blur(1px);
+    pointer-events: none;
+  }
+
+  filters {
+    display: block;
+    height: 100%;
+    min-height: 0;
+
+    form {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      height: 100%;
+      min-height: 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.25rem 1rem;
+      padding: 1rem 1.25rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .eyebrow {
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+    }
+
+    .title {
+      grid-column: 1;
+      margin: 0;
+      font-size: 1.125rem;
+    }
+
+    .close {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: start;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--black);
+      cursor: pointer;
+    }
+
+    .body {
+      display: grid;
+      align-content: start;
+      gap: 28px;
+      min-height: 0;
+      padding: 1.25rem;
+      overflow: auto;
+    }
+
+    fieldset {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    legend {
+      padding: 0;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+    }
+
+    .sort-list,
+    .values,
+    .price {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .sort-list {
+      gap: 0;
+      border: 1px solid var(--border-color);
+    }
+
+    .sort-option,
+    .value {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0 1rem;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--black);
+      cursor: pointer;
+    }
+
+    .sort-option {
+      justify-content: space-between;
+      border-width: 0 0 1px;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      &:has(input:checked) {
+        background: var(--background-darken);
+      }
+
+      &:hover {
+        background: var(--background-darken);
+      }
+
+      svg {
+        opacity: 0;
+        transform: rotate(90deg);
+      }
+
+      &:has(input:checked) svg {
+        opacity: 1;
+      }
+    }
+
+    .sort-option input,
+    .value input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: inherit;
+    }
+
+    .values {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .value {
+      justify-content: center;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+
+      &:hover {
+        background: var(--background-darken);
+      }
+
+      &.is-active {
+        background: var(--black);
+        color: var(--white);
+        border-color: var(--black);
+      }
+
+      &:has(input:checked) {
+        background: var(--black);
+        color: var(--white);
+        border-color: var(--black);
+      }
+
+      &.is-disabled {
+        background: var(--background-darken);
+        border-color: var(--background-darken);
+        border-left: 4px solid var(--orange);
+        color: var(--gray);
+        cursor: not-allowed;
+      }
+    }
+
+    .price {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      input {
+        width: 100%;
+        min-height: 2.75rem;
+        padding: 0 0.75rem;
+        border: 1px solid var(--border-color);
+        background: var(--white);
+        color: var(--black);
+        font: inherit;
+      }
+    }
+
+    footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1.75fr;
+      gap: 0.5rem;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .clear,
+    .apply {
+      min-height: 2.75rem;
+      border: 1px solid var(--border-color);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .clear {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .apply {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .filters-drawer {
+      --filters-dock-clearance: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing));
+      --drawer-height: calc(100dvh - var(--spacing) - var(--filters-dock-clearance));
+      --origin-x: 0;
+      --origin-y: calc(100% + var(--filters-dock-clearance));
+
+      inset:
+        var(--spacing)
+        var(--drawer-right-spacing)
+        var(--filters-dock-clearance)
+        var(--drawer-left-spacing);
+      width: auto;
+      height: var(--drawer-height);
+      max-width: none;
+      max-height: none;
+    }
+  }
+{% endstylesheet %}
