@@ -5,7 +5,6 @@ class Filters {
   static SELECTOR = 'filters';
   static CLEAR_SELECTOR = '[data-filters-clear]';
   static CLOSE_SELECTOR = '[data-filters-close]';
-  static DOCK_SELECTOR = '.header-mobile-bar, .header-mobile-dock-actions';
   static TEMPLATE_VIEW = 'filters';
 
   constructor() {
@@ -54,7 +53,6 @@ class Filters {
 
     const clear = target.closest(Filters.CLEAR_SELECTOR);
     const close = target.closest(Filters.CLOSE_SELECTOR);
-    const dock = target.closest(Filters.DOCK_SELECTOR);
 
     if (clear instanceof HTMLElement) {
       const form = clear.closest('form');
@@ -70,10 +68,6 @@ class Filters {
     if (close instanceof HTMLElement) {
       event.preventDefault();
       this.close(close);
-    }
-
-    if (dock instanceof HTMLElement && !target.closest(Filters.SELECTOR)) {
-      this.closeOpen();
     }
   }
 
@@ -118,14 +112,6 @@ class Filters {
    */
   close(element) {
     const dialog = element.closest('dialog');
-
-    if (dialog instanceof HTMLDialogElement) {
-      dialog.close();
-    }
-  }
-
-  closeOpen() {
-    const dialog = document.querySelector('.filters-drawer[open]');
 
     if (dialog instanceof HTMLDialogElement) {
       dialog.close();

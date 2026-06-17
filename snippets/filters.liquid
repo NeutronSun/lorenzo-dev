@@ -82,14 +82,49 @@
           {% for filter in source.filters %}
             {% liquid
               assign filter_label = filter.label | downcase
+              assign filter_param_name = filter.param_name | default: ''
               assign is_color_filter = false
+              assign is_rarity_filter = false
 
               if filter_label contains 'color' or filter_label contains 'colour' or filter_label contains 'colore'
                 assign is_color_filter = true
               endif
+
+              if filter_label contains 'rarity' or filter_param_name contains 'valeverce.rarity'
+                assign is_rarity_filter = true
+              endif
             %}
 
-            {% unless filter.type == 'price_range' or is_color_filter %}
+            {% if is_rarity_filter %}
+              {% if filter.values.size > 1 %}
+                <fieldset>
+                  <legend class="font-mono">{{ filter.label }}</legend>
+                  <div class="rarity-values">
+                    {% for value in filter.values %}
+                      {% if value.active or value.count > 0 %}
+                        {% liquid
+                          assign rarity_color = value.swatch.color
+                        %}
+
+                        <label class="value rarity-value{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          >
+                          <span class="rarity-swatch" style="--rarity-color: {{ rarity_color | default: 'var(--background-darken)' }};"></span>
+                          <span>{{ value.label }}</span>
+                        </label>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% endif %}
+            {% endif %}
+
+            {% unless filter.type == 'price_range' or is_color_filter or is_rarity_filter %}
               {% if filter.values.size > 1 %}
                 <fieldset>
                   <legend class="font-mono">{{ filter.label }}</legend>
@@ -139,8 +174,8 @@
   }
 
   .filters-drawer {
-    --drawer-width: min(420px, calc(100dvw - var(--drawer-left-spacing) - var(--drawer-right-spacing)));
-    z-index: 90;
+    --drawer-width: var(--filters-drawer-width);
+    z-index: var(--z-index-drawer);
     border: 1px solid var(--border-color);
     background: var(--white);
     color: var(--black);
@@ -150,8 +185,8 @@
     content: "";
     position: fixed;
     inset: 0;
-    z-index: 80;
-    background: rgb(0 0 0 / 0.28);
+    z-index: var(--z-index-overlay);
+    background: rgb(0 0 0 / 0.2);
     backdrop-filter: blur(1px);
     pointer-events: none;
   }
@@ -234,9 +269,15 @@
     }
 
     .sort-list,
-    .values,
+    .rarity-values,
     .price {
       display: grid;
+      gap: 0.5rem;
+    }
+
+    .values {
+      display: flex;
+      flex-wrap: wrap;
       gap: 0.5rem;
     }
 
@@ -256,6 +297,10 @@
       background: var(--white);
       color: var(--black);
       cursor: pointer;
+      font-family: var(--font-body--family);
+      font-style: var(--font-body--style);
+      font-weight: 400;
+      font-size: 14px;
     }
 
     .sort-option {
@@ -295,13 +340,10 @@
       cursor: inherit;
     }
 
-    .values {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .value {
+      width: fit-content;
+      text-wrap: nowrap;
       justify-content: center;
-      font-size: 0.75rem;
       text-transform: uppercase;
 
       &:hover {
@@ -327,6 +369,28 @@
         color: var(--gray);
         cursor: not-allowed;
       }
+    }
+
+    .value.rarity-value {
+      justify-content: flex-start;
+      gap: 0.75rem;
+      text-transform: uppercase;
+
+      &:has(input:checked),
+      &.is-active {
+        background: var(--background-darken);
+        color: var(--black);
+        border-color: var(--border-color);
+      }
+    }
+
+    .rarity-swatch {
+      flex: 0 0 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--rarity-color, var(--background-darken));
     }
 
     .price {
