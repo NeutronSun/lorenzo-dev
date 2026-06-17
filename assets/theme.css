@@ -12,7 +12,8 @@
     --secondary-black: oklch(50% 0.01 260.01);
 
 
-    --red: oklch(57.71% 0.2152 27.33);
+    --accent: oklch(70.6242% 0.1555 48.48);
+    --red: oklch(58.5716% 0.2473 27.96);
     --yellow: oklch(76.859% 0.1647 70.08);
     --green: oklch(62.705% 0.1699 149.21);
     --blue: oklch(62.308% 0.188 259.81);
@@ -20,8 +21,8 @@
     --pink: oklch(65.592% 0.2118 354.31);
     --orange: oklch(70.487% 0.1867 47.6);
     --gray: oklch(55.102% 0.0234 264.36);
-    --black: oklch(27.808% 0.0296 256.85);
-    --white: oklch(98.463% 0.0017 247.84);
+    --black: oklch(17.9480% 0.0104 253.58);
+    --white: oklch(100% 0 0);
 
     --spacing: 20px;
     --header-spacing-top: var(--spacing);

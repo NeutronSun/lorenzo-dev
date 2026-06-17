@@ -312,7 +312,9 @@
       }
 
       &:has(input:checked) {
-        background: var(--background-darken);
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--black);
       }
 
       &:hover {
@@ -351,15 +353,15 @@
       }
 
       &.is-active {
-        background: var(--black);
-        color: var(--white);
-        border-color: var(--black);
+        background: var(--accent);
+        color: var(--black);
+        border-color: var(--accent);
       }
 
       &:has(input:checked) {
-        background: var(--black);
-        color: var(--white);
-        border-color: var(--black);
+        background: var(--accent);
+        color: var(--black);
+        border-color: var(--accent);
       }
 
       &.is-disabled {
@@ -378,9 +380,9 @@
 
       &:has(input:checked),
       &.is-active {
-        background: var(--background-darken);
+        background: var(--accent);
         color: var(--black);
-        border-color: var(--border-color);
+        border-color: var(--accent);
       }
     }
 

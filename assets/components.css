@@ -1,6 +1,6 @@
 @layer components {
   .button {
-    --color: var(--blue);
+    --color: var(--black);
     --color-hover: oklch(from var(--color) calc(l - var(--hover-l)) c h);
     --color-disabled: oklch(from var(--color) var(--disabled-l) var(--disabled-c) h);
     --color-disabled-text: oklch(from var(--color) 0.55 0.02 h);
@@ -10,13 +10,15 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+    border-radius: 0;
     background: var(--color);
-    border: none;
+    border: 1px solid var(--color);
     color: var(--white);
+    text-transform: uppercase;
 
     &:hover {
       background: var(--color-hover);
+      border-color: var(--color-hover);
     }
 
     &:disabled {
@@ -26,12 +28,25 @@
     }
 
     &.button-primary {
+      --color: var(--black);
       color: var(--white);
     }
 
     &.button-secondary {
-      --color: var(--gray);
-      color: var(--white);
+      --color: var(--white);
+      color: var(--black);
+      border-color: var(--border-color);
+    }
+
+    &.button-accent {
+      --color: var(--accent);
+      color: var(--black);
+    }
+
+    &.button-ghost {
+      --color: var(--background-darken);
+      color: var(--gray);
+      border-color: var(--background-darken);
     }
   }
 
