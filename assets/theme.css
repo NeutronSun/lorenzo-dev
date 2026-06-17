@@ -23,7 +23,8 @@
     --black: #1f2937;
     --white: #f9fafb;
 
-    --header-spacing-top: 20px;
+    --spacing: 20px;
+    --header-spacing-top: var(--spacing);
     --header-spacing: var(--header-spacing-top);
 
   }

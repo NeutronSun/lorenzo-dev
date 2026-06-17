@@ -1,103 +1,265 @@
 {% doc %}
-  Renders a group of blocks with configurable layout direction, gap and
-  alignment.
-
-  All settings apply to only one dimension to reduce configuration complexity.
-
-  This component is a wrapper concerned only with rendering its children in
-  the specified layout direction with appropriate padding and alignment.
+  Renders a group of blocks with configurable flex layout.
 
   @example
   {% content_for 'block', type: 'group', id: 'group' %}
 {% enddoc %}
 
+{% liquid
+  assign direction = block.settings.direction
+  assign width = block.settings.width
+  assign height = block.settings.height
+  assign width_percent = block.settings.width_percent
+  assign background_image = block.settings.background_image
+  assign background_image_mobile = block.settings.background_image_mobile
+%}
+
 <div
-  class="group {{ block.settings.layout_direction }}"
-  style="
-    --padding: {{ block.settings.padding }}px;
-    --alignment: {{ block.settings.alignment }};
-  "
+  class="group group-{{ block.id }} group--{{ direction }} group--width-{{ width }} group--height-{{ height }}{% if block.settings.vertical_on_mobile and direction == 'horizontal' %} group--mobile-vertical{% endif %}"
   {{ block.shopify_attributes }}
 >
   {% content_for 'blocks' %}
 </div>
 
+{% style %}
+  .group.group-{{ block.id }} {
+    {% if block.settings.width == 'custom' %}
+      flex: 0 0 auto;
+      width: {{ width_percent }}%;
+    {% endif %}
+    gap: {{ block.settings.gap }}px;
+    padding: {{ block.settings.padding }}px;
+    align-items: {{ block.settings.align_items }};
+    justify-content: {{ block.settings.justify_content }};
+  }
+
+  {% if block.settings.enable_background_image and background_image != blank %}
+    .group-{{ block.id }} {
+      background-image: url('{{ background_image | image_url: width: 2400 }}');
+    }
+  {% endif %}
+
+  {% if block.settings.enable_background_image and background_image_mobile != blank %}
+    @media screen and (max-width: 749px) {
+      .group-{{ block.id }} {
+        background-image: url('{{ background_image_mobile | image_url: width: 1200 }}');
+      }
+    }
+  {% endif %}
+{% endstyle %}
+
 {% stylesheet %}
   .group {
     display: flex;
+    flex: 1 1 auto;
     flex-wrap: nowrap;
     overflow: hidden;
-    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   .group--horizontal {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 var(--padding);
   }
 
   .group--vertical {
     flex-direction: column;
-    align-items: var(--alignment);
-    padding: var(--padding) 0;
+  }
+
+  .group--width-fill {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .group--width-fit {
+    flex: 1 1 auto;
+    width: fit-content;
+  }
+
+  .group--width-custom {
+    flex: 0 0 auto;
+  }
+
+  .group--height-auto {
+    min-height: 0;
+  }
+
+  .group--height-small {
+    min-height: 240px;
+  }
+
+  .group--height-medium {
+    min-height: 420px;
+  }
+
+  .group--height-large {
+    min-height: 640px;
+  }
+
+  .group--height-full-screen {
+    min-height: 100svh;
+  }
+
+  @media screen and (max-width: 749px) {
+    .group--mobile-vertical {
+      flex-direction: column;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.group",
+  "name": "Group",
+  "tag": null,
   "blocks": [{ "type": "@theme" }],
   "settings": [
     {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
       "type": "select",
-      "id": "layout_direction",
-      "label": "t:labels.layout_direction",
-      "default": "group--vertical",
+      "id": "direction",
+      "label": "Layout direction",
+      "default": "vertical",
       "options": [
-        { "value": "group--horizontal", "label": "t:options.direction.horizontal" },
-        { "value": "group--vertical", "label": "t:options.direction.vertical" }
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "vertical", "label": "Vertical" }
       ]
     },
     {
-      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
-      "id": "alignment",
-      "label": "t:labels.alignment",
+      "id": "align_items",
+      "label": "Align items",
       "default": "flex-start",
       "options": [
-        { "value": "flex-start", "label": "t:options.alignment.left" },
-        { "value": "center", "label": "t:options.alignment.center" },
-        { "value": "flex-end", "label": "t:options.alignment.right" }
+        { "value": "flex-start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "End" },
+        { "value": "stretch", "label": "Stretch" }
       ]
+    },
+    {
+      "type": "select",
+      "id": "justify_content",
+      "label": "Justify content",
+      "default": "flex-start",
+      "options": [
+        { "value": "flex-start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "End" },
+        { "value": "space-between", "label": "Space between" }
+      ]
+    },
+    {
+      "visible_if": "{{ block.settings.direction == 'horizontal' }}",
+      "type": "checkbox",
+      "id": "vertical_on_mobile",
+      "label": "Vertical on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "default": 16,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "padding",
-      "label": "t:labels.padding",
+      "label": "Padding",
       "default": 0,
       "min": 0,
       "max": 200,
       "step": 2,
       "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "fill",
+      "options": [
+        { "value": "fill", "label": "Fill" },
+        { "value": "fit", "label": "Fit" },
+        { "value": "custom", "label": "Custom" }
+      ]
+    },
+    {
+      "visible_if": "{{ block.settings.width == 'custom' }}",
+      "type": "range",
+      "id": "width_percent",
+      "label": "Width percent",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "default": "auto",
+      "options": [
+        { "value": "auto", "label": "Auto" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full-screen", "label": "Full screen" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_background_image",
+      "label": "Enable background image",
+      "default": false
+    },
+    {
+      "visible_if": "{{ block.settings.enable_background_image }}",
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "visible_if": "{{ block.settings.enable_background_image }}",
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Background image mobile"
     }
   ],
   "presets": [
     {
-      "name": "t:general.column",
-      "category": "t:general.layout",
+      "name": "Group",
+      "category": "Layout",
       "settings": {
-        "layout_direction": "group--vertical",
-        "alignment": "flex-start",
-        "padding": 0
-      }
-    },
-    {
-      "name": "t:general.row",
-      "category": "t:general.layout",
-      "settings": {
-        "layout_direction": "group--horizontal",
-        "padding": 0
+        "direction": "vertical",
+        "align_items": "flex-start",
+        "justify_content": "flex-start",
+        "gap": 16,
+        "padding": 0,
+        "width": "fill",
+        "width_percent": 50,
+        "height": "auto"
       }
     }
   ]

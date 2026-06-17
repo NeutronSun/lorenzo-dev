@@ -1,0 +1,82 @@
+{% render 'spacing', section: section %}
+
+<div class="default-section section-{{ section.id }}">
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .default-section {
+    background-color: var(--white);
+    border: 1px solid var(--red);
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Section",
+  "class": "section page-width",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "default_spacing",
+      "label": "Default spacing",
+      "default": true
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Spacing top mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Spacing bottom mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Spacing top desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Spacing bottom desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Section"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+{% doc %}
+  Renders section spacing scoped by section id.
+
+  @param {section} section - Section object
+{% enddoc %}
+
+{% style %}
+  .section-{{ section.id }} {
+    {% if section.settings.default_spacing %}
+      margin-top: var(--spacing);
+      margin-bottom: var(--spacing);
+    {% else %}
+      margin-top: {{ section.settings.padding_top_mobile }}px;
+      margin-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    {% endif %}
+  }
+
+  {% unless section.settings.default_spacing %}
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }} {
+        margin-top: {{ section.settings.padding_top_desktop }}px;
+        margin-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      }
+    }
+  {% endunless %}
+{% endstyle %}
