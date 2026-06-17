@@ -11,6 +11,63 @@
   "sections": {
     "main": {
       "type": "collection",
+      "blocks": {
+        "filters-and-sorting": {
+          "type": "filters",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "product-card": {
+          "type": "product-card",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "media": {
+              "type": "product-card-media",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "labels": {
+                  "type": "product-card-labels",
+                  "static": true,
+                  "settings": {
+                    "show_new_in": true,
+                    "show_sold_out": true,
+                    "show_rarity": true
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "info": {
+              "type": "product-card-info",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "details": {
+                  "type": "product-card-details",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
+                "swatches": {
+                  "type": "product-card-swatches",
+                  "static": true,
+                  "settings": {
+                    "match_prefix": "Tema_",
+                    "siblings_limit": 10
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": []
+        }
+      },
       "settings": {}
     }
   },
