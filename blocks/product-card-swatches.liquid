@@ -1,33 +1,34 @@
-<product-card-swatches {{ block.shopify_attributes }}>
-  <span style="--swatch-color: oklch(90% 0.04 85);"></span>
-  <span style="--swatch-color: oklch(18% 0.02 260);"></span>
-  <span style="--swatch-color: oklch(36% 0.05 130);"></span>
-</product-card-swatches>
-
-{% stylesheet %}
-  product-card-swatches {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    min-height: 12px;
-  }
-
-  product-card-swatches span {
-    width: 12px;
-    height: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: var(--swatch-color);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
-  }
-{% endstylesheet %}
+{% render 'product-card-swatches',
+  product: product,
+  match_prefix: block.settings.match_prefix,
+  siblings_limit: block.settings.siblings_limit,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
   "name": "Swatches",
-  "settings": [],
+  "settings": [
+    {
+      "type": "select",
+      "id": "match_prefix",
+      "label": "Match tag prefix",
+      "default": "Model_",
+      "options": [
+        { "value": "Model_", "label": "Model_" },
+        { "value": "Tema_", "label": "Tema_" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "siblings_limit",
+      "label": "Siblings limit",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    }
+  ],
   "presets": [
     {
       "name": "Swatches",

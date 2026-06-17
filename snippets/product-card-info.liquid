@@ -1,0 +1,49 @@
+{% doc %}
+  Renders product card info.
+
+  @param {product} product - Product object
+  @param {string} match_prefix - Product sibling match tag prefix
+  @param {number} siblings_limit - Product siblings limit
+  @param {string} details - Product card details HTML
+  @param {string} swatches - Product card swatches HTML
+  @param {string} attributes - Optional attributes for the product-card-info element
+{% enddoc %}
+
+<product-card-info {{ attributes }}>
+  {% if details != blank %}
+    {{ details }}
+  {% else %}
+    {% render 'product-card-details', product: product, attributes: '' %}
+  {% endif %}
+
+  {% if swatches != blank %}
+    {{ swatches }}
+  {% else %}
+    {% render 'product-card-swatches',
+      product: product,
+      match_prefix: match_prefix,
+      siblings_limit: siblings_limit,
+      attributes: ''
+    %}
+  {% endif %}
+</product-card-info>
+
+{% stylesheet %}
+  product-card-info {
+    display: grid;
+    grid-template-rows: auto 18px;
+    gap: 8px;
+    min-height: 76px;
+    padding: 10px;
+    background: var(--white);
+    color: var(--black);
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 749px) {
+    product-card-info {
+      gap: 8px;
+      padding: 10px;
+    }
+  }
+{% endstylesheet %}

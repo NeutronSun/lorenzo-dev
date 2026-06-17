@@ -1,73 +1,7 @@
-{% liquid
-  assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
-  assign micro_category = product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+{% render 'product-card-details',
+  product: product,
+  attributes: block.shopify_attributes
 %}
-
-<product-card-details {{ block.shopify_attributes }}>
-  <div class="product-card-details__meta font-mono">
-    <span>{{ macro_category }}</span>
-    <span>{{ micro_category }}</span>
-  </div>
-
-  <div class="product-card-details__main">
-    <h2>{{ product.title }}</h2>
-    <span>{{ product.price | money }}</span>
-  </div>
-</product-card-details>
-
-{% stylesheet %}
-  product-card-details {
-    display: grid;
-    gap: 6px;
-  }
-
-  .product-card-details__meta,
-  .product-card-details__main {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: 10px;
-  }
-
-  .product-card-details__meta {
-    min-height: 1em;
-    color: var(--gray);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .product-card-details__meta span {
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .product-card-details__main {
-    color: var(--black);
-    font-family: var(--font-body--family);
-    font-style: var(--font-body--style);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 1.2;
-  }
-
-  .product-card-details__main h2 {
-    margin: 0;
-    min-width: 0;
-    font: inherit;
-    letter-spacing: 0;
-  }
-
-  .product-card-details__main span {
-    white-space: nowrap;
-  }
-
-  @media screen and (max-width: 749px) {
-    product-card-details {
-      gap: 6px;
-    }
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

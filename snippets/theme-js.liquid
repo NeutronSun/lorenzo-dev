@@ -7,7 +7,8 @@
       "@theme/header": "{{ 'header.js' | asset_url }}",
       "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}",
       "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
-      "@theme/collection": "{{ 'collection.js' | asset_url }}"
+      "@theme/collection": "{{ 'collection.js' | asset_url }}",
+      "@theme/product-card": "{{ 'product-card.js' | asset_url }}"
     }
   }
 </script>
@@ -36,6 +37,11 @@
 <link
   rel="modulepreload"
   href="{{ 'collection.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'product-card.js' | asset_url }}"
   fetchpriority="low"
 >
 <script

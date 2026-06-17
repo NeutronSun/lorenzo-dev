@@ -1,28 +1,27 @@
-<product-card-info {{ block.shopify_attributes }}>
+{% capture details %}
   {% content_for 'block', type: 'product-card-details', id: 'details', product: product %}
+{% endcapture %}
+
+{% capture swatches %}
   {% content_for 'block', type: 'product-card-swatches', id: 'swatches', product: product %}
-</product-card-info>
+{% endcapture %}
 
-{% stylesheet %}
-  product-card-info {
-    display: grid;
-    gap: 8px;
-    padding: 10px;
-    background: var(--white);
-    color: var(--black);
-  }
-
-  @media screen and (max-width: 749px) {
-    product-card-info {
-      gap: 8px;
-      padding: 10px;
-    }
-  }
-{% endstylesheet %}
+{% render 'product-card-info',
+  product: product,
+  match_prefix: 'Model_',
+  siblings_limit: 10,
+  details: details,
+  swatches: swatches,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
   "name": "Info",
+  "blocks": [
+    { "type": "product-card-details" },
+    { "type": "product-card-swatches" }
+  ],
   "settings": [],
   "presets": [
     {

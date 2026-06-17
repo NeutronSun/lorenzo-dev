@@ -40,6 +40,35 @@ export class HTMLComponent extends HTMLElement {
   });
 
   /**
+   * Collects refs from a root element.
+   *
+   * @param {ParentNode} root
+   * @returns {Refs}
+   */
+  static getRefs(root) {
+    const refs = /** @type any */ ({});
+
+    for (const element of root.querySelectorAll('[ref]')) {
+      const name = element.getAttribute('ref');
+
+      if (!name) continue;
+
+      if (name.endsWith('[]')) {
+        const key = name.slice(0, -2);
+
+        refs[key] ??= [];
+        refs[key].push(element);
+
+        continue;
+      }
+
+      refs[name] = element;
+    }
+
+    return refs;
+  }
+
+  /**
    * Initializes refs, delegated events and DOM observation.
    */
   connectedCallback() {
@@ -95,26 +124,7 @@ export class HTMLComponent extends HTMLElement {
    * `<div ref="items[]"></div>` becomes `this.refs.items`.
    */
   updateRefs() {
-    const refs = /** @type any */ ({});
-
-    for (const element of this.querySelectorAll('[ref]')) {
-      const name = element.getAttribute('ref');
-
-      if (!name) continue;
-
-      if (name.endsWith('[]')) {
-        const key = name.slice(0, -2);
-
-        refs[key] ??= [];
-        refs[key].push(element);
-
-        continue;
-      }
-
-      refs[name] = element;
-    }
-
-    this.refs = refs;
+    this.refs = /** @type {T} */ (HTMLComponent.getRefs(this));
   }
 
   /**
@@ -197,5 +207,55 @@ export class HTMLComponent extends HTMLElement {
   }
 
   onResize() {
+  }
+
+  /**
+   * Replaces a child node from a matching child in a source element.
+   *
+   * @param {string} selector
+   * @param {HTMLElement | Document} source
+   */
+  update(selector, source) {
+    const next = source.querySelector(selector);
+    const current = this.querySelector(selector);
+
+    if (!next || !current) return;
+
+    current.replaceWith(next);
+  }
+
+  /**
+   * Replaces a ref with a matching ref in a source component.
+   *
+   * @param {string} name
+   * @param {HTMLElement} source
+   */
+  updateRef(name, source) {
+    const current = this.refs[name];
+    const next = HTMLComponent.getRefs(source)[name];
+
+    if (!(current instanceof Element)) return;
+    if (!(next instanceof Element)) return;
+
+    current.replaceWith(next);
+  }
+
+  /**
+   * Finds the nearest ancestor by tag name.
+   *
+   * @param {string} tagName
+   * @returns {Element | null}
+   */
+  closestTag(tagName) {
+    let element = this.parentElement;
+    const normalizedTagName = tagName.toLowerCase();
+
+    while (element) {
+      if (element.localName === normalizedTagName) return element;
+
+      element = element.parentElement;
+    }
+
+    return null;
   }
 }

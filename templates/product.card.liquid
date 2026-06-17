@@ -1,0 +1,61 @@
+{% layout none %}
+
+{% capture labels %}
+  {% render 'product-card-labels',
+    product: product,
+    show_new_in: true,
+    show_sold_out: true,
+    show_rarity: true,
+    attributes: ''
+  %}
+{% endcapture %}
+
+{% capture media %}
+  {% render 'product-card-media',
+    product: product,
+    show_new_in: true,
+    show_sold_out: true,
+    show_rarity: true,
+    labels: labels,
+    attributes: ''
+  %}
+{% endcapture %}
+
+{% capture details %}
+  {% render 'product-card-details',
+    product: product,
+    attributes: ''
+  %}
+{% endcapture %}
+
+{% capture swatches %}
+  {% render 'product-card-swatches',
+    product: product,
+    match_prefix: 'Model_',
+    siblings_limit: 10,
+    attributes: ''
+  %}
+{% endcapture %}
+
+{% capture info %}
+  {% render 'product-card-info',
+    product: product,
+    match_prefix: 'Model_',
+    siblings_limit: 10,
+    details: details,
+    swatches: swatches,
+    attributes: ''
+  %}
+{% endcapture %}
+
+{% render 'product-card',
+  product: product,
+  show_new_in: true,
+  show_sold_out: true,
+  show_rarity: true,
+  match_prefix: 'Model_',
+  siblings_limit: 10,
+  media: media,
+  info: info,
+  attributes: ''
+%}

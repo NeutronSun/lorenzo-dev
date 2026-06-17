@@ -1,3 +1,64 @@
-<div class="main-image">
-  {{ product.featured_image | image_url: width: 720 | image_tag }}
-</div>
+{% doc %}
+  Renders product card media.
+
+  @param {product} product - Product object
+  @param {boolean} show_new_in - Show new in label
+  @param {boolean} show_sold_out - Show sold out label
+  @param {boolean} show_rarity - Show rarity label
+  @param {string} labels - Product card labels HTML
+  @param {string} attributes - Optional attributes for the product-card-media element
+{% enddoc %}
+
+<product-card-media ref="media" {{ attributes }}>
+  <div class="main-image">
+    {{ product.featured_image | image_url: width: 720 | image_tag }}
+  </div>
+  {% if labels != blank %}
+    {{ labels }}
+  {% else %}
+    {% render 'product-card-labels',
+      product: product,
+      show_new_in: show_new_in,
+      show_sold_out: show_sold_out,
+      show_rarity: show_rarity,
+      attributes: ''
+    %}
+  {% endif %}
+</product-card-media>
+
+{% stylesheet %}
+  product-card-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 251 / 376;
+    overflow: hidden;
+    background: var(--background-darken);
+
+    .main-image,
+    .hover-image {
+      height: 100%;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition:
+        opacity var(--motion-base) var(--ease-base),
+        transform var(--motion-slow) var(--ease-emphasized);
+      transform-origin: center;
+    }
+  }
+
+  product-card:hover product-card-media img {
+    opacity: 0.96;
+    transform: scale(1.015);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    product-card-media img {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

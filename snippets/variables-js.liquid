@@ -1,1 +1,6 @@
-
+<script>
+  window.storefront = {
+    apiUrl: 'https://{{ shop.permanent_domain }}/api/{{ settings.storefront_api_version | default: '2026-04' }}/graphql.json',
+    accessToken: {{ settings.storefront_access_token | json }}
+  };
+</script>

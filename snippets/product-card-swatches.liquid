@@ -1,0 +1,135 @@
+{% doc %}
+  Renders product card swatches.
+
+  @param {product} product - Product object
+  @param {string} match_prefix - Product sibling match tag prefix
+  @param {number} siblings_limit - Product siblings limit
+  @param {string} attributes - Optional attributes for the product-card-swatches element
+{% enddoc %}
+
+{% liquid
+  assign match_prefix = match_prefix | default: 'Model_'
+  assign siblings_limit = siblings_limit | default: 10
+  assign prefix_size = match_prefix.size
+  assign match_tag = blank
+
+  for tag in product.tags
+    assign tag_prefix = tag | slice: 0, prefix_size
+
+    if tag_prefix == match_prefix
+      assign match_tag = tag
+      break
+    endif
+  endfor
+%}
+
+{% if match_tag != blank %}
+  <product-card-swatches
+    data-match-tag="{{ match_tag | escape }}"
+    data-limit="{{ siblings_limit }}"
+    {{ attributes }}
+  >
+    <fieldset ref="fieldset">
+      <product-card-sibling>
+        <input
+          ref="input[]"
+          type="radio"
+          name="product-card-sibling-{{ product.id }}"
+          value="{{ product.handle }}"
+          data-handle="{{ product.handle }}"
+          data-url="{{ product.url }}"
+          on:change="select"
+          checked
+        >
+        <span aria-label="{{ product.title | escape }}">
+          {% if product.featured_image %}
+            {{ product.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', widths: '40, 80', alt: product.title }}
+          {% endif %}
+        </span>
+      </product-card-sibling>
+    </fieldset>
+  </product-card-swatches>
+{% endif %}
+
+{% stylesheet %}
+  product-card-swatches {
+    position: relative;
+    z-index: 3;
+    display: block;
+    min-height: 18px;
+    overflow: hidden;
+
+    fieldset {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 5px;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+    }
+  }
+
+  product-card-sibling {
+    position: relative;
+    flex: 0 0 auto;
+    display: block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--background-darken);
+    cursor: pointer;
+    overflow: hidden;
+
+    input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: inherit;
+    }
+
+    span,
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    &:has(input:checked) {
+      border-color: var(--black);
+      box-shadow: 0 0 0 1px var(--black);
+    }
+
+    &.is-loading {
+      opacity: 0.55;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    product-card-swatches {
+      margin-inline: -10px;
+      padding-inline: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+
+      fieldset {
+        overflow: visible;
+      }
+    }
+
+    product-card-swatches::-webkit-scrollbar {
+      display: none;
+    }
+  }
+{% endstylesheet %}

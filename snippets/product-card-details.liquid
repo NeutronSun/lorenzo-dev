@@ -1,0 +1,84 @@
+{% doc %}
+  Renders product card details.
+
+  @param {product} product - Product object
+  @param {string} attributes - Optional attributes for the product-card-details element
+{% enddoc %}
+
+{% liquid
+  assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
+  assign micro_category = product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+%}
+
+<product-card-details ref="details" {{ attributes }}>
+  <div class="meta font-mono">
+    <span>{{ macro_category }}</span>
+    <span>{{ micro_category }}</span>
+  </div>
+
+  <div class="main">
+    <h2>{{ product.title }}</h2>
+    <span>{{ product.price | money }}</span>
+  </div>
+</product-card-details>
+
+{% stylesheet %}
+  product-card-details {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+
+    .meta,
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .meta {
+      min-height: 1em;
+      color: var(--gray);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .main {
+      color: var(--black);
+      font-family: var(--font-body--family);
+      font-style: var(--font-body--style);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.2;
+
+      h2 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        margin: 0;
+        min-width: 0;
+        overflow: hidden;
+        font: inherit;
+        letter-spacing: 0;
+      }
+
+      span {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    product-card-details {
+      gap: 6px;
+    }
+  }
+{% endstylesheet %}

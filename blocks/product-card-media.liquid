@@ -1,48 +1,22 @@
-<product-card-media {{ block.shopify_attributes }}>
-  {% render 'product-card-media', product: product %}
+{% capture labels %}
   {% content_for 'block', type: 'product-card-labels', id: 'labels', product: product %}
-</product-card-media>
+{% endcapture %}
 
-{% stylesheet %}
-  product-card-media {
-    position: relative;
-    display: block;
-    aspect-ratio: 251 / 376;
-    overflow: hidden;
-    background: var(--background-darken);
-
-    .main-image,
-    .hover-image {
-      height: 100%;
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition:
-        opacity var(--motion-base) var(--ease-base),
-        transform var(--motion-slow) var(--ease-emphasized);
-      transform-origin: center;
-    }
-  }
-
-  product-card:hover product-card-media img {
-    opacity: 0.96;
-    transform: scale(1.015);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    product-card-media img {
-      transition: none;
-    }
-  }
-{% endstylesheet %}
+{% render 'product-card-media',
+  product: product,
+  show_new_in: true,
+  show_sold_out: true,
+  show_rarity: true,
+  labels: labels,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
   "name": "Media",
+  "blocks": [
+    { "type": "product-card-labels" }
+  ],
   "settings": [],
   "presets": [
     {

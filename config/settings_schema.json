@@ -110,5 +110,21 @@
         "label": "Favicon"
       }
     ]
+  },
+  {
+    "name": "Storefront API",
+    "settings": [
+      {
+        "type": "text",
+        "id": "storefront_access_token",
+        "label": "Storefront access token"
+      },
+      {
+        "type": "text",
+        "id": "storefront_api_version",
+        "label": "Storefront API version",
+        "default": "2026-04"
+      }
+    ]
   }
 ]

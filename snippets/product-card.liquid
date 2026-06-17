@@ -1,0 +1,102 @@
+{% doc %}
+  Renders a static product card.
+
+  @param {product} product - Product object
+  @param {boolean} show_new_in - Show new in label
+  @param {boolean} show_sold_out - Show sold out label
+  @param {boolean} show_rarity - Show rarity label
+  @param {string} match_prefix - Product sibling match tag prefix
+  @param {number} siblings_limit - Product siblings limit
+  @param {string} media - Product card media HTML
+  @param {string} info - Product card info HTML
+  @param {string} attributes - Optional attributes for the product-card element
+{% enddoc %}
+
+<product-card
+  data-handle="{{ product.handle }}"
+  {{ attributes }}
+>
+  {% if media != blank %}
+    {{ media }}
+  {% else %}
+    {% render 'product-card-media',
+      product: product,
+      show_new_in: show_new_in,
+      show_sold_out: show_sold_out,
+      show_rarity: show_rarity,
+      labels: '',
+      attributes: ''
+    %}
+  {% endif %}
+
+  {% if info != blank %}
+    {{ info }}
+  {% else %}
+    {% render 'product-card-info',
+      product: product,
+      match_prefix: match_prefix,
+      siblings_limit: siblings_limit,
+      details: '',
+      swatches: '',
+      attributes: ''
+    %}
+  {% endif %}
+  <a ref="link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
+</product-card>
+
+{% stylesheet %}
+  product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    box-shadow: 0 1px 10px rgb(0 0 0 / 0.03);
+  }
+
+  product-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 4;
+    height: 2px;
+    background:
+      linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent)
+      var(--black);
+    background-size: 220% 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  product-card.is-loading::after {
+    opacity: 0.55;
+    animation: product-card-skeleton 900ms var(--ease-in-out) infinite;
+  }
+
+  product-card > a[ref="link"] {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    cursor: pointer;
+  }
+
+  product-card-labels,
+  product-card-swatches {
+    z-index: 3;
+  }
+
+  @keyframes product-card-skeleton {
+    from {
+      background-position: 120% 0;
+    }
+
+    to {
+      background-position: -120% 0;
+    }
+  }
+{% endstylesheet %}
