@@ -14,7 +14,7 @@
     "header": {
       "type": "header",
       "settings": {
-        "menu": "collezioni-metafield",
+        "menu": "tema-pm-collezioni",
         "customer_account_menu": "customer-account-main-menu"
       }
     }
