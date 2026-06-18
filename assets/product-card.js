@@ -136,12 +136,8 @@ class ProductCardSiblings extends HTMLComponent {
   }
 
   connectedCallback() {
-    try {
-      super.connectedCallback();
-      this.render();
-    } catch (error) {
-      console.error(error);
-    }
+    super.connectedCallback();
+    this.render();
   }
 
   /**
@@ -153,15 +149,13 @@ class ProductCardSiblings extends HTMLComponent {
     if (!element.checked) return;
 
     const card = this.closestTag('product-card');
-    const group = this.closestTag('product-card-swatches');
 
     if (!(card instanceof ProductCard)) return;
-    if (!(group instanceof ProductCardSiblings)) return;
 
     event.preventDefault();
     event.stopPropagation();
 
-    await group.publish(card, element);
+    await this.publish(card, element);
   }
 
   async render() {
@@ -173,17 +167,13 @@ class ProductCardSiblings extends HTMLComponent {
     if (!(card instanceof ProductCard)) return;
     if (!this.refs.fieldset) return;
 
-    try {
-      const siblings = await ColorSibling.fetch(tag, limit);
+    const siblings = await ColorSibling.fetch(tag, limit);
 
-      if (!siblings.length) return;
+    if (!siblings.length) return;
 
-      this.refs.fieldset.innerHTML = siblings
-        .map((sibling) => ProductCardSiblings.build(sibling, this.name, card.handle))
-        .join('');
-    } catch (error) {
-      console.error(error);
-    }
+    this.refs.fieldset.innerHTML = siblings
+      .map((sibling) => ProductCardSiblings.build(sibling, this.name, card.handle))
+      .join('');
   }
 
   get name() {
@@ -249,20 +239,18 @@ class ProductCard extends HTMLComponent {
     if (handle === this.handle) return;
     if (this.isLoading) return;
 
-    try {
-      this.isLoading = true;
+    this.isLoading = true;
 
-      const html = await this.fetchCard(handle, productUrl);
-      const nextCard = this.getCard(html);
+    const html = await this.fetchCard(handle, productUrl);
+    const nextCard = html.querySelector('product-card');
 
-      if (!(nextCard instanceof HTMLElement)) return;
-
-      this.render(nextCard);
-    } catch (error) {
-      console.error(error);
-    } finally {
+    if (!(nextCard instanceof HTMLElement)) {
       this.isLoading = false;
+      return;
     }
+
+    this.render(nextCard);
+    this.isLoading = false;
   }
 
   /**
@@ -291,27 +279,22 @@ class ProductCard extends HTMLComponent {
    */
   getCardUrl(productUrl) {
     const url = new URL(productUrl, window.location.origin);
-
     url.searchParams.set('view', ProductCard.TEMPLATE_VIEW);
-
     return url;
-  }
-
-  /**
-   * @param {Document} html
-   * @returns {Element | undefined}
-   */
-  getCard(html) {
-    return Array.from(html.body.children).find((element) => element.localName === 'product-card');
   }
 
   /**
    * @param {HTMLElement} nextCard
    */
   render(nextCard) {
-    this.updateRef('media', nextCard);
-    this.updateRef('details', nextCard);
-    this.updateRef('link', nextCard);
+    const sections = [
+      'media',
+      'details',
+      'link',
+    ]
+
+    for (const section of sections) 
+      this.updateRef(section, nextCard);
     this.dataset.handle = nextCard.dataset.handle || this.handle;
   }
 }

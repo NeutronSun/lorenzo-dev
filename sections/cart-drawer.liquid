@@ -121,7 +121,8 @@
     z-index: var(--z-index-overlay);
     background: rgb(0 0 0 / 0.2);
     backdrop-filter: blur(1px);
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
   body:has(.cart-drawer[open]) .uyn-header {
@@ -133,6 +134,7 @@
   cart-drawer {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
     height: 100%;
     min-height: 0;
     background: var(--white);
@@ -329,21 +331,31 @@
     position: sticky;
     bottom: 0;
     z-index: 1;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 18px 20px;
     border-top: 1px solid var(--border-color);
     background: var(--white);
   }
 
+  .cart-drawer-footer > * {
+    min-width: 0;
+  }
+
   .cart-drawer-subtotal {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
     font-size: 12px;
   }
 
   .cart-drawer-subtotal cart-money {
+    margin-left: auto;
     font-size: 16px;
     font-weight: 700;
   }
@@ -353,6 +365,8 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
+    width: 100%;
+    box-sizing: border-box;
     min-height: 40px;
     border: 1px solid var(--black);
     background: var(--black);

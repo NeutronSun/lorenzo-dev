@@ -13,6 +13,7 @@ import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from "@th
  */
 export class DialogComponent extends HTMLComponent {
   static SELECTOR = 'dialog-component';
+  static HEADER_SELECTOR = '.uyn-header';
 
   /** @type {((event: OnDialogOpenEvent) => void) | null} */
   onDialogOpen = null;
@@ -20,6 +21,8 @@ export class DialogComponent extends HTMLComponent {
   onDialogClose = null;
   /** @type {((event: KeyboardEvent) => void) | null} */
   onDialogKeydown = null;
+  /** @type {((event: MouseEvent) => void) | null} */
+  onDocumentClick = null;
 
   connectedCallback() {
     super.connectedCallback();
@@ -43,19 +46,38 @@ export class DialogComponent extends HTMLComponent {
       event.preventDefault();
       this.close();
     };
+    this.onDocumentClick = (event) => {
+      if (!this.refs.dialog?.open) return;
+      if (this.hasAttribute('persistent')) return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest(DialogComponent.HEADER_SELECTOR)) return;
+
+      const matchingOpener = target.closest('dialog-opener');
+      if (matchingOpener?.getAttribute('name') === this.name) return;
+
+      const dialog = this.refs.dialog;
+      if (dialog.contains(target)) return;
+
+      this.close();
+    };
 
     document.addEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
     document.addEventListener('keydown', this.onDialogKeydown);
+    document.addEventListener('click', this.onDocumentClick, true);
     this.refs.dialog?.addEventListener('close', this.onDialogClose);
   }
 
   disconnectedCallback() {
     this.onDialogOpen && document.removeEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
     this.onDialogKeydown && document.removeEventListener('keydown', this.onDialogKeydown);
+    this.onDocumentClick && document.removeEventListener('click', this.onDocumentClick, true);
     this.onDialogClose && this.refs.dialog?.removeEventListener('close', this.onDialogClose);
     this.onDialogOpen = null;
     this.onDialogClose = null;
     this.onDialogKeydown = null;
+    this.onDocumentClick = null;
     super.disconnectedCallback();
   }
 
