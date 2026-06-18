@@ -9,6 +9,32 @@
  */
 {
   "sections": {
+    "section_QrRYmR": {
+      "type": "section",
+      "blocks": {
+        "text_bpiKFG": {
+          "type": "text",
+          "name": "t:general.text",
+          "settings": {
+            "text": "was",
+            "text_style": "text--title",
+            "alignment": "left"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_bpiKFG"
+      ],
+      "name": "Section",
+      "settings": {
+        "default_spacing": true,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "padding_top_desktop": 0,
+        "padding_bottom_desktop": 0
+      }
+    },
     "main": {
       "type": "product",
       "blocks": {
@@ -29,6 +55,7 @@
     }
   },
   "order": [
+    "section_QrRYmR",
     "main"
   ]
 }
