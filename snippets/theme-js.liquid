@@ -10,6 +10,7 @@
       "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
       "@theme/collection": "{{ 'collection.js' | asset_url }}",
       "@theme/cart": "{{ 'cart.js' | asset_url }}",
+      "@theme/product": "{{ 'product.js' | asset_url }}",
       "@theme/product-card": "{{ 'product-card.js' | asset_url }}"
     }
   }
@@ -49,6 +50,11 @@
 <link
   rel="modulepreload"
   href="{{ 'cart.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'product.js' | asset_url }}"
   fetchpriority="low"
 >
 <link

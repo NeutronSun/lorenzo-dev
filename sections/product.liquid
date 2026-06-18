@@ -1,45 +1,68 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Product page section without breadcrumb.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<product-page class="section">
+  <div class="layout page-width">
+    {% render 'pdp-gallery', product: product %}
+    {% render 'pdp-product-info', product: product %}
+  </div>
+</product-page>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+{% stylesheet %}
+  product-page {
+    --gap: 16px;
+    --gallery-height: calc(100dvh - var(--header-height, 0px) - var(--spacing) * 2);
+    --main-height: calc(var(--gallery-height) - var(--thumb-size) - var(--gap));
+    --thumb-size: clamp(96px, 11vw, 164px);
 
-<product-form class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    padding-block: var(--spacing);
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+    .layout {
+      grid-column: 2;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--gap);
+    }
 
-    <input type="text" name="quantity" min="1" value="1">
+    pdp-gallery {
+      position: sticky;
+      top: var(--spacing);
+      flex: 1 1 auto;
+      min-width: 0;
+    }
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</product-form>
+    pdp-product-info {
+      flex: 0 0 clamp(320px, 30vw, 420px);
+      min-width: 0;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    product-page {
+      --thumb-size: clamp(72px, 21vw, 92px);
+      --gallery-height: calc(100dvh - var(--dock-clearance, 86px) - var(--spacing));
+      --main-height: calc(var(--gallery-height) - var(--thumb-size) - 12px);
+
+      padding-block: 0 calc(var(--dock-clearance, 86px) + var(--spacing));
+
+      .layout {
+        display: grid;
+        gap: 16px;
+      }
+
+      pdp-gallery {
+        position: static;
+      }
+
+      pdp-product-info {
+        width: 100%;
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

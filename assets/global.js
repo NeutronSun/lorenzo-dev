@@ -3,6 +3,7 @@ import "@theme/header";
 import "@theme/dialog";
 import "@theme/collection";
 import "@theme/cart";
+import "@theme/product";
 import "@theme/product-card";
 
 console.log(`

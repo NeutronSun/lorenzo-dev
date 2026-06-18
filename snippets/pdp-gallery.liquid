@@ -1,0 +1,197 @@
+{% doc %}
+  Renders PDP gallery.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign media_count = product.images.size
+  assign first_image = product.featured_image | default: product.images.first
+  assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
+  assign micro_category = product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+%}
+
+<pdp-gallery ref="gallery" class="{% unless media_count > 1 %}single{% endunless %}">
+  <div class="media">
+    {% if product.available %}
+      <span class="stock font-mono">
+        <span></span>
+        In stock
+      </span>
+    {% else %}
+      <span class="stock sold-out font-mono">
+        <span></span>
+        Sold out
+      </span>
+    {% endif %}
+
+    <span class="counter font-mono">01 / {{ media_count | at_least: 1 | prepend: '00' | slice: -2, 2 }}</span>
+
+    {% if first_image %}
+      {{
+        first_image
+        | image_url: width: 1600
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '420, 640, 820, 1100, 1400, 1600',
+          alt: product.title
+      }}
+    {% endif %}
+
+    <div class="caption font-mono">
+      {% if macro_category != blank %}
+        <span>{{ macro_category }}</span>
+      {% endif %}
+      {% if micro_category != blank %}
+        <span>{{ micro_category }}</span>
+      {% endif %}
+    </div>
+
+    <button type="button" class="save font-mono" aria-label="Save {{ product.title | escape }}">
+      Save
+    </button>
+  </div>
+
+  {% if media_count > 1 %}
+    <div class="thumbs" aria-label="Product media">
+      {% for image in product.images limit: 4 %}
+        <button
+          type="button"
+          class="thumb{% if forloop.first %} active{% endif %}"
+          aria-label="View image {{ forloop.index }} of {{ media_count }}"
+        >
+          {{
+            image
+            | image_url: width: 360
+            | image_tag:
+              loading: 'lazy',
+              widths: '120, 180, 240, 360',
+              alt: product.title
+          }}
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</pdp-gallery>
+
+{% stylesheet %}
+  pdp-gallery {
+    display: grid;
+    gap: 12px;
+    height: var(--gallery-height);
+    min-height: 520px;
+
+    .media {
+      position: relative;
+      min-height: 0;
+      height: var(--main-height);
+      border: 1px solid var(--border-color);
+      background: var(--background-darken);
+      overflow: hidden;
+    }
+
+    &.single .media {
+      height: var(--gallery-height);
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .stock,
+    .counter,
+    .save {
+      position: absolute;
+      z-index: 2;
+      min-height: 28px;
+      border: 1px solid var(--border-color);
+      background: rgb(255 255 255 / 0.92);
+      color: var(--black);
+      font-size: 10px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .stock {
+      top: 12px;
+      left: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .stock span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .stock.sold-out span {
+      background: var(--red);
+    }
+
+    .counter {
+      top: 12px;
+      right: 12px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .save {
+      right: 24px;
+      bottom: 24px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .caption {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      z-index: 2;
+      display: grid;
+      gap: 6px;
+      color: var(--white);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      height: var(--thumb-size);
+      min-height: 0;
+    }
+
+    .thumb {
+      min-width: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      background: var(--background-darken);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .thumb.active {
+      border-color: var(--black);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    pdp-gallery {
+      height: var(--gallery-height);
+      min-height: 0;
+    }
+  }
+{% endstylesheet %}

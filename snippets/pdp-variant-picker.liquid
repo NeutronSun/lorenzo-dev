@@ -1,0 +1,171 @@
+{% doc %}
+  Renders PDP visual variant picker.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign color_option = blank
+  assign size_option = blank
+
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+
+    if option_name contains 'color' or option_name contains 'colour' or option_name contains 'colore'
+      assign color_option = option
+    endif
+
+    if option_name contains 'size' or option_name contains 'taglia'
+      assign size_option = option
+    endif
+  endfor
+%}
+
+<pdp-variant-picker>
+  <div class="group">
+    <div class="head font-mono">
+      <span>{{ color_option.name | default: 'Color' }}</span>
+      <span>
+        {% if color_option != blank %}
+          {{ color_option.selected_value | default: color_option.values.first }}
+        {% else %}
+          Black
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="values">
+      {% if color_option != blank %}
+        {% for value in color_option.values limit: 4 %}
+          <button type="button" class="chip{% if forloop.first %} active{% endif %}">
+            <span class="swatch"></span>
+            {{ value }}
+          </button>
+        {% endfor %}
+      {% else %}
+        <button type="button" class="chip active">
+          <span class="swatch"></span>
+          Black
+        </button>
+        <button type="button" class="chip">
+          <span class="swatch olive"></span>
+          Olive
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="head font-mono">
+      <span>{{ size_option.name | default: 'Size' }}</span>
+      <button type="button">Size guide</button>
+    </div>
+
+    <div class="values">
+      {% if size_option != blank %}
+        {% for value in size_option.values limit: 5 %}
+          <button type="button" class="size{% if forloop.first %} unavailable{% endif %}">{{ value }}</button>
+        {% endfor %}
+      {% else %}
+        <button type="button" class="size unavailable">S</button>
+        <button type="button" class="size">M</button>
+        <button type="button" class="size">L</button>
+        <button type="button" class="size">XL</button>
+      {% endif %}
+    </div>
+  </div>
+</pdp-variant-picker>
+
+{% stylesheet %}
+  pdp-variant-picker {
+    display: grid;
+
+    .group {
+      display: grid;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .head span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .head button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--secondary-black);
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: none;
+      cursor: pointer;
+    }
+
+    .values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip,
+    .size {
+      min-height: 36px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-mono--family);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .active {
+      border-color: var(--black);
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      background: var(--black);
+    }
+
+    .swatch.olive {
+      background: oklch(34% 0.06 130);
+    }
+
+    .size {
+      min-width: 54px;
+      padding: 0 16px;
+    }
+
+    .size.unavailable {
+      color: var(--secondary-black);
+      background:
+        linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--border-color) calc(50% - 0.5px), var(--border-color) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        var(--white);
+    }
+  }
+{% endstylesheet %}
