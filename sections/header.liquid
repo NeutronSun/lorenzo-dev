@@ -63,15 +63,6 @@
       </nav>
     </div>
     <div class="header-right header-group{% if product_active %} header-right-product{% endif %}">
-      {% if home_active %}
-        <input
-          type="radio"
-          id="header-home-current-{{ section.id }}"
-          class="header-home-current-toggle"
-          checked
-          hidden
-        >
-      {% endif %}
       {% if product_active %}
         <input
           type="radio"
@@ -97,30 +88,47 @@
         >
       {% endif %}
       <nav class="header-mobile-bar mobile-only{% if product_active %} header-mobile-bar-product{% endif %}" ref="mobileBar" aria-label="Mobile navigation">
+        <span class="header-mobile-bar-active" aria-hidden="true">
+          <span class="header-mobile-bar-active-shape"></span>
+        </span>
         {% if product_active %}
           <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-bar-item header-mobile-product-home header-mobile-product-home-open" aria-label="Open product dock">
-            {% render 'icon-home', size: 22 %}
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-home">
+              {% render 'icon-home', size: 22 %}
+            </span>
           </label>
           <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link header-mobile-product-home header-mobile-product-home-close" aria-label="Home">
-            {% render 'icon-home', size: 22 %}
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-home">
+              {% render 'icon-home', size: 22 %}
+            </span>
           </a>
           <label for="header-product-dock-menu-{{ section.id }}" class="header-mobile-bar-item header-mobile-product-home header-mobile-product-home-config" aria-label="Back to product dock">
-            {% render 'icon-home', size: 22 %}
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-home">
+              {% render 'icon-home', size: 22 %}
+            </span>
           </label>
         {% elsif home_active %}
-          <label for="header-home-current-{{ section.id }}" class="header-mobile-bar-item header-mobile-bar-item-active" aria-label="Home">
-            {% render 'icon-home', size: 22 %}
-          </label>
+          <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link header-mobile-home header-mobile-bar-item-active" aria-label="Home">
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-home">
+              {% render 'icon-home', size: 22 %}
+            </span>
+          </a>
         {% else %}
-          <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link{% if home_active %} header-mobile-bar-item-active{% endif %}" aria-label="Home">
-            {% render 'icon-home', size: 22 %}
+          <a href="{{ routes.root_url }}" class="header-mobile-bar-item header-link header-mobile-home{% if home_active %} header-mobile-bar-item-active{% endif %}" aria-label="Home">
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-home">
+              {% render 'icon-home', size: 22 %}
+            </span>
           </a>
         {% endif %}
-        <a href="{{ routes.account_url }}" class="header-mobile-bar-item header-link{% if account_active %} header-mobile-bar-item-active{% endif %}" aria-label="Account">
-          {% render 'icon-account', size: 22 %}
+        <a href="{{ routes.account_url }}" class="header-mobile-bar-item header-link header-mobile-account{% if account_active %} header-mobile-bar-item-active{% endif %}" aria-label="Account">
+          <span class="header-mobile-bar-icon header-mobile-bar-icon-account">
+            {% render 'icon-account', size: 22 %}
+          </span>
         </a>
-        <a href="{{ routes.cart_url }}" class="header-mobile-bar-item header-link{% if cart_active %} header-mobile-bar-item-active{% endif %}" aria-label="Bag">
-          {% render 'icon-bag', size: 22 %}
+        <a href="{{ routes.cart_url }}" class="header-mobile-bar-item header-link header-mobile-bag{% if cart_active %} header-mobile-bar-item-active{% endif %}" aria-label="Bag">
+          <span class="header-mobile-bar-icon header-mobile-bar-icon-bag">
+            {% render 'icon-bag', size: 22 %}
+          </span>
         </a>
         <dialog-opener name="header-menu" class="header-mobile-bar-item header-nav-trigger{% if menu_active %} header-mobile-bar-item-active{% endif %}">
           <label for="header-nav-{{ section.id }}" on:click="publish" aria-label="Menu">
@@ -130,7 +138,9 @@
               class="header-nav-toggle"
               hidden
             >
-            {% render 'icon-menu', size: 22 %}
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-menu">
+              {% render 'icon-menu', size: 22 %}
+            </span>
           </label>
         </dialog-opener>
       </nav>
@@ -282,11 +292,63 @@
           }
 
           .header-mobile-bar {
+            --active-translate: 0;
+            --active-scale: 0;
+
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            position: relative;
             width: 100%;
+            overflow: hidden;
             background-color: var(--white);
             border: 1px solid var(--border-color);
+            view-transition-name: header-mobile-bar;
+          }
+
+          .header-mobile-bar-active {
+            position: absolute;
+            inset-block: 0;
+            left: 0;
+            z-index: 1;
+            width: 25%;
+            opacity: var(--active-scale);
+            pointer-events: none;
+            transform: translate3d(var(--active-translate), 0, 0);
+            transform-origin: center;
+            transition:
+              opacity var(--motion-base) var(--ease-base),
+              transform var(--motion-dock) var(--ease-dock);
+            view-transition-name: header-mobile-bar-active;
+          }
+
+          .header-mobile-bar-active-shape {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent);
+            border-radius: 0;
+            transform: scale(var(--active-scale));
+            transform-origin: center;
+          }
+
+          .header-mobile-bar:has(> .header-mobile-bar-item-active:nth-child(2)) {
+            --active-translate: 0;
+            --active-scale: 1;
+          }
+
+          .header-mobile-bar:has(> .header-mobile-bar-item-active:nth-child(3)) {
+            --active-translate: 100%;
+            --active-scale: 1;
+          }
+
+          .header-mobile-bar:has(> .header-mobile-bar-item-active:nth-child(4)) {
+            --active-translate: 200%;
+            --active-scale: 1;
+          }
+
+          .header-mobile-bar:has(> .header-nav-trigger.header-mobile-bar-item-active) {
+            --active-translate: 300%;
+            --active-scale: 1;
           }
 
           .header-mobile-bar-product {
@@ -574,6 +636,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 2;
             min-width: 0;
             padding: 16px 0 18px;
             color: var(--secondary-black);
@@ -586,7 +650,7 @@
               opacity var(--motion-dock) var(--ease-dock),
               transform var(--motion-dock) var(--ease-dock);
 
-            &:first-child {
+            &:nth-child(2) {
               border-inline-start: none;
             }
 
@@ -604,7 +668,7 @@
 
           .header-right-product:has(.header-product-dock-menu-toggle:checked) {
             .header-mobile-bar-product {
-              .header-mobile-bar-item:not(:first-child) {
+              .header-mobile-bar-item:not(:nth-child(2)) {
                 border-inline-start-color: var(--border-color);
               }
             }
@@ -612,7 +676,29 @@
 
           .header-mobile-bar-item-active {
             color: var(--black);
-            background-color: var(--accent);
+          }
+
+          .header-mobile-bar-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+          }
+
+          .header-mobile-bar-icon-home {
+            view-transition-name: header-mobile-bar-home;
+          }
+
+          .header-mobile-bar-icon-account {
+            view-transition-name: header-mobile-bar-account;
+          }
+
+          .header-mobile-bar-icon-bag {
+            view-transition-name: header-mobile-bar-bag;
+          }
+
+          .header-mobile-bar-icon-menu {
+            view-transition-name: header-mobile-bar-menu;
           }
 
           .header-center {
@@ -742,14 +828,17 @@
               pointer-events: auto;
             }
 
+            .header-mobile-bar {
+              --active-translate: 300%;
+              --active-scale: 1;
+            }
+
             .header-mobile-bar-item-active:not(.header-nav-trigger) {
               color: var(--secondary-black);
-              background-color: transparent;
             }
 
             .header-nav-trigger {
               color: var(--black);
-              background-color: var(--accent);
             }
           }
         }

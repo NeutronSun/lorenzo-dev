@@ -42,7 +42,42 @@
       }
     }
 
+    @keyframes header-mobile-bar-active-out {
+      0% {
+        border-radius: 0;
+        transform: scale(1);
+      }
+
+      100% {
+        border-radius: 999px;
+        transform: scale(0.34);
+      }
+    }
+
+    @keyframes header-mobile-bar-active-in {
+      0% {
+        border-radius: 999px;
+        transform: scale(0.34);
+      }
+
+      45% {
+        border-radius: 999px;
+        transform: scaleX(1.36) scaleY(0.54);
+      }
+
+      100% {
+        border-radius: 0;
+        transform: scale(1);
+      }
+    }
+
     ::view-transition-group(header-mobile-dock),
+    ::view-transition-group(header-mobile-bar),
+    ::view-transition-group(header-mobile-bar-active),
+    ::view-transition-group(header-mobile-bar-home),
+    ::view-transition-group(header-mobile-bar-account),
+    ::view-transition-group(header-mobile-bar-bag),
+    ::view-transition-group(header-mobile-bar-menu),
     ::view-transition-group(header-mobile-dock-search),
     ::view-transition-group(header-mobile-dock-filter),
     ::view-transition-group(header-mobile-dock-buy),
@@ -54,6 +89,12 @@
     }
 
     ::view-transition-image-pair(header-mobile-dock),
+    ::view-transition-image-pair(header-mobile-bar),
+    ::view-transition-image-pair(header-mobile-bar-active),
+    ::view-transition-image-pair(header-mobile-bar-home),
+    ::view-transition-image-pair(header-mobile-bar-account),
+    ::view-transition-image-pair(header-mobile-bar-bag),
+    ::view-transition-image-pair(header-mobile-bar-menu),
     ::view-transition-image-pair(header-mobile-dock-search),
     ::view-transition-image-pair(header-mobile-dock-filter),
     ::view-transition-image-pair(header-mobile-dock-buy),
@@ -67,9 +108,61 @@
       object-fit: fill;
     }
 
+    ::view-transition-old(header-mobile-bar) {
+      object-fit: fill;
+    }
+
     ::view-transition-new(header-mobile-dock) {
       animation: header-mobile-dock-in var(--motion-dock) var(--ease-dock) both;
       object-fit: fill;
+    }
+
+    ::view-transition-new(header-mobile-bar) {
+      object-fit: fill;
+    }
+
+    ::view-transition-group(header-mobile-bar) {
+      z-index: 0;
+    }
+
+    ::view-transition-group(header-mobile-bar-active) {
+      z-index: 1;
+    }
+
+    ::view-transition-group(header-mobile-bar-home),
+    ::view-transition-group(header-mobile-bar-account),
+    ::view-transition-group(header-mobile-bar-bag),
+    ::view-transition-group(header-mobile-bar-menu) {
+      z-index: 2;
+    }
+
+    ::view-transition-old(header-mobile-bar-active),
+    ::view-transition-new(header-mobile-bar-active) {
+      mix-blend-mode: normal;
+      object-fit: fill;
+      transform-origin: center;
+    }
+
+    ::view-transition-old(header-mobile-bar-active) {
+      animation: header-mobile-bar-active-out var(--motion-panel) var(--ease-dock) both;
+    }
+
+    ::view-transition-new(header-mobile-bar-active) {
+      animation: header-mobile-bar-active-in var(--motion-dock) var(--ease-dock) both;
+    }
+
+    ::view-transition-old(header-mobile-bar-home),
+    ::view-transition-new(header-mobile-bar-home),
+    ::view-transition-old(header-mobile-bar-account),
+    ::view-transition-new(header-mobile-bar-account),
+    ::view-transition-old(header-mobile-bar-bag),
+    ::view-transition-new(header-mobile-bar-bag),
+    ::view-transition-old(header-mobile-bar-menu),
+    ::view-transition-new(header-mobile-bar-menu) {
+      animation: none;
+      mix-blend-mode: normal;
+      object-fit: fill;
+      transform-origin: center;
     }
 
     ::view-transition-old(header-mobile-dock-search),
