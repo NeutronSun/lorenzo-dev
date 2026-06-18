@@ -4,10 +4,12 @@
   {
     "imports": {
       "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
       "@theme/header": "{{ 'header.js' | asset_url }}",
       "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}",
       "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
       "@theme/collection": "{{ 'collection.js' | asset_url }}",
+      "@theme/cart": "{{ 'cart.js' | asset_url }}",
       "@theme/product-card": "{{ 'product-card.js' | asset_url }}"
     }
   }
@@ -17,6 +19,11 @@
 <link
   rel="modulepreload"
   href="{{ 'utilities.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'events.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
@@ -37,6 +44,11 @@
 <link
   rel="modulepreload"
   href="{{ 'collection.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'cart.js' | asset_url }}"
   fetchpriority="low"
 >
 <link

@@ -30,7 +30,7 @@
     {{ attributes }}
   >
     <fieldset ref="fieldset">
-      <product-card-sibling>
+      <label class="product-card-sibling">
         <input
           ref="input[]"
           type="radio"
@@ -46,7 +46,7 @@
             {{ product.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', widths: '40, 80', alt: product.title }}
           {% endif %}
         </span>
-      </product-card-sibling>
+      </label>
     </fieldset>
   </product-card-swatches>
 {% endif %}
@@ -71,7 +71,7 @@
     }
   }
 
-  product-card-sibling {
+  .product-card-sibling {
     position: relative;
     flex: 0 0 auto;
     display: block;

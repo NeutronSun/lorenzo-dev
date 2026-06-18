@@ -1,7 +1,7 @@
 import { HTMLComponent } from "@theme/HTMLComponent";
+import { OnFiltersApplyEvent } from "@theme/events";
 
 class Filters {
-  static EVENT_FILTER = 'filters:apply';
   static SELECTOR = 'filters';
   static CLEAR_SELECTOR = '[data-filters-clear]';
   static CLOSE_SELECTOR = '[data-filters-close]';
@@ -123,10 +123,8 @@ class Filters {
    */
   publish(params) {
     document.dispatchEvent(
-      new CustomEvent(Filters.EVENT_FILTER, {
-        bubbles: true,
-        composed: true,
-        detail: { params },
+      new OnFiltersApplyEvent({
+        params,
       })
     );
   }
@@ -175,7 +173,6 @@ class Filters {
  * @extends {HTMLComponent<ProductGridRefs>}
  */
 class ProductGrid extends HTMLComponent {
-  static EVENT_FILTER = Filters.EVENT_FILTER;
   static TEMPLATE_VIEW = 'grid';
 
   constructor() {
@@ -187,22 +184,22 @@ class ProductGrid extends HTMLComponent {
   connectedCallback() {
     try {
       super.connectedCallback();
-      document.addEventListener(ProductGrid.EVENT_FILTER, this.onFilter);
+      document.addEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
     } catch (error) {
       console.error(error);
     }
   }
 
   disconnectedCallback() {
-    document.removeEventListener(ProductGrid.EVENT_FILTER, this.onFilter);
+    document.removeEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
     super.disconnectedCallback();
   }
 
   /**
-   * @param {CustomEvent<{ params: URLSearchParams }>} event
+   * @param {OnFiltersApplyEvent} event
    */
   async onFilter(event) {
-    await this.render(event.detail.params);
+    await this.render(event.params);
   }
 
   /**
