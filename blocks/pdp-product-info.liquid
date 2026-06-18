@@ -45,10 +45,10 @@
     <p class="shipping font-mono">Free EU shipping &middot; 30-day returns</p>
   </section>
 
-  <section class="panel notes">
-    <h2 class="font-mono">/Notes</h2>
+  <section class="panel description">
+    <h2 class="font-mono">/Description</h2>
 
-    <div class="description">
+    <div class="content">
       {% if product.description != blank %}
         {{ product.description }}
       {% else %}
@@ -131,7 +131,7 @@
     }
 
     .config > h2,
-    .notes > h2 {
+    .description > h2 {
       margin: 0;
       padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
@@ -179,22 +179,22 @@
       font-size: 10px;
     }
 
-    .notes {
+    .description {
       display: grid;
     }
 
-    .description {
+    .content {
       padding: 18px 20px 22px;
       color: var(--secondary-black);
       font-size: 14px;
       line-height: 1.55;
     }
 
-    .description > * {
+    .content > * {
       margin-block: 0 12px;
     }
 
-    .description > *:last-child {
+    .content > *:last-child {
       margin-bottom: 0;
     }
   }
