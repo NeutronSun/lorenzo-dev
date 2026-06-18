@@ -179,6 +179,7 @@
     border: 1px solid var(--border-color);
     background: var(--white);
     color: var(--black);
+    view-transition-name: filters-drawer;
   }
 
   body:has(.filters-drawer[open])::after {
@@ -190,6 +191,7 @@
     backdrop-filter: blur(1px);
     pointer-events: auto;
     cursor: pointer;
+    view-transition-name: active-overlay;
   }
 
   filters {

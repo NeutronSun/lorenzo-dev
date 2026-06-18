@@ -83,7 +83,7 @@
   endif
 -%}
 
-<pdp-breadcrumb class="section" data-pdp-breadcrumb>
+<pdp-breadcrumb class="section" data-pdp-breadcrumb style="view-transition-name: product-breadcrumb;">
   <nav class="bar page-width font-mono" aria-label="Breadcrumb">
     <a href="{{ routes.root_url }}">Home</a>
 
@@ -176,7 +176,9 @@
 
   @media screen and (max-width: 749px) {
     pdp-breadcrumb {
+      position: sticky;
       top: var(--spacing);
+      z-index: 30;
       padding-block: 0;
     }
   }

@@ -125,6 +125,8 @@ class ProductCardSiblings extends HTMLComponent {
 class ProductCard extends HTMLComponent {
   static CACHE_PREFIX = 'product-card:';
   static TEMPLATE_VIEW = 'card';
+  static VIEW_TRANSITION_SELECTOR = '[data-view-transition]';
+  static VIEW_TRANSITION_RESET_DELAY = 1200;
 
   get handle() {
     return this.dataset.handle || '';
@@ -136,6 +138,26 @@ class ProductCard extends HTMLComponent {
 
   set isLoading(value) {
     this.classList.toggle('is-loading', value);
+  }
+
+  prepareViewTransition() {
+    this.clearViewTransitionNames();
+
+    for (const element of this.querySelectorAll(ProductCard.VIEW_TRANSITION_SELECTOR)) {
+      if (!(element instanceof HTMLElement)) continue;
+
+      element.style.viewTransitionName = element.dataset.viewTransition || '';
+    }
+
+    window.setTimeout(() => this.clearViewTransitionNames(), ProductCard.VIEW_TRANSITION_RESET_DELAY);
+  }
+
+  clearViewTransitionNames() {
+    for (const element of document.querySelectorAll(ProductCard.VIEW_TRANSITION_SELECTOR)) {
+      if (!(element instanceof HTMLElement)) continue;
+
+      element.style.viewTransitionName = '';
+    }
   }
 
   /**

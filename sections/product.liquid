@@ -11,10 +11,11 @@
 
 {% stylesheet %}
   product-page {
-    --gap: 16px;
+    --layout-gap: 16px;
+    --gallery-gap: 12px;
     --sticky-top: calc(var(--header-height, 0px) + var(--breadcrumb-height, 0px) + var(--spacing));
     --gallery-height: calc(100dvh - var(--sticky-top) - var(--spacing));
-    --main-height: calc(var(--gallery-height) - var(--thumb-size) - var(--gap));
+    --main-height: max(0px, calc(var(--gallery-height) - var(--thumb-size) - var(--gallery-gap)));
     --thumb-size: clamp(96px, 11vw, 164px);
 
     display: grid;
@@ -25,12 +26,10 @@
       grid-column: 2;
       display: flex;
       align-items: flex-start;
-      gap: var(--gap);
+      gap: var(--layout-gap);
     }
 
     pdp-gallery {
-      position: sticky;
-      top: var(--sticky-top);
       flex: 1 1 auto;
       min-width: 0;
     }
@@ -41,22 +40,37 @@
     }
   }
 
+  @media screen and (min-width: 750px) {
+    product-page {
+      pdp-gallery {
+        position: sticky;
+        top: var(--sticky-top);
+        align-self: flex-start;
+      }
+    }
+  }
+
   @media screen and (max-width: 749px) {
     product-page {
       --thumb-size: clamp(72px, 21vw, 92px);
       --sticky-top: calc(var(--spacing) + var(--breadcrumb-height, 0px) + var(--spacing));
       --gallery-height: calc(100dvh - var(--sticky-top) - var(--dock-clearance, 86px));
-      --main-height: calc(var(--gallery-height) - var(--thumb-size) - 12px);
+      --main-height: max(0px, calc(var(--gallery-height) - var(--thumb-size) - var(--gallery-gap)));
 
-      padding-block: 0 calc(var(--dock-clearance, 86px) + var(--spacing));
+      padding-block: var(--spacing) calc(var(--dock-clearance, 86px) + var(--spacing));
 
       .layout {
         display: grid;
-        gap: 16px;
+        gap: var(--layout-gap);
       }
 
       pdp-product-info {
         width: 100%;
+      }
+
+      pdp-gallery {
+        position: static;
+        top: auto;
       }
     }
   }

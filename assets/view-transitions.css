@@ -1,5 +1,5 @@
 @layer animation {
-  @media screen and (max-width: 749px) and (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     @view-transition {
       navigation: auto;
     }
@@ -10,188 +10,180 @@
       mix-blend-mode: normal;
     }
 
-    @keyframes header-mobile-dock-out {
-      to {
-        filter: blur(8px) saturate(1.28);
-        opacity: 0.7;
-        transform: scaleX(0.96) scaleY(0.98);
-      }
+    ::view-transition-group(root) {
+      z-index: 0;
     }
 
-    @keyframes header-mobile-dock-in {
+    @keyframes product-breadcrumb-in {
       from {
-        filter: blur(8px) saturate(1.28);
-        opacity: 0.7;
-        transform: scaleX(1.04) scaleY(0.98);
-      }
-    }
-
-    @keyframes header-mobile-dock-item-in {
-      from {
-        filter: blur(6px) saturate(1.2);
         opacity: 0;
-        transform: scale(0.86);
+        transform: translateY(-4px);
       }
     }
 
-    @keyframes header-mobile-dock-item-out {
+    @keyframes product-breadcrumb-out {
       to {
-        filter: blur(6px) saturate(1.2);
         opacity: 0;
-        transform: scale(0.86);
+        transform: translateY(4px);
       }
     }
 
-    @keyframes header-mobile-bar-active-out {
-      0% {
-        border-radius: 0;
-        transform: scale(1);
-      }
-
-      100% {
-        border-radius: 999px;
-        transform: scale(0.34);
+    @keyframes product-image-old {
+      to {
+        opacity: 0.82;
       }
     }
 
-    @keyframes header-mobile-bar-active-in {
-      0% {
-        border-radius: 999px;
-        transform: scale(0.34);
-      }
-
-      45% {
-        border-radius: 999px;
-        transform: scaleX(1.36) scaleY(0.54);
-      }
-
-      100% {
-        border-radius: 0;
-        transform: scale(1);
+    @keyframes product-image-new {
+      from {
+        opacity: 0.82;
       }
     }
 
-    ::view-transition-group(header-mobile-dock),
-    ::view-transition-group(header-mobile-bar),
-    ::view-transition-group(header-mobile-bar-active),
-    ::view-transition-group(header-mobile-bar-home),
-    ::view-transition-group(header-mobile-bar-account),
-    ::view-transition-group(header-mobile-bar-bag),
-    ::view-transition-group(header-mobile-bar-menu),
-    ::view-transition-group(header-mobile-dock-search),
-    ::view-transition-group(header-mobile-dock-filter),
-    ::view-transition-group(header-mobile-dock-buy),
-    ::view-transition-group(header-mobile-dock-product),
-    ::view-transition-group(header-mobile-dock-gear) {
+    @keyframes product-info-old {
+      to {
+        opacity: 0.88;
+      }
+    }
+
+    @keyframes product-info-new {
+      from {
+        opacity: 0.88;
+      }
+    }
+
+    ::view-transition-group(site-header) {
+      z-index: 40;
+      animation: none;
+    }
+
+    ::view-transition-group(product-image) {
+      z-index: 10;
       animation-duration: var(--motion-dock);
       animation-timing-function: var(--ease-dock);
       overflow: hidden;
     }
 
-    ::view-transition-image-pair(header-mobile-dock),
-    ::view-transition-image-pair(header-mobile-bar),
-    ::view-transition-image-pair(header-mobile-bar-active),
-    ::view-transition-image-pair(header-mobile-bar-home),
-    ::view-transition-image-pair(header-mobile-bar-account),
-    ::view-transition-image-pair(header-mobile-bar-bag),
-    ::view-transition-image-pair(header-mobile-bar-menu),
-    ::view-transition-image-pair(header-mobile-dock-search),
-    ::view-transition-image-pair(header-mobile-dock-filter),
-    ::view-transition-image-pair(header-mobile-dock-buy),
-    ::view-transition-image-pair(header-mobile-dock-product),
-    ::view-transition-image-pair(header-mobile-dock-gear) {
+    ::view-transition-group(product-info) {
+      z-index: 12;
+      animation-duration: var(--motion-dock);
+      animation-timing-function: var(--ease-dock);
+      overflow: hidden;
+    }
+
+    ::view-transition-group(product-breadcrumb) {
+      z-index: 11;
+      animation-duration: var(--motion-panel);
+      animation-timing-function: var(--ease-dock);
+    }
+
+    ::view-transition-group(active-overlay) {
+      z-index: 70;
+    }
+
+    ::view-transition-group(cart-drawer),
+    ::view-transition-group(filters-drawer) {
+      z-index: 80;
+      animation-duration: var(--motion-panel);
+      animation-timing-function: var(--ease-base);
+      overflow: hidden;
+    }
+
+    ::view-transition-image-pair(site-header),
+    ::view-transition-image-pair(product-image),
+    ::view-transition-image-pair(product-info),
+    ::view-transition-image-pair(product-breadcrumb),
+    ::view-transition-image-pair(active-overlay),
+    ::view-transition-image-pair(cart-drawer),
+    ::view-transition-image-pair(filters-drawer) {
       isolation: isolate;
     }
 
-    ::view-transition-old(header-mobile-dock) {
-      animation: header-mobile-dock-out var(--motion-dock) var(--ease-dock) both;
-      object-fit: fill;
-    }
-
-    ::view-transition-old(header-mobile-bar) {
-      object-fit: fill;
-    }
-
-    ::view-transition-new(header-mobile-dock) {
-      animation: header-mobile-dock-in var(--motion-dock) var(--ease-dock) both;
-      object-fit: fill;
-    }
-
-    ::view-transition-new(header-mobile-bar) {
-      object-fit: fill;
-    }
-
-    ::view-transition-group(header-mobile-bar) {
-      z-index: 0;
-    }
-
-    ::view-transition-group(header-mobile-bar-active) {
-      z-index: 1;
-    }
-
-    ::view-transition-group(header-mobile-bar-home),
-    ::view-transition-group(header-mobile-bar-account),
-    ::view-transition-group(header-mobile-bar-bag),
-    ::view-transition-group(header-mobile-bar-menu) {
-      z-index: 2;
-    }
-
-    ::view-transition-old(header-mobile-bar-active),
-    ::view-transition-new(header-mobile-bar-active) {
-      mix-blend-mode: normal;
-      object-fit: fill;
-      transform-origin: center;
-    }
-
-    ::view-transition-old(header-mobile-bar-active) {
-      animation: header-mobile-bar-active-out var(--motion-panel) var(--ease-dock) both;
-    }
-
-    ::view-transition-new(header-mobile-bar-active) {
-      animation: header-mobile-bar-active-in var(--motion-dock) var(--ease-dock) both;
-    }
-
-    ::view-transition-old(header-mobile-bar-home),
-    ::view-transition-new(header-mobile-bar-home),
-    ::view-transition-old(header-mobile-bar-account),
-    ::view-transition-new(header-mobile-bar-account),
-    ::view-transition-old(header-mobile-bar-bag),
-    ::view-transition-new(header-mobile-bar-bag),
-    ::view-transition-old(header-mobile-bar-menu),
-    ::view-transition-new(header-mobile-bar-menu) {
+    ::view-transition-old(site-header),
+    ::view-transition-new(site-header) {
       animation: none;
       mix-blend-mode: normal;
       object-fit: fill;
-      transform-origin: center;
     }
 
-    ::view-transition-old(header-mobile-dock-search),
-    ::view-transition-new(header-mobile-dock-search),
-    ::view-transition-old(header-mobile-dock-filter),
-    ::view-transition-new(header-mobile-dock-filter),
-    ::view-transition-old(header-mobile-dock-buy),
-    ::view-transition-new(header-mobile-dock-buy),
-    ::view-transition-old(header-mobile-dock-product),
-    ::view-transition-new(header-mobile-dock-product),
-    ::view-transition-old(header-mobile-dock-gear),
-    ::view-transition-new(header-mobile-dock-gear) {
+    ::view-transition-old(product-image),
+    ::view-transition-new(product-image) {
+      mix-blend-mode: normal;
+      object-fit: contain;
+    }
+
+    ::view-transition-old(product-image) {
+      animation: product-image-old var(--motion-dock) var(--ease-dock) both;
+    }
+
+    ::view-transition-new(product-image) {
+      animation: product-image-new var(--motion-dock) var(--ease-dock) both;
+    }
+
+    ::view-transition-old(product-info) {
+      animation: product-info-old var(--motion-dock) var(--ease-dock) both;
       mix-blend-mode: normal;
       object-fit: fill;
-      transform-origin: center;
     }
 
-    ::view-transition-old(header-mobile-dock-filter):only-child,
-    ::view-transition-old(header-mobile-dock-buy):only-child,
-    ::view-transition-old(header-mobile-dock-product):only-child,
-    ::view-transition-old(header-mobile-dock-gear):only-child {
-      animation: header-mobile-dock-item-out var(--motion-dock) var(--ease-dock) both;
+    ::view-transition-new(product-info) {
+      animation: product-info-new var(--motion-dock) var(--ease-dock) both;
+      mix-blend-mode: normal;
+      object-fit: fill;
     }
 
-    ::view-transition-new(header-mobile-dock-filter):only-child,
-    ::view-transition-new(header-mobile-dock-buy):only-child,
-    ::view-transition-new(header-mobile-dock-product):only-child,
-    ::view-transition-new(header-mobile-dock-gear):only-child {
-      animation: header-mobile-dock-item-in var(--motion-dock) var(--ease-dock) both;
+    ::view-transition-old(product-breadcrumb) {
+      animation: product-breadcrumb-out var(--motion-base) var(--ease-exit) both;
+      mix-blend-mode: normal;
+      object-fit: fill;
+    }
+
+    ::view-transition-new(product-breadcrumb) {
+      animation: product-breadcrumb-in var(--motion-panel) var(--ease-dock) both;
+      mix-blend-mode: normal;
+      object-fit: fill;
+    }
+
+    ::view-transition-old(active-overlay),
+    ::view-transition-new(active-overlay),
+    ::view-transition-old(cart-drawer),
+    ::view-transition-new(cart-drawer),
+    ::view-transition-old(filters-drawer),
+    ::view-transition-new(filters-drawer) {
+      mix-blend-mode: normal;
+      object-fit: fill;
+    }
+  }
+
+  @media screen and (max-width: 749px) and (prefers-reduced-motion: no-preference) {
+    ::view-transition-group(header-mobile-chrome),
+    ::view-transition-group(header-mobile-menu) {
+      animation-duration: var(--motion-dock);
+      animation-timing-function: var(--ease-dock);
+      overflow: clip;
+    }
+
+    ::view-transition-image-pair(header-mobile-chrome),
+    ::view-transition-image-pair(header-mobile-menu) {
+      isolation: isolate;
+    }
+
+    ::view-transition-group(header-mobile-menu) {
+      z-index: 90;
+      animation-duration: var(--motion-panel);
+      animation-timing-function: var(--ease-base);
+    }
+
+    ::view-transition-group(header-mobile-chrome) {
+      z-index: 100;
+    }
+
+    ::view-transition-old(header-mobile-chrome),
+    ::view-transition-new(header-mobile-chrome),
+    ::view-transition-old(header-mobile-menu),
+    ::view-transition-new(header-mobile-menu) {
+      mix-blend-mode: normal;
+      object-fit: fill;
     }
   }
 }

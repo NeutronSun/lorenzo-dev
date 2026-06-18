@@ -19,6 +19,7 @@ class StickyHeader extends HTMLComponent {
   static MOBILE_MENU_GAP = 8;
   static LOCAL_STATE_INPUT_SELECTOR = '.header-nav-toggle, .header-product-dock-mode';
   static CART_DRAWER_SELECTOR = 'dialog-component[name="cart-drawer"] dialog';
+  static DIALOG_COMPONENT_SELECTOR = 'dialog-component';
 
   /**
    * @type {ResizeObserver | null}
@@ -148,8 +149,21 @@ class StickyHeader extends HTMLComponent {
     const dialogOpener = label.closest('dialog-opener');
 
     if (!dialogOpener || typeof dialogOpener.publish !== 'function') return;
+    if (!this.hasDialogComponent(dialogOpener)) return;
 
     dialogOpener.publish();
+  }
+
+  hasDialogComponent(dialogOpener) {
+    const name = dialogOpener.getAttribute('name');
+
+    if (!name) return false;
+
+    for (const dialog of document.querySelectorAll(StickyHeader.DIALOG_COMPONENT_SELECTOR)) {
+      if (dialog.getAttribute('name') === name) return true;
+    }
+
+    return false;
   }
 
 }

@@ -3,7 +3,6 @@ import { CSSUtils } from '@theme/utilities';
 class ProductPage extends HTMLElement {
   static MOBILE_MEDIA = '(max-width: 749px)';
   static MIN_GALLERY_HEIGHT = 420;
-  static MOBILE_MIN_GALLERY_HEIGHT = 480;
   static DEFAULT_SPACING = 20;
   static DEFAULT_MOBILE_BAR_HEIGHT = 58;
   static DEFAULT_MOBILE_MENU_GAP = 8;
@@ -31,11 +30,13 @@ class ProductPage extends HTMLElement {
     this.observe();
     this.updateLayout();
     window.addEventListener('resize', this.onResize);
+    window.visualViewport?.addEventListener('resize', this.onResize);
   }
 
   disconnectedCallback() {
     this.resizeObserver?.disconnect();
     window.removeEventListener('resize', this.onResize);
+    window.visualViewport?.removeEventListener('resize', this.onResize);
   }
 
   observe() {
@@ -58,14 +59,15 @@ class ProductPage extends HTMLElement {
     const mobileBarHeight = this.getRootNumber('--header-mobile-bar-height', ProductPage.DEFAULT_MOBILE_BAR_HEIGHT);
     const mobileMenuGap = this.getRootNumber('--header-mobile-menu-gap', ProductPage.DEFAULT_MOBILE_MENU_GAP);
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-    const dockClearance = mobileBarHeight + mobileMenuGap + spacing;
-    const top = this.getStickyTop(spacing);
-    const reservedBottom = this.isMobile ? dockClearance : spacing;
-    const minHeight = this.isMobile ? ProductPage.MOBILE_MIN_GALLERY_HEIGHT : ProductPage.MIN_GALLERY_HEIGHT;
-    const height = Math.max(minHeight, window.innerHeight - top - reservedBottom);
+    const breadcrumbArea = spacing + breadcrumbHeight + spacing;
+    const dockArea = mobileBarHeight + mobileMenuGap + spacing;
+    const top = this.isMobile ? breadcrumbArea : this.getStickyTop(spacing);
+    const reservedBottom = this.isMobile ? dockArea : spacing;
+    const availableHeight = this.getViewportHeight() - top - reservedBottom;
+    const height = this.isMobile ? Math.max(0, availableHeight) : Math.max(ProductPage.MIN_GALLERY_HEIGHT, availableHeight);
 
     CSSUtils.setValue('--breadcrumb-height', breadcrumbHeight, this);
-    CSSUtils.setValue('--dock-clearance', dockClearance, this);
+    CSSUtils.setValue('--dock-clearance', dockArea, this);
     CSSUtils.setValue('--gallery-height', height, this);
     CSSUtils.setValue('--sticky-top', top, this);
   }
@@ -80,6 +82,10 @@ class ProductPage extends HTMLElement {
     if (!(element instanceof HTMLElement)) return 0;
 
     return element.offsetHeight;
+  }
+
+  getViewportHeight() {
+    return window.visualViewport?.height || window.innerHeight;
   }
 
   getStickyTop(spacing) {

@@ -41,7 +41,7 @@
       attributes: ''
     %}
   {% endif %}
-  <a ref="link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
+  <a ref="link" href="{{ product.url }}" aria-label="{{ product.title | escape }}" on:click="prepareViewTransition"></a>
 </product-card>
 
 {% stylesheet %}

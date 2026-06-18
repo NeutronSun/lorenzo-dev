@@ -112,6 +112,7 @@
     background: var(--white);
     color: var(--black);
     overflow: hidden;
+    view-transition-name: cart-drawer;
   }
 
   body:has(.cart-drawer[open])::after {
@@ -123,6 +124,7 @@
     backdrop-filter: blur(1px);
     pointer-events: auto;
     cursor: pointer;
+    view-transition-name: active-overlay;
   }
 
   body:has(.cart-drawer[open]) .uyn-header {

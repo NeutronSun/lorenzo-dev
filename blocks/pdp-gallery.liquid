@@ -12,7 +12,7 @@
 %}
 
 <pdp-gallery ref="gallery" class="{% unless media_count > 1 %}single{% endunless %}" {{ block.shopify_attributes }}>
-  <div class="media">
+  <div class="media" style="view-transition-name: product-image;">
     {% if product.available %}
       <span class="stock font-mono">
         <span></span>
@@ -78,21 +78,22 @@
 {% stylesheet %}
   pdp-gallery {
     display: grid;
-    gap: 12px;
+    grid-template-rows: minmax(0, var(--main-height)) var(--thumb-size);
+    gap: var(--gallery-gap);
     height: var(--gallery-height);
     min-height: 520px;
 
     .media {
       position: relative;
       min-height: 0;
-      height: var(--main-height);
+      height: 100%;
       border: 1px solid var(--border-color);
       background: var(--background-darken);
       overflow: hidden;
     }
 
-    &.single .media {
-      height: var(--gallery-height);
+    &.single {
+      grid-template-rows: minmax(0, 1fr);
     }
 
     img {
@@ -169,8 +170,8 @@
     .thumbs {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      height: var(--thumb-size);
+      gap: var(--gallery-gap);
+      height: 100%;
       min-height: 0;
     }
 

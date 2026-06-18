@@ -217,6 +217,7 @@
       left: auto;
       justify-self: start;
       width: 100%;
+      view-transition-name: site-header;
       transition: width var(--motion-panel) var(--ease-emphasized);
 
       body:has(.filters-drawer[open]) & {
@@ -322,6 +323,7 @@
             grid-template-columns: minmax(0, 1fr) auto;
             gap: var(--header-mobile-menu-gap);
             width: 100%;
+            view-transition-name: header-mobile-chrome;
           }
 
           .header-right-product {
@@ -343,7 +345,6 @@
             overflow: hidden;
             background-color: var(--white);
             border: 1px solid var(--border-color);
-            view-transition-name: header-mobile-bar;
           }
 
           .header-mobile-bar-active {
@@ -359,7 +360,6 @@
             transition:
               opacity var(--motion-base) var(--ease-base),
               transform var(--motion-dock) var(--ease-dock);
-            view-transition-name: header-mobile-bar-active;
           }
 
           .header-mobile-bar-active-shape {
@@ -433,7 +433,6 @@
             container: header-mobile-dock / size;
             overflow: hidden;
             contain: layout paint;
-            view-transition-name: header-mobile-dock;
           }
 
           .header-mobile-dock-actions-collection {
@@ -524,7 +523,6 @@
               width var(--motion-dock) var(--ease-dock),
               color var(--motion-base) var(--ease-base),
               background-color var(--motion-base) var(--ease-base);
-            view-transition-name: header-mobile-dock-buy;
           }
 
           .header-mobile-product-button {
@@ -547,17 +545,12 @@
             transform-origin: center;
           }
 
-          .header-mobile-search-button {
-            view-transition-name: header-mobile-dock-search;
-          }
-
           .header-mobile-dock-actions-collection {
             .header-mobile-filter-button {
               --opacity: 1;
               --scale: 1;
 
               pointer-events: auto;
-              view-transition-name: header-mobile-dock-filter;
             }
 
             .header-mobile-search-button {
@@ -618,7 +611,6 @@
               opacity: 0;
               pointer-events: none;
               transform: scaleX(0.18);
-              view-transition-name: none;
             }
 
             .header-mobile-dock-actions-product {
@@ -632,7 +624,6 @@
               --scale: 1;
 
               pointer-events: auto;
-              view-transition-name: header-mobile-dock-product;
             }
 
             .header-mobile-search-button {
@@ -659,7 +650,6 @@
               opacity: 0;
               pointer-events: none;
               transform: scale(0.72);
-              view-transition-name: none;
             }
 
             .header-mobile-gear-button {
@@ -669,7 +659,6 @@
               opacity: var(--opacity);
               pointer-events: auto;
               transform: scale(var(--scale));
-              view-transition-name: header-mobile-dock-gear;
             }
           }
 
@@ -741,18 +730,6 @@
             pointer-events: none;
           }
 
-          .header-mobile-bar-icon-home {
-            view-transition-name: header-mobile-bar-home;
-          }
-
-          .header-mobile-bar-icon-account {
-            view-transition-name: header-mobile-bar-account;
-          }
-
-          .header-mobile-bar-icon-bag {
-            view-transition-name: header-mobile-bar-bag;
-          }
-
           .header-mobile-bag-count {
             position: absolute;
             top: 8px;
@@ -778,10 +755,6 @@
             display: none;
           }
 
-          .header-mobile-bar-icon-menu {
-            view-transition-name: header-mobile-bar-menu;
-          }
-
           .header-center {
             position: absolute;
             bottom: calc(var(--header-mobile-bar-height) + var(--header-mobile-menu-gap));
@@ -805,6 +778,7 @@
               opacity var(--motion-base) var(--ease-base),
               visibility var(--motion-instant) var(--ease-linear) var(--motion-panel);
             pointer-events: none;
+            view-transition-name: header-mobile-menu;
           }
 
           .header-menu-list {
