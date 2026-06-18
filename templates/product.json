@@ -11,7 +11,21 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {},
+      "blocks": {
+        "gallery": {
+          "type": "pdp-gallery",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "info": {
+          "type": "pdp-product-info",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "settings": {}
     }
   },
   "order": [

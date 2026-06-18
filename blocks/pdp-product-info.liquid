@@ -9,7 +9,7 @@
   assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
 %}
 
-<pdp-product-info>
+<pdp-product-info {{ block.shopify_attributes }}>
   <section class="panel heading">
     <div class="meta font-mono">
       <span>{{ macro_category | default: product.type }}</span>
@@ -212,3 +212,16 @@
     }
   }
 {% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Product Info",
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Product Info",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

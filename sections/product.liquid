@@ -4,8 +4,8 @@
 
 <product-page class="section">
   <div class="layout page-width">
-    {% render 'pdp-gallery', product: product %}
-    {% render 'pdp-product-info', product: product %}
+    {% content_for 'block', type: 'pdp-gallery', id: 'gallery', product: product %}
+    {% content_for 'block', type: 'pdp-product-info', id: 'info', product: product %}
   </div>
 </product-page>
 
@@ -67,6 +67,10 @@
 {% schema %}
 {
   "name": "t:general.product",
+  "blocks": [
+    { "type": "pdp-gallery" },
+    { "type": "pdp-product-info" }
+  ],
   "settings": [],
   "disabled_on": {
     "groups": ["header", "footer"]
