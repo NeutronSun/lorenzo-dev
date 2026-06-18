@@ -132,12 +132,9 @@
 
 {% stylesheet %}
   pdp-breadcrumb {
-    position: sticky;
-    top: calc(var(--header-height, 0px) + var(--spacing));
-    z-index: calc(var(--z-index-header) - 1);
     display: grid;
     grid-template-columns: var(--content-grid);
-    padding-block: 0;
+    padding-block: var(--spacing);
     background: var(--background);
 
     .bar {

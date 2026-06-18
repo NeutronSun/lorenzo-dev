@@ -11,6 +11,8 @@
       "@theme/collection": "{{ 'collection.js' | asset_url }}",
       "@theme/cart": "{{ 'cart.js' | asset_url }}",
       "@theme/product": "{{ 'product.js' | asset_url }}",
+      "@theme/color-sibling": "{{ 'color-sibling.js' | asset_url }}",
+      "@theme/pdp-siblings": "{{ 'pdp-siblings.js' | asset_url }}",
       "@theme/product-card": "{{ 'product-card.js' | asset_url }}"
     }
   }
@@ -55,6 +57,16 @@
 <link
   rel="modulepreload"
   href="{{ 'product.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'color-sibling.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'pdp-siblings.js' | asset_url }}"
   fetchpriority="low"
 >
 <link

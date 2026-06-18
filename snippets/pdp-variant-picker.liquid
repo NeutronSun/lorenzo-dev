@@ -1,84 +1,77 @@
 {% doc %}
-  Renders PDP visual variant picker.
+  Renders PDP product siblings picker.
 
   @param {product} product - Product object
 {% enddoc %}
 
 {% liquid
-  assign color_option = blank
-  assign size_option = blank
+  assign theme_tag = blank
+  assign pm_value = product.metafields.valeverce.pm.value | default: product.metafields.valeverce.pm
+  assign micro_value = product.metafields.elastick.filter_microcategory.value | default: product.metafields.elastick.filter_microcategory | default: product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+  assign siblings_limit = 250
+  assign theme_prefix = 'Tema_'
+  assign theme_prefix_size = theme_prefix.size
 
-  for option in product.options_with_values
-    assign option_name = option.name | downcase
+  for tag in product.tags
+    assign theme_tag_prefix = tag | slice: 0, theme_prefix_size
 
-    if option_name contains 'color' or option_name contains 'colour' or option_name contains 'colore'
-      assign color_option = option
-    endif
-
-    if option_name contains 'size' or option_name contains 'taglia'
-      assign size_option = option
+    if theme_tag == blank and theme_tag_prefix == theme_prefix
+      assign theme_tag = tag
     endif
   endfor
 %}
 
-<pdp-variant-picker>
-  <div class="group">
-    <div class="head font-mono">
-      <span>{{ color_option.name | default: 'Color' }}</span>
-      <span>
-        {% if color_option != blank %}
-          {{ color_option.selected_value | default: color_option.values.first }}
-        {% else %}
-          Black
-        {% endif %}
-      </span>
-    </div>
+<pdp-siblings
+  data-theme-tag="{{ theme_tag | escape }}"
+  data-current-handle="{{ product.handle | escape }}"
+  data-current-url="{{ product.url | escape }}"
+  data-limit="{{ siblings_limit }}"
+  class="{% if theme_tag != blank %}is-loading{% endif %}"
+  aria-busy="{% if theme_tag != blank %}true{% else %}false{% endif %}"
+  {% if theme_tag == blank %}hidden{% endif %}
+>
+  {% if theme_tag != blank %}
+    <script type="application/json" ref="currentProduct">
+      {
+        "id": {{ product.id | json }},
+        "handle": {{ product.handle | json }},
+        "title": {{ product.title | json }},
+        "url": {{ product.url | json }},
+        "tags": {{ product.tags | json }},
+        "microCategory": {{ micro_value | json }},
+        "pm": {{ pm_value | json }},
+        "image": {% if product.featured_image %}{{ product.featured_image | image_url: width: 96 | json }}{% else %}""{% endif %},
+        "imageAlt": {{ product.featured_image.alt | default: product.title | json }}
+      }
+    </script>
 
-    <div class="values">
-      {% if color_option != blank %}
-        {% for value in color_option.values limit: 4 %}
-          <button type="button" class="chip{% if forloop.first %} active{% endif %}">
-            <span class="swatch"></span>
-            {{ value }}
-          </button>
-        {% endfor %}
-      {% else %}
-        <button type="button" class="chip active">
-          <span class="swatch"></span>
-          Black
-        </button>
-        <button type="button" class="chip">
-          <span class="swatch olive"></span>
-          Olive
-        </button>
-      {% endif %}
-    </div>
-  </div>
+    <div class="group skeleton" aria-hidden="true">
+      <div class="head font-mono">
+        <span></span>
+        <span></span>
+      </div>
 
-  <div class="group">
-    <div class="head font-mono">
-      <span>{{ size_option.name | default: 'Size' }}</span>
-      <button type="button">Size guide</button>
-    </div>
+      <div class="tabs font-mono">
+        <span></span>
+        <span></span>
+      </div>
 
-    <div class="values">
-      {% if size_option != blank %}
-        {% for value in size_option.values limit: 5 %}
-          <button type="button" class="size{% if forloop.first %} unavailable{% endif %}">{{ value }}</button>
-        {% endfor %}
-      {% else %}
-        <button type="button" class="size unavailable">S</button>
-        <button type="button" class="size">M</button>
-        <button type="button" class="size">L</button>
-        <button type="button" class="size">XL</button>
-      {% endif %}
+      <div class="values">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
-  </div>
-</pdp-variant-picker>
+  {% endif %}
+</pdp-siblings>
 
 {% stylesheet %}
-  pdp-variant-picker {
+  pdp-siblings {
     display: grid;
+
+    &[hidden] {
+      display: none;
+    }
 
     .group {
       display: grid;
@@ -105,15 +98,63 @@
       white-space: nowrap;
     }
 
-    .head button {
-      padding: 0;
-      border: 0;
+    .tabs {
+      display: inline-flex;
+      width: fit-content;
+      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      min-height: 30px;
+      padding: 0 14px;
+      border-right: 1px solid var(--border-color);
       background: transparent;
       color: var(--secondary-black);
       font: inherit;
-      letter-spacing: inherit;
-      text-transform: none;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       cursor: pointer;
+    }
+
+    .tab:last-child {
+      border-right: 0;
+    }
+
+    .tab input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: inherit;
+    }
+
+    .tab span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab:has(input:checked) {
+      background: var(--background-darken);
+      color: var(--black);
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .tabs:has(input[value="theme"]:checked) ~ .panels .panel[data-tab="theme"],
+    .tabs:has(input[value="pm"]:checked) ~ .panels .panel[data-tab="pm"] {
+      display: block;
     }
 
     .values {
@@ -122,50 +163,92 @@
       gap: 8px;
     }
 
-    .chip,
-    .size {
-      min-height: 36px;
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      min-height: 32px;
+      padding: 0 9px;
       border: 1px solid var(--border-color);
       background: var(--white);
       color: var(--black);
       font-family: var(--font-mono--family);
       font-size: 10px;
       letter-spacing: 0.12em;
+      text-decoration: none;
       text-transform: uppercase;
-      cursor: pointer;
     }
 
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 10px;
-    }
-
-    .active {
+    .chip.is-active {
       border-color: var(--black);
+      background: var(--white);
+      color: var(--black);
+      box-shadow: none;
+    }
+
+    .chip-label {
+      white-space: nowrap;
     }
 
     .swatch {
+      flex: 0 0 auto;
       width: 18px;
       height: 18px;
-      background: var(--black);
+      border: 1px solid transparent;
+      background: var(--background-darken);
+      overflow: hidden;
     }
 
-    .swatch.olive {
-      background: oklch(34% 0.06 130);
+    .swatch img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .size {
-      min-width: 54px;
-      padding: 0 16px;
+    .chip.is-active .swatch {
+      border-color: var(--black);
     }
 
-    .size.unavailable {
-      color: var(--secondary-black);
-      background:
-        linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--border-color) calc(50% - 0.5px), var(--border-color) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
-        var(--white);
+    .skeleton .head span,
+    .skeleton .tabs span,
+    .skeleton .values span {
+      display: block;
+      background: linear-gradient(90deg, var(--background-darken), var(--border-color), var(--background-darken));
+      background-size: 220% 100%;
+      animation: pdp-siblings-skeleton 1100ms var(--ease-in-out) infinite;
+    }
+
+    .skeleton .head span {
+      width: 72px;
+      height: 10px;
+    }
+
+    .skeleton .head span:last-child {
+      width: 44px;
+    }
+
+    .skeleton .tabs span {
+      width: 72px;
+      height: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    .skeleton .values span {
+      width: 72px;
+      height: 32px;
+      border: 1px solid var(--border-color);
+    }
+  }
+
+  @keyframes pdp-siblings-skeleton {
+    from {
+      background-position: 120% 0;
+    }
+
+    to {
+      background-position: -120% 0;
     }
   }
 {% endstylesheet %}
