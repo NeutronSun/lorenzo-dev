@@ -1,4 +1,5 @@
 import { HTMLComponent } from "@theme/HTMLComponent";
+import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from "@theme/events";
 
 /**
  * Dialog component.
@@ -12,21 +13,20 @@ import { HTMLComponent } from "@theme/HTMLComponent";
  */
 export class DialogComponent extends HTMLComponent {
   static SELECTOR = 'dialog-component';
-  static EVENT_OPEN = 'dialog:open';
-  static EVENT_OPENED = 'dialog:opened';
-  static EVENT_CLOSED = 'dialog:closed';
 
-  /** @type {((event: CustomEvent<{ name: string }>) => void) | null} */
+  /** @type {((event: OnDialogOpenEvent) => void) | null} */
   onDialogOpen = null;
   /** @type {(() => void) | null} */
   onDialogClose = null;
+  /** @type {((event: KeyboardEvent) => void) | null} */
+  onDialogKeydown = null;
 
   connectedCallback() {
     super.connectedCallback();
 
     this.name = this.getAttribute('name');
     this.onDialogOpen = (event) => {
-      if (event.detail.name === this.name) {
+      if (event.name === this.name) {
         this.open();
         return;
       }
@@ -35,17 +35,27 @@ export class DialogComponent extends HTMLComponent {
         this.close();
       }
     };
-    this.onDialogClose = () => this.dispatch(DialogComponent.EVENT_CLOSED);
+    this.onDialogClose = () => this.dispatchClosed();
+    this.onDialogKeydown = (event) => {
+      if (event.key !== 'Escape') return;
+      if (!this.refs.dialog?.open) return;
 
-    document.addEventListener(DialogComponent.EVENT_OPEN, this.onDialogOpen);
+      event.preventDefault();
+      this.close();
+    };
+
+    document.addEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
+    document.addEventListener('keydown', this.onDialogKeydown);
     this.refs.dialog?.addEventListener('close', this.onDialogClose);
   }
 
   disconnectedCallback() {
-    this.onDialogOpen && document.removeEventListener(DialogComponent.EVENT_OPEN, this.onDialogOpen);
+    this.onDialogOpen && document.removeEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
+    this.onDialogKeydown && document.removeEventListener('keydown', this.onDialogKeydown);
     this.onDialogClose && this.refs.dialog?.removeEventListener('close', this.onDialogClose);
     this.onDialogOpen = null;
     this.onDialogClose = null;
+    this.onDialogKeydown = null;
     super.disconnectedCallback();
   }
 
@@ -57,12 +67,12 @@ export class DialogComponent extends HTMLComponent {
 
     if (this.hasAttribute('non-modal')) {
       this.refs.dialog.show();
-      this.dispatch(DialogComponent.EVENT_OPENED);
+      this.dispatchOpened();
       return;
     }
 
     this.refs.dialog.showModal();
-    this.dispatch(DialogComponent.EVENT_OPENED);
+    this.dispatchOpened();
   }
 
   close() {
@@ -78,15 +88,18 @@ export class DialogComponent extends HTMLComponent {
     }
   }
 
-  /**
-   * @param {string} eventName
-   */
-  dispatch(eventName) {
+  dispatchOpened() {
     this.dispatchEvent(
-      new CustomEvent(eventName, {
-        bubbles: true,
-        composed: true,
-        detail: { name: this.name },
+      new OnDialogOpenedEvent({
+        name: this.name,
+      })
+    );
+  }
+
+  dispatchClosed() {
+    this.dispatchEvent(
+      new OnDialogClosedEvent({
+        name: this.name,
       })
     );
   }
@@ -107,10 +120,8 @@ class DialogOpener extends HTMLComponent {
 
   publish() {
     document.dispatchEvent(
-      new CustomEvent(DialogComponent.EVENT_OPEN, {
-        bubbles: true,
-        composed: true,
-        detail: { name: this.name },
+      new OnDialogOpenEvent({
+        name: this.name,
       })
     );
   }

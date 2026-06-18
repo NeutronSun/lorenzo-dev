@@ -18,6 +18,7 @@ import { CSSUtils } from '@theme/utilities';
 class StickyHeader extends HTMLComponent {
   static MOBILE_MENU_GAP = 8;
   static LOCAL_STATE_INPUT_SELECTOR = '.header-nav-toggle, .header-product-dock-mode';
+  static CART_DRAWER_SELECTOR = 'dialog-component[name="cart-drawer"] dialog';
 
   /**
    * @type {ResizeObserver | null}
@@ -127,8 +128,20 @@ class StickyHeader extends HTMLComponent {
       input.checked = true;
     }
 
+    if (input.matches('.header-nav-toggle') && input.checked) {
+      this.closeCartDrawer();
+    }
+
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  closeCartDrawer() {
+    const dialog = document.querySelector(StickyHeader.CART_DRAWER_SELECTOR);
+
+    if (!(dialog instanceof HTMLDialogElement)) return;
+
+    dialog.open && dialog.close();
   }
 
   publishLocalDialog(label) {

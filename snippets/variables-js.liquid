@@ -1,4 +1,23 @@
 <script>
+  window.Theme = {
+    ...(window.Theme || {}),
+    routes: {
+      cart_add_url: {{ routes.cart_add_url | json }},
+      cart_change_url: {{ routes.cart_change_url | json }},
+      cart_update_url: {{ routes.cart_update_url | json }},
+      cart_url: {{ routes.cart_url | json }},
+      predictive_search_url: {{ routes.predictive_search_url | json }},
+      search_url: {{ routes.search_url | json }}
+    },
+    template: {
+      name: {{ request.page_type | json }}
+    },
+    translations: {
+      cart_checkout: {{ 'cart.checkout' | t | json }},
+      cart_remove: {{ 'cart.remove' | t | json }}
+    }
+  };
+
   window.storefront = {
     apiUrl: 'https://{{ shop.permanent_domain }}/api/{{ settings.storefront_api_version | default: '2026-04' }}/graphql.json',
     accessToken: {{ settings.storefront_access_token | json }}

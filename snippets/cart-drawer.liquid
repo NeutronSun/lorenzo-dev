@@ -1,0 +1,415 @@
+<dialog-component name="cart-drawer" non-modal>
+  <dialog ref="dialog" class="drawer from-right cart-drawer">
+    <cart-drawer>
+      <header class="cart-drawer-header">
+        <div>
+          <p class="cart-drawer-eyebrow font-mono">/BAG</p>
+          <p class="cart-drawer-count" ref="count">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</p>
+        </div>
+        <form method="dialog">
+          <button type="submit" class="cart-drawer-close" aria-label="Close bag">
+            {% render 'icon-close', size: 18 %}
+          </button>
+        </form>
+      </header>
+
+      <div class="cart-drawer-body" ref="body">
+        {% if cart.item_count == 0 %}
+          <div class="cart-empty">
+            <span class="cart-empty-icon" aria-hidden="true">
+              {% render 'icon-bag', size: 34 %}
+            </span>
+            <p class="cart-empty-title font-mono">YOUR BAG IS EMPTY</p>
+            <p class="cart-empty-text">Add a piece to start. Free EU shipping over €120.</p>
+          </div>
+        {% else %}
+          {% for item in cart.items %}
+            <cart-item key="{{ item.key | escape }}" quantity="{{ item.quantity }}">
+              <a class="cart-item-image" href="{{ item.url }}">
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | image_url: width: 192 }}"
+                    alt="{{ item.product.title | escape }}"
+                    width="96"
+                    height="96"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+              <div class="cart-item-info">
+                <div class="cart-item-copy">
+                  <a class="cart-item-title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                  {% if item.variant.title != 'Default Title' %}
+                    <p class="cart-item-variant font-mono">{{ item.variant.title | escape }}</p>
+                  {% endif %}
+                  {% assign visible_properties = false %}
+                  {% for property in item.properties %}
+                    {% assign property_first = property.first | slice: 0 %}
+                    {% if property.last != blank and property_first != '_' %}
+                      {% assign visible_properties = true %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if visible_properties %}
+                    <p class="cart-item-properties font-mono">
+                      {% for property in item.properties %}
+                        {% assign property_first = property.first | slice: 0 %}
+                        {% if property.last != blank and property_first != '_' %}
+                          <span>{{ property.first | escape }}: {{ property.last | escape }}</span>
+                        {% endif %}
+                      {% endfor %}
+                    </p>
+                  {% endif %}
+                </div>
+                <div class="cart-item-actions">
+                  <button type="button" on:click="decrease" aria-label="Decrease quantity">-</button>
+                  <span ref="quantity">{{ item.quantity }}</span>
+                  <button type="button" on:click="increase" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+              <div class="cart-item-meta">
+                <cart-money class="cart-item-price" value="{{ item.final_line_price }}"></cart-money>
+                <button type="button" class="cart-item-remove font-mono" on:click="removeItem" aria-label="Remove {{ item.product.title | escape }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M6 6l1 16h10l1-16"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                  </svg>
+                  <span>REMOVE</span>
+                </button>
+              </div>
+            </cart-item>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <footer class="cart-drawer-footer">
+        <div class="cart-drawer-subtotal">
+          <span class="font-mono">SUBTOTAL</span>
+          <cart-money ref="subtotal" value="{{ cart.total_price }}"></cart-money>
+        </div>
+        <button
+          type="button"
+          ref="checkout"
+          class="cart-drawer-checkout font-mono"
+          onclick="window.location.href = '{{ routes.cart_url }}'"
+          {% if cart.item_count == 0 %}disabled{% endif %}
+        >
+          CHECKOUT — <cart-money ref="checkoutTotal" value="{{ cart.total_price }}"></cart-money>
+        </button>
+      </footer>
+    </cart-drawer>
+  </dialog>
+</dialog-component>
+
+{% stylesheet %}
+  .cart-drawer {
+    --drawer-width: min(440px, calc(100dvw - var(--spacing) * 2));
+    z-index: var(--z-index-drawer);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    background: var(--white);
+    color: var(--black);
+    overflow: hidden;
+  }
+
+  body:has(.cart-drawer[open])::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index-overlay);
+    background: rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(1px);
+    pointer-events: none;
+  }
+
+  body:has(.cart-drawer[open]) .uyn-header {
+    @media screen and (min-width: 750px) {
+      width: calc(100% - min(440px, calc(100dvw - var(--spacing) * 2)) - var(--spacing));
+    }
+  }
+
+  cart-drawer {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100%;
+    min-height: 0;
+    background: var(--white);
+  }
+
+  cart-drawer[pending] cart-money {
+    opacity: 0.42;
+  }
+
+  .cart-drawer-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--white);
+  }
+
+  .cart-drawer-eyebrow,
+  .cart-drawer-count {
+    margin: 0;
+  }
+
+  .cart-drawer-eyebrow {
+    font-size: 11px;
+  }
+
+  .cart-drawer-count {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .cart-drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--black);
+    cursor: pointer;
+  }
+
+  .cart-drawer-body {
+    min-height: 0;
+    padding: 18px 20px;
+    overflow: auto;
+  }
+
+  cart-drawer[empty] .cart-drawer-body,
+  .cart-drawer-body:has(.cart-empty) {
+    display: grid;
+  }
+
+  .cart-empty {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 12px;
+    min-height: 100%;
+    text-align: center;
+    color: var(--secondary-black);
+  }
+
+  .cart-empty-title,
+  .cart-empty-text {
+    margin: 0;
+  }
+
+  .cart-empty-title {
+    font-size: 11px;
+  }
+
+  .cart-empty-text {
+    font-size: 14px;
+  }
+
+  cart-item {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    align-items: stretch;
+    gap: 12px;
+    position: relative;
+    margin-bottom: 18px;
+    min-height: 96px;
+  }
+
+  cart-item[pending] {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .cart-item-image {
+    display: block;
+    width: 96px;
+    height: 96px;
+    background: var(--background-darken);
+    color: inherit;
+  }
+
+  .cart-item-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .cart-item-title {
+    display: block;
+    color: var(--black);
+    overflow: hidden;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cart-item-variant,
+  .cart-item-properties {
+    display: grid;
+    gap: 2px;
+    margin: 3px 0 0;
+    font-size: 10px;
+  }
+
+  .cart-item-actions {
+    display: inline-grid;
+    grid-template-columns: 28px 36px 28px;
+    align-items: center;
+    width: max-content;
+    border: 1px solid var(--border-color);
+  }
+
+  .cart-item-actions button {
+    width: 28px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--black);
+    cursor: pointer;
+  }
+
+  .cart-item-actions span {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .cart-item-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: max-content;
+  }
+
+  .cart-item-price {
+    font-family: var(--font-mono--family);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .cart-item-remove {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 0 5px;
+    border: 0;
+    background: transparent;
+    color: var(--secondary-black);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+  }
+
+  .cart-item-remove svg {
+    flex: 0 0 auto;
+  }
+
+  .cart-drawer-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    padding: 18px 20px;
+    border-top: 1px solid var(--border-color);
+    background: var(--white);
+  }
+
+  .cart-drawer-subtotal {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 12px;
+  }
+
+  .cart-drawer-subtotal cart-money {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .cart-drawer-checkout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 40px;
+    border: 1px solid var(--black);
+    background: var(--black);
+    color: var(--white);
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .cart-drawer-checkout:disabled {
+    border-color: var(--background-darken);
+    background: var(--background-darken);
+    color: var(--secondary-black);
+    cursor: not-allowed;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cart-drawer {
+      --drawer-top-spacing: var(--header-spacing, var(--spacing));
+      --drawer-height: calc(100dvh - var(--drawer-top-spacing) - var(--drawer-bottom-spacing));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .cart-drawer {
+      --cart-dock-clearance: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing));
+      --drawer-height: calc(100dvh - var(--spacing) - var(--cart-dock-clearance));
+      --origin-x: 0;
+      --origin-y: calc(100% + var(--cart-dock-clearance));
+
+      inset:
+        var(--spacing)
+        var(--drawer-right-spacing)
+        var(--cart-dock-clearance)
+        var(--drawer-left-spacing);
+      width: auto;
+      height: var(--drawer-height);
+      max-width: none;
+      max-height: none;
+    }
+
+    .cart-drawer-body,
+    .cart-drawer-header,
+    .cart-drawer-footer {
+      padding-inline: 20px;
+    }
+
+    cart-item {
+      grid-template-columns: 84px minmax(0, 1fr) auto;
+    }
+
+    .cart-item-image {
+      width: 84px;
+      height: 84px;
+    }
+
+    .cart-item-remove {
+      letter-spacing: 0.12em;
+    }
+  }
+{% endstylesheet %}

@@ -17,7 +17,7 @@
   <p>{{ product.description }}</p>
 </div>
 
-<div class="product-form">
+<product-form class="product-form">
   {% form 'product', product %}
     {% assign current_variant = product.selected_or_first_available_variant %}
 
@@ -39,7 +39,7 @@
     <input type="submit" value="Add to cart">
     {{ form | payment_button }}
   {% endform %}
-</div>
+</product-form>
 
 {% schema %}
 {

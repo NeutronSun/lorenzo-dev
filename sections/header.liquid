@@ -58,7 +58,7 @@
         </a>
         <a href="{{ routes.cart_url }}" class="header-mobile-menu-footer-item header-link">
           {% render 'icon-bag', size: 18 %}
-          <span class="font-mono font-12">BAG · {{ cart.item_count }}</span>
+          <span class="font-mono font-12">BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
         </a>
       </nav>
     </div>
@@ -87,6 +87,18 @@
           hidden
         >
       {% endif %}
+      <nav class="header-desktop-actions mobile-hidden" aria-label="Desktop shortcuts">
+        <a href="{{ routes.search_url }}" class="header-desktop-action header-link" aria-label="Search">
+          {% render 'icon-search', size: 18 %}
+        </a>
+        <a href="{{ routes.account_url }}" class="header-desktop-action header-link" aria-label="Account">
+          {% render 'icon-account', size: 18 %}
+        </a>
+        <a href="{{ routes.cart_url }}" class="header-desktop-action header-desktop-bag header-link font-mono font-12" aria-label="Bag">
+          {% render 'icon-bag', size: 16 %}
+          <span>BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
+        </a>
+      </nav>
       <nav class="header-mobile-bar mobile-only{% if product_active %} header-mobile-bar-product{% endif %}" ref="mobileBar" aria-label="Mobile navigation">
         <span class="header-mobile-bar-active" aria-hidden="true">
           <span class="header-mobile-bar-active-shape"></span>
@@ -129,6 +141,7 @@
           <span class="header-mobile-bar-icon header-mobile-bar-icon-bag">
             {% render 'icon-bag', size: 22 %}
           </span>
+          <span class="header-mobile-bag-count font-mono" data-cart-count data-cart-bubble{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
         </a>
         <dialog-opener name="header-menu" class="header-mobile-bar-item header-nav-trigger{% if menu_active %} header-mobile-bar-item-active{% endif %}">
           <label for="header-nav-{{ section.id }}" on:click="publish" aria-label="Menu">
@@ -267,6 +280,38 @@
           width: 100%;
           height: 100%;
           cursor: inherit;
+        }
+
+        .header-desktop-actions {
+          display: none;
+          align-items: stretch;
+          border: 1px solid var(--border-color);
+
+          @media screen and (min-width: 750px) {
+            display: flex;
+          }
+        }
+
+        .header-desktop-action {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          min-width: 40px;
+          min-height: 40px;
+          padding: 0 12px;
+          border-inline-start: 1px solid var(--border-color);
+          color: var(--black);
+        }
+
+        .header-desktop-action:first-child {
+          border-inline-start: 0;
+        }
+
+        .header-desktop-bag {
+          background: var(--black);
+          color: var(--white);
+          letter-spacing: 0.12em;
         }
 
         @media screen and (max-width: 749px) {
@@ -531,6 +576,21 @@
             }
           }
 
+          body:has(.cart-drawer[open]) & {
+            .header-mobile-bar {
+              --active-translate: 200%;
+              --active-scale: 1;
+            }
+
+            .header-mobile-bar-item-active:not(.header-mobile-bag) {
+              color: var(--secondary-black);
+            }
+
+            .header-mobile-bag {
+              color: var(--black);
+            }
+          }
+
           .header-right-product:has(.header-product-dock-menu-toggle:checked) {
             .header-mobile-product-home-open,
             .header-mobile-product-home-config {
@@ -695,6 +755,31 @@
 
           .header-mobile-bar-icon-bag {
             view-transition-name: header-mobile-bar-bag;
+          }
+
+          .header-mobile-bag-count {
+            position: absolute;
+            top: 8px;
+            right: 50%;
+            z-index: 3;
+            display: grid;
+            place-items: center;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            border: 1px solid var(--white);
+            border-radius: 999px;
+            background: var(--black);
+            color: var(--white);
+            font-size: 9px;
+            line-height: 1;
+            letter-spacing: 0;
+            transform: translateX(22px);
+            pointer-events: none;
+          }
+
+          .header-mobile-bag-count[hidden] {
+            display: none;
           }
 
           .header-mobile-bar-icon-menu {

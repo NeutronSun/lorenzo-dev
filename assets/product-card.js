@@ -95,17 +95,15 @@ class ColorSibling {
 }
 
 /**
- * @typedef {Object} ProductCardSiblingRefs
- * @property {HTMLInputElement} input
+ * @typedef {Object} ProductCardSiblingsRefs
+ * @property {HTMLFieldSetElement} fieldset
+ * @property {HTMLInputElement[]} input
  */
 
 /**
- * @extends {HTMLComponent<ProductCardSiblingRefs>}
+ * @extends {HTMLComponent<ProductCardSiblingsRefs>}
  */
-class ProductCardSibling extends HTMLComponent {
-  static CACHE_PREFIX = 'product-card:';
-  static TEMPLATE_VIEW = 'card';
-
+class ProductCardSiblings extends HTMLComponent {
   /**
    * @param {{ handle: string, title: string, url: string, image: string, imageAlt: string }} sibling
    * @param {string} name
@@ -115,26 +113,35 @@ class ProductCardSibling extends HTMLComponent {
   static build(sibling, name, activeHandle) {
     const checked = sibling.handle === activeHandle ? ' checked' : '';
     const image = sibling.image
-      ? `<img src="${ProductCardSibling.escape(sibling.image)}" alt="${ProductCardSibling.escape(sibling.imageAlt)}" loading="lazy" width="40" height="40">`
+      ? `<img src="${ProductCardSiblings.escape(sibling.image)}" alt="${ProductCardSiblings.escape(sibling.imageAlt)}" loading="lazy" width="40" height="40">`
       : '';
 
     return `
-      <product-card-sibling>
+      <label class="product-card-sibling">
         <input
           ref="input[]"
           type="radio"
-          name="${ProductCardSibling.escape(name)}"
-          value="${ProductCardSibling.escape(sibling.handle)}"
-          data-handle="${ProductCardSibling.escape(sibling.handle)}"
-          data-url="${ProductCardSibling.escape(sibling.url)}"
+          name="${ProductCardSiblings.escape(name)}"
+          value="${ProductCardSiblings.escape(sibling.handle)}"
+          data-handle="${ProductCardSiblings.escape(sibling.handle)}"
+          data-url="${ProductCardSiblings.escape(sibling.url)}"
           on:change="select"
           ${checked}
         >
-        <span aria-label="${ProductCardSibling.escape(sibling.title)}">
+        <span aria-label="${ProductCardSiblings.escape(sibling.title)}">
           ${image}
         </span>
-      </product-card-sibling>
+      </label>
     `;
+  }
+
+  connectedCallback() {
+    try {
+      super.connectedCallback();
+      this.render();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -154,7 +161,108 @@ class ProductCardSibling extends HTMLComponent {
     event.preventDefault();
     event.stopPropagation();
 
-    await group.change(card, this, element);
+    await group.publish(card, element);
+  }
+
+  async render() {
+    const tag = this.dataset.matchTag;
+    const limit = Number(this.dataset.limit || 10);
+    const card = this.closestTag('product-card');
+
+    if (!tag) return;
+    if (!(card instanceof ProductCard)) return;
+    if (!this.refs.fieldset) return;
+
+    try {
+      const siblings = await ColorSibling.fetch(tag, limit);
+
+      if (!siblings.length) return;
+
+      this.refs.fieldset.innerHTML = siblings
+        .map((sibling) => ProductCardSiblings.build(sibling, this.name, card.handle))
+        .join('');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  get name() {
+    return `product-card-sibling-${this.dataset.matchTag || 'default'}`;
+  }
+
+  /**
+   * @param {ProductCard} card
+   * @param {HTMLInputElement} input
+   */
+  async publish(card, input) {
+    const handle = input.dataset.handle;
+    const productUrl = input.dataset.url;
+
+    if (!handle) return;
+    if (!productUrl) return;
+
+    await card.changeSibling(handle, productUrl);
+  }
+
+  /**
+   * @param {string} value
+   * @returns {string}
+   */
+  static escape(value) {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+}
+
+/**
+ * @typedef {Object} ProductCardRefs
+ */
+
+/**
+ * @extends {HTMLComponent<ProductCardRefs>}
+ */
+class ProductCard extends HTMLComponent {
+  static CACHE_PREFIX = 'product-card:';
+  static TEMPLATE_VIEW = 'card';
+
+  get handle() {
+    return this.dataset.handle || '';
+  }
+
+  get isLoading() {
+    return this.classList.contains('is-loading');
+  }
+
+  set isLoading(value) {
+    this.classList.toggle('is-loading', value);
+  }
+
+  /**
+   * @param {string} handle
+   * @param {string} productUrl
+   */
+  async changeSibling(handle, productUrl) {
+    if (handle === this.handle) return;
+    if (this.isLoading) return;
+
+    try {
+      this.isLoading = true;
+
+      const html = await this.fetchCard(handle, productUrl);
+      const nextCard = this.getCard(html);
+
+      if (!(nextCard instanceof HTMLElement)) return;
+
+      this.render(nextCard);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   /**
@@ -163,7 +271,7 @@ class ProductCardSibling extends HTMLComponent {
    * @returns {Promise<Document>}
    */
   async fetchCard(handle, productUrl) {
-    const cacheKey = `${ProductCardSibling.CACHE_PREFIX}${handle}`;
+    const cacheKey = `${ProductCard.CACHE_PREFIX}${handle}`;
     const cached = sessionStorage.getItem(cacheKey);
 
     if (cached) return new DOMParser().parseFromString(cached, 'text/html');
@@ -184,100 +292,9 @@ class ProductCardSibling extends HTMLComponent {
   getCardUrl(productUrl) {
     const url = new URL(productUrl, window.location.origin);
 
-    url.searchParams.set('view', ProductCardSibling.TEMPLATE_VIEW);
+    url.searchParams.set('view', ProductCard.TEMPLATE_VIEW);
 
     return url;
-  }
-
-  /**
-   * @param {string} value
-   * @returns {string}
-   */
-  static escape(value) {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-}
-
-/**
- * @typedef {Object} ProductCardSiblingsRefs
- * @property {HTMLFieldSetElement} fieldset
- * @property {HTMLInputElement[]} input
- */
-
-/**
- * @extends {HTMLComponent<ProductCardSiblingsRefs>}
- */
-class ProductCardSiblings extends HTMLComponent {
-  connectedCallback() {
-    try {
-      super.connectedCallback();
-      this.render();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async render() {
-    const tag = this.dataset.matchTag;
-    const limit = Number(this.dataset.limit || 10);
-    const card = this.closestTag('product-card');
-
-    if (!tag) return;
-    if (!(card instanceof ProductCard)) return;
-    if (!this.refs.fieldset) return;
-
-    try {
-      const siblings = await ColorSibling.fetch(tag, limit);
-
-      if (!siblings.length) return;
-
-      this.refs.fieldset.innerHTML = siblings
-        .map((sibling) => ProductCardSibling.build(sibling, this.name, card.handle))
-        .join('');
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  get name() {
-    return `product-card-sibling-${this.dataset.matchTag || 'default'}`;
-  }
-
-  /**
-   * @param {ProductCard} card
-   * @param {ProductCardSibling} sibling
-   * @param {HTMLInputElement} input
-   */
-  async change(card, sibling, input) {
-    const handle = input.dataset.handle;
-    const productUrl = input.dataset.url;
-
-    if (!handle) return;
-    if (!productUrl) return;
-    if (handle === card.handle) return;
-    if (card.isLoading) return;
-
-    try {
-      card.isLoading = true;
-      sibling.classList.add('is-loading');
-
-      const html = await sibling.fetchCard(handle, productUrl);
-      const nextCard = this.getCard(html);
-
-      if (!(nextCard instanceof HTMLElement)) return;
-
-      card.render(nextCard);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      card.isLoading = false;
-      sibling.classList.remove('is-loading');
-    }
   }
 
   /**
@@ -286,27 +303,6 @@ class ProductCardSiblings extends HTMLComponent {
    */
   getCard(html) {
     return Array.from(html.body.children).find((element) => element.localName === 'product-card');
-  }
-}
-
-/**
- * @typedef {Object} ProductCardRefs
- */
-
-/**
- * @extends {HTMLComponent<ProductCardRefs>}
- */
-class ProductCard extends HTMLComponent {
-  get handle() {
-    return this.dataset.handle || '';
-  }
-
-  get isLoading() {
-    return this.classList.contains('is-loading');
-  }
-
-  set isLoading(value) {
-    this.classList.toggle('is-loading', value);
   }
 
   /**
@@ -322,10 +318,6 @@ class ProductCard extends HTMLComponent {
 
 if (!customElements.get('product-card')) {
   customElements.define('product-card', ProductCard);
-}
-
-if (!customElements.get('product-card-sibling')) {
-  customElements.define('product-card-sibling', ProductCardSibling);
 }
 
 if (!customElements.get('product-card-swatches')) {
