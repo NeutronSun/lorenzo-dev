@@ -1,0 +1,659 @@
+{
+  "id": "gid://shopify/CheckoutAndAccountsConfiguration/2258337838",
+  "configuration": {
+    "branding": {
+      "designTokens": {
+        "colors": {
+          "palette": {
+            "color1": "#F6F5F1",
+            "color2": "#EDEBE7",
+            "color3": "#DFDEDA",
+            "color4": "#606369",
+            "color5": "#EC7E3E",
+            "color6": "#0E1216",
+            "color7": "#FFFFFF",
+            "color8": "#16A34A",
+            "color9": "#F59E0B",
+            "color10": "#EB0005",
+            "color11": "#3B82F6",
+            "color12": "#F97316",
+            "color13": "#6B7280",
+            "color14": "#000000"
+          }
+        },
+        "cornerRadius": {
+          "base": 1,
+          "small": 1,
+          "large": 1
+        },
+        "typography": {
+          "primary": {
+            "shopifyFontGroup": {
+              "baseFontHandle": "work_sans_n4",
+              "boldFontHandle": "work_sans_n7",
+              "loadingStrategy": "AUTO"
+            }
+          },
+          "secondary": {
+            "shopifyFontGroup": {
+              "baseFontHandle": "inter_n4",
+              "boldFontHandle": "inter_n7",
+              "loadingStrategy": "AUTO"
+            }
+          },
+          "size": {
+            "base": 14,
+            "ratio": 1.1
+          }
+        }
+      },
+      "components": {
+        "shared": {
+          "colors": {
+            "accent": "#EC7E3E",
+            "button": "#0E1216",
+            "control": "#EDEBE7",
+            "success": "#16A34A",
+            "warning": "#F59E0B",
+            "critical": "#EB0005",
+            "info": "#3B82F6",
+            "decorative": "#FFFFFF"
+          },
+          "cornerRadius": "NONE",
+          "typography": {
+            "kerning": "BASE",
+            "letterCase": "NONE"
+          }
+        },
+        "header": {
+          "alignment": "CENTER",
+          "logo": {
+            "maxWidth": 140
+          },
+          "colors": {
+            "base": {
+              "background": "#FFFFFF",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "icon": "#0E1216",
+              "accent": "#EC7E3E",
+              "decorative": "#F6F5F1"
+            },
+            "control": {
+              "background": "#FFFFFF",
+              "border": "#DFDEDA",
+              "selected": {
+                "background": "#EC7E3E",
+                "border": "#EC7E3E"
+              }
+            },
+            "primaryButton": {
+              "background": "#0E1216",
+              "text": "#FFFFFF",
+              "hover": {
+                "background": "#000000"
+              }
+            },
+            "secondaryButton": {
+              "background": "#FFFFFF",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "hover": {
+                "background": "#EDEBE7",
+                "text": "#0E1216",
+                "border": "#0E1216"
+              }
+            }
+          }
+        },
+        "control": {
+          "cornerRadius": "NONE"
+        },
+        "checkbox": {
+          "cornerRadius": "NONE"
+        },
+        "select": {
+          "typography": {
+            "size": "BASE",
+            "weight": "BASE",
+            "font": "PRIMARY",
+            "letterCase": "NONE"
+          }
+        },
+        "textField": {
+          "typography": {
+            "size": "BASE",
+            "weight": "BASE",
+            "font": "PRIMARY",
+            "letterCase": "NONE"
+          }
+        },
+        "merchandiseThumbnail": {
+          "cornerRadius": "NONE"
+        },
+        "headingLevel1": {
+          "typography": {
+            "size": "LARGE",
+            "weight": "BOLD",
+            "font": "SECONDARY",
+            "kerning": "LOOSE",
+            "letterCase": "UPPER"
+          }
+        },
+        "headingLevel2": {
+          "typography": {
+            "size": "BASE",
+            "weight": "BOLD",
+            "font": "SECONDARY",
+            "letterCase": "UPPER"
+          }
+        },
+        "headingLevel3": {
+          "typography": {
+            "size": "SMALL",
+            "weight": "BOLD",
+            "font": "SECONDARY",
+            "letterCase": "UPPER"
+          }
+        },
+        "primaryButton": {
+          "cornerRadius": "NONE",
+          "typography": {
+            "size": "MEDIUM",
+            "weight": "BOLD",
+            "font": "PRIMARY",
+            "kerning": "LOOSE",
+            "letterCase": "UPPER"
+          },
+          "blockPadding": "BASE",
+          "inlinePadding": "BASE",
+          "border": "FULL"
+        },
+        "secondaryButton": {
+          "cornerRadius": "NONE",
+          "typography": {
+            "size": "BASE",
+            "weight": "BOLD",
+            "font": "PRIMARY",
+            "kerning": "LOOSE",
+            "letterCase": "UPPER"
+          },
+          "blockPadding": "BASE",
+          "inlinePadding": "BASE",
+          "border": "FULL"
+        },
+        "main": {
+          "colors": {
+            "base": {
+              "background": "#F6F5F1",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "icon": "#0E1216",
+              "accent": "#EC7E3E",
+              "decorative": "#EDEBE7"
+            },
+            "control": {
+              "background": "#FFFFFF",
+              "border": "#DFDEDA",
+              "selected": {
+                "background": "#EC7E3E",
+                "border": "#EC7E3E"
+              }
+            },
+            "primaryButton": {
+              "background": "#0E1216",
+              "text": "#FFFFFF",
+              "hover": {
+                "background": "#000000"
+              }
+            },
+            "secondaryButton": {
+              "background": "#FFFFFF",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "hover": {
+                "background": "#EDEBE7",
+                "text": "#0E1216",
+                "border": "#0E1216"
+              }
+            }
+          },
+          "section": {
+            "background": "BASE",
+            "border": "FULL",
+            "borderStyle": "BASE",
+            "borderWidth": "BASE",
+            "cornerRadius": "NONE",
+            "shadow": null,
+            "padding": "BASE",
+            "colors": {
+              "base": {
+                "background": "#FFFFFF",
+                "text": "#0E1216",
+                "border": "#DFDEDA",
+                "icon": "#0E1216",
+                "accent": "#EC7E3E",
+                "decorative": "#F6F5F1"
+              },
+              "control": {
+                "background": "#FFFFFF",
+                "border": "#DFDEDA",
+                "selected": {
+                  "background": "#EC7E3E",
+                  "border": "#EC7E3E"
+                }
+              },
+              "primaryButton": {
+                "background": "#0E1216",
+                "text": "#FFFFFF",
+                "hover": {
+                  "background": "#000000"
+                }
+              },
+              "secondaryButton": {
+                "background": "#FFFFFF",
+                "text": "#0E1216",
+                "border": "#DFDEDA",
+                "hover": {
+                  "background": "#EDEBE7",
+                  "text": "#0E1216",
+                  "border": "#0E1216"
+                }
+              }
+            }
+          },
+          "divider": {
+            "borderStyle": "BASE",
+            "borderWidth": "BASE",
+            "visibility": "VISIBLE"
+          }
+        },
+        "footer": {
+          "alignment": "CENTER",
+          "colors": {
+            "base": {
+              "background": "#FFFFFF",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "icon": "#0E1216",
+              "accent": "#EC7E3E",
+              "decorative": "#F6F5F1"
+            },
+            "control": {
+              "background": "#FFFFFF",
+              "border": "#DFDEDA",
+              "selected": {
+                "background": "#EC7E3E",
+                "border": "#EC7E3E"
+              }
+            },
+            "primaryButton": {
+              "background": "#0E1216",
+              "text": "#FFFFFF",
+              "hover": {
+                "background": "#000000"
+              }
+            },
+            "secondaryButton": {
+              "background": "#FFFFFF",
+              "text": "#0E1216",
+              "border": "#DFDEDA",
+              "hover": {
+                "background": "#EDEBE7",
+                "text": "#0E1216",
+                "border": "#0E1216"
+              }
+            }
+          }
+        }
+      },
+      "surfaces": {
+        "checkout": {
+          "components": {
+            "orderSummary": {
+              "section": {
+                "background": "BASE",
+                "shadow": null,
+                "padding": "BASE",
+                "border": "FULL",
+                "borderStyle": "BASE",
+                "borderWidth": "BASE",
+                "cornerRadius": "NONE",
+                "colors": {
+                  "base": {
+                    "background": "#FFFFFF",
+                    "text": "#0E1216",
+                    "border": "#DFDEDA",
+                    "icon": "#0E1216",
+                    "accent": "#EC7E3E",
+                    "decorative": "#F6F5F1"
+                  },
+                  "control": {
+                    "background": "#FFFFFF",
+                    "border": "#DFDEDA",
+                    "selected": {
+                      "background": "#EC7E3E",
+                      "border": "#EC7E3E"
+                    }
+                  },
+                  "primaryButton": {
+                    "background": "#0E1216",
+                    "text": "#FFFFFF",
+                    "hover": {
+                      "background": "#000000"
+                    }
+                  },
+                  "secondaryButton": {
+                    "background": "#FFFFFF",
+                    "text": "#0E1216",
+                    "border": "#DFDEDA",
+                    "hover": {
+                      "background": "#EDEBE7",
+                      "text": "#0E1216",
+                      "border": "#0E1216"
+                    }
+                  }
+                }
+              },
+              "colors": {
+                "base": {
+                  "background": "#F6F5F1",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#FFFFFF"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                },
+                "primaryButton": {
+                  "background": "#0E1216",
+                  "text": "#FFFFFF",
+                  "hover": {
+                    "background": "#000000"
+                  }
+                },
+                "secondaryButton": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "hover": {
+                    "background": "#EDEBE7",
+                    "text": "#0E1216",
+                    "border": "#0E1216"
+                  }
+                }
+              }
+            },
+            "main": {
+              "colors": {
+                "base": {
+                  "background": "#F6F5F1",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#EDEBE7"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                },
+                "primaryButton": {
+                  "background": "#0E1216",
+                  "text": "#FFFFFF",
+                  "hover": {
+                    "background": "#000000"
+                  }
+                },
+                "secondaryButton": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "hover": {
+                    "background": "#EDEBE7",
+                    "text": "#0E1216",
+                    "border": "#0E1216"
+                  }
+                }
+              },
+              "section": {
+                "background": "BASE",
+                "shadow": null,
+                "cornerRadius": "NONE",
+                "border": "FULL",
+                "borderStyle": "BASE",
+                "borderWidth": "BASE",
+                "padding": "BASE",
+                "colors": {
+                  "base": {
+                    "background": "#FFFFFF",
+                    "text": "#0E1216",
+                    "border": "#DFDEDA",
+                    "icon": "#0E1216",
+                    "accent": "#EC7E3E",
+                    "decorative": "#F6F5F1"
+                  },
+                  "control": {
+                    "background": "#FFFFFF",
+                    "border": "#DFDEDA",
+                    "selected": {
+                      "background": "#EC7E3E",
+                      "border": "#EC7E3E"
+                    }
+                  },
+                  "primaryButton": {
+                    "background": "#0E1216",
+                    "text": "#FFFFFF",
+                    "hover": {
+                      "background": "#000000"
+                    }
+                  },
+                  "secondaryButton": {
+                    "background": "#FFFFFF",
+                    "text": "#0E1216",
+                    "border": "#DFDEDA",
+                    "hover": {
+                      "background": "#EDEBE7",
+                      "text": "#0E1216",
+                      "border": "#0E1216"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "customerAccounts": {
+          "components": {
+            "main": {
+              "colors": {
+                "base": {
+                  "background": "#F6F5F1",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#EDEBE7"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                },
+                "primaryButton": {
+                  "background": "#0E1216",
+                  "text": "#FFFFFF",
+                  "hover": {
+                    "background": "#000000"
+                  }
+                },
+                "secondaryButton": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "hover": {
+                    "background": "#EDEBE7",
+                    "text": "#0E1216",
+                    "border": "#0E1216"
+                  }
+                }
+              },
+              "section": {
+                "background": "BASE",
+                "shadow": null,
+                "cornerRadius": "NONE",
+                "border": "FULL",
+                "borderStyle": "BASE",
+                "borderWidth": "BASE",
+                "padding": "BASE",
+                "colors": {
+                  "base": {
+                    "background": "#FFFFFF",
+                    "text": "#0E1216",
+                    "border": "#DFDEDA",
+                    "icon": "#0E1216",
+                    "accent": "#EC7E3E",
+                    "decorative": "#F6F5F1"
+                  },
+                  "control": {
+                    "background": "#FFFFFF",
+                    "border": "#DFDEDA",
+                    "selected": {
+                      "background": "#EC7E3E",
+                      "border": "#EC7E3E"
+                    }
+                  }
+                }
+              }
+            },
+            "header": {
+              "colors": {
+                "base": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#F6F5F1"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                }
+              }
+            },
+            "footer": {
+              "alignment": "CENTER",
+              "colors": {
+                "base": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#F6F5F1"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                },
+                "primaryButton": {
+                  "background": "#0E1216",
+                  "text": "#FFFFFF",
+                  "hover": {
+                    "background": "#000000"
+                  }
+                },
+                "secondaryButton": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "hover": {
+                    "background": "#EDEBE7",
+                    "text": "#0E1216",
+                    "border": "#0E1216"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "signIn": {
+          "components": {
+            "header": {
+              "padding": "BASE"
+            },
+            "main": {
+              "section": {
+                "background": "BASE",
+                "cornerRadius": "NONE",
+                "shadow": null,
+                "border": "FULL",
+                "borderStyle": "BASE",
+                "borderWidth": "BASE",
+                "padding": "BASE"
+              },
+              "colors": {
+                "base": {
+                  "background": "#F6F5F1",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "icon": "#0E1216",
+                  "accent": "#EC7E3E",
+                  "decorative": "#FFFFFF"
+                },
+                "control": {
+                  "background": "#FFFFFF",
+                  "border": "#DFDEDA",
+                  "selected": {
+                    "background": "#EC7E3E",
+                    "border": "#EC7E3E"
+                  }
+                },
+                "primaryButton": {
+                  "background": "#0E1216",
+                  "text": "#FFFFFF",
+                  "hover": {
+                    "background": "#000000"
+                  }
+                },
+                "secondaryButton": {
+                  "background": "#FFFFFF",
+                  "text": "#0E1216",
+                  "border": "#DFDEDA",
+                  "hover": {
+                    "background": "#EDEBE7",
+                    "text": "#0E1216",
+                    "border": "#0E1216"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+mutation checkoutAndAccountsConfigurationUpdate(
+  $configuration: CheckoutAndAccountsConfigurationInput!
+  $id: ID!
+) {
+  checkoutAndAccountsConfigurationUpdate(configuration: $configuration, id: $id) {
+    configuration {
+      id
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
