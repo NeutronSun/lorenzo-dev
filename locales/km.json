@@ -658,5 +658,130 @@
         }
       }
     }
+  },
+  "customer_accounts": {
+    "settings": {
+      "log_out_everywhere": {
+        "description": "ប្រសិនបើអ្នកបានបាត់បង់ឧបករណ៍ ឬមានបញ្ហាសុវត្ថិភាព សូមចូលចេញពីគ្រប់ទីកន្លែងដើម្បីធានាសុវត្ថិភាពគណនីរបស់អ្នក។",
+        "button": "ចាកចេញពីគណនីនៅលើឧបករណ៍ទាំងអស់",
+        "warning_message": "អ្នកក៏នឹងត្រូវបានចេញពីគណនីនៅលើឧបករណ៍នេះផងដែរ។"
+      }
+    },
+    "shop_ads": {
+      "title": "ផលិតផលផ្សេងទៀតដែលអ្នកប្រហែលជាចូលចិត្ត",
+      "subtitle": "មានសម្រាប់តែរយៈពេលកំណត់ប៉ុណ្ណោះ។",
+      "button": "ស្វែងរកនៅក្នុងហាង",
+      "previous_button": "មុន",
+      "next_button": "បន្ទាប់"
+    },
+    "knowledge_base": {
+      "self_serve_returns": {
+        "enabled": "អតិថិជនអាចស្នើសុំ និងគ្រប់គ្រងការបង្វិលសងដោយខ្លួនឯងបាន។",
+        "disabled": "អតិថិជនត្រូវតែទាក់ទងអ្នកលក់ដើម្បីស្នើសុំការបង្វិលទំនិញវិញ។"
+      }
+    },
+    "subscriptions": {
+      "update_payment_instrument": {
+        "title": "ផ្លាស់ប្ដូរវិធីបង់ប្រាក់",
+        "loading": "កំពុងផ្ទុកវិធីទូទាត់",
+        "no_payment_methods_available": "មិនមានវិធីទូទាត់ប្រាក់ណាមួយអាចប្រើបានទេ",
+        "select_new_payment_method": "ជ្រើសរើសវិធីសាស្រ្តទូទាត់ថ្មី",
+        "current_method": "បច្ចុប្បន្ន",
+        "cancel": "បោះបង់",
+        "save": "រក្សាទុក",
+        "success": "វិធីបង់ប្រាក់បានធ្វើបច្ចុប្បន្នភាព",
+        "use_new_payment_method": "+ ប្រើវិធីទូទាត់ប្រាក់ថ្មី"
+      }
+    },
+    "intents": {
+      "subscription_replace_payment_method": {
+        "card_number": "លេខប័ណ្ណ",
+        "title": "ផ្លាស់ប្ដូរវិធីបង់ប្រាក់",
+        "replace_with": "ជំនួស​ដោយ",
+        "add_new_payment_method": "បន្ថែមថ្មី",
+        "save_button": "រក្សាទុក",
+        "close_button": "បិទ",
+        "loading": "កំពុងផ្ទុកម៉ូឌុលជំនួសវិធីសាស្ត្រទូទាត់",
+        "success": "វិធីបង់ប្រាក់បានធ្វើបច្ចុប្បន្នភាព",
+        "invalid_subscription_contract": "មិនអាចស្វែងរកការជាវបានទេ",
+        "edit_current_payment_method": "កែសម្រួលវិធីបង់ប្រាក់បច្ចុប្បន្ន",
+        "edit_selected_payment_method": "កែសម្រួលវិធីបង់ប្រាក់ដែលបានជ្រើសរើស"
+      }
+    },
+    "sign_in": {
+      "brand_logo_alt_text": "និមិត្តសញ្ញា​របស់ %{shop_name}",
+      "processing": "កំពុងដំណើរការ...",
+      "step_one": {
+        "page_title": "ចូលគណនី - %{shop_name}",
+        "heading": "ចូលគណនី",
+        "subheading": "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក ហើយយើងនឹងផ្ញើលេខកូដផ្ទៀងផ្ទាត់ទៅអ្នក។",
+        "subheading_with_sign_in_options": "ចូលប្រើ ឬបង្កើតគណនី",
+        "input_field_label": "អ៊ីមែល",
+        "button": "បន្ត",
+        "or": "ឬក៏",
+        "consent_agreement": "តាមរយៈការបន្ត អ្នកយល់ព្រមនឹង %{terms}"
+      },
+      "step_two": {
+        "page_title": "បញ្ចូលកូដ - %{shop_name}",
+        "heading": "បញ្ចូលកូដ",
+        "subheading": "ផ្ញើទៅកាន់ %{email}",
+        "restart_link": "ចូលប្រើដោយប្រើអ៊ីមែលផ្សេងទៀត",
+        "input_field_label": "លេខសម្ងាត់ ៦ខ្ទង់",
+        "button": "ដាក់ស្នើ"
+      },
+      "error": {
+        "invalid": {
+          "invalid_email": "បញ្ចូលអាសយដ្ឋានអ៊ីមែលត្រឹមត្រូវ",
+          "invalid_code": "បញ្ចូលលេខកូដ 6 ខ្ទង់ដែលត្រឹមត្រូវ"
+        }
+      }
+    }
+  },
+  "404": {
+    "not_found": "រកមិនឃើញទំព័រ។",
+    "back_to_shopping": "ត្រឡប់ទៅទិញឥវ៉ាន់វិញ"
+  },
+  "blog": {
+    "article_comments": "មតិយោបល់",
+    "comment_form_body": "យោបល់",
+    "comment_form_email": "អ៊ីមែល",
+    "comment_form_name": "ឈ្មោះ",
+    "comment_form_submit": "ប្រកាស",
+    "comment_form_title": "បន្ថែមមតិយោបល់"
+  },
+  "cart": {
+    "checkout": "ការទូទាត់",
+    "title": "រទេះ",
+    "update": "អាប់ដេត",
+    "remove": "លុប"
+  },
+  "customers": {
+    "login": {
+      "email": "អ៊ីមែល",
+      "password": "លេខសម្ងាត់",
+      "submit": "ចូលគណនី",
+      "title": "ចូលប្រើ"
+    }
+  },
+  "collections": {
+    "title": "បណ្តុំ"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "បន្ថែមទៅកាន់ Apple Wallet",
+    "card": "ប័ណ្ណ​ជូន​កាដូ",
+    "expired": "កាតអំណោយនេះបានផុតកំណត់ហើយ។",
+    "expires_on": "ផុតកំណត់នៅថ្ងៃទី {{ expires_on }}",
+    "use_at_checkout": "ប្រើកាតអំណោយនេះនៅពេលទូទាត់ប្រាក់"
+  },
+  "password": {
+    "title": "ហាងនេះជាកម្មសិទ្ធិឯកជន",
+    "password": "លេខសម្ងាត់",
+    "enter": "បញ្ចូល"
+  },
+  "search": {
+    "title": "ស្វែងរក",
+    "placeholder": "ស្វែងរកអត្ថបទ ទំព័រ ឬផលិតផល",
+    "submit": "ស្វែងរក",
+    "no_results_html": "រកមិនឃើញលទ្ធផលសម្រាប់ {{ terms }}"
   }
 }
