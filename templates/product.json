@@ -11,7 +11,9 @@
   "sections": {
     "breadcrumb": {
       "type": "product-breadcrumb",
-      "settings": {}
+      "settings": {
+        "separator": "/"
+      }
     },
     "main": {
       "type": "product",
@@ -27,13 +29,15 @@
                 "season": "SS/26 - DROP 04",
                 "number": "04/24",
                 "series": "A"
-              }
+              },
+              "blocks": {}
             },
             "description": {
               "type": "pdp-dossier-description",
               "settings": {
-                "text": "Lightweight technical longsleeve engineered for layering. Brushed inner face, 4-way stretch, flat-lock seams."
-              }
+                "text": ""
+              },
+              "blocks": {}
             },
             "technical": {
               "type": "pdp-dossier-tech",
@@ -44,28 +48,32 @@
                   "settings": {
                     "label": "Material",
                     "value": "78% recycled polyester - 22% elastane"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "weight": {
                   "type": "pdp-dossier-tech-row",
                   "settings": {
                     "label": "Weight",
                     "value": "185 g/m2"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "fit": {
                   "type": "pdp-dossier-tech-row",
                   "settings": {
                     "label": "Fit",
                     "value": "Regular - true to size"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "origin": {
                   "type": "pdp-dossier-tech-row",
                   "settings": {
                     "label": "Origin",
                     "value": "Designed in Milan - made in Porto"
-                  }
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
