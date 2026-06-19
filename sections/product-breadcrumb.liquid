@@ -134,7 +134,6 @@
   pdp-breadcrumb {
     display: grid;
     grid-template-columns: var(--content-grid);
-    padding-block: var(--spacing);
     background: var(--background);
 
     .bar {
@@ -174,17 +173,21 @@
     }
   }
 
+  @media screen and (min-width: 750px) {
+    .breadcrumb-wrapper {
+      position: sticky;
+      top: calc(var(--header-height, 0px) + var(--spacing));
+      z-index: 30;
+      padding-block: var(--spacing);
+    }
+  }
+
   @media screen and (max-width: 749px) {
     .breadcrumb-wrapper {
       position: sticky;
       top: 0;
       z-index: 30;
-      padding-block-start: calc(var(--spacing) + env(safe-area-inset-top, 0px));
-      background: var(--background);
-    }
-
-    pdp-breadcrumb {
-      padding-block: 0;
+      padding-block: calc(var(--spacing) + env(safe-area-inset-top, 0px));
     }
   }
 {% endstylesheet %}
