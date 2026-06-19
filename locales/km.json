@@ -362,7 +362,162 @@
         "gift_card_ending": "បណ្ណអំណោយមានលេខសម្គាល់បួនខ្ទង់ចុងក្រោយ %{last_characters}",
         "estimated_tax_label": "ពន្ធប៉ាន់ស្មាន",
         "multiple_shipping_lines_label": "តម្លៃដឹកជញ្ជូនសរុប",
-        "recurring_subtotal_label": "តម្លៃរងកើតឡើងវិញ"
+        "recurring_subtotal_label": "តម្លៃរងកើតឡើងវិញ",
+        "title": "សេចក្ដីសង្ខេបនៃការបញ្ជាទិញ",
+        "group_title_label": "ជាផ្នែកមួយនៃ \"%{group_title}\"",
+        "for_add_on": "សម្រាប់៖ %{group_title}",
+        "from_shop_heading": "ពី %{shop_name}",
+        "from_other_stores_heading": "ពីហាងផ្សេងៗ",
+        "from_multiple_stores_heading": "ពីហាងជាច្រើន",
+        "number_items": {
+          "one": "ទំនិញ %{count} មុខ",
+          "other": "%{count} ធាតុ"
+        },
+        "view_all_items": {
+          "one": "មើលទំនិញ %{count}\n",
+          "other": "មើលទំនិញទាំងអស់ %{count}"
+        },
+        "more_items_modal": {
+          "search_item": "ស្វែងរក",
+          "clear_search": "ជម្រះការស្វែងរក",
+          "empty_results": "មិនមានលទ្ធផលណាមួយត្រូវបានរកឃើញសម្រាប់ \"%{searchText}\"។ សូមពិនិត្យមើលការប្រកប ឬប្រើពាក្យ ឬឃ្លាផ្សេង។",
+          "number_items_shown": "ធាតុ %{shownNumber} នៃ %{totalNumber}"
+        },
+        "order_name_label": "បញ្ជាទិញ %{name}",
+        "shopping_cart_label": "រទេះទិញទំនិញ",
+        "discount_title": "បញ្ចុះតម្លៃ",
+        "discount_title_stacking": {
+          "one": "បញ្ចុះតម្លៃ",
+          "other": "ការបញ្ចុះតម្លៃ"
+        },
+        "discount_order_stacking": {
+          "one": "ការបញ្ចុះតម្លៃនៃការបញ្ជាទិញ",
+          "other": "ការបញ្ចុះតម្លៃនៃការបញ្ជាទិញ"
+        },
+        "discount_label": "លេខកូដបញ្ចុះតម្លៃ",
+        "discount_not_found": "មិនអាចស្វែងរកការបញ្ចុះតម្លៃត្រឹមត្រូវដែលត្រូវនឹងកូដដែលបានបញ្ចូលបានទេ។",
+        "discount_placeholder": "លេខកូដបញ្ចុះតម្លៃ",
+        "discount_code_applied": "បានប្រើលេខកូដបញ្ចុះតម្លៃ",
+        "discount_code_applied_with_code": "លេខកូដបញ្ចុះតម្លៃ %{code} ត្រូវបានអនុវត្ត",
+        "discount_code_removed": "លេខ​កូដ​បញ្ចុះតម្លៃ %{code} ត្រូវ​បាន​លុប​ចេញ​ហើយ។",
+        "discount_code_replaced": "លេខកូដបញ្ចុះតម្លៃ %{old_code} ត្រូវបានលុបចេញ ហើយ %{code} ត្រូវបានអនុវត្ត",
+        "discount_code_replaced_multiple": "លេខកូដបញ្ចុះតម្លៃច្រើនត្រូវបានលុបចេញហើយ %{code} ត្រូវបានអនុវត្ត។",
+        "discount_code_allocations_mismatch": "លេខកូដបញ្ចុះតម្លៃ <strong style=\"text-transform:uppercase\">%{code}</strong> របស់អ្នកបានផ្លាស់ប្ដូរហើយ។ សូមពិនិត្យមើលកន្ត្រករបស់អ្នកឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
+        "order_discounts_apply_to_local_shop": "ការបញ្ចុះតម្លៃនៃការបញ្ជាទិញអាចអនុវត្តចំពោះតែទំនិញពី %{shop_name} ប៉ុណ្ណោះ។",
+        "gift_card_applied": "ប័ណ្ណអំណោយត្រូវបានប្រើប្រាស់",
+        "enter_shipping_address": "សូមបញ្ចូលអាសយដ្ឋានដឹកជញ្ជូន",
+        "gift_card_title": "ប័ណ្ណ​ជូន​កាដូ",
+        "gift_card_label": "ប័ណ្ណ​ជូន​កាដូ",
+        "gift_card_placeholder": "ប័ណ្ណ​ជូន​កាដូ",
+        "gift_card_and_discount_title": "លេខកូដបញ្ចុះតម្លៃ ឬប័ណ្ណបាការី (Gift Card)",
+        "gift_card_and_discount_label": "លេខកូដបញ្ចុះតម្លៃ ឬប័ណ្ណបាការី (Gift Card)",
+        "gift_card_and_discount_placeholder": "លេខកូដបញ្ចុះតម្លៃ ឬប័ណ្ណបាការី (Gift Card)",
+        "gift_cards_apply_to_local_shop": "ប័ណ្ណ​ជូន​កាដូ​អាច​ប្រើ​បាន​សម្រាប់​តែ​ទំនិញ​ពី %{shop_name} តែ​ប៉ុណ្ណោះ។",
+        "add_discount_or_gift_card": "បន្ថែមលេខកូដបញ្ចុះតម្លៃ ឬប័ណ្ណកាដូ",
+        "remove_gift_card_label": "ប័ណ្ណបា​តុះ​ទំនិញ​ទទេ",
+        "remove_discount_label": "លុបការបញ្ចុះតម្លៃ",
+        "return_restocking_fee_label": "ថ្លៃស្តុកទុកវិញ។",
+        "return_shipping_fee_label": "ការដឹកជញ្ជូនត្រឡប់មកវិញ",
+        "free_shipping_discount_label": "ដឹកជញ្ជូនដោយឥតគិតថ្លៃ",
+        "applied_free_shipping_discount_label": "បានដាក់ពាក្យ",
+        "apply_discount_button_label": "ដាក់ពាក្យស្នើសុំ"
+      },
+      "stock": {
+        "unpurchasable_product": {
+          "title": "ផលិតផលដែលមិនអាចទិញបាន។",
+          "header": "ទំនិញ​មួយ​ចំនួន​ត្រូវ​បាន​យក​ចេញ​ពី​កន្ត្រក​របស់​អ្នក។",
+          "message": "មុខទំនិញទាំងនេះមិនមានសម្រាប់បញ្ជាទិញបែប B2B ទេ។",
+          "status_column_header": "មិនមានទេ។"
+        },
+        "unpurchasable_product_generic": {
+          "title": "ផលិតផលដែលមិនអាចទិញបាន។",
+          "header": "ទំនិញ​មួយ​ចំនួន​ត្រូវ​បាន​យក​ចេញ​ពី​កន្ត្រក​របស់​អ្នក។",
+          "message": "របស់ទាំងនេះមិនមានទេ។",
+          "status_column_header": "មិនមានទេ។"
+        },
+        "unfulfillable_product": {
+          "title": "មិនមានការដឹកជញ្ជូនទេ",
+          "message": {
+            "one": "%{delivery_method} លែងមានសម្រាប់ទំនិញនេះទៀតហើយ។",
+            "other": "%{delivery_method} មិនអាចប្រើបានសម្រាប់មុខទំនិញទាំងនេះទេ។"
+          },
+          "default_message": {
+            "one": "វិធីសាស្ត្រដឹកជញ្ជូនដែលបានជ្រើសរើសមិនអាចប្រើសម្រាប់ការបញ្ជាទិញនេះទេ។",
+            "other": "វិធីសាស្រ្តដឹកជញ្ជូនដែលបានជ្រើសរើសមិនអាចប្រើបានទៀតទេសម្រាប់ទំនិញទាំងនេះ។"
+          }
+        },
+        "unshippable_product": {
+          "title": "មិនមានការដឹកជញ្ជូន",
+          "header": {
+            "one": "មិនមានសេវាដឹកជញ្ជូនសម្រាប់ទំនិញ %{count} ទេ",
+            "other": "មិនមានការដឹកជញ្ជូនសម្រាប់ទំនិញចំនួន %{count} មុខទេ។"
+          },
+          "message": {
+            "one": "មុខទំនិញនេះនឹងត្រូវដកចេញពីកន្ត្រកទំនិញរបស់អ្នកដោយសារតែគ្មានវិធីសាស្ត្រដឹកជញ្ជូនណាមួយដែលអាចប្រើបានសម្រាប់អាសយដ្ឋានរបស់អ្នក។",
+            "other": "ទំនិញទាំងនេះនឹងត្រូវលុបចេញពីកន្រ្តករបស់អ្នក ពីព្រោះគ្មានវិធីសាស្រ្តដឹកជញ្ជូនណាមួយអាចប្រើបានសម្រាប់អាសយដ្ឋានរបស់អ្នកទេ។"
+          },
+          "status_column_header": "គ្មានការដឹកជញ្ជូនទេ។"
+        },
+        "price_update": {
+          "title": "ការអាប់ដេតតម្លៃ",
+          "description": "តម្លៃសម្រាប់មុខទំនិញទាំងនេះបានផ្លាស់ប្ដូរ ហើយត្រូវបានអាប់ដេតនៅក្នុងរទេះរបស់អ្នក។",
+          "updated_price": "តម្លៃថ្មី"
+        },
+        "price_and_quantity_update": {
+          "title": "ការអាប់ដេតតម្លៃ និងបរិមាណ",
+          "description": "តម្លៃ និងបរិមាណសម្រាប់ធាតុទាំងនេះបានផ្លាស់ប្តូរ ហើយបានធ្វើបច្ចុប្បន្នភាពនៅក្នុងកន្ត្រកទំនិញរបស់អ្នក។"
+        },
+        "out_of_stock": {
+          "description": "ទំនិញទាំងនេះលែងមានហើយនឹងត្រូវលុបចេញពីកន្ត្រកទំនិញរបស់អ្នក។",
+          "items_unavailable": "ទំនិញ​មួយ​ចំនួន​លែងមាន​ហើយ នឹង​ត្រូវ​បាន​យកចេញ​ពី​កន្ត្រក​ទំនិញ​របស់​អ្នក។"
+        },
+        "out_of_stock_in_context_label": "ផលិតផលនេះមិនមានដាក់លក់នៅក្នុងប្រទេស/តំបន់របស់អ្នកទេ។"
+      },
+      "contextual_availability": {
+        "title": {
+          "one": "ផលិតផលមិនមានទេ",
+          "other": "ផលិតផលមិនមានលក់"
+        },
+        "products_not_available": {
+          "one": "ផលិតផលនេះនឹងត្រូវបានយកចេញពីកញ្ចប់ទំនិញរបស់អ្នកពីព្រោះវាមិនមាននៅក្នុងប្រទេស/តំបន់របស់អ្នកទេ។",
+          "other": "ផលិតផលទាំងនេះនឹងត្រូវបានដកចេញពីកន្ត្រកទំនិញរបស់អ្នក ពីព្រោះវាមិនមានសម្រាប់ដាក់លក់នៅក្នុងប្រទេស/តំបន់របស់អ្នកទេ។"
+        },
+        "all_products_in_cart_unavailable": {
+          "one": "ផលិតផលនេះមិនមានដាក់លក់នៅក្នុងប្រទេស/តំបន់របស់អ្នកទេ។",
+          "other": "ផលិតផលទាំងនេះមិនមាននៅក្នុងប្រទេស/តំបន់របស់អ្នកទេ។"
+        },
+        "unavailable_label": "មិន​អាច​ប្រើ​បាន។"
+      },
+      "merchandise_unavailable_in_buyer_location": {
+        "banner_title": {
+          "some_products_one": "ផលិតផលនេះមិនមានសម្រាប់ដឹកជញ្ជូនទៅកាន់ %{location_name} នោះទេ។",
+          "some_products_other": "ផលិតផលទាំងនេះមិនមានសម្រាប់ដឹកជញ្ជូនទៅកាន់ %{location_name} ទេ។",
+          "all_products_one": "ផលិតផលនៅក្នុងកន្ត្រករបស់អ្នកមិនអាចដឹកជញ្ជូនទៅកាន់ %{location_name} បានទេ។",
+          "all_products_other": "ផលិតផល​ក្នុង​រទេះ​របស់​អ្នក​មិន​អាច​ដឹក​ជញ្ជូន​ទៅ %{location_name} បាន​ទេ។"
+        },
+        "missing_country_fallback": "ប្រទេសរបស់អ្នក។",
+        "indeterminate_location_fallback": "ទីតាំងរបស់អ្នក។",
+        "cart_updated": "រទេះ​របស់​អ្នក​ត្រូវ​បាន​អាប់ដេត។",
+        "change_address_only": "សូមប្តូរអាសយដ្ឋានដឹកជញ្ជូនដើម្បីបន្ត។",
+        "change_address_or_remove": "ប្ដូរអាសយដ្ឋានដឹកជញ្ជូន ឬ %{remove_action}។",
+        "remove_items_action": {
+          "one": "លុបធាតុដែលមិនមាន",
+          "other": "លុបធាតុដែលមិនមាន"
+        },
+        "empty_cart_action": "ទុក​កន្ត្រក​ទទេ ហើយ​ត្រឡប់​ទៅ​ហាង​វិញ"
+      },
+      "deliverability": {
+        "not_deliverable": {
+          "title": {
+            "one": "មិនមានសេវាដឹកជញ្ជូនសម្រាប់ទំនិញ %{count} ទេ",
+            "other": "មិនមានការដឹកជញ្ជូនសម្រាប់ទំនិញចំនួន %{count} មុខទេ។"
+          },
+          "message": {
+            "one": "មុខទំនិញនេះនឹងត្រូវដកចេញពីកន្ត្រកទំនិញរបស់អ្នកដោយសារតែគ្មានវិធីសាស្ត្រដឹកជញ្ជូនណាមួយដែលអាចប្រើបានសម្រាប់អាសយដ្ឋានរបស់អ្នក។",
+            "other": "ទំនិញទាំងនេះនឹងត្រូវលុបចេញពីកន្រ្តករបស់អ្នក ពីព្រោះគ្មានវិធីសាស្រ្តដឹកជញ្ជូនណាមួយអាចប្រើបានសម្រាប់អាសយដ្ឋានរបស់អ្នកទេ។"
+          },
+          "label": "គ្មានការដឹកជញ្ជូនទេ។"
+        }
       }
     }
   }
