@@ -175,10 +175,15 @@
   }
 
   @media screen and (max-width: 749px) {
-    pdp-breadcrumb {
+    .breadcrumb-wrapper {
       position: sticky;
-      top: var(--spacing);
+      top: 0;
       z-index: 30;
+      padding-block-start: calc(var(--spacing) + env(safe-area-inset-top, 0px));
+      background: var(--background);
+    }
+
+    pdp-breadcrumb {
       padding-block: 0;
     }
   }

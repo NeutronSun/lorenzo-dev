@@ -13,6 +13,8 @@
   product-page {
     --layout-gap: 16px;
     --gallery-gap: 12px;
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     --sticky-top: calc(var(--header-height, 0px) + var(--breadcrumb-height, 0px) + var(--spacing));
     --gallery-height: calc(100dvh - var(--sticky-top) - var(--spacing));
     --main-height: max(0px, calc(var(--gallery-height) - var(--thumb-size) - var(--gallery-gap)));
@@ -53,15 +55,16 @@
   @media screen and (max-width: 749px) {
     product-page {
       --thumb-size: clamp(72px, 21vw, 92px);
-      --sticky-top: calc(var(--spacing) + var(--breadcrumb-height, 0px) + var(--spacing));
-      --gallery-height: calc(100dvh - var(--sticky-top) - var(--dock-clearance, 86px));
+      --dock-clearance-fallback: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing) + var(--safe-area-bottom));
+      --sticky-top: calc(var(--breadcrumb-height, 0px) + var(--spacing));
+      --gallery-height: calc(100dvh - var(--sticky-top) - var(--dock-clearance, var(--dock-clearance-fallback)));
       --main-height: max(0px, calc(var(--gallery-height) - var(--thumb-size) - var(--gallery-gap)));
 
-      padding-block: var(--spacing) calc(var(--dock-clearance, 86px) + var(--spacing));
+      padding-block: var(--spacing) calc(var(--dock-clearance, var(--dock-clearance-fallback)) + var(--spacing));
 
       .layout {
         display: grid;
-        gap: var(--layout-gap);
+        gap: var(--dock-clearance, var(--dock-clearance-fallback));
       }
 
       pdp-product-info {

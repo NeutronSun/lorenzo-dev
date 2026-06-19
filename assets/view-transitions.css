@@ -29,26 +29,50 @@
     }
 
     @keyframes product-image-old {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+
       to {
-        opacity: 0.82;
+        opacity: 0;
+        transform: scale(0.985);
       }
     }
 
     @keyframes product-image-new {
       from {
         opacity: 0.82;
+        transform: scale(1.015);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 
     @keyframes product-info-old {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       to {
-        opacity: 0.88;
+        opacity: 0;
+        transform: translateY(8px);
       }
     }
 
     @keyframes product-info-new {
       from {
         opacity: 0.88;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -110,6 +134,7 @@
     ::view-transition-new(product-image) {
       mix-blend-mode: normal;
       object-fit: contain;
+      transform-origin: center;
     }
 
     ::view-transition-old(product-image) {
@@ -124,12 +149,14 @@
       animation: product-info-old var(--motion-dock) var(--ease-dock) both;
       mix-blend-mode: normal;
       object-fit: fill;
+      transform-origin: center;
     }
 
     ::view-transition-new(product-info) {
       animation: product-info-new var(--motion-dock) var(--ease-dock) both;
       mix-blend-mode: normal;
       object-fit: fill;
+      transform-origin: center;
     }
 
     ::view-transition-old(product-breadcrumb) {

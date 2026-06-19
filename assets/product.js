@@ -6,13 +6,18 @@ class ProductPage extends HTMLElement {
   static DEFAULT_SPACING = 20;
   static DEFAULT_MOBILE_BAR_HEIGHT = 58;
   static DEFAULT_MOBILE_MENU_GAP = 8;
+  static DEFAULT_SAFE_AREA = 0;
 
   get gallery() {
     return this.querySelector('[ref="gallery"]');
   }
 
   get breadcrumb() {
-    return document.querySelector('[data-pdp-breadcrumb]');
+    return document.querySelector('.breadcrumb-wrapper');
+  }
+
+  get mobileDock() {
+    return document.querySelector('.uyn-header');
   }
 
   get isMobile() {
@@ -44,6 +49,7 @@ class ProductPage extends HTMLElement {
 
     this.gallery instanceof HTMLElement && this.resizeObserver?.observe(this.gallery);
     this.breadcrumb instanceof HTMLElement && this.resizeObserver?.observe(this.breadcrumb);
+    this.mobileDock instanceof HTMLElement && this.resizeObserver?.observe(this.mobileDock);
   }
 
   onResize() {
@@ -58,9 +64,12 @@ class ProductPage extends HTMLElement {
     const spacing = this.getRootNumber('--spacing', ProductPage.DEFAULT_SPACING);
     const mobileBarHeight = this.getRootNumber('--header-mobile-bar-height', ProductPage.DEFAULT_MOBILE_BAR_HEIGHT);
     const mobileMenuGap = this.getRootNumber('--header-mobile-menu-gap', ProductPage.DEFAULT_MOBILE_MENU_GAP);
+    const safeAreaBottom = this.getNumber('--safe-area-bottom', ProductPage.DEFAULT_SAFE_AREA, this);
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-    const breadcrumbArea = spacing + breadcrumbHeight + spacing;
-    const dockArea = mobileBarHeight + mobileMenuGap + spacing;
+    const breadcrumbArea = this.isMobile ? breadcrumbHeight + spacing : spacing + breadcrumbHeight + spacing;
+    const mobileDockHeight = this.getElementHeight(this.mobileDock);
+    const dockHeight = mobileDockHeight || mobileBarHeight + mobileMenuGap;
+    const dockArea = this.isMobile ? dockHeight + spacing + safeAreaBottom : mobileBarHeight + mobileMenuGap + spacing;
     const top = this.isMobile ? breadcrumbArea : this.getStickyTop(spacing);
     const reservedBottom = this.isMobile ? dockArea : spacing;
     const availableHeight = this.getViewportHeight() - top - reservedBottom;
@@ -73,7 +82,11 @@ class ProductPage extends HTMLElement {
   }
 
   getRootNumber(property, fallback) {
-    const value = Number(CSSUtils.getProperty(property));
+    return this.getNumber(property, fallback);
+  }
+
+  getNumber(property, fallback, element = document.documentElement) {
+    const value = Number(CSSUtils.getProperty(property, element));
 
     return Number.isFinite(value) && value > 0 ? value : fallback;
   }
@@ -91,7 +104,7 @@ class ProductPage extends HTMLElement {
   getStickyTop(spacing) {
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
 
-    if (this.isMobile) return spacing + breadcrumbHeight + spacing;
+    if (this.isMobile) return breadcrumbHeight + spacing;
 
     return this.getRootNumber('--header-height', 0) + spacing + breadcrumbHeight + spacing;
   }
