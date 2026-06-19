@@ -63,6 +63,30 @@ export class CartHandler {
   }
 
   /**
+   * @param {Array<{ id: number, quantity: number, properties?: Record<string, string> }>} items
+   * @returns {Promise<Object>}
+   */
+  static async addItems(items) {
+    return await CartHandler.mutate('add', async () => {
+      const response = await fetch(CartHandler.routes.cart_add_url || CartHandler.ADD_URL, {
+        method: 'POST',
+        headers: {
+          ...CartHandler.JSON_HEADERS,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || result.description || 'Cart add failed');
+      }
+
+      return await CartHandler.fetchCart(CartHandler.CART_URL);
+    });
+  }
+
+  /**
    * @param {string} key
    * @param {number} quantity
    * @returns {Promise<Object>}
@@ -246,6 +270,7 @@ class CartDrawer extends HTMLComponent {
   static NAME = 'cart-drawer';
   static CART_LINK_SELECTOR = 'a[href]';
   static MONEY_SELECTOR = 'cart-money';
+  static SECTION_BODY_SELECTOR = 'cart-drawer [ref="body"]';
 
   constructor() {
     super();
@@ -364,7 +389,7 @@ class CartDrawer extends HTMLComponent {
       return;
     }
 
-    this.refs.body.innerHTML = items.map((item) => CartDrawer.buildItem(item)).join('');
+    this.updateBodyFromSection();
   }
 
   updateTotals() {
@@ -396,6 +421,48 @@ class CartDrawer extends HTMLComponent {
     }
   }
 
+  async updateBodyFromSection() {
+    let html = '';
+
+    try {
+      html = await this.fetchSectionBody();
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (html) {
+      this.refs.body.innerHTML = html;
+      return;
+    }
+
+    this.refs.body.innerHTML = (this.cart.items || []).map((item) => CartDrawer.buildItem(item)).join('');
+  }
+
+  /**
+   * @returns {Promise<string>}
+   */
+  async fetchSectionBody() {
+    const sectionId = this.dataset.sectionId;
+
+    if (!sectionId) return '';
+
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('section_id', sectionId);
+
+    const response = await fetch(url.toString(), {
+      headers: { Accept: 'text/html' },
+    });
+    const result = await response.text();
+
+    if (!response.ok) return '';
+
+    const html = new DOMParser().parseFromString(result, 'text/html');
+    const body = html.querySelector(CartDrawer.SECTION_BODY_SELECTOR);
+
+    return body?.innerHTML || '';
+  }
+
   /**
    * @param {Object} item
    * @returns {string}
@@ -408,6 +475,7 @@ class CartDrawer extends HTMLComponent {
       ? `<p class="cart-item-variant font-mono">${CartDrawer.escape(item.variant_title)}</p>`
       : '';
     const properties = CartDrawer.buildProperties(item.properties || {});
+    const price = CartDrawer.buildLinePrice(item.final_line_price ?? item.line_price ?? 0, item.original_line_price ?? item.line_price ?? 0);
 
     return `
       <cart-item key="${CartDrawer.escape(item.key)}" quantity="${item.quantity}">
@@ -425,7 +493,7 @@ class CartDrawer extends HTMLComponent {
           </div>
         </div>
         <div class="cart-item-meta">
-          <cart-money class="cart-item-price" value="${item.final_line_price ?? item.line_price ?? 0}"></cart-money>
+          ${price}
           <button type="button" class="cart-item-remove font-mono" on:click="removeItem" aria-label="Remove ${CartDrawer.escape(item.product_title || item.title)}">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 6h18"></path>
@@ -457,6 +525,24 @@ class CartDrawer extends HTMLComponent {
     if (!parts.length) return '';
 
     return `<p class="cart-item-properties font-mono">${parts.join('')}</p>`;
+  }
+
+  /**
+   * @param {number} price
+   * @param {number} compareAtPrice
+   * @returns {string}
+   */
+  static buildLinePrice(price, compareAtPrice) {
+    const compare = compareAtPrice > price
+      ? `<s><cart-money value="${compareAtPrice}"></cart-money></s>`
+      : '';
+
+    return `
+      <span class="cart-item-price">
+        <cart-money value="${price}"></cart-money>
+        ${compare}
+      </span>
+    `;
   }
 
   /**
@@ -547,6 +633,123 @@ if (!customElements.get('cart-drawer')) {
 }
 
 /**
+ * @typedef {Object} PDPBundleRefs
+ * @property {HTMLScriptElement} bundleData
+ * @property {HTMLButtonElement} add
+ */
+
+/**
+ * @extends {HTMLComponent<PDPBundleRefs>}
+ */
+class PDPBundle extends HTMLComponent {
+  static BUNDLE_PROPERTY = '_bundleId';
+  static BUNDLE_ID_SEPARATOR = '||';
+  static RANDOM_RADIX = 36;
+  static RANDOM_SLICE_START = 2;
+
+  get bundleData() {
+    if (!(this.refs.bundleData instanceof HTMLScriptElement)) return null;
+
+    return JSON.parse(this.refs.bundleData.textContent || 'null');
+  }
+
+  get bundleId() {
+    return String(this.bundleData?.bundleId || '');
+  }
+
+  get items() {
+    const items = this.bundleData?.items;
+
+    return Array.isArray(items) ? items : [];
+  }
+
+  get availableItems() {
+    return this.items.filter((item) => item?.available && Number(item.id) > 0);
+  }
+
+  get allItemsAvailable() {
+    return Boolean(this.bundleId) && this.items.length > 0 && this.availableItems.length === this.items.length;
+  }
+
+  set isPending(value) {
+    this.toggleAttribute('pending', value);
+    this.refs.add instanceof HTMLButtonElement && (this.refs.add.disabled = value || !this.allItemsAvailable);
+  }
+
+  /**
+   * @param {string} baseBundleId
+   * @returns {string}
+   */
+  static createBundleInstanceId(baseBundleId) {
+    const randomId = window.crypto?.randomUUID?.() || `${Date.now().toString(PDPBundle.RANDOM_RADIX)}-${Math.random().toString(PDPBundle.RANDOM_RADIX).slice(PDPBundle.RANDOM_SLICE_START)}`;
+
+    return `${baseBundleId}${PDPBundle.BUNDLE_ID_SEPARATOR}${randomId}`;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.updateButton();
+  }
+
+  /**
+   * @param {Event} event
+   */
+  async addToCart(event) {
+    PDPBundle.stop(event);
+
+    if (this.hasAttribute('pending')) return;
+    if (!this.allItemsAvailable) {
+      this.updateButton();
+      return;
+    }
+
+    this.isPending = true;
+
+    try {
+      await CartHandler.addItems(this.getCartItems(PDPBundle.createBundleInstanceId(this.bundleId)));
+      CartDrawer.closeHeaderMenu();
+      document.dispatchEvent(new OnDialogOpenEvent({ name: CartDrawer.NAME }));
+    } catch (error) {
+      console.error(error);
+    }
+
+    this.isPending = false;
+  }
+
+  /**
+   * @param {string} bundleId
+   * @returns {Array<{ id: number, quantity: number, properties: Record<string, string> }>}
+   */
+  getCartItems(bundleId) {
+    return this.availableItems.map((item) => ({
+      id: Number(item.id),
+      quantity: 1,
+      properties: {
+        [PDPBundle.BUNDLE_PROPERTY]: bundleId,
+      },
+    }));
+  }
+
+  updateButton() {
+    if (!(this.refs.add instanceof HTMLButtonElement)) return;
+
+    this.refs.add.disabled = !this.allItemsAvailable;
+  }
+
+  /**
+   * @param {Event | undefined} event
+   */
+  static stop(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+  }
+}
+
+if (!customElements.get('pdp-bundle')) {
+  customElements.define('pdp-bundle', PDPBundle);
+}
+
+/**
  * @typedef {Object} CartItemRefs
  * @property {HTMLElement} quantity
  */
@@ -561,6 +764,10 @@ class CartItem extends HTMLComponent {
 
   get quantity() {
     return Number(this.getAttribute('quantity') || 0);
+  }
+
+  get removeOne() {
+    return this.hasAttribute('remove-one');
   }
 
   /**
@@ -586,7 +793,7 @@ class CartItem extends HTMLComponent {
    */
   async removeItem(event) {
     CartItem.stop(event);
-    await this.change(0);
+    await this.change(this.removeOne && this.quantity > 1 ? this.quantity - 1 : 0);
   }
 
   /**

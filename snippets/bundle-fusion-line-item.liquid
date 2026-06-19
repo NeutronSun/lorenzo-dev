@@ -1,0 +1,89 @@
+{% doc %}
+  Renders a cart bundle fusion line item.
+
+  @param {line_item} item - Cart line item
+{% enddoc %}
+
+<cart-item key="{{ item.key | escape }}" quantity="{{ item.quantity }}" class="bundle-fusion-line-item" remove-one>
+  <a class="cart-item-image" href="{{ item.url }}">
+    {% if item.image %}
+      <img
+        src="{{ item.image | image_url: width: 192 }}"
+        alt="{{ item.product.title | escape }}"
+        width="96"
+        height="96"
+        loading="lazy"
+      >
+    {% endif %}
+  </a>
+
+  <div class="cart-item-info">
+    <div class="cart-item-copy">
+      <a class="cart-item-title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+
+      {% if item.variant.title != 'Default Title' %}
+        <p class="cart-item-variant font-mono">{{ item.variant.title | escape }}</p>
+      {% endif %}
+
+      <div class="bundle-fusion-components" aria-label="Bundle components">
+        {% for component in item.item_components %}
+          {% if component.product.metafields.montura.bundle_data.value %}
+            {% assign fusion_component = component %}
+          {% endif %}
+        {% endfor %}
+
+        {% if fusion_component %}
+          <a class="bundle-fusion-component bundle-fusion-component-main" href="{{ fusion_component.url }}" aria-label="{{ fusion_component.product.title | escape }}">
+            {% if fusion_component.image %}
+              <img
+                src="{{ fusion_component.image | image_url: width: 96 }}"
+                alt="{{ fusion_component.product.title | escape }}"
+                width="32"
+                height="48"
+                loading="lazy"
+              >
+            {% endif %}
+          </a>
+        {% endif %}
+
+        {% if item.item_components.size > 1 %}
+          <span class="bundle-fusion-arrow font-mono" aria-hidden="true">&lt;-</span>
+          <span class="bundle-fusion-nested">
+            {% for component in item.item_components  %}
+              {% if component.product.id == fusion_component.product.id %}
+                {% continue %}
+              {% endif %}
+
+              <a class="bundle-fusion-component" href="{{ component.url }}" aria-label="{{ component.product.title | escape }}">
+                {% if component.image %}
+                  <img
+                    src="{{ component.image | image_url: width: 96 }}"
+                    alt="{{ component.product.title | escape }}"
+                    width="32"
+                    height="48"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+            {% endfor %}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-item-meta">
+    {% render 'cart-line-price', price: item.final_line_price, compare_at_price: item.original_line_price, class: 'cart-item-price' %}
+
+    <button type="button" class="cart-item-remove font-mono" on:click="removeItem" aria-label="Remove {{ item.product.title | escape }}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 6h18"></path>
+        <path d="M8 6V4h8v2"></path>
+        <path d="M6 6l1 16h10l1-16"></path>
+        <path d="M10 11v6"></path>
+        <path d="M14 11v6"></path>
+      </svg>
+      <span>REMOVE</span>
+    </button>
+  </div>
+</cart-item>

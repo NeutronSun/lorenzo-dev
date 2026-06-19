@@ -2,10 +2,11 @@ import { HTMLComponent } from "@theme/HTMLComponent";
 import { ColorSibling } from "@theme/color-sibling";
 
 class PDPsiblings extends HTMLComponent {
-  static CACHE_PREFIX = 'pdp-siblings:v3:';
+  static CACHE_PREFIX = 'pdp-siblings:v5:';
   static DEFAULT_LIMIT = 250;
+  static FUSION_TAG_PREFIX = 'Fusion_';
+  static TAB_FUSION = 'fusion';
   static TAB_THEME = 'theme';
-  static TAB_PM = 'pm';
 
   get themeTag() {
     return this.dataset.themeTag || '';
@@ -13,6 +14,10 @@ class PDPsiblings extends HTMLComponent {
 
   get currentHandle() {
     return this.dataset.currentHandle || '';
+  }
+
+  get fusionTag() {
+    return this.currentHandle ? `${PDPsiblings.FUSION_TAG_PREFIX}${this.currentHandle}` : '';
   }
 
   get currentProduct() {
@@ -38,19 +43,18 @@ class PDPsiblings extends HTMLComponent {
   }
 
   async render() {
-    if (!this.themeTag) {
+    if (!this.themeTag && !this.fusionTag) {
       this.isLoading = false;
       this.hidden = true;
       return;
     }
 
     const currentProduct = this.currentProduct;
-    const siblings = await this.fetchProducts();
-    const products = [
-      ...(currentProduct ? [currentProduct] : []),
-      ...siblings.filter((product) => product.handle !== currentProduct?.handle),
-    ].sort((product, nextProduct) => Number(String(product.id).split('/').pop()) - Number(String(nextProduct.id).split('/').pop()));
-    const tabs = this.getTabs(products, currentProduct);
+    const [themeProducts, fusionProducts] = await Promise.all([
+      this.themeTag ? this.fetchProducts(this.themeTag) : [],
+      this.fusionTag ? this.fetchProducts(this.fusionTag) : [],
+    ]);
+    const tabs = this.getTabs(themeProducts, fusionProducts, currentProduct);
 
     if (!tabs.length) {
       this.isLoading = false;
@@ -84,41 +88,34 @@ class PDPsiblings extends HTMLComponent {
     this.innerHTML = parts.join('');
   }
 
-  async fetchProducts() {
-    return ColorSibling.fetchQuery(this.themeTag, this.limit, this.getQuery(), PDPsiblings.mapNode, PDPsiblings.CACHE_PREFIX, 'PDP siblings');
+  async fetchProducts(tag) {
+    return ColorSibling.fetchQuery(tag, this.limit, this.getQuery(tag), PDPsiblings.mapNode, PDPsiblings.CACHE_PREFIX, 'PDP siblings');
   }
 
-  getTabs(products, currentProduct) {
-    const themeSiblings = products.filter((product) => product.handle !== this.currentHandle);
-    const pmSiblings = currentProduct?.microCategory && currentProduct?.pm
-      ? products.filter((product) => (
-        product.handle !== this.currentHandle
-        && product.microCategory === currentProduct.microCategory
-        && product.pm
-        && product.pm !== currentProduct.pm
-      ))
-      : [];
+  getTabs(themeProducts, fusionProducts, currentProduct) {
+    const themeSiblings = themeProducts.filter((product) => product.handle !== this.currentHandle);
+    const fusionSiblings = fusionProducts.filter((product) => product.handle !== this.currentHandle);
     const tabs = [];
 
     themeSiblings.length && tabs.push({
       name: PDPsiblings.TAB_THEME,
       label: 'Tema',
-      products,
+      products: PDPsiblings.sortProducts([
+        ...(currentProduct ? [currentProduct] : []),
+        ...themeSiblings,
+      ]),
     });
 
-    pmSiblings.length && tabs.push({
-      name: PDPsiblings.TAB_PM,
-      label: 'PM',
-      products: [
-        ...(currentProduct ? [currentProduct] : []),
-        ...pmSiblings,
-      ].sort((product, nextProduct) => Number(String(product.id).split('/').pop()) - Number(String(nextProduct.id).split('/').pop())),
+    fusionSiblings.length && tabs.push({
+      name: PDPsiblings.TAB_FUSION,
+      label: 'Fusion',
+      products: PDPsiblings.sortProducts(fusionSiblings),
     });
 
     return tabs;
   }
 
-  getQuery() {
+  getQuery(tag) {
     return {
       query: `
         query PDPSiblings($first: Int!, $query: String!) {
@@ -150,7 +147,7 @@ class PDPsiblings extends HTMLComponent {
       `,
       variables: {
         first: this.limit,
-        query: ColorSibling.getSearchQuery(this.themeTag),
+        query: ColorSibling.getSearchQuery(tag),
       },
     };
   }
@@ -171,6 +168,16 @@ class PDPsiblings extends HTMLComponent {
       image: node.featuredImage?.url || '',
       imageAlt: node.featuredImage?.altText || node.title,
     };
+  }
+
+  /**
+   * @param {Array<{ id: string | number }>} products
+   * @returns {Array}
+   */
+  static sortProducts(products) {
+    return [...products].sort((product, nextProduct) => (
+      Number(String(product.id).split('/').pop()) - Number(String(nextProduct.id).split('/').pop())
+    ));
   }
 
   /**
@@ -200,7 +207,7 @@ class PDPsiblings extends HTMLComponent {
    */
   static buildPanel(tab, currentHandle) {
     return `
-      <div data-tab="${PDPsiblings.escape(tab.name)}">
+      <div class="panel" data-tab="${PDPsiblings.escape(tab.name)}">
         <div class="values">
           ${tab.products.map((product) => PDPsiblings.buildProduct(product, currentHandle)).join('')}
         </div>

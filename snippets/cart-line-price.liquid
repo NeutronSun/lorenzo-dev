@@ -1,0 +1,23 @@
+{% doc %}
+  Renders a cart line price with optional compare at price.
+
+  @param {number} price - Final line price
+  @param {number} compare_at_price - Original or compare line price
+  @param {string} class - Wrapper class
+{% enddoc %}
+
+{% liquid
+  assign class = class | default: 'cart-item-price'
+  assign price = price | default: 0
+  assign compare_at_price = compare_at_price | default: price
+%}
+
+<span class="{{ class }}">
+  <cart-money value="{{ price }}"></cart-money>
+
+  {% if compare_at_price > price %}
+    <s>
+      <cart-money value="{{ compare_at_price }}"></cart-money>
+    </s>
+  {% endif %}
+</span>
