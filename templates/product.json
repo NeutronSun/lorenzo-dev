@@ -28,7 +28,7 @@
               "settings": {
                 "season": "{{ closest.product.metafields.valeverce.edition.value }}",
                 "number": "{{ closest.product.metafields.valeverce.number.value }}",
-                "series": "A"
+                "series": "{{ closest.product.metafields.valeverce.micro_category.value }}"
               },
               "blocks": {}
             },
