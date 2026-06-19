@@ -1,0 +1,255 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "shopify": {
+    "checkout": {
+      "general": {
+        "errors": {
+          "delivery": {
+            "invalid_origin_location_id": "មិន​អាច​រក​ទីតាំង​ដែល​ផ្គូផ្គង​លេខសម្គាល់​ទីតាំង​ប្រភព​បាន​ទេ។",
+            "origin_location_id_not_allowed": "វិធីសាស្ត្រដឹកជញ្ជូនដែលបានស្នើសុំមិនគាំទ្រលេខសម្គាល់ទីតាំងដើមឡើយ។",
+            "auto_fulfill_not_allowed": "វគ្គនេះមិនត្រូវបានអនុញ្ញាតឱ្យបដិសេធឥរិយាបថបំពេញនោះទេ។",
+            "auto_fulfill_required": "ការបំពេញដោយស្វ័យប្រវត្តិ គឺតម្រូវនៅពេលវិធីសាស្ត្រដឹកជញ្ជូន RETAIL ត្រូវបានស្នើសុំ។",
+            "prefetch_shipping_rates_used": "អត្រាដឹកជញ្ជូនដែលបានយកមកទុកជាមុន មិនគួរបង្ហាញអត្រាឡើយ។",
+            "fulfillment_constraints_not_satisfied": "លក្ខខណ្ឌនៃការបំពេញមួយ ឬច្រើន មិនត្រូវបានបំពេញទេ។",
+            "must_fulfill_from_constraint_not_satisfied": "លក្ខខណ្ឌ​បំពេញ​មិន​គ្រប់គ្រាន់​ទេ ដោយសារ​ទំនិញ​មិនអាច​បំពេញ​ពីទីតាំង​ដែលបាន​កំណត់​។",
+            "must_fulfill_from_same_location_constraint_not_satisfied": "លក្ខខណ្ឌ​បំពេញ​ការងារ​មិន​ពេញលេញ​ទេ ដោយសារ​តែ​ទំនិញ​មិន​អាច​បំពេញ​ពី​ទីតាំង​ដូចគ្នា​បាន។",
+            "delivery_strategy_conditions_not_satisfied": "យុទ្ធសាស្ត្រដឹកជញ្ជូនអាចប្រើបានសម្រាប់ទីតាំងនេះ ប៉ុន្តែលក្ខខណ្ឌរបស់ពួកវាមិនត្រូវបានបំពេញទេ។",
+            "out_of_stock_at_origin_location": "គ្មានស្តុកនៅទីតាំងដើមទេ។",
+            "invalid_signature": "ហត្ថលេខាការបញ្ចុះតម្លៃមិនត្រឹមត្រូវ។",
+            "mixed_destination_countries": "ការដឹកជញ្ជូនមិនមានទេ ដោយសារបណ្តាញនៃការដឹកជញ្ជូនមាននៅទូទាំងបណ្ដាប្រទេសជាច្រើន។"
+          },
+          "discount": {
+            "discounts_not_allowed_for_b2b": "ការបញ្ចុះតម្លៃមិនត្រូវបានអនុញ្ញាតនៅក្នុងហាង B2B ទេ។",
+            "mixed_destination_countries": "ការបញ្ចុះតម្លៃមិនមានទេពីព្រោះខ្សែដឹកជញ្ជូនលាតសន្ធឹងពាសពេញប្រទេសជាច្រើន។",
+            "custom_discount_not_honoured": "ការបញ្ចុះតម្លៃពិសេសដែលបានផ្ដល់ជូន មិនត្រូវបានអនុញ្ញាតនោះទេ។",
+            "unsupported_expectation": "បន្ទាត់បញ្ចុះតម្លៃដែលបានផ្ដល់មកមានលក្ខខណ្ឌដែលគោលការណ៍មិនអាចបកស្រាយបាន។",
+            "additional_requested_discount_code_discarded": "{{code}} ត្រឹមត្រូវ ប៉ុន្តែមិនអាចប្រើបានទេ។ សូមពិនិត្យមើលលក្ខខណ្ឌការបញ្ចុះតម្លៃ។",
+            "additional_requested_discount_discarded": "ការបញ្ចុះតម្លៃរបស់អ្នកគឺមានសុពលភាព ប៉ុន្តែមិនអាចអនុវត្តបានទេ។ សូមពិនិត្យលក្ខខណ្ឌនៃការបញ្ចុះតម្លៃ។",
+            "allocations_mismatch": "លេខកូដបញ្ចុះតម្លៃរបស់អ្នកបានផ្លាស់ប្ដូរហើយ។ សូមពិនិត្យមើលកន្ត្រកទំនិញរបស់អ្នកឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
+            "discount_title_too_long": "ចំណងជើងការបញ្ចុះតម្លៃមិនអាចវែងជាង ២៥៥ តួអក្សរឡើយ។"
+          },
+          "tax": {
+            "new_tax_must_be_accepted": "ពន្ធដែលទាក់ទងនឹងការបញ្ជាទិញរបស់អ្នកបានផ្លាស់ប្ដូរហើយ។ សូមពិនិត្យមើល និងព្យាយាមម្ដងទៀត។",
+            "unresolvable_tax_terms": "លក្ខខណ្ឌដែលបានស្នើឡើង មិនអាចដោះស្រាយបានទេ ដោយផ្អែកលើបរិបទនៃការចរចាបច្ចុប្បន្ន។",
+            "delivery_price_is_abstract": "តម្លៃដឹកជញ្ជូនដែលពាក់ព័ន្ធគឺជាអរូបី។",
+            "tax_inclusivity_mismatch": "ចរចាឡើងវិញជាមួយតម្លៃ totalTaxAndDutyAmount ឬ totalAmountIncludedInTarget ដែលជាក់លាក់។",
+            "tax_exemption_not_supported": "ការលើកលែងពន្ធមិនត្រូវបានគាំទ្រសម្រាប់ការចរចាបច្ចុប្បន្នទេ។",
+            "delivery_tax_exemption_not_supported": "បច្ចុប្បន្ន ការលើកលែងពន្ធសម្រាប់ខ្សែចែកចាយមិនត្រូវបានគាំទ្រទេ។",
+            "proposed_allocations_required": "បាត់​វាល 'ការ​បែងចែក​ដែល​បាន​ស្នើ​ឡើង'។",
+            "merchandise_terms_must_be_defined": "លក្ខខណ្ឌ​ទំនិញត្រូវតែត្រូវបានកំណត់។",
+            "delivery_terms_must_be_defined": "លក្ខខណ្ឌនៃការដឹកជញ្ជូនត្រូវតែកំណត់។",
+            "merchandise_discount_terms_must_be_defined": "លក្ខខណ្ឌនៃការបញ្ចុះតម្លៃទំនិញត្រូវតែកំណត់។",
+            "delivery_discount_terms_must_be_defined": "លក្ខខណ្ឌ​បញ្ចុះតម្លៃ​លើ​ការ​ដឹកជញ្ជូន​ត្រូវតែ​កំណត់។",
+            "allocated_required": "ខ្វះ​វាល 'allocated'។",
+            "value_required": "បាត់​វាល 'value'។",
+            "line_splits_not_supported": "វាល 'បន្ទាត់ទំនិញ' ត្រូវតែបំបែកនៅក្នុងវិធីដែលធាតុនីមួយៗមានធាតុផ្សំបន្ទាត់តែមួយនៅក្នុងសំណើអ្នកលក់។"
+          },
+          "payment": {
+            "manual_payments_not_allowed_for_b2b": "ការទូទាត់ដោយដៃមិនត្រូវបានអនុញ្ញាតនៅក្នុងហាង B2B ទេ។",
+            "positive_amount_expected": "ចំនួនទឹកប្រាក់ដែលត្រូវបង់ត្រូវតែធំជាង 0។",
+            "total_amount_mismatch": "ចំនួនទឹកប្រាក់សរុបដែលត្រូវបង់មិនស៊ីនឹងផលបូកនៃចំនួនទឹកប្រាក់ដែលបានបង់នោះទេ។",
+            "subscription_terms_not_accepted": "លក្ខខណ្ឌនៃការជាវមិនត្រូវបានទទួលយកទេ។",
+            "missing_session_id": "បាត់ព័ត៌មានវគ្គប័ណ្ណឥណទាន។",
+            "gateway_not_supported": "Payment gateway មិនអាចផ្ទុកវិធីបង់ប្រាក់បានទេ។",
+            "credit_card_last_name_required": "នាមត្រកូល' មិនអាចនៅទទេបានទេ ។",
+            "credit_card_update_failed": "ការអាប់ដេតកាតឥណទានបរាជ័យ។",
+            "invalid_address_type": "ប្រភេទ​អាសយដ្ឋាន​ដែល​បាន​ផ្ដល់​គឺ​មិន​ត្រឹមត្រូវ​សម្រាប់​វិធីសាស្ត្រទូទាត់​នេះ​ទេ។",
+            "missing_retail_attributions": "តម្រូវ​ឲ្យ​មាន​លក្ខណសម្បត្តិ​នៃ​ការលក់​រាយ​សម្រាប់​ការទូទាត់​តាម​កាត​ឥណទាន​ដែល​បាន​បញ្ចូល​ដោយ​ដៃ។",
+            "unexpected_retail_attributions": "ព័ត៌មានលម្អិតរបស់ហាងលក់រាយត្រូវបានផ្ដល់ជូនដោយមិនបានរំពឹងទុកសម្រាប់ការទូទាត់កាតឥណទាន។",
+            "invalid_card_source": "វគ្គនេះមិនមានការអនុញ្ញាតឲ្យប្រើប្រាស់ប្រភពកាតនេះទេ។",
+            "wallet_content_missing": "មាតិកាកាបូបលុយបាត់។",
+            "payment_instrument_not_found": "មិនអាចស្វែងរកវិធីសាស្រ្តទូទាត់ប្រាក់បានទេ",
+            "unauthorized_capture_method": "មិនអនុញ្ញាតឱ្យកំណត់រចនាសម្ព័ន្ធវិធីសាស្ត្រចាប់យកការទូទាត់ទេ។",
+            "saved_payment_methods_not_allowed": "មិនអនុញ្ញាតវិធីសាស្ត្រទូទាត់ដែលបានរក្សាទុកទេ។",
+            "saved_payment_methods_not_enabled": "វិធីសាស្រ្តទូទាត់ដែលបានរក្សាទុក មិនត្រូវបានអនុញ្ញាតសម្រាប់ហាងនេះទេ។",
+            "saved_payment_methods_cvv_verification_disabled": "វិធីទូទាត់ដែលបានជ្រើសរើស ទាមទារការផ្ទៀងផ្ទាត់ CVV ដែលមិនត្រូវបានបើកដំណើរការសម្រាប់ហាងនេះទេ។ សូមជ្រើសរើសវិធីទូទាត់ផ្សេង។",
+            "store_credit_not_enabled": "ឥណទានហាងមិនត្រូវបានបើកសម្រាប់ហាងនេះទេ។",
+            "store_credit_account_not_found": "មិនអាចរកគណនីឥណទានរបស់ហាងឃើញទេ។",
+            "store_credit_account_mismatch": "គណនីឥណទានហាងមិនត្រូវគ្នានឹងអត្តសញ្ញាណរបស់អ្នកទិញទេ។",
+            "store_credit_mismatched_currency": "រូបិយប័ណ្ណនៃគណនីឥណទានរបស់ហាងមិនដូចគ្នានឹងរូបិយប័ណ្ណនៃការទូទាត់នោះទេ។",
+            "store_credit_insufficient_funds": "គណនីឥណទានហាងមានទឹកប្រាក់មិនគ្រប់គ្រាន់ទេ។",
+            "store_credit_buying_gift_card": "អ្នកមិនអាចប្រើក្រេឌីតហាងដើម្បីទិញកាតអំណោយបានទេ។",
+            "gift_cards_not_allowed_for_b2b": "បណ្ណ​ជូន​កាដូ​មិន​អនុញ្ញាត​សម្រាប់​ការ​ទិញ​ទំនិញ​ពី​ហាង​សម្រាប់​អាជីវកម្ម​ទៅ​អាជីវកម្ម​ទេ។",
+            "method_required": "ត្រូវតែស្នើវិធីបង់ប្រាក់។",
+            "paypal_express_address_invalid": "PayPal បានផ្ដល់អាសយដ្ឋានមិនត្រឹមត្រូវ។"
+          },
+          "tip": {
+            "not_accepted_by_shop": "ហាងមិនទទួលយកប្រាក់បំណាច់ទេ។",
+            "only_one_tip_line_allowed": "មិនអាចប្រើខ្សែបន្ទាត់ណែនាំច្រើនជាងមួយបានទេ។",
+            "tips_not_allowed_for_b2b": "ហាង B2B មិនអនុញ្ញាតឱ្យមានប្រាក់រង្វាន់ទេ។",
+            "currency_change_reset": "ការណែនាំត្រូវបានកំណត់ឡើងវិញ ដោយសារតែការផ្លាស់ប្ដូររូបិយប័ណ្ណ។",
+            "tips_not_allowed_for_deferred_purchase_options": "ការណែនាំមិនទាន់ត្រូវបានគាំទ្រសម្រាប់ជម្រើសទិញពន្យារពេលនៅឡើយទេ។"
+          },
+          "sale_attribution": {
+            "draft_order_not_exist": "លំដាប់ពង្រាងនេះមិនមាននៅក្នុងហាងបច្ចុប្បន្នទេ។",
+            "staff_member_not_exist": "បុគ្គលិកនេះមិនមាននៅក្នុងហាងបច្ចុប្បន្នទេ។",
+            "location_not_exist": "ទីតាំងនេះមិនមាននៅក្នុងហាងបច្ចុប្បន្នទេ។",
+            "point_of_sale_device_not_exist": "ឧបករណ៍លក់នេះមិនមាននៅក្នុងហាងបច្ចុប្បន្នទេ។",
+            "unresolvable_target_merchandise_lines": "ការចាត់តាំងការលក់ដែលបានស្នើឡើងមិនអាចដោះស្រាយបានទេ ដោយសារតែបរិបទនៃការចរចាបច្ចុប្បន្ន។"
+          },
+          "non_negotiable": {
+            "missing_non_negotiable_terms": "សំណើរបស់អ្នកទិញគួរមានលក្ខខណ្ឌដែលមិនអាចចរចាបាន។",
+            "invalid_signature": "ហត្ថលេខា​សម្រាប់ {{target_terms}} គឺ​មិន​ត្រឹមត្រូវ​ទេ។"
+          },
+          "inventory": {
+            "missing_quantity_value": "វាលបរិមាណបាត់នៅក្នុងបន្ទាត់បញ្ជីស្តុករបស់អ្នកទិញ។",
+            "changing_behavior_not_allowed": "អតិថិជននេះមិនមានសិទ្ធិផ្លាស់ប្ដូរសកម្មភាពនៃសារពើភណ្ឌនោះទេ។",
+            "only_one_inventory_behavior_allowed": "បច្ចុប្បន្ន អនុញ្ញាតឲ្យដំណើរការបញ្ជីសារពើភណ្ឌតែមួយមុខគត់ប៉ុណ្ណោះក្នុងពេលពិនិត្យទំនិញចេញម្ដងៗ។"
+          },
+          "optional_duties": {
+            "optional_duties_not_permitted": "ការបដិសេធកាតព្វកិច្ចមិនត្រូវបានអនុញ្ញាតសម្រាប់ការទូទាត់ប្រាក់នេះទេ។"
+          },
+          "attribution": {
+            "retail_attribution_not_allowed": "ការបញ្ជាក់ប្រភពលក់រាយ មិនត្រូវបានអនុញ្ញាតសម្រាប់ការទូទាត់ប្រាក់នេះទេ។",
+            "retail_attribution_required": "តម្រូវ​ឲ្យ​មាន​ការ​កំណត់​ប្រភព​លក់​រាយ​សម្រាប់​ការទូទាត់​នេះ។"
+          },
+          "captcha": {
+            "metadata_missing": "ការបំពេញ captcha ត្រូវបានទាមទារសម្រាប់ការទូទាត់នេះ។",
+            "metadata_mismatch": "កម្មវិធីផ្ទៀងផ្ទាត់ Captcha ដែលបានផ្ដល់ និងប្រភេទមិនត្រឹមត្រូវតាមតម្លៃដែលបានកំណត់ទុកជាមុនទេ។",
+            "token_missing": "ត្រូវផ្ដល់ថូខឹន captcha ដើម្បីបញ្ចប់ការទូទាត់នេះ។",
+            "job_enqueue_failed": "ការងារ​ផ្ទៀងផ្ទាត់ captcha បរាជ័យ​ក្នុង​ការដាក់​ក្នុងជួរ។",
+            "job_already_queued": "ការផ្ទៀងផ្ទាត់ Captcha ត្រូវបានដាក់ចូលជួរសម្រាប់ថូខឹន captcha នេះរួចហើយ។",
+            "token_expired": "Captcha token ដែលបានផ្ដល់ឱ្យបានផុតកំណត់ហើយ។ សូមបំពេញ Captcha ថ្មីដើម្បីបន្តការទូទាត់។",
+            "token_invalid": "និមិត្តសញ្ញា captcha ដែលបានផ្ដល់គឺមិនត្រឹមត្រូវទេ។ សូមបំពេញ captcha ថ្មីមួយ ដើម្បីបន្តការទូទាត់។",
+            "token_not_valid_for_session": "Captcha ដែលបានផ្ដល់ជូនមិនអាចប្រើជាមួយការទូទាត់នេះទេ។"
+          },
+          "fx_reconciliation_override": {
+            "shop_currency_mismatch": "ចំនួនទឹកប្រាក់ដែលទទួលបានត្រូវតែជារូបិយប័ណ្ណរបស់ហាង។"
+          },
+          "checkout_source": {
+            "revoked": "ការទូទាត់នេះលែងមានទៀតហើយ។"
+          }
+        },
+        "full_price": "តម្លៃពេញ៖",
+        "title": "ការទូទាត់ - {{shopName}}",
+        "full_title": "{{pageTitle}} - {{shopName}} - ពិនិត្យមើលការបញ្ជាទិញ",
+        "loading": "កំពុងផ្ទុក…",
+        "loading_title": "ការទូទាត់ - {{shopName}}",
+        "google_map_title": "ផែនទី Google",
+        "confirm_order_button_label": "បញ្ជាក់ការបញ្ជាទិញ",
+        "submit_order_button_label": "ដាក់បញ្ជាទិញ",
+        "submit_for_review_button_label": "ដាក់ស្នើសម្រាប់ត្រួតពិនិត្យ",
+        "submit_for_review_notice_label": "ការទូទាត់នឹងមិនត្រូវធ្វើឡើងទេ រហូតដល់ការបញ្ជាទិញរបស់អ្នកត្រូវបានត្រួតពិនិត្យរួចរាល់។"
+      },
+      "payment": {
+        "name_on_card_placeholder": "ឈ្មោះនៅលើកាត",
+        "card_nickname_label": "ឈ្មោះហៅក្រៅ (ស្រេចចិត្ត)",
+        "card_expired": "ផុតកំណត់",
+        "card_expiry_label": "ថ្ងៃផុតកំណត់ (ខខ/ឆឆ)",
+        "card_expiry_placeholder": "ថ្ងៃផុតកំណត់ (ខខ/ឆឆ)",
+        "credit_card_start_month": "ខែចាប់ផ្តើម",
+        "credit_card_start_year": "ឆ្នាំចាប់ផ្ដើម",
+        "delete_customer_mandate_modal_title": "លុបកាតទូទាត់នេះដែរទេ?",
+        "delete_customer_mandate_modal_body": "ប្រសិនបើអ្នកលុបកាតនេះ អ្នកនឹងត្រូវបន្ថែមវាម្តងទៀតមុនពេលប្រើវាសម្រាប់បង់ប្រាក់។",
+        "delete_customer_mandate_modal_confirm": "លុបកាតចេញ",
+        "delete_customer_mandate_modal_cancel": "បោះបង់",
+        "card_verification_value_label": "លេខកូដសុវត្ថិភាព",
+        "card_verification_value_placeholder": "លេខកូដសុវត្ថិភាព",
+        "card_verification_confirm": "សម្រាប់គោលបំណងផ្ទៀងផ្ទាត់ សូមបញ្ចូលលេខកូដសុវត្ថិភាពកាតរបស់អ្នក។",
+        "card_expiry_date_explanation": "កាលបរិច្ឆេទផុតកំណត់កាតក្នុងទម្រង់៖ ខែ ខែ ឆ្នាំ ឆ្នាំ",
+        "card_expiration_month_label": "ខែផុតកំណត់",
+        "card_expiration_year_label": "ឆ្នាំផុតកំណត់",
+        "card_verification_value_explanation": "លេខកូដសុវត្ថិភាព 3 ខ្ទង់ ជាទូទៅគឺនៅខាងក្រោយកាតរបស់អ្នក។ កាត American Express មានលេខកូដ 4 ខ្ទង់ ដែលស្ថិតនៅផ្នែកខាងមុខ។",
+        "card_verification_value_explanation_amex": "លេខកូដសុវត្ថិភាព ៤ ខ្ទង់នៅពីមុខកាតរបស់អ្នក។",
+        "card_verification_value_explanation_other": "លេខកូដសុវត្ថិភាព 3 ខ្ទង់នៅពីក្រោយកាតរបស់អ្នក។",
+        "card_start_label": "កាលបរិច្ឆេទចេញផ្សាយ (ខែ / ឆ្នាំ)",
+        "card_start_placeholder": "កាលបរិច្ឆេទចេញផ្សាយ (ខែ / ឆ្នាំ)",
+        "card_issue_number_label": "លេខ​បញ្ហា",
+        "card_issue_number_placeholder": "លេខ​បញ្ហា",
+        "card_change_label": "ផ្លាស់ប្ដូរ",
+        "card_update_label": "ធ្វើបច្ចុប្បន្នភាពកាត",
+        "paypal_disconnect": "ផ្តាច់",
+        "ends_with_label": "បканчиដោយ %{last_digits}",
+        "payment_method_saved": "បានរក្សាទុកវិធីសាស្ត្រទូទាត់",
+        "card_vaulted_company_location": "កាតត្រូវបានរក្សាទុកសម្រាប់ទីតាំងនេះ។",
+        "bank_account_vaulted_company_location": "គណនីធនាគារ​ត្រូវ​បាន​រក្សា​ទុក​សម្រាប់​ទីតាំង​នេះ។",
+        "expiry_long": "(ផុតកំណត់ %{month}/%{year})",
+        "expiry_short": "(ផុតកំណត់ %{month}/%{year})",
+        "crypto_payment_method": {
+          "description": "ភ្ជាប់កាបូបរបស់អ្នកដោយសុវត្ថិភាព។ សមតុល្យ និងអាសយដ្ឋានរបស់អ្នក នឹងមិនត្រូវបានចែករំលែកឡើយ។",
+          "tooltip": "សមតុល្យកាបូបលុយរបស់អ្នក និងអាសយដ្ឋាននឹងមិនត្រូវបានចែករំលែកឡើយ ហើយទឹកប្រាក់ដែលបានស្នើសុំប៉ុណ្ណាស់ដែលអាចត្រូវកាត់បាន។",
+          "cashback_descriptor": {
+            "one": "អ្នកនឹងទទួលបានប្រាក់ត្រឡប់មកវិញក្រោយ %{count} ថ្ងៃ។",
+            "other": "អ្នកនឹងទទួលបានប្រាក់ត្រឡប់មកវិញបន្ទាប់ពី %{count} ថ្ងៃ។"
+          }
+        },
+        "crypto_modal": {
+          "header": "បង់ %{total_price} USDC ទៅ %{shop_name}",
+          "error": {
+            "refresh": "ផ្ទុកឡើងវិញ",
+            "close": "បិទ",
+            "sandbox_error": "មានអ្វីមួយខុសបច្ចេកទេស",
+            "web_component_error": "មាន​បញ្ហា​ក្នុង​ការ​ផ្ទុក​ទំព័រ​នេះ"
+          }
+        },
+        "saved_by_payment_method": "បានរក្សាទុកដោយ %{payment_method}",
+        "pay_with_payment_method": "ទូទាត់ជាមួយ %{payment_method}",
+        "different_credit_card_label": "ប្រើកាតឥណទានផ្សេង",
+        "same_billing_address_label": "ដូចគ្នានឹងអាសយដ្ឋានដឹកជញ្ជូនដែរ",
+        "different_billing_address_label": "ប្រើអាសយដ្ឋានចេញវិក្កយបត្រផ្សេងទៀត។",
+        "billing_address_associated_with_mandate": "ប្រើប្រាស់អាសយដ្ឋានដែលភ្ជាប់ជាមួយវិធីបង់ប្រាក់",
+        "billing_address_associated_with_mandate_info": "ប្រសិនបើអ្នកចង់ផ្លាស់ប្ដូរអាសយដ្ឋានចេញវិក្កយបត្រ សូមលុប និងបញ្ចូលព័ត៌មានលម្អិតកាតឥណទានរបស់អ្នកឡើងវិញ។",
+        "free_order_notice_html": "ការកម្ម៉ង់របស់អ្នកគឺ<strong>ឥតគិតថ្លៃ</strong>។ មិនចាំបាច់បង់ប្រាក់ទេ។",
+        "express_checkout_free_order": "អ្នកនឹងមិនត្រូវបានគិតថ្លៃសម្រាប់​ការកម្មង់ឥតគិតថ្លៃនោះទេ។",
+        "order_covered_by_gift_cards_notice": {
+          "one": "ការបញ្ជាទិញរបស់អ្នកត្រូវបានគ្របដណ្តប់ដោយបណ្ណអំណោយរបស់អ្នក។",
+          "other": "ការបញ្ជាទិញរបស់អ្នកត្រូវបានបង់ដោយកាតអំណោយរបស់អ្នកហើយ។"
+        },
+        "offsite_gateway_redirect_hint": "អ្នកនឹងត្រូវបានបញ្ជូនបន្តទៅ %{gateway_label} ដើម្បីបញ្ចប់ការទិញរបស់អ្នក។",
+        "offsite_gateway_review_page_redirect_hint": "បន្ទាប់​ពី​អ្នក​ពិនិត្យ​មើល​ការ​បញ្ជា​ទិញ​របស់​អ្នក​រួច អ្នក​នឹង​ត្រូវ​បាន​បញ្ជូន​បន្ត​ទៅ %{gateway_label} ដើម្បី​បញ្ចប់​ការ​ទិញ​របស់​អ្នក។",
+        "offsite_gateway_redirect_hint_multi_currency_html": "%{gateway_label} សរុប %{total_shop_price}",
+        "offsite_gateway_redirect_hint_no_button_label": "អ្នកនឹងត្រូវបានបញ្ជូនបន្តទៅ %{gateway_label} ដើម្បីបញ្ចប់ការទិញរបស់អ្នក។",
+        "receiver_payment_experience_hint": "បន្ទាប់ពីដាក់ការបញ្ជាទិញរបស់អ្នករួច អ្នកនឹងទទួលបានព័ត៌មានលម្អិតអំពីការទូទាត់។ សូមធ្វើការទូទាត់តាមរយៈ Multibanco ឬតាមអ៊ីនធឺណិតក្នុងរយៈពេល %{due_days} ថ្ងៃ។",
+        "billing_address_title": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+        "billing_address_rollup_accessibility_label": "ជម្រើសអាសយដ្ឋានចេញវិក្កយបត្រ",
+        "billing_address_description": "ជ្រើសរើសអាសយដ្ឋានដែលត្រូវគ្នានឹងកាត ឬវិធីទូទាត់របស់អ្នក។",
+        "billing_address_description_no_shipping_address": "សូមបញ្ចូលអាសយដ្ឋានដែលត្រូវនឹងកាត ឬវិធីទូទាត់ប្រាក់របស់អ្នក។",
+        "no_js_credit_card_fields_redirect_hint": "អ្នកនឹងត្រូវបានបញ្ជូនបន្តដើម្បីបន្ថែមព័ត៌មានបង់ប្រាក់របស់អ្នក។",
+        "card_fields_container_prefix": "កុងតឺន័រវាលសម្រាប់៖",
+        "card_fields_unavailable_html": {
+          "one": "ការទូទាត់តាមប័ណ្ណឥណទាន និងប័ណ្ណឥណពន្ធមិនទាន់អាចប្រើប្រាស់បាននៅពេលនេះទេ។ <a href=\"%{current_url}\">ផ្ទុកទំព័រនេះឡើងវិញ</a> ឬព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+          "other": "ការបង់ប្រាក់តាមកាតឥណទាន និងកាតឥណពន្ធមិនទាន់អាចប្រើប្រាស់បានទេ។<br><a href=\"%{current_url}\">សូមផ្ទុកទំព័រនេះឡើងវិញ</a> ឬសាកល្បងវិធីបង់ប្រាក់ផ្សេង។"
+        },
+        "card_fields_processing_error": "មាន​បញ្ហា​ក្នុង​ការ​ដំណើរ​ការ​ទូទាត់។ សូម​ព្យាយាម​ផ្ទុក​ទំព័រ​នេះ​ឡើង​វិញ ឬ​ពិនិត្យ​មើល​ការ​តភ្ជាប់​អ៊ីនធឺណិត​របស់​អ្នក។",
+        "technical_error": "ការទូទាត់មិនអាចដំណើរការបានទេឥឡូវនេះ ដោយសារតែមានបញ្ហាបច្ចេកទេស។ សូមព្យាយាមម្ដងទៀតក្នុងរយៈពេលពីរបីនាទី។",
+        "no_method_error": "ហាងនេះមិនអាចទទួលការទូទាត់បានទេនៅពេលនេះ។",
+        "not_configured_error": "ហាងនេះមិនអាចទទួលការទូទាត់បានទេនៅពេលនេះ។",
+        "missing_credit_card_error": "បញ្ចូលព័ត៌មានលម្អិតកាតរបស់អ្នកដើម្បីបញ្ចប់ការទូទាត់",
+        "shop_pay_ideal_unavailable_error": "iDEAL | Wero មិនអាចប្រើសម្រាប់ការបញ្ជាទិញនេះទេ។ សូមជ្រើសរើសវិធីទូទាត់ប្រាក់ផ្សេង។",
+        "payment_method_not_available_for_shipping_address_error": "វិធីបង់ប្រាក់មិនអាចប្រើសម្រាប់ការដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលបានជ្រើសរើសបានទេ។ សូមជ្រើសរើសវិធីបង់ប្រាក់ផ្សេងទៀត។",
+        "billing_address_not_supported_for_payment_method_error": "វិធីសាស្ត្រទូទាត់ប្រាក់នេះមិនមានសម្រាប់អាសយដ្ឋានចេញវិក្កយបត្រ និងរូបិយបណ្ណរបស់អ្នកទេ។ សូមសាកល្បងប្រើវិធីសាស្ត្រទូទាត់ប្រាក់ផ្សេង។",
+        "generic_incorrect_card_info": "ព័ត៌មានលម្អិតអំពីការទូទាត់របស់អ្នកមិនអាចផ្ទៀងផ្ទាត់បានទេ។ សូមពិនិត្យព័ត៌មានលម្អិតកាតរបស់អ្នក ហើយព្យាយាមម្ដងទៀត។",
+        "sofort_label": "ការផ្ទេរប្រាក់តាមធនាគារ Sofort",
+        "paypal_label": "ផេយបាល់",
+        "shop_pay_installments_label": "បង់រំលស់ជាមួយ Shop Pay",
+        "default": "លំនាំដើម",
+        "continue_to_guest_checkout": "បន្តទូទាត់ប្រាក់ជាភ្ញៀវ",
+        "paypal_modal": {
+          "order_contains_subscriptions": "ការជាវ",
+          "order_contains_fixed_selling_plans": "តម្លៃសរុបអាចមិនទាន់រាប់បញ្ចូលពន្ធ ការដឹកជញ្ជូន ថ្លៃសេវាពន្យារពេល និងការបញ្ចុះតម្លៃមួយចំនួននៅឡើយ។ សូមបន្តទៅកាន់ទំព័រទូទាត់ប្រាក់សម្រាប់ទឹកប្រាក់ដែលត្រូវបង់នៅថ្ងៃនេះ។"
+        },
+        "klarna_label": "ខ្លាណា",
+        "klarna_pay_later_label": "បង់ប្រាក់នៅពេលក្រោយជាមួយ Klarna",
+        "klarna_pay_now_label": "បង់ប្រាក់ឥឡូវនេះជាមួយ Klarna",
+        "bancontact_label": "បានខុនតាក់",
+        "giropay_label": "ជីរ៉ូផេយ",
+        "multibanco_label": "ម៉ាល់ទីបង់កូ",
+        "eps_label": "ការផ្ទេរតាមរយៈ eps",
+        "klarna_slice_it_label": "ហិរញ្ញវត្ថុជាមួយ Klarna",
+        "bank_picker_label": "ធនាគារ",
+        "afterpay_label": "អាហ្វធើផេ (Afterpay)",
+        "cashapppay_label": "ការទូទាត់តាមរយៈ Cash App",
+        "blik_label": "ប្លិក",
+        "mobilepay_label": "ម៉ូបាលផេយ"
+      }
+    }
+  }
+}
