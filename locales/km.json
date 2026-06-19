@@ -249,6 +249,120 @@
         "cashapppay_label": "ការទូទាត់តាមរយៈ Cash App",
         "blik_label": "ប្លិក",
         "mobilepay_label": "ម៉ូបាលផេយ"
+      },
+      "order_summary": {
+        "applied_discount_message": "បញ្ចុះតម្លៃ %{amount} លើតម្លៃសរុបនៃការបញ្ជាទិញ",
+        "discount_has_been_applied": "ការបញ្ចុះតម្លៃត្រូវបានអនុវត្ត",
+        "discount_has_been_removed": "ការបញ្ចុះតម្លៃត្រូវបានដកចេញហើយ។",
+        "automatic_discount_tooltip": "ការបញ្ចុះតម្លៃដែលបានអនុវត្តដោយស្វ័យប្រវត្តិនឹងមិនអាចលុបចេញបានទេ",
+        "gift_card_has_been_applied": "កាតអំណោយត្រូវបានប្រើប្រាស់ហើយ។",
+        "gift_card_has_been_removed": "ប័ណ្ណ​អំណោយ​ត្រូវ​បាន​លុបចេញ​ហើយ។",
+        "gift_card_subscriptions_notice": "កាត​អំណោយ​នឹង​អាច​ប្រើ​បាន​សម្រាប់​តែ​ការ​បង់​ប្រាក់​ដំបូង​របស់​អ្នក​ប៉ុណ្ណោះ។",
+        "discount_already_applied": "ការបញ្ចុះតម្លៃត្រូវបានអនុវត្តទៅការបញ្ជាទិញនេះ។ អ្នកមិនអាចបន្ថែមការបញ្ចុះតម្លៃផ្សេងទៀតបានទេ។",
+        "cart_does_not_meet_discount_requirements_notice": "លេខកូដបញ្ចុះតម្លៃ <strong style=\"text-transform:uppercase\">%{code}</strong> មិនត្រឹមត្រូវសម្រាប់ទំនិញនៅក្នុងកញ្ចប់ទំនិញរបស់អ្នកទេ",
+        "discount_requires_customer_notice": "បញ្ចូលព័ត៌មានដឹកជញ្ជូនរបស់អ្នក ដើម្បីប្រើប្រាស់កូដបញ្ចុះតម្លៃ <strong style=\"text-transform:uppercase\">%{code}</strong>",
+        "customer_does_not_meet_discount_requirements_notice": "<strong style=\"text-transform:uppercase\">%{code}</strong> លេខកូដបញ្ចុះតម្លៃមិនមានសម្រាប់អ្នកឥឡូវនេះទេ។",
+        "eligible_customer_missing_notice": "<strong style=\"text-transform:uppercase\">%{code}</strong> កូដបញ្ចុះតម្លៃទាមទារអតិថិជនដែលមានសិទ្ធិ",
+        "shipping_information_does_not_meet_discount_requirements_notice": "លេខកូដបញ្ចុះតម្លៃ <strong style=\"text-transform:uppercase\">%{code}</strong> មិនមានសម្រាប់អាសយដ្ឋានដឹកជញ្ជូនរបស់អ្នកទេ",
+        "customer_already_used_once_per_customer_discount_notice": "លេខកូដបញ្ចុះតម្លៃ <strong style=\"text-transform:uppercase\">%{code}</strong> ត្រូវបានប្រើប្រាស់រួចហើយ",
+        "subtotal_label": "សរុបរង",
+        "subtotal_label_with_quantity": {
+          "one": "សរុបបឋម · %{count} មុខទំនិញ",
+          "other": "សរុបរង · %{count} មុខទំនិញ"
+        },
+        "shipping_label": "ការដឹកជញ្ជូន",
+        "pickup_label": "ទៅយកនៅហាង",
+        "no_pickup_location": "មិនមានទីតាំងសម្រាប់ទៅយកទេ។",
+        "pickup_unavailable_banner_title": {
+          "one": "មិនមានហាងដែលមានទំនិញរបស់អ្នកទេ",
+          "other": "គ្មានហាងណាមួយដែលអាចប្រើជាមួយទំនិញរបស់អ្នកបានទេ"
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "one": "មិនមានហាងលក់ទំនិញក្នុងប្រទេស %{country} ដែលមានទំនិញរបស់អ្នកទេ",
+          "other": "គ្មានហាងណាមួយនៅក្នុង %{country} ដែលមានទំនិញដូចរបស់លោកអ្នកទេ"
+        },
+        "pickup_unavailable_banner_body": {
+          "ship_to_address": "ដឹក​ជញ្ជូន​ទៅ​កាន់​អាសយដ្ឋាន",
+          "ship_to_address_instead_html": "ជំនួសវិញ %{link}"
+        },
+        "tip_label": "ព័ត៌មានជំនួយ",
+        "unconfirmed_label": "មិនទាន់បានបញ្ជាក់",
+        "calculating_shipping": "កំពុងគណនា...",
+        "calculating": "កំពុងគណនា...",
+        "shipping_default_value": "គណនានៅជំហានបន្ទាប់",
+        "shipping_discount_title": "ការបញ្ចុះតម្លៃលើការដឹកជញ្ជូន",
+        "shipping_pending_message": "មិនទាន់មាននៅឡើយ",
+        "shipping_policy_link": "តម្លៃដឹកជញ្ជូន",
+        "taxes_label": "ពន្ធដារ",
+        "tax_line": {
+          "gst": "ពន្ធលើទំនិញ និងសេវាកម្ម"
+        },
+        "estimated_taxes_label": "ពន្ធប៉ាន់ស្មាន",
+        "estimated_taxes_label_short": "ប៉ាន់ស្មាន",
+        "information_estimated_taxes_label": "ពន្ធ (ប៉ាន់ស្មាន)",
+        "estimated_taxes_finalization_tooltip_content": "ពន្ធចុងក្រោយ និង​តម្លៃសរុប​នឹង​ត្រូវបានបញ្ជាក់​តាមរយៈអ៊ីម៉ែល ឬ​សារអត្ថបទ បន្ទាប់ពីលោកអ្នក​ដាក់បញ្ជាទិញ។",
+        "estimated_taxes_finalization_tooltip_content_short": "ពន្ធត្រូវបានបញ្ចប់ក្រោយការបង់ប្រាក់រួចរាល់",
+        "order_total_label": "តម្លៃសរុបនៃការកម្ម៉ង់ទិញ",
+        "price_before_discount_aria_text": "តម្លៃដើម",
+        "price_after_discount_aria_text": "តម្លៃ​បញ្ចុះ​តម្លៃ",
+        "discount_code_aria_text": "លេខកូដបញ្ចុះតម្លៃ",
+        "total_savings": "ប្រាក់សន្សំសរុប",
+        "total_label": "សរុប",
+        "total_due_label": "ចំនួនទឹកប្រាក់សរុបដែលត្រូវបង់",
+        "total_paid_label": "ចំនួនទឹកប្រាក់សរុបដែលបានបង់",
+        "total_price_label": "តម្លៃសរុប",
+        "total_outstanding_label": "ចំនួនទឹកប្រាក់ដែលត្រូវបង់",
+        "deposit_label": "ការដាក់ប្រាក់",
+        "total_due_today_label": "ចំនួនសរុបដែលត្រូវបង់ថ្ងៃនេះ",
+        "total_due_later_label": "ទឹកប្រាក់សរុបត្រូវបង់ពេលក្រោយ",
+        "partial_total_label": "សរុប",
+        "free_total_label": "ឥតគិតថ្លៃ",
+        "free_shipping_total_label": "ឥតគិតថ្លៃ",
+        "paid_label": "បានបង់",
+        "payment_due_label": "ដល់កំណត់បង់ប្រាក់",
+        "vat_label_html": "រួមទាំងពន្ធ %{amount}",
+        "duties_included_label": "សរុប​រួម​ទាំង​ពន្ធដារ និង​កាតព្វកិច្ច​នានា។ គ្មាន​ការ​គិត​ថ្លៃ​បន្ថែម​ទៀត​លើ​ការ​ដឹក​ជញ្ជូន​ទេ។",
+        "discount_and_gift_card_savings_notice": "ក្រោយពីបញ្ចុះតម្លៃ %{discount_amount} និងប័ណ្ណ​កាដូ %{gift_card_amount}",
+        "discount_savings_notice": "ក្រោយពីបញ្ចុះតម្លៃ %{discount_amount}",
+        "gift_card_savings_notice": "បន្ទាប់ពីប័ណ្ណអំណោយចំនួន %{gift_card_amount}",
+        "cost_table_title": "សេចក្ដីសង្ខេបចំណាយ",
+        "cost_table_item_column_header": "មុខទំនិញ",
+        "cost_table_value_column_header": "តម្លៃ",
+        "description_label": "ការពិពណ៌នា",
+        "price_label": "តម្លៃ",
+        "price_per_item": {
+          "accessibility_label": "%{price} ក្នុងមួយមុខ",
+          "label": "%{price}/មួួួយ"
+        },
+        "quantity_label": "បរិមាណ",
+        "product_change_label": "ផ្លាស់ប្ដូរ",
+        "product_image_label": "រូបភាពផលិតផល",
+        "product_image_quantity_label": "បរិមាណ",
+        "scroll_order_summary": "អូសដើម្បីមើលទំនិញច្រើនទៀត",
+        "expand_order_summary_short": "បង្ហាញ",
+        "collapse_order_summary_short": "លាក់",
+        "original_price": "តម្លៃដើម",
+        "sale_price": "តម្លៃលក់",
+        "compare_at_sale": "លក់បាន (%{sale_amount})",
+        "total_updated_label": "តម្លៃសរុបដែលបានអាប់ដេត៖",
+        "order_total_updated_label": "បានធ្វើបច្ចុប្បន្នភាពសរុប",
+        "total_already_paid_label": "បានបង់",
+        "unit_price": {
+          "accessible_separator": "ក្នុងមួយ",
+          "content_html": "%{price}%{accessible_separator}រៀងរាល់%{per_unit}",
+          "per_item": {
+            "single": "មួយ%{price}",
+            "one": "%{price} ក្នុង​ចំណោម​ទំនិញ %{count}",
+            "other": "%{price} ក្នុងចំណោម %{count} មុខទំនិញ"
+          },
+          "per_unit": {
+            "single": "%{price}​/%{unit}"
+          }
+        },
+        "gift_card_ending": "បណ្ណអំណោយមានលេខសម្គាល់បួនខ្ទង់ចុងក្រោយ %{last_characters}",
+        "estimated_tax_label": "ពន្ធប៉ាន់ស្មាន",
+        "multiple_shipping_lines_label": "តម្លៃដឹកជញ្ជូនសរុប",
+        "recurring_subtotal_label": "តម្លៃរងកើតឡើងវិញ"
       }
     }
   }
