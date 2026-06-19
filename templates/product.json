@@ -26,8 +26,8 @@
             "edition": {
               "type": "pdp-dossier-edition",
               "settings": {
-                "season": "SS/26 - DROP 04",
-                "number": "04/24",
+                "season": "{{ closest.product.metafields.valeverce.edition.value }}",
+                "number": "{{ closest.product.metafields.valeverce.number.value }}",
                 "series": "A"
               },
               "blocks": {}
@@ -47,7 +47,7 @@
                   "type": "pdp-dossier-tech-row",
                   "settings": {
                     "label": "Material",
-                    "value": "78% recycled polyester - 22% elastane"
+                    "value": "{{ closest.product.metafields.valeverce.material | metafield_text }}"
                   },
                   "blocks": {}
                 },
@@ -55,32 +55,14 @@
                   "type": "pdp-dossier-tech-row",
                   "settings": {
                     "label": "Weight",
-                    "value": "185 g/m2"
-                  },
-                  "blocks": {}
-                },
-                "fit": {
-                  "type": "pdp-dossier-tech-row",
-                  "settings": {
-                    "label": "Fit",
-                    "value": "Regular - true to size"
-                  },
-                  "blocks": {}
-                },
-                "origin": {
-                  "type": "pdp-dossier-tech-row",
-                  "settings": {
-                    "label": "Origin",
-                    "value": "Designed in Milan - made in Porto"
+                    "value": "{{ closest.product.metafields.valeverce.weight | metafield_text }}"
                   },
                   "blocks": {}
                 }
               },
               "block_order": [
                 "material",
-                "weight",
-                "fit",
-                "origin"
+                "weight"
               ]
             }
           },
