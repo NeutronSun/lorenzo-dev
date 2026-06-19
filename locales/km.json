@@ -248,7 +248,112 @@
         "afterpay_label": "អាហ្វធើផេ (Afterpay)",
         "cashapppay_label": "ការទូទាត់តាមរយៈ Cash App",
         "blik_label": "ប្លិក",
-        "mobilepay_label": "ម៉ូបាលផេយ"
+        "mobilepay_label": "ម៉ូបាលផេយ",
+        "edit_credit_card_modal": {
+          "fields": {
+            "card_number": "លេខប័ណ្ណ",
+            "expiry": "ថ្ងៃផុតកំណត់",
+            "security_code": "លេខកូដសុវត្ថិភាព",
+            "name": "ឈ្មោះនៅលើកាត",
+            "billing": "វិក្កយបត្រដល់"
+          }
+        },
+        "expired_cards_info": {
+          "one": "មានកាតហួសសុពលភាពចំនួន %{count} ដែលអ្នកអាចមើល និងកែសម្រួលបាននៅក្នុងគណនីរបស់អ្នក។",
+          "other": "មានកាតផុតកំណត់ចំនួន %{count} ដែលអ្នកអាចមើល និងកែសម្រួលនៅក្នុងគណនីរបស់អ្នក។"
+        },
+        "local_payment_method_receiver_notice": "<p>បន្ទាប់ពីការកុម្ម៉ង់ទំនិញរបស់អ្នករួចរាល់ អ្នកនឹងទទួលបានព័ត៌មានលម្អិតអំពីការទូទាត់។ សូមធ្វើការទូទាត់តាមរយៈម៉ាស៊ីន ATM ឬអនឡាញក្នុងរយៈពេល {{dueDays}} ថ្ងៃ។</p>",
+        "order_edit_banner_title": "ការបង់ប្រាក់ចំនួន {{amount_owed}} គឺត្រូវបានទាមទារ",
+        "order_edit_banner_subtitle": "ការបញ្ជាទិញរបស់អ្នក {{order_number}} ត្រូវបានធ្វើបច្ចុប្បន្នភាពហើយ។ សូមពិនិត្យមើលការផ្លាស់ប្តូរទាំងនេះ រួចបង់ប្រាក់ដើម្បីបញ្ជាក់ការបញ្ជាទិញរបស់អ្នក។",
+        "order_edit_banner_items_added": {
+          "one": "បានបន្ថែម",
+          "other": "បានបន្ថែម %{count}"
+        },
+        "order_edit_banner_items_removed": {
+          "in_full": "បានដកចេញ",
+          "with_quantities": "បានដកចេញ {{delta}} នៃ {{quantity}}"
+        },
+        "order_edit_banner_items_returned": {
+          "in_full": "បានត្រឡប់ {{quantity}}",
+          "with_quantities": "បានត្រឡប់ {{delta}} នៃ {{quantity}}"
+        },
+        "order_edit_banner_items_return_line_item_removed": {
+          "in_full": "បានដកចេញពីការត្រឡប់មកវិញ",
+          "with_quantities": "បានដកចេញ {{delta}} ពីការត្រឡប់មកវិញ"
+        },
+        "order_edit_banner_single_item_added": "បានបន្ថែម",
+        "order_edit_banner_multiple_items_added": "បានបន្ថែម {{amount}}",
+        "order_edit_banner_single_item_removed": "បានដកចេញ",
+        "order_edit_banner_multiple_items_removed": "បានដកចេញ {{amount}}",
+        "order_edit_banner_single_item_returned": "បានត្រឡប់មកវិញ",
+        "order_edit_banner_multiple_items_returned": "បានត្រឡប់មកវិញ {{amount}}",
+        "order_edit_banner_single_item_return_line_item_removed": "បានដកចេញពីការត្រឡប់មកវិញ",
+        "order_edit_banner_multiple_items_return_line_item_removed": "បានដក {{amount}} ចេញពីការត្រឡប់មកវិញ",
+        "order_edit_banner_updated_order_label": "ការបញ្ជាទិញដែលបានធ្វើបច្ចុប្បន្នភាព",
+        "gift_card_wrapper": {
+          "heading": "ប័ណ្ណ​ជូន​កាដូ",
+          "apply_gift_card_label": "អនុវត្តកាតអំណោយ",
+          "apply_another_gift_card_label": "អនុវត្តប័ណ្ណអំណោយផ្សេងទៀត។",
+          "gift_card_label": "ប័ណ្ណ​ជូន​កាដូ %{identifier}",
+          "payment_tag": "ប័ណ្ណ​ជូន​កាដូ",
+          "add_label": "បន្ថែមបណ្ណអំណោយ",
+          "manage_label": "គ្រប់គ្រងប័ណ្ណទូទាត់ (Gift card)"
+        },
+        "gift_card_store_credit": {
+          "add_label": "បន្ថែមប័ណ្ណអំណោយ ឬក្រេឌីតហាង",
+          "manage_label": "គ្រប់គ្រងកាតអំណោយ ឬក្រេឌីតហាង"
+        },
+        "gift_card_checkbox_label": "អនុវត្តប័ណ្ណអំណោយ",
+        "custom_onsite_payment_method_modal": {
+          "title": "ការបញ្ជាក់ការទូទាត់នៅនឹងកន្លែងតាមតម្រូវការ"
+        },
+        "markets_pro_disclaimer_label": "ដោយការដាក់បញ្ជាទិញរបស់អ្នក អ្នកយល់ព្រមទិញពី Global-e ជាពាណិជ្ជករនៃកំណត់ត្រា ដែលជាកម្មវត្ថុនៃ %{markets_pro_terms} និង %{privacy_policy} របស់ Global-e ហើយចែករំលែកព័ត៌មានរបស់អ្នកជាមួយ %{shop_name}។",
+        "markets_pro_disclaimer_terms_and_conditions": "លក្ខខណ្ឌប្រើប្រាស់",
+        "markets_pro_disclaimer_privacy_policy": "គោលការណ៍ឯកជនភាព",
+        "markets_pro_disclaimer_terms_and_conditions_title": "លក្ខខណ្ឌរបស់អ្នកជំនួញដែលបានកត់ត្រា",
+        "markets_pro_disclaimer_privacy_policy_title": "គោលការណ៍ឯកជនភាពរបស់អ្នកលក់កត់ត្រា",
+        "purchase_order_number": {
+          "title": "លេខ​បញ្ជាទិញ",
+          "label": "លេខបញ្ជាទិញ (ស្រេចចិត្ត)"
+        },
+        "alternative_payment_currency_total_notice": "ចំណាំ៖ អ្នកនឹងត្រូវបង់ប្រាក់ %{amount_due}។",
+        "alternative_payment_currency_total_manual_payment_notice": "ចំណាំ៖ ចំនួនទឹកប្រាក់សរុបដែលបានបំប្លែងគឺ %{amount_due}។",
+        "waiting_on_taxes_message": "ប្រសិនបើពន្ធរបស់អ្នកមិនត្រូវបានគណនាក្នុងរយៈពេលប៉ុន្មានវិនាទីខាងមុខនេះទេ សូមផ្ទុកទំព័រឡើងវិញ។",
+        "waiting_on_taxes_notice": "ការគណនាពន្ធ",
+        "payment_method": "វិធីសាស្រ្តបង់ប្រាក់",
+        "payment_method_rollup_accessibility_label": "ជម្រើសនៃវិធីសាស្ត្រទូទាត់ប្រាក់",
+        "expired_payment_method": "វិធីសាស្រ្តទូទាត់ដែលបានជ្រើសរើសបានផុតកំណត់ហើយ។",
+        "payment_method_update_failed": "ការអាប់ដេតវិធីទូទាត់បរាជ័យ។",
+        "payment_method_incompatible_with_payment_terms": "វិធីទូទាត់មិនត្រូវគ្នាជាមួយលក្ខខណ្ឌទូទាត់ទេ។",
+        "proposed_gateway_unavailable": "ច្រកទូទាត់ដែលបានស្នើឡើងមិនអាចប្រើបានទេ។",
+        "pay_in_installments_split_pay_short": "បង់ %{amount} ចំនួន 4 ដង",
+        "gift_cards_unavailable": "កាតអំណោយរបស់អ្នកមិនអាចប្រើសម្រាប់ការកម្ម៉ង់នេះបានទៀតទេ ហើយត្រូវបានដកចេញ។",
+        "payment_flexibility_terms_id_mismatch": "Payment flexibility terms ID មិនត្រូវគ្នាទេ។",
+        "payment_option": {
+          "accessibility_label": "ជ្រើសរើសជម្រើសការទូទាត់"
+        },
+        "bank_account_type": {
+          "checking": "កំពុងពិនិត្យ",
+          "savings": "ការសន្សំ"
+        },
+        "new_bank_account_disclaimer": "ដោយ​ការ​បញ្ចប់​ការ​កម្ម៉ង់​របស់​អ្នក អ្នក​អនុញ្ញាត​ឲ្យ %{shop_name} ឥណពន្ធ​គណនី​ខាងក្រោម​តាមរយៈ ACH សម្រាប់​ចំនួន និង​នៅ​ពេល​ដែល​បាន​បង្ហាញ។",
+        "bank_account_disclaimer": "ការទូទាត់ ACH អាចចំណាយពេលរហូតដល់ ៤ ថ្ងៃនៃថ្ងៃធ្វើការដើម្បីដំណើរការ។",
+        "bank_account_choose": "ជ្រើសរើស​គណនី​ដើម្បី​បញ្ចប់​ការ​ទិញ​របស់​អ្នក​ដោយ​សុវត្ថិភាព",
+        "bank_account_connect_another": "ភ្ជាប់គណនីធនាគារមួយផ្សេងទៀត",
+        "bank_account_connect": "ភ្ជាប់គណនីធនាគារ",
+        "bank_account_missing": "គណនីធនាគារត្រូវតែភ្ជាប់",
+        "bank_account_generic_error": "មិនអាចបន្ថែមគណនីធនាគារបានទេ។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+        "separate_payments_label": "ទំនិញរបស់អ្នកមកពីហាងច្រើនជាងមួយ។ អ្នកនឹងត្រូវគិតប្រាក់ក្នុង %{separate_payments_link}។",
+        "separate_payments_text": "ការទូទាត់ដាច់ដោយឡែក",
+        "payments": "ការទូទាត់",
+        "add_payment_method": "បន្ថែមវិធីបង់ប្រាក់",
+        "add_new_payment_method": "បន្ថែមវិធីបង់ប្រាក់ថ្មី",
+        "choose_new_payment_method": "ជ្រើសរើសវិធីទូទាត់ថ្មី",
+        "multiple_primary_payment_not_allowed": "វិធីសាស្ត្រទូទាត់មិនត្រឹមត្រូវ",
+        "vault_for_payment_later": {
+          "pay_button_label": "ដាក់បញ្ជាទិញ",
+          "notice": "អ្នកនឹងមិនត្រូវបានគិតប្រាក់ឥឡូវនេះទេ។ ដោយបន្តការទូទាត់របស់អ្នក អ្នកយល់ព្រមថាវិធីបង់ប្រាក់របស់អ្នកនឹងត្រូវបានកាត់ប្រាក់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានដំណើរការ។"
+        }
       },
       "order_summary": {
         "applied_discount_message": "បញ្ចុះតម្លៃ %{amount} លើតម្លៃសរុបនៃការបញ្ជាទិញ",
@@ -534,6 +639,39 @@
       },
       "address_management": {
         "saved_with_store": "រក្សាទុកជាមួយហាងនេះ។"
+      },
+      "billing": {
+        "billing_address_title": "វិក្កយបត្រដល់",
+        "billing_address_rollup_accessibility_label": "ជម្រើស​វិក្កយបត្រ​ទៅ",
+        "same_as_shipping": "ដូចគ្នានឹងអាសយដ្ឋានដឹកជញ្ជូនដែរ",
+        "add_address": "ប្រើអាសយដ្ឋានផ្សេង",
+        "edit": "កែសម្រួល",
+        "delete": "លុប",
+        "address_more": "សកម្មភាព​បន្ថែម​ទៀត​សម្រាប់​អាសយដ្ឋាន​នេះ។",
+        "address_edit": "កែសម្រួលអាសយដ្ឋាន",
+        "address_delete": "លុបអាសយដ្ឋាន",
+        "address_confirm": "តើ​អ្នក​ពិតជា​ចង់​លុប​អាសយដ្ឋាន​នេះ​ចេញពី​គណនី​របស់​អ្នក​មែនទេ?",
+        "address_form": {
+          "add_address": "បន្ថែមអាសយដ្ឋាន",
+          "save": "រក្សាទុក",
+          "cancel": "បោះបង់"
+        }
+      },
+      "company_location": {
+        "location_title": "ទីតាំងក្រុមហ៊ុន",
+        "location_rollup_accessibility_label": "ជម្រើសទីតាំងក្រុមហ៊ុន"
+      },
+      "payment_summary": {
+        "gift_card_current_balance_notice": "សមតុល្យបច្ចុប្បន្ន %{amount}",
+        "credit_card_expires_on_notice": "ផុតកំណត់នៅ %{month}/%{year}",
+        "express_payment_gateway_label": "បង្ហាញ",
+        "manual_payment_gateway_label": "សៀវភៅណែនាំ",
+        "billing_address_title": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+        "free_label": "ឥតគិតថ្លៃ"
+      },
+      "field_errors": {
+        "handle_phone_invalid": "សូមបញ្ចូលលេខទូរសព្ទដែលមានសុពលភាព",
+        "handle_email_invalid": "សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ"
       }
     },
     "pagination": {
