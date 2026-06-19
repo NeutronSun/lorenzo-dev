@@ -200,7 +200,7 @@ class PDPsiblings extends HTMLComponent {
    */
   static buildPanel(tab, currentHandle) {
     return `
-      <div class="panel" data-tab="${PDPsiblings.escape(tab.name)}">
+      <div data-tab="${PDPsiblings.escape(tab.name)}">
         <div class="values">
           ${tab.products.map((product) => PDPsiblings.buildProduct(product, currentHandle)).join('')}
         </div>

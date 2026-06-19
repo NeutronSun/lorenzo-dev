@@ -1,0 +1,28 @@
+{% doc %}
+  Renders PDP dossier technical rows.
+{% enddoc %}
+
+<section class="pdp-dossier-panel pdp-dossier-tech" {{ block.shopify_attributes }}>
+  <h2 class="pdp-dossier-title font-mono">/Technical</h2>
+
+  <dl class="rows">
+    {% content_for 'blocks' %}
+  </dl>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Dossier Technical",
+  "tag": null,
+  "blocks": [
+    { "type": "pdp-dossier-tech-row" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Dossier Technical",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

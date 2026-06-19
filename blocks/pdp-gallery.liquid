@@ -7,131 +7,162 @@
 {% liquid
   assign media_count = product.images.size
   assign first_image = product.featured_image | default: product.images.first
+  assign current_variant = product.selected_or_first_available_variant
   assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
   assign micro_category = product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
 %}
 
-<pdp-gallery ref="gallery" class="{% unless media_count > 1 %}single{% endunless %}" {{ block.shopify_attributes }}>
+<div ref="gallery" class="pdp-gallery{% unless media_count > 1 %} single{% endunless %}" {{ block.shopify_attributes }}>
   <div class="media" style="view-transition-name: product-image;">
-    {% if product.available %}
-      <span class="stock font-mono">
-        <span></span>
-        In stock
-      </span>
-    {% else %}
-      <span class="stock sold-out font-mono">
-        <span></span>
-        Sold out
-      </span>
-    {% endif %}
-
-    <span class="counter font-mono">01 / {{ media_count | at_least: 1 | prepend: '00' | slice: -2, 2 }}</span>
-
-    {% if first_image %}
-      {{
-        first_image
-        | image_url: width: 1600
-        | image_tag:
-          loading: 'eager',
-          fetchpriority: 'high',
-          widths: '420, 640, 820, 1100, 1400, 1600',
-          alt: product.title
-      }}
-    {% endif %}
-
-    <div class="caption font-mono">
-      {% if macro_category != blank %}
-        <span>{{ macro_category }}</span>
+    <div class="head font-mono">
+      {% if product.available %}
+        <span class="stock">
+          <span></span>
+          In stock
+        </span>
+      {% else %}
+        <span class="stock sold-out">
+          <span></span>
+          Sold out
+        </span>
       {% endif %}
-      {% if micro_category != blank %}
-        <span>{{ micro_category }}</span>
-      {% endif %}
+
+      <span class="category">{{ macro_category | default: product.type }}</span>
+
+      <span class="counter">01 / {{ media_count | at_least: 1 | prepend: '00' | slice: -2, 2 }}</span>
     </div>
 
-    <button type="button" class="save font-mono" aria-label="Save {{ product.title | escape }}">
-      Save
-    </button>
+    <div class="image">
+      {% if first_image %}
+        {{
+          first_image
+          | image_url: width: 1600
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '420, 640, 820, 1100, 1400, 1600',
+            alt: product.title
+        }}
+      {% endif %}
+
+      <button type="button" class="save font-mono" aria-label="Save {{ product.title | escape }}">
+        <span aria-hidden="true">&#9825;</span>
+      </button>
+
+      <div class="caption">
+        <div class="caption-meta font-mono">
+          <span>{{ current_variant.sku | default: product.handle }}</span>
+          {% if micro_category != blank %}
+            <span>{{ micro_category }}</span>
+          {% endif %}
+        </div>
+
+        <div class="caption-row">
+          <span>{{ product.title }}</span>
+          <span>{{ current_variant.price | money }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   {% if media_count > 1 %}
-    <div class="thumbs" aria-label="Product media">
-      {% for image in product.images limit: 4 %}
-        <button
-          type="button"
-          class="thumb{% if forloop.first %} active{% endif %}"
-          aria-label="View image {{ forloop.index }} of {{ media_count }}"
-        >
-          {{
-            image
-            | image_url: width: 360
-            | image_tag:
-              loading: 'lazy',
-              widths: '120, 180, 240, 360',
-              alt: product.title
-          }}
-        </button>
-      {% endfor %}
+    <div class="thumbs-container">
+      <div class="thumbs" aria-label="Product media">
+        {% for image in product.images limit: 4 %}
+          <button
+            type="button"
+            class="thumb{% if forloop.first %} active{% endif %}"
+            aria-label="View image {{ forloop.index }} of {{ media_count }}"
+          >
+            {{
+              image
+              | image_url: width: 360
+              | image_tag:
+                loading: 'lazy',
+                widths: '120, 180, 240, 360',
+                alt: product.title
+            }}
+          </button>
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
-</pdp-gallery>
+</div>
 
 {% stylesheet %}
-  pdp-gallery {
-    display: grid;
-    grid-template-rows: minmax(0, var(--main-height)) var(--thumb-size);
-    gap: var(--gallery-gap);
-    height: var(--gallery-height);
-    min-height: 520px;
+  .pdp-gallery {
+    display: block;
+    min-width: 0;
 
     .media {
       position: relative;
+      display: grid;
+      grid-template-rows: 52px minmax(0, 1fr);
       min-height: 0;
-      height: 100%;
+      padding: 8px 16px 16px;
       border: 1px solid var(--border-color);
-      background: var(--background-darken);
+      background: var(--white);
+      box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
       overflow: hidden;
     }
 
-    &.single {
-      grid-template-rows: minmax(0, 1fr);
+    .media::before,
+    .media::after,
+    .image::before,
+    .image::after {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
     }
 
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .media::before {
+      top: 8px;
+      left: 8px;
+      border-top: 1px solid var(--border-color);
+      border-left: 1px solid var(--border-color);
     }
 
-    .thumb img {
-      object-fit: cover;
+    .media::after {
+      top: 8px;
+      right: 8px;
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+    }
+
+    .head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      min-height: 52px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
 
     .stock,
     .counter,
-    .save {
-      position: absolute;
-      z-index: 2;
-      min-height: 28px;
-      border: 1px solid var(--border-color);
-      background: rgb(255 255 255 / 0.92);
-      color: var(--black);
-      font-size: 10px;
-      line-height: 1;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+    .category {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .stock {
-      top: 12px;
-      left: 12px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 0 10px;
+      justify-self: start;
     }
 
     .stock span {
+      flex: 0 0 auto;
       width: 6px;
       height: 6px;
       border-radius: 999px;
@@ -142,40 +173,117 @@
       background: var(--red);
     }
 
+    .category {
+      justify-self: center;
+    }
+
     .counter {
-      top: 12px;
-      right: 12px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 10px;
+      justify-self: end;
+    }
+
+    .image {
+      position: relative;
+      min-height: 0;
+      background: var(--background-darken);
+      overflow: hidden;
+    }
+
+    .image::before {
+      bottom: 8px;
+      left: 8px;
+      border-bottom: 1px solid var(--border-color);
+      border-left: 1px solid var(--border-color);
+    }
+
+    .image::after {
+      right: 8px;
+      bottom: 8px;
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .image > img {
+      object-fit: contain;
     }
 
     .save {
-      right: 24px;
-      bottom: 24px;
-      padding: 0 12px;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid var(--border-color);
+      background: rgb(255 255 255 / 0.82);
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1;
       cursor: pointer;
     }
 
     .caption {
       position: absolute;
-      left: 24px;
-      bottom: 24px;
-      z-index: 2;
+      right: 20px;
+      bottom: 20px;
+      left: 20px;
+      z-index: 4;
       display: grid;
-      gap: 6px;
+      gap: 8px;
+      min-height: 52px;
+      padding: 10px 12px;
+      background: rgb(24 23 21 / 0.42);
       color: var(--white);
-      font-size: 10px;
-      letter-spacing: 0.22em;
+    }
+
+    .caption-meta,
+    .caption-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .caption-meta {
+      font-size: 9px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      pointer-events: none;
+    }
+
+    .caption-row {
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .caption span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .thumbs-container {
+      margin-block-start: var(--gallery-gap);
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
     }
 
     .thumbs {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: var(--gallery-gap);
-      height: 100%;
+      height: var(--thumb-size);
       min-height: 0;
     }
 
@@ -188,15 +296,38 @@
       overflow: hidden;
     }
 
+    .thumb img {
+      object-fit: cover;
+    }
+
     .thumb.active {
       border-color: var(--black);
     }
   }
 
   @media screen and (max-width: 749px) {
-    pdp-gallery {
-      height: var(--gallery-height);
-      min-height: 0;
+    .pdp-gallery {
+      .media {
+        min-height: 0;
+      }
+
+      .image > img {
+        object-fit: cover;
+      }
+
+      .head {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .category {
+        display: none;
+      }
+
+      .caption {
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+      }
     }
   }
 {% endstylesheet %}

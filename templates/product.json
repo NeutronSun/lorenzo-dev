@@ -16,6 +16,72 @@
     "main": {
       "type": "product",
       "blocks": {
+        "dossier": {
+          "type": "pdp-product-dossier",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "edition": {
+              "type": "pdp-dossier-edition",
+              "settings": {
+                "season": "SS/26 - DROP 04",
+                "number": "04/24",
+                "series": "A"
+              }
+            },
+            "description": {
+              "type": "pdp-dossier-description",
+              "settings": {
+                "text": "Lightweight technical longsleeve engineered for layering. Brushed inner face, 4-way stretch, flat-lock seams."
+              }
+            },
+            "technical": {
+              "type": "pdp-dossier-tech",
+              "settings": {},
+              "blocks": {
+                "material": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Material",
+                    "value": "78% recycled polyester - 22% elastane"
+                  }
+                },
+                "weight": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Weight",
+                    "value": "185 g/m2"
+                  }
+                },
+                "fit": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Fit",
+                    "value": "Regular - true to size"
+                  }
+                },
+                "origin": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Origin",
+                    "value": "Designed in Milan - made in Porto"
+                  }
+                }
+              },
+              "block_order": [
+                "material",
+                "weight",
+                "fit",
+                "origin"
+              ]
+            }
+          },
+          "block_order": [
+            "edition",
+            "description",
+            "technical"
+          ]
+        },
         "gallery": {
           "type": "pdp-gallery",
           "static": true,

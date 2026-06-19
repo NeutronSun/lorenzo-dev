@@ -2,14 +2,21 @@ import { CSSUtils } from '@theme/utilities';
 
 class ProductPage extends HTMLElement {
   static MOBILE_MEDIA = '(max-width: 749px)';
-  static MIN_GALLERY_HEIGHT = 420;
   static DEFAULT_SPACING = 20;
   static DEFAULT_MOBILE_BAR_HEIGHT = 58;
   static DEFAULT_MOBILE_MENU_GAP = 8;
   static DEFAULT_SAFE_AREA = 0;
 
+  get dossier() {
+    return this.querySelector('[ref="dossier"]');
+  }
+
   get gallery() {
     return this.querySelector('[ref="gallery"]');
+  }
+
+  get info() {
+    return this.querySelector('[ref="info"]');
   }
 
   get breadcrumb() {
@@ -47,7 +54,9 @@ class ProductPage extends HTMLElement {
   observe() {
     this.resizeObserver?.observe(this);
 
+    this.dossier instanceof HTMLElement && this.resizeObserver?.observe(this.dossier);
     this.gallery instanceof HTMLElement && this.resizeObserver?.observe(this.gallery);
+    this.info instanceof HTMLElement && this.resizeObserver?.observe(this.info);
     this.breadcrumb instanceof HTMLElement && this.resizeObserver?.observe(this.breadcrumb);
     this.mobileDock instanceof HTMLElement && this.resizeObserver?.observe(this.mobileDock);
   }
@@ -73,11 +82,11 @@ class ProductPage extends HTMLElement {
     const top = this.isMobile ? breadcrumbArea : this.getStickyTop(spacing);
     const reservedBottom = this.isMobile ? dockArea : spacing;
     const availableHeight = this.getViewportHeight() - top - reservedBottom;
-    const height = this.isMobile ? Math.max(0, availableHeight) : Math.max(ProductPage.MIN_GALLERY_HEIGHT, availableHeight);
+    const height = Math.max(0, availableHeight);
 
     CSSUtils.setValue('--breadcrumb-height', breadcrumbHeight, this);
     CSSUtils.setValue('--dock-clearance', dockArea, this);
-    CSSUtils.setValue('--gallery-height', height, this);
+    CSSUtils.setValue('--pdp-card-height', height, this);
     CSSUtils.setValue('--sticky-top', top, this);
   }
 

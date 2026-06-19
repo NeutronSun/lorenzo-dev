@@ -1,0 +1,40 @@
+{% doc %}
+  Renders one PDP dossier technical row.
+{% enddoc %}
+
+{% liquid
+  assign label = block.settings.label | default: 'Material'
+  assign value = block.settings.value | default: '78% recycled polyester - 22% elastane'
+%}
+
+<div class="pdp-dossier-tech-row" {{ block.shopify_attributes }}>
+  <dt class="font-mono">{{ label }}</dt>
+  <dd>{{ value }}</dd>
+</div>
+
+{% schema %}
+{
+  "name": "PDP Dossier Technical Row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Material"
+    },
+    {
+      "type": "text",
+      "id": "value",
+      "label": "Value",
+      "default": "78% recycled polyester - 22% elastane"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Dossier Technical Row",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

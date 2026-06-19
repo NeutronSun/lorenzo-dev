@@ -161,6 +161,9 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      max-height: calc(32px * 2 + 8px);
+      overflow-y: auto;
+      padding-right: 4px;
     }
 
     .chip {
@@ -239,6 +242,23 @@
       width: 72px;
       height: 32px;
       border: 1px solid var(--border-color);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    pdp-siblings {
+      .values {
+        flex-wrap: nowrap;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-right: 0;
+        padding-bottom: 4px;
+      }
+
+      .chip {
+        flex: 0 0 auto;
+      }
     }
   }
 
