@@ -675,7 +675,34 @@
       },
       "split_delivery": {
         "inventory_issue_banner": {
-          "remove_items_or_pickup": "%{pickup_in_store_link} ឬ %{remove_items_link}"
+          "remove_items_or_pickup": "%{pickup_in_store_link} ឬ %{remove_items_link}",
+          "heading": {
+            "cannot_be_picked_up": {
+              "one": "មិនអាចយកទំនិញ %{count} បានទេ",
+              "other": "មិនអាចយកបាន %{count} មុខទេ។"
+            },
+            "cannot_be_shipped": {
+              "one": "មិនអាចដឹកជញ្ជូនទំនិញបាន %{count} មុខទេ។",
+              "other": "មិនអាចដឹកជញ្ជូនទំនិញបាន %{count} មុខទេ។"
+            }
+          },
+          "remove_item": {
+            "one": "ដកធាតុចេញ",
+            "other": "លុបធាតុចេញ"
+          },
+          "remove_item_only": {
+            "one": "លុបធាតុ",
+            "other": "លុបធាតុចេញ"
+          },
+          "ship_separately": {
+            "one": "ដឹកជញ្ជូនវាដោយឡែកពីគ្នា។",
+            "other": "ផ្ញើពួកវាដាច់ដោយឡែកពីគ្នា។"
+          },
+          "pick_them_up_in_store": {
+            "one": "ទៅទទួលយកនៅហាង",
+            "other": "ទៅ​ទទួល​ទំនិញ​នៅ​ហាង"
+          },
+          "remove_items_or_ship": "%{ship_separately_link} ឬ %{remove_items_link}"
         },
         "cross_border": {
           "modal": {
@@ -685,7 +712,13 @@
             "change_country": "ប្ដូរប្រទេស"
           },
           "banner": "វិធីសាស្ត្រដឹកជញ្ជូនរបស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាព"
-        }
+        },
+        "pickup_all_items": "រើសយករបស់របរទាំងអស់។",
+        "items_for_pickup": "ទំនិញសម្រាប់ទៅយក",
+        "items_for_shipping": "ទំនិញសម្រាប់ដឹកជញ្ជូន",
+        "items_moved_to_shipping_toast": "ទំនិញដែលមិនអាចរើសបានត្រូវបានផ្លាស់ប្តូរទៅកាន់ផ្នែកដឹកជញ្ជូន",
+        "delivery_method": "វិធីសាស្រ្តដឹកជញ្ជូនបំបែក",
+        "delivery_method_menu": "ម៉ឺនុយវិធីសាស្រ្តដឹកជញ្ជូនបំបែក"
       },
       "captcha": {
         "title": "សូមបំពេញ CAPTCHA ដើម្បីបន្ត",
@@ -824,6 +857,151 @@
             "subtotal_limit_reached": "តម្លៃអតិបរមានៃធាតុក្នុងបញ្ជីបានពេញហើយ។",
             "signature_mismatch": "ហត្ថលេខាទំនិញមិនត្រឹមត្រូវសម្រាប់បន្ទាត់ %{stable_id}។"
           }
+        }
+      },
+      "notice_banner": {
+        "validation_errors_banner": {
+          "section_label": {
+            "delivery": "ការដឹកជញ្ជូន",
+            "contact": "ទំនាក់ទំនង",
+            "payment": "ការទូទាត់",
+            "billing": "ការចេញវិក្កយបត្រ"
+          }
+        }
+      },
+      "review_address_modal": {
+        "title": "អាសយដ្ឋានត្រួតពិនិត្យ",
+        "subtitle": {
+          "one": "ការបញ្ជាទិញនេះនឹងត្រូវបានដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលបានផ្ដល់ដោយ {{merchant}}។",
+          "other": "ការបញ្ជាទិញនេះនឹងត្រូវដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលផ្ដល់ដោយ {{merchant}}។ សូមជ្រើសរើសអាសយដ្ឋានដឹកជញ្ជូន។"
+        },
+        "subtitle_no_match": "អាសយដ្ឋាននេះមិនផ្គូផ្គងនឹងអាសយដ្ឋានដែលអ្នកបានរក្សាទុកទេ។",
+        "subtitle_must_use": "ការបញ្ជាទិញរបស់អ្នកនឹងត្រូវបានដឹកជញ្ជូនទៅកាន់អាសយដ្ឋាននេះ។",
+        "continue": "បន្តជាមួយអាសយដ្ឋាននេះ។",
+        "use_saved_address": "ប្រើអាសយដ្ឋានផ្សេង",
+        "return_to_cart": "ត្រឡប់ទៅកន្ត្រកទំនិញ"
+      },
+      "marketplaces": {
+        "legal_notice": {
+          "legal_text": "ពិនិត្យឡើងវិញ",
+          "link_label": "{{partnerDisplayName}} លក្ខខណ្ឌ"
+        }
+      },
+      "online_store_chat": {
+        "title": "មានសំណួរ? ជជែកជាមួយយើង"
+      },
+      "local_pickup": {
+        "title": "ទីតាំង",
+        "location_address_search_label": "អាសយដ្ឋាន",
+        "location_address_search_placeholder": "លេខកូដប្រៃសណីយ៍ ឬអាសយដ្ឋាន",
+        "location_closest": "ទីតាំងដែលមានរបស់របររបស់អ្នកនៅជិតបំផុត។",
+        "location_closest_one_item": "ទីតាំងដែលមានរបស់របររបស់អ្នកនៅជិតបំផុត។",
+        "location_closest_other_items": "ទីតាំងជិតបំផុតដែលមានរបស់របររបស់អ្នក។",
+        "location_information": {
+          "one": "មានទីតាំងចំនួន %{count} ដែលមានស្តុកជិតអ្នក",
+          "other": "មានទីតាំងចំនួន %{count} ដែលមានស្តុកជិតអ្នក"
+        },
+        "location_information_far_away": {
+          "one": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។",
+          "other": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក"
+        },
+        "location_information_far_away_one_item": {
+          "one": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។",
+          "other": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក"
+        },
+        "location_information_far_away_other_items": {
+          "one": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក",
+          "other": "មានទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។"
+        },
+        "location_nearby": {
+          "one": "មានទីតាំងចំនួន %{count} នៅក្បែរនោះ ដែលមានទំនិញរបស់អ្នក។",
+          "other": "មានទីតាំងចំនួន %{count} នៅក្បែរដែលមានទំនិញរបស់អ្នក"
+        },
+        "location_nearby_one_item": {
+          "one": "មានទីតាំងចំនួន %{count} នៅក្បែរនោះ ដែលមានទំនិញរបស់អ្នក។",
+          "other": "មានទីតាំងចំនួន %{count} នៅក្បែរដែលមានទំនិញរបស់អ្នក"
+        },
+        "location_nearby_other_items": {
+          "one": "មានទីតាំងជិតខាង %{count} ដែលមានទំនិញរបស់អ្នក",
+          "other": "មានទីតាំងចំនួន %{count} នៅក្បែរនោះ ដែលមានទំនិញរបស់អ្នក។"
+        },
+        "location_nearby_short": {
+          "one": "ទីតាំងជិតខាង %{count} ដែលមានទំនិញរបស់អ្នក",
+          "other": "ទីតាំងជិតខាងចំនួន %{count} ដែលមានមុខទំនិញរបស់អ្នក"
+        },
+        "location_nearby_short_one_item": {
+          "one": "ទីតាំងជិតខាង %{count} ដែលមានទំនិញរបស់អ្នក",
+          "other": "ទីតាំងជិតខាងចំនួន %{count} ដែលមានមុខទំនិញរបស់អ្នក"
+        },
+        "location_nearby_short_other_items": {
+          "one": "ទីតាំងជិតខាង %{count} ដែលមានធាតុរបស់អ្នក",
+          "other": "ទីតាំងជិតខាង %{count} ដែលមានធាតុរបស់អ្នក"
+        },
+        "location_far_away": {
+          "one": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។",
+          "other": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក"
+        },
+        "location_far_away_one_item": {
+          "one": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។",
+          "other": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក"
+        },
+        "location_far_away_other_items": {
+          "one": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក",
+          "other": "ទីតាំង %{count} ដែលមានធាតុរបស់អ្នក។"
+        },
+        "toggle_location": "ប្ដូរទីតាំង",
+        "toggle_more_locations": {
+          "one": "ទីតាំង %{count} បន្ថែមទៀត",
+          "other": "ទីតាំង %{count} បន្ថែមទៀត"
+        },
+        "toggle_multiple_locations": "ទីតាំង %{count}+ បន្ថែមទៀត",
+        "or": "ឬ",
+        "cancel": "បោះបង់",
+        "your_location": "ទីតាំងរបស់អ្នក។",
+        "search_button": "ស្វែងរកហាង",
+        "no_stores_found": "រកមិនឃើញហាងណាមួយទេ។",
+        "all_stores_far_away": {
+          "title": "ទីតាំង​ដែល​នៅ​ជិត​បំផុត​មាន​ចម្ងាយ​ជាង %{distance}",
+          "title_with_item": {
+            "one": "ទីតាំងដែលនៅជិតបំផុតដែលមានទំនិញរបស់អ្នកគឺនៅឆ្ងាយជាង %{distance} ពី %{location}",
+            "other": "ទីតាំងដែលនៅជិតបំផុតដែលមានទំនិញរបស់អ្នកគឺនៅឆ្ងាយជាង %{distance} ពី %{location}"
+          },
+          "title_with_specific_location": "ទីតាំងដែលនៅជិតបំផុតដែលមានទំនិញរបស់អ្នកគឺនៅឆ្ងាយជាង %{distance} ពី %{location}",
+          "description": "ជ្រើសរើសទីតាំង ឬ %{ship_to_address_link}",
+          "ship_to_address_link": "ដឹក​ជញ្ជូន​ទៅ​កាន់​អាសយដ្ឋាន",
+          "change_location_link": "ប្ដូរទីតាំងរបស់អ្នក"
+        },
+        "selected_pickup_option_no_longer_available": {
+          "title": "ទីតាំងដែលអ្នកបានជ្រើសរើសពីមុនលែងមានទៀតហើយ។",
+          "description": "យើងបានជ្រើសរើសទីតាំងដែលនៅជិតបំផុតដែលមានទំនិញដែលអ្នកចង់បានក្នុងស្តុក។"
+        },
+        "could_not_resolve_address": "មិន​អាច​កំណត់ទីតាំង​អាសយដ្ឋាន​របស់​អ្នក​បាន​ទេ។ សូម​ព្យាយាម​ម្ដង​ទៀត ឬ​ប្រើ​អាសយដ្ឋាន​ផ្សេង",
+        "paginator": {
+          "accessibility_label": "ការទូទាត់សម្រាប់​ការទៅទទួលដោយខ្លួនឯង",
+          "previous": "ទំព័រមុន",
+          "next": "ទំព័របន្ទាប់",
+          "label": {
+            "one": "%{first} - %{last} ក្នុងចំណោមហាង %{count}",
+            "other": "%{first} - %{last} ក្នុងចំណោមហាង %{count}"
+          }
+        },
+        "reveal_more_label": {
+          "one": "បង្ហាញទីតាំង %{count} បន្ថែមទៀត",
+          "other": "បង្ហាញទីតាំង %{count} បន្ថែមទៀត"
+        },
+        "pickup_unavailable_banner_title": {
+          "one": "មិនមានទីតាំងជាមួយធាតុរបស់អ្នកទេ",
+          "other": "មិនមានទីតាំងជាមួយធាតុរបស់អ្នកទេ"
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "one": "គ្មានទីតាំងនៅក្នុងប្រទេស %{country} ដែលមានទំនិញរបស់អ្នកទេ",
+          "other": "មិនមានទីតាំងណាមួយនៅក្នុង %{country} ដែលមានធាតុរបស់អ្នកទេ។"
+        },
+        "pickup_unavailable_banner_body": {
+          "ship_items": "ដឹកជញ្ជូនទំនិញរបស់អ្នក",
+          "search_elsewhere": "ស្វែងរកនៅកន្លែងផ្សេង",
+          "search_elsewhere_standalone": "ស្វែងរកនៅកន្លែងផ្សេង",
+          "ship_items_or_search_elsewhere": "%{ship_items} ឬ %{search_elsewhere}"
         }
       }
     },
