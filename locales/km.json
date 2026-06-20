@@ -1486,6 +1486,149 @@
       "navigation_accessibility_message": "អ្នកបានចូលទៅ {{sectionName}}",
       "open_menu_accessibility_label": "បើកការរុករកមេ",
       "shop_logo_accessibility_label": "{{shopName}} និមិត្តសញ្ញា"
+    },
+    "payment_methods": {
+      "edit_payment_method": {
+        "billing_address_choose_from_list": "ជ្រើសរើសពីបញ្ជី",
+        "future_purchases_notice": "វិធីសាស្ត្រទូទាត់នេះនឹងត្រូវបានរក្សាទុកសម្រាប់ធ្វើការទិញនាពេលអនាគត។",
+        "generic_error": "មាន​បញ្ហា​ក្នុង​ការ​អាប់ដេត។ សូម​ព្យាយាម​ម្ដងទៀត។"
+      },
+      "update_payment_method": {
+        "title": "អាប់ដេតវិធីទូទាត់",
+        "button_title": "អាប់ដេត",
+        "billing_address": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+        "disclaimer": "វិធីទូទាត់នេះ នឹងត្រូវបានរក្សាទុកសម្រាប់ការទិញលើកក្រោយ ហើយអាចត្រូវបានប្រើសម្រាប់ការទិញដែលកើតឡើងដដែលៗ ឬពន្យារពេលណាមួយ។",
+        "error_message": "មិនអាចអាប់ដេតវិធីទូទាត់បានទេ",
+        "current": "បច្ចុប្បន្ន",
+        "subscriptions_title": "ការជាវ",
+        "subscriptions_list_accessibility_label": "បញ្ជីផលិតផលសម្រាប់ការជាវ",
+        "pre_orders_title": "ដែលនឹងមកដល់",
+        "pre_orders_list_accessibility_label": "បញ្ជីផលិតផលការកម្ម៉ង់ដែលមិនទាន់បានបង់ប្រាក់",
+        "resources_list_accessibility_label": "ផលិតផលជាវ និងផលិតផលការបញ្ជាទិញដែលមិនទាន់សម្រេចដែលប្រើវិធីទូទាត់នេះ",
+        "resources_card_scroll": "អូសដើម្បីមើលទំនិញច្រើនទៀត",
+        "resources_card_show_more": "បង្ហាញច្រើនទៀត",
+        "resources_card_show_less": "បង្ហាញតិចជាងនេះ",
+        "loading_form_accessibility_message": "កំពុងផ្ទុកទម្រង់ធ្វើបច្ចុប្បន្នភាពវិធីបង់ប្រាក់",
+        "loading_current_payment_method": "កំពុងផ្ទុកវិធីបង់ប្រាក់បច្ចុប្បន្ន",
+        "loading_digital_wallets": "កំពុងផ្ទុកជម្រើសកាបូបលុយឌីជីថល",
+        "loading_card_fields": "កំពុងផ្ទុកវាលកាតឥណទាន",
+        "loading_resources": "កំពុងផ្ទុកការជាវ និងការបញ្ជាទិញនាពេលខាងមុខ"
+      },
+      "link_expired": {
+        "message": "តំណភ្ជាប់​សម្រាប់​ធ្វើបច្ចុប្បន្នភាព​វិធីសាស្ត្រ​ទូទាត់​របស់អ្នក​បានផុតកំណត់​ហើយ។",
+        "update_message": "តំណភ្ជាប់​សម្រាប់​ធ្វើបច្ចុប្បន្នភាព​វិធីសាស្ត្រ​ទូទាត់​របស់អ្នក​បានផុតកំណត់​ហើយ។",
+        "add_message": "តំណភ្ជាប់សម្រាប់បន្ថែមវិធីទូទាត់ប្រាក់របស់អ្នកបានផុតកំណត់ហើយ។",
+        "return_home_button": "ត្រឡប់ទៅទំព័រដើម"
+      },
+      "update_success": {
+        "title": "វិធីបង់ប្រាក់បានធ្វើបច្ចុប្បន្នភាព",
+        "done_button": "បន្តការទិញទំនិញ"
+      },
+      "add_success": {
+        "title": "បានបន្ថែមវិធីទូទាត់",
+        "done_button": "បន្តការទិញទំនិញ"
+      },
+      "card_fields": {
+        "card_number_label": "លេខប័ណ្ណ",
+        "card_number_placeholder": "លេខប័ណ្ណ",
+        "name_on_card_label": "ឈ្មោះនៅលើកាត",
+        "name_on_card_placeholder": "ឈ្មោះនៅលើកាត",
+        "card_expiry_label": "ថ្ងៃផុតកំណត់ (ខខ/ឆឆ)",
+        "card_expiry_placeholder": "ថ្ងៃផុតកំណត់ (ខខ/ឆឆ)",
+        "card_verification_value_label": "លេខកូដសុវត្ថិភាព",
+        "card_verification_value_placeholder": "លេខកូដសុវត្ថិភាព",
+        "card_start_label": "កាលបរិច្ឆេទចេញផ្សាយ (ខែ / ឆ្នាំ)",
+        "card_start_placeholder": "កាលបរិច្ឆេទចេញផ្សាយ (ខែ / ឆ្នាំ)",
+        "tooltip": {
+          "tooltip_accessibility_label": "ព័ត៌មាន​បន្ថែម",
+          "card_verification_value_explanation_amex": "លេខកូដសុវត្ថិភាព ៤ ខ្ទង់នៅពីមុខកាតរបស់អ្នក។",
+          "card_verification_value_explanation_other": "លេខកូដសុវត្ថិភាព 3 ខ្ទង់នៅពីក្រោយកាតរបស់អ្នក។",
+          "card_verification_value_explanation": "លេខកូដសុវត្ថិភាព 3 ខ្ទង់ ជាទូទៅគឺនៅខាងក្រោយកាតរបស់អ្នក។ កាត American Express មានលេខកូដ 4 ខ្ទង់ ដែលស្ថិតនៅផ្នែកខាងមុខ។",
+          "card_security_notice": "រាល់ប្រតិបត្តិការទាំងអស់មានសុវត្ថិភាព និងបានអ៊ិនគ្រីប។"
+        },
+        "field_errors": {
+          "credit_card_name_invalid": "បញ្ចូលឈ្មោះរបស់អ្នកអោយបានត្រឹមត្រូវដូចដែលបានសរសេរនៅលើកាតរបស់អ្នក",
+          "credit_card_number_invalid": "សូមបញ្ចូលលេខកាតដែលត្រឹមត្រូវ",
+          "credit_card_expiry_invalid": "សូមបញ្ចូលកាលបរិច្ឆេទផុតកំណត់នៃកាតដែលត្រឹមត្រូវ",
+          "credit_card_verification_value_blank": "សូមបញ្ចូលលេខកូដ CVV ឬលេខកូដសុវត្ថិភាពដែលមាននៅលើប័ណ្ណរបស់អ្នក។"
+        },
+        "unavailable": {
+          "text": "ការទូទាត់តាមរយៈកាតឥណទាន និងប័ណ្ណឥណពន្ធមិនទាន់អាចប្រើប្រាស់បាននៅពេលនេះទេ។",
+          "link_text": "ផ្ទុកទំព័រនេះឡើងវិញ",
+          "suffix": "ឬសាកល្បងម្ដងទៀតនៅពេលក្រោយ។"
+        }
+      },
+      "payment_delete": {
+        "title": "លុបវិធីទូទាត់",
+        "description_without_replacement": "វិធីបង់ប្រាក់នេះនឹងលែងមានសម្រាប់ទិញទំនិញនៅពេលក្រោយទៀតហើយ។",
+        "description_with_replacement": "ការលុបវិធីទូទាត់នេះនឹងប៉ះពាល់ដល់ការទូទាត់ដែលបានអនុញ្ញាតជាមុន។ អ្នកអាចជ្រើសរើសជំនួសវាដោយវិធីបង់ប្រាក់ផ្សេងទៀត ដើម្បីបន្តទទួលបានការបញ្ជាទិញដែលនឹងមកដល់។",
+        "warning_message_with_replacement": {
+          "with_pending_orders_and_subscriptions": "ការលុបវិធីទូទាត់ប្រាក់នេះនឹងប៉ះពាល់ដល់ការទូទាត់ដែលមានការអនុញ្ញាតជាមុន។ លុះត្រាតែអ្នកជ្រើសរើសវិធីទូទាត់ប្រាក់ផ្សេង វិធីទូទាត់ប្រាក់នេះនឹងនៅតែត្រូវបានគិតថ្លៃសម្រាប់សមតុល្យដែលមិនទាន់ទូទាត់លើការបញ្ជាទិញដែលមានស្រាប់។ ការជ្រើសរើសវិធីទូទាត់ប្រាក់ជំនួសនឹងអនុញ្ញាតឱ្យអ្នកទទួលបានការជាវនាពេលខាងមុខដោយគ្មានការរំខាន។",
+          "with_pending_orders": "ការលុបវិធីទូទាត់ប្រាក់នេះ នឹងលុបវាចេញពីគណនីរបស់អ្នក ហើយវានឹងលែងមានទៀតសម្រាប់ការទិញទៅថ្ងៃមុខ។ លុះត្រាតែអ្នកជ្រើសរើសវិធីទូទាត់ប្រាក់ផ្សេងទៀត នោះវានៅតែត្រូវបានគិតថ្លៃសម្រាប់សមតុល្យដែលនៅសេសសល់លើការបញ្ជាទិញដែលមានស្រាប់។",
+          "with_subscriptions": "ការលុបវិធីទូទាត់ប្រាក់នេះ នឹងជះឥទ្ធិពលដល់ការទូទាត់ប្រាក់ដែលបានអនុញ្ញាតជាមុន។ សូមប្ដូរវាទៅជាវិធីទូទាត់ប្រាក់ផ្សេង ដើម្បីបន្តទទួលបានការបញ្ជាទិញនាពេលខាងមុខ។"
+        },
+        "warning_message_without_replacement": {
+          "with_pending_orders_and_subscriptions": "ការលុបវិធីទូទាត់នេះនឹងប៉ះពាល់ដល់ការទូទាត់ដែលបានអនុញ្ញាតជាមុន។ វិធីទូទាត់នេះនឹងនៅតែត្រូវបានគិតប្រាក់សម្រាប់សមតុល្យដែលនៅសេសសល់លើការបញ្ជាទិញដែលមានស្រាប់ ប៉ុន្តែអ្នកនឹងមិនទទួលបានការបញ្ជាទិញការជាវដែលនឹងមកដល់នោះទេ។ បន្ថែមវិធីបង់ប្រាក់ជំនួស ដើម្បីបន្តទទួលបានការបញ្ជាទិញការជាវ។",
+          "with_pending_orders": "ការលុបវិធីទូទាត់នេះនឹងលុបវាចេញពីគណនីរបស់អ្នក ហើយនឹងលែងមានទៀតសម្រាប់​ការទិញនាពេលអនាគត។ វានឹងនៅតែត្រូវបានគិតថ្លៃសម្រាប់សមតុល្យដែលនៅសល់ណាមួយលើការបញ្ជាទិញដែលមានស្រាប់។",
+          "with_subscriptions": "ការលុបវិធីទូទាត់ប្រាក់នេះនឹងប៉ះពាល់ដល់ការបង់ប្រាក់ដែលបានអនុញ្ញាតជាមុន។ សូមបន្ថែមវិធីទូទាត់ប្រាក់ផ្សេងទៀតដើម្បីបន្តទទួលបានការបញ្ជាទិញនាពេលខាងមុខ។"
+        },
+        "payment_method_selector_placeholder": "ជ្រើសរើសវិធីសាស្រ្តទូទាត់ជំនួស (ជាជម្រើស)",
+        "payment_method_selector_no_alternative_payment": "គ្មានវិធីសាស្រ្តជំនួសទេ។",
+        "replace_method_with_new_method_description": "{{currentPaymentMethodName}} របស់អ្នកនឹងត្រូវបានលុបហើយជំនួសដោយ {{newPaymentMethodName}} របស់អ្នក។",
+        "error_when_deleting": "យើងខ្ញុំសូមអភ័យទោស ប៉ុន្តែមានអ្វីមួយមិនប្រក្រតី ហើយយើងមិនអាចលុបវិធីទូទាត់ប្រាក់នេះបានទេ។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ ឬផ្ទុកទំព័រឡើងវិញ។",
+        "delete_and_replace_button": "លុបនិងជំនួស",
+        "delete_and_replace_button_accessibility_label": "លុប {{currentPaymentMethodName}} ហើយជំនួសដោយ {{newPaymentMethodName}}។",
+        "deleted_successfully": "វិធីសាស្រ្តទូទាត់ត្រូវបានលុបដោយជោគជ័យ។",
+        "loading_available_payment_methods_accessibility_label": "កំពុងផ្ទុកវិធីបង់ប្រាក់ដែលមាន"
+      },
+      "add_payment_method": {
+        "title": "បន្ថែមវិធីបង់ប្រាក់",
+        "button_title": "បន្ថែម",
+        "payment_method_added_confirmation": "បានបន្ថែមវិធីទូទាត់",
+        "missing_customer_error": "មានអ្វីមួយខុសប្រក្រតី។ សូម​ព្យាយាម​ម្ដង​ទៀត ឬ​ទាក់ទង​ផ្នែក​ជំនួយ។",
+        "replace_mode_warning": "ការលុបវិធីទូទាត់ប្រាក់នេះនឹងប៉ះពាល់ដល់ការជាវ ឬការបញ្ជាទិញជាមុន។ សូមជំនួសវាដោយវិធីទូទាត់ប្រាក់ផ្សេងទៀត ដើម្បីបន្តទទួលបានការបញ្ជាទិញដែលនឹងមកដល់។",
+        "choose_from_list": "ជ្រើសរើសពីបញ្ជី",
+        "add_new_button": "បន្ថែមថ្មី",
+        "billing_address": {
+          "title": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+          "add_billing_address_button": "បន្ថែមថ្មី",
+          "add_billing_address_button_accessibility_label": "បន្ថែមអាសយដ្ឋានចេញវិក្កយបត្រថ្មី",
+          "choose_billing_address_from_list_button": "ជ្រើសរើសពីបញ្ជី",
+          "choose_billing_address_from_list_button_accessibility_label": "ជ្រើសរើសអាសយដ្ឋានចេញវិក្កយបត្រពីបញ្ជី",
+          "missing_billing_address_error_message": "សូម​បញ្ជាក់​អាសយដ្ឋាន​ចេញ​វិក្កយបត្រ",
+          "default_checkbox": "កំណត់ជាវិធីទូទាត់លំនាំដើម"
+        },
+        "subscription_contracts": {
+          "title": "ប្រើវិធីបង់ប្រាក់សម្រាប់កម្មង់ដដែលៗ",
+          "more_items": {
+            "one": "{{count}} ផលិតផលផ្សេងទៀត។",
+            "other": "{{count}} ផលិតផលផ្សេងទៀត"
+          },
+          "product_count": {
+            "one": "{{count}} ផលិតផល",
+            "other": "{{count}} ផលិតផល"
+          },
+          "product_details": "ព័ត៌មានលម្អិតអំពីផលិតផល",
+          "load_more": "ផ្ទុកបន្ថែម"
+        },
+        "updating_contracts": {
+          "one": "កំពុងអាប់ដេតកិច្ចសន្យាជាវចំនួន {{count}}...",
+          "other": "កំពុងអាប់ដេតកិច្ចសន្យាជាវចំនួន {{count}}..."
+        },
+        "contracts_updated": {
+          "one": "បានអាប់ដេតកិច្ចសន្យាការជាវចំនួន {{count}} ដោយជោគជ័យ",
+          "other": "បានធ្វើបច្ចុប្បន្នភាពកិច្ចសន្យាជាវចំនួន {{count}} ដោយជោគជ័យ"
+        },
+        "contracts_update_failed": "បរាជ័យក្នុងការអាប់ដេតកិច្ចសន្យាការជាវមួយចំនួន",
+        "subscription_contracts_updated": "បានអាប់ដេត {{succeeded}} នៃ {{total}} ការជាវ",
+        "invalid_wallet_type_error": "ប្រភេទកាបូបមិនត្រឹមត្រូវ។"
+      },
+      "three_d_secure": {
+        "verification_failed": "ការទូទាត់របស់អ្នកមិនអាចផ្ទៀងផ្ទាត់បានទេ។ សូមព្យាយាមម្ដងទៀត ឬប្រើវិធីទូទាត់ផ្សេង។"
+      }
+    },
+    "payment_method_brands": {
+      "visa": "ទិដ្ឋាការ"
     }
   },
   "404": {
