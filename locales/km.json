@@ -1491,7 +1491,13 @@
       "edit_payment_method": {
         "billing_address_choose_from_list": "ជ្រើសរើសពីបញ្ជី",
         "future_purchases_notice": "វិធីសាស្ត្រទូទាត់នេះនឹងត្រូវបានរក្សាទុកសម្រាប់ធ្វើការទិញនាពេលអនាគត។",
-        "generic_error": "មាន​បញ្ហា​ក្នុង​ការ​អាប់ដេត។ សូម​ព្យាយាម​ម្ដងទៀត។"
+        "generic_error": "មាន​បញ្ហា​ក្នុង​ការ​អាប់ដេត។ សូម​ព្យាយាម​ម្ដងទៀត។",
+        "title": "កែប្រែវិធីទូទាត់",
+        "save_payment_method_button": "រក្សាទុក",
+        "cancel_edit_payment_method_button": "បោះបង់",
+        "payment_method_updated_toast": "វិធីបង់ប្រាក់បានធ្វើបច្ចុប្បន្នភាព",
+        "billing_address": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+        "billing_address_add_new": "បន្ថែមថ្មី"
       },
       "update_payment_method": {
         "title": "អាប់ដេតវិធីទូទាត់",
@@ -1625,10 +1631,136 @@
       },
       "three_d_secure": {
         "verification_failed": "ការទូទាត់របស់អ្នកមិនអាចផ្ទៀងផ្ទាត់បានទេ។ សូមព្យាយាមម្ដងទៀត ឬប្រើវិធីទូទាត់ផ្សេង។"
+      },
+      "replacement_payment_method_title": "វិធីសាស្ត្រទូទាត់ជំនួស",
+      "title": "វិធីសាស្ត្រទូទាត់ប្រាក់",
+      "add_payment_method_button": "បន្ថែមវិធីបង់ប្រាក់",
+      "add_payment_method_dropdown": {
+        "bank_account_consent": "ដោយបន្ថែមវិធីបង់ប្រាក់ អ្នកអនុញ្ញាតឲ្យកាតរបស់អ្នកត្រូវបានកាត់ ឬគណនីធនាគារត្រូវបានដកសម្រាប់រាល់ការទិញនាពេលអនាគតដែលអ្នកបានអនុម័ត រហូតទាល់តែអ្នកលុបចោល។"
+      },
+      "bank_account": {
+        "loading_accessibility_message": "ប៊ូតុងគណនីធនាគារកំពុងដំណើរការ",
+        "iframe_title_accessibility_label": "ការបង្កើតគណនីធនាគារ",
+        "display_name": "គណនីធនាគារ",
+        "generic_error": "មិនអាចបន្ថែមគណនីធនាគារបានទេ។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។"
+      },
+      "add_payment_method_banner": "បន្ថែមវិធីបង់ប្រាក់សម្រាប់ការទូទាត់លឿនជាងមុន ឬសេវាកម្មដែលមានការអនុញ្ញាតជាមុន",
+      "no_payment_methods_banner": "មិនទាន់មានវិធីបង់ប្រាក់ណាមួយបានបន្ថែមទេ",
+      "edit_payment_method_button_accessibility_label": "កែសម្រួល {{paymentMethodName}} ដែលបញ្ចប់ដោយខ្ទង់ {{lastDigits}}",
+      "edit_payment_method_brand_button_accessibility_label": "កែសម្រួល {{paymentMethodName}}",
+      "delete_payment_method_button": "លុប",
+      "delete_payment_method_button_accessibility_label": "លុប {{paymentMethodName}}",
+      "back_button": "ត្រឡប់",
+      "back_button_accessibility_label": "ត្រឡប់ទៅ {{paymentMethodStepTitle}} វិញ",
+      "default": "លំនាំដើម",
+      "generic_card": "កាត",
+      "expiration_warning_button_accessibility_label": "បង្ហាញការព្រមានផុតកំណត់សម្រាប់ {{paymentMethodName}} ដែលបញ្ចប់ដោយលេខ {{lastDigits}}",
+      "expires_soon": "កាតនេះជិតផុតកំណត់ហើយ។",
+      "expired": "កាតនេះផុតកំណត់ហើយ។",
+      "expired_badge_label": "ផុតកំណត់",
+      "card_update_consent": "វិធីសាស្ត្រទូទាត់នេះនឹងត្រូវបានរក្សាទុកសម្រាប់ធ្វើការទិញនាពេលអនាគត។",
+      "card_update_consent_subscriptions": "វិធីទូទាត់នេះ នឹងត្រូវបានរក្សាទុកសម្រាប់ការទិញលើកក្រោយ ហើយអាចត្រូវបានប្រើសម្រាប់ការទិញដែលកើតឡើងដដែលៗ ឬពន្យារពេលណាមួយ។",
+      "digital_wallet_title": "កាបូបលុយឌីជីថល",
+      "credit_or_debit_card_title": "ប័ណ្ណឥណទាន ឬប័ណ្ណឥណពន្ធ",
+      "credit_card_title": "កាតឥណទាន",
+      "additional_payment_methods": "វិធីសាស្ត្រទូទាត់បន្ថែម",
+      "or": "ឬ",
+      "google_pay": {
+        "iframe_title_accessibility_label": "បន្ថែមវិធីបង់ប្រាក់ Google Pay",
+        "loading_accessibility_message": "កំពុងផ្ទុក Google Pay",
+        "loading": "កំពុងផ្ទុក Google Pay",
+        "errors": {
+          "generic": "មានបញ្ហាជាមួយ Google Pay។ សូមព្យាយាមម្ដងទៀត ឬប្រើវិធីបង់ប្រាក់ផ្សេង។",
+          "missing_billing_address": "Google Pay តម្រូវ​ឲ្យមាន​អាសយដ្ឋាន​ចេញវិក្កយបត្រ។ សូម​បន្ថែម​អាសយដ្ឋាន​ទៅកាន់​គណនី​របស់អ្នក។"
+        }
+      },
+      "pay_pal": {
+        "iframe_title_accessibility_label": "បន្ថែមវិធីបង់ប្រាក់ PayPal",
+        "loading_accessibility_message": "កំពុងផ្ទុក PayPal",
+        "errors": {
+          "generic": "មាន​បញ្ហា​ជាមួយ PayPal។ សូម​ព្យាយាម​ម្ដង​ទៀត ឬ​ប្រើ​វិធីសាស្ត្រ​បង់ប្រាក់​ផ្សេង។"
+        }
+      },
+      "apple_pay": {
+        "loading": "កំពុងផ្ទុក Apple Pay",
+        "errors": {
+          "generic": "មានបញ្ហាជាមួយ Apple Pay។ សូមព្យាយាមម្ដងទៀត ឬប្រើវិធីទូទាត់ផ្សេងទៀត។",
+          "not_available": "Apple Pay មិនអាចប្រើបានលើឧបករណ៍នេះទេ។",
+          "missing_billing_address": "Apple Pay តម្រូវ​ឱ្យ​មាន​អាសយដ្ឋាន​ចេញ​វិក្កយបត្រ។ សូម​បន្ថែម​អាសយដ្ឋាន​ទៅ​ក្នុង​គណនី​របស់​អ្នក។"
+        }
+      },
+      "store_credit": {
+        "label": "ឥណទានហាង",
+        "accesibility_label": "ឥណទានហាង - {{formattedBalance}}",
+        "expirable_amounts_button": "មើលចំនួនដែលអាចផុតកំណត់បាន។",
+        "expirable_amounts_label": "ចំនួនដែលត្រូវផុតកំណត់",
+        "details_modal": {
+          "title": "ឥណទានហាងដែលនឹងផុតកំណត់",
+          "balance_label": "សមតុល្យ",
+          "expiration_date_label": "ថ្ងៃផុតកំណត់",
+          "amount_label": "ចំនួនទឹកប្រាក់",
+          "date_label": "កាលបរិច្ឆេទ",
+          "event_label": "ព្រឹត្តិការណ៍",
+          "events": {
+            "adjustment": "ការលៃតម្រូវ",
+            "order_payment": "ការទូទាត់ការបញ្ជាទិញ",
+            "order_refund": "ការបង្វិលសងប្រាក់វិញសម្រាប់ការបញ្ជាទិញ",
+            "payment_failure": "ការទូទាត់បរាជ័យ",
+            "payment_returned": "ការទូទាត់ត្រូវបានត្រឡប់មកវិញ",
+            "order_cancellation": "ការលុបចោលការបញ្ជាទិញ",
+            "tax_finalization": "ការបិទបញ្ជីពន្ធដារ"
+          },
+          "expirable_balance_info": "ទឹកប្រាក់សមតុល្យមួយចំនួននឹងផុតកំណត់នៅពេលខាងមុខ",
+          "expirable_amount_label": "ចំនួនទឹកប្រាក់ផុតកំណត់សរុប",
+          "expirable_amounts_info": "ចំនួនទឹកប្រាក់ដែលនឹងផុតកំណត់ឆាប់ៗនេះ នឹងត្រូវអនុវត្តមុនគេនៅពេលទូទាត់ប្រាក់។",
+          "expirable_amounts_button": "ទិដ្ឋភាព",
+          "expired_amounts_button": "មើលចំនួនដែលផុតកំណត់",
+          "pagination": {
+            "load_more_label": "ផ្ទុកបន្ថែម",
+            "load_more_accessibility_label": "ផ្ទុកចំនួនទឹកប្រាក់ដែលអាចផុតកំណត់បានបន្ថែមទៀត"
+          }
+        }
+      },
+      "payment_details": {
+        "title": "ព័ត៌មានលម្អិតអំពីវិធីសាស្ត្រទូទាត់",
+        "credit_card_details_accessibility_label": "ដែលបញ្ចប់ដោយ {{lastDigits}}",
+        "billing_title": "អាសយដ្ឋានចេញវិក្កយបត្រ",
+        "card_info_title": "ព័ត៌មានកាត",
+        "payment_method_expiring_on": "ផុតកំណត់នៅថ្ងៃទី {{expiryDate}}",
+        "payment_method_expired_on": "ផុតកំណត់នៅថ្ងៃទី {{expiryDate}}",
+        "preauthorized_payments": "ការទូទាត់ដែលបានអនុញ្ញាតជាមុន",
+        "close_payment_modal": "បិទ",
+        "close_payment_modal_accessibility_label": "បិទ​ម៉ូឌុល​ព័ត៌មាន​លម្អិត​អំពី​វិធីសាស្ត្រ​ទូទាត់",
+        "payment_method_not_found_error": "មិន​អាច​ស្វែងរកវិធីបង់ប្រាក់​បានទេ",
+        "payment_details_loading": "កំពុងផ្ទុកព័ត៌មានលម្អិតអំពីវិធីសាស្ត្រទូទាត់",
+        "pre_authorized_payments": "ការទូទាត់ដែលបានអនុញ្ញាតជាមុន",
+        "total_amount_of_subscription_line_items_left": "និង {{total}} បន្ថែមទៀត",
+        "total_amount_of_subscription_line_items_left_accessibility_label": "{{totalItems}} មុខទំនិញ​សរុប​ កំពុង​បង្ហាញ {{totalItemsToDisplay}} មុខទំនិញ។",
+        "next_payment_due": "ការទូទាត់បន្ទាប់ដល់កំណត់ {{dueDateInMonthDayYear}}",
+        "edit_payment_method_button": "កែសម្រួល",
+        "edit_payment_method_button_accessibility_label": "កែសម្រួលវិធីទូទាត់ដែលបញ្ចប់ដោយ {{lastDigits}}",
+        "loading_shop_pay": "កំពុងផ្ទុក Shop Pay",
+        "invalid_payment_method": "វិធីបង់ប្រាក់មិនត្រឹមត្រូវ",
+        "invalid_payment_method_message": "សូមប្រើកាតឥណទានថ្មី ដើម្បីបន្តទទួលការបញ្ជាទិញនាពេលខាងមុខ។",
+        "replace_payment_method": "ផ្លាស់ប្ដូរវិធីបង់ប្រាក់",
+        "checkout_card_banner": "វិធីទូទាត់នេះអាចប្រើបានសម្រាប់តែការទូទាត់ដែលបានអនុញ្ញាតជាមុនប៉ុណ្ណោះ។ វានឹងមិនបង្ហាញនៅពេលទូទាត់ប្រាក់នោះទេ ប្រសិនបើអ្នកបានចូលទៅកាន់ហាងនេះ។",
+        "default_checkbox": "កំណត់ជាលំនាំដើម",
+        "default_checkbox_accessibility_label": "កំណត់វិធីទូទាត់នេះជាលំនាំដើម",
+        "replace_payment_method_button": "ជំនួស"
       }
     },
     "payment_method_brands": {
       "visa": "ទិដ្ឋាការ"
+    },
+    "errors": {
+      "failed_to_revert": "មិនអាចទម្លាក់ការកំណត់គណនីអតិថិជនបានទេ។",
+      "revert_window_expired": "ពេលវេលាកំណត់សម្រាប់បកស្រាយបានផុតកំណត់ហើយ។"
+    },
+    "throttle": {
+      "too_many_attempts": {
+        "message": "ព្យាយាម​ច្រើន​ដង​ពេក",
+        "description": "សូមព្យាយាមម្ដងទៀតក្នុងរយៈពេលពីរបីនាទី។"
+      }
     }
   },
   "404": {
