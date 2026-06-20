@@ -525,7 +525,70 @@
         "return_shipping_fee_label": "ការដឹកជញ្ជូនត្រឡប់មកវិញ",
         "free_shipping_discount_label": "ដឹកជញ្ជូនដោយឥតគិតថ្លៃ",
         "applied_free_shipping_discount_label": "បានដាក់ពាក្យ",
-        "apply_discount_button_label": "ដាក់ពាក្យស្នើសុំ"
+        "apply_discount_button_label": "ដាក់ពាក្យស្នើសុំ",
+        "recurring_total_label": "ចំនួនសរុបដែលកើតឡើងវិញ។",
+        "recurring_total_tooltip": "មិនរាប់បញ្ចូលថ្លៃដឹកជញ្ជូន ពន្ធ កាតព្វកិច្ច ឬការបញ្ចុះតម្លៃដែលអាចអនុវត្តបានឡើយ។",
+        "confirmation_number_label": "លេខបញ្ជាក់៖ #%{confirmation_number}",
+        "higher_value_discount_applied": "<strong style=\"text-transform:uppercase\">%{code}</strong> មិនអាចប្រើជាមួយការបញ្ចុះតម្លៃដែលមានស្រាប់របស់អ្នកបានទេ។",
+        "percent_off_shipping": "បញ្ចុះតម្លៃការដឹកជញ្ជូន %{percent}%",
+        "amount_off_shipping": "បញ្ចុះតម្លៃការដឹកជញ្ជូន %{amount}",
+        "deferred_payment_info": {
+          "title": "ការទូទាត់ចំនួន %{amount_due} ត្រូវដល់កំណត់នៅថ្ងៃទី %{due_at}",
+          "description_html": "សម្រាប់សំណួរអំពីការកម្ម៉ង់របស់អ្នក សូម%{contact_us}។",
+          "paid_today": "សរុបបានបង់ថ្ងៃនេះ",
+          "paid_today_next": "បានបង់ថ្ងៃនេះ",
+          "due_on_fulfillment_title": "ការទូទាត់ចំនួន %{amount_due} ត្រូវដល់កំណត់នៅពេលបំពេញរួចរាល់",
+          "due_on_receipt_title": "ការទូទាត់ %{amount_due} ត្រូវដល់កំណត់នៅពេលបានទទួល"
+        },
+        "deferred_balance_info": {
+          "title": "សមតុល្យចំនួន {{amount_due}} ត្រូវបង់នៅថ្ងៃទី {{due_at}}",
+          "due_on_fulfillment_title": "ទឹកប្រាក់ {{amount_due}} ដែលនៅសល់នឹងត្រូវដល់កំណត់បង់នៅពេលបំពេញតាមលក្ខខណ្ឌ"
+        },
+        "payment_terms_totals": {
+          "due_today": "ចំនួនសរុបដែលត្រូវបង់ថ្ងៃនេះ",
+          "due_today_next": "ត្រូវ​ប្រគល់​ថ្ងៃនេះ",
+          "due_later": "ចំនួនទឹកប្រាក់សរុបត្រូវទូទាត់ %{due_at}",
+          "due_on_fulfillment": "ចំនួនទឹកប្រាក់សរុបដែលត្រូវទូទាត់នៅពេលបំពេញតាមលក្ខខណ្ឌ",
+          "due_on_fulfillment_next": "ត្រូវបង់នៅពេលបំពេញតាមលក្ខខណ្ឌ",
+          "due_on_receipt": "បង់ភ្លាមៗនៅពេលបានទទួល",
+          "due_later_checkout_to_draft": "ទឹកប្រាក់សរុបត្រូវបង់ពេលក្រោយ",
+          "total_paid": "ចំនួនទឹកប្រាក់សរុបដែលបានបង់"
+        },
+        "maximum_discount_code_limit_reached": "អ្នក​បាន​ប្រើ​លេខ​កូដ​បញ្ចុះ​តម្លៃ​ដល់​ចំនួន​អតិបរមា​ហើយ។ លុប​លេខ​កូដ​ដែល​មាន​ស្រាប់​មួយ​ចេញ ដើម្បី​ប្រើ <strong style=\"text-transform:uppercase\">%{code}</strong>។",
+        "discount_code_application_failed": "<strong style=\"text-transform:uppercase\">%{code}</strong> កំពុងមានបញ្ហាឥឡូវនេះ។ សូមទាក់ទងមកយើងខ្ញុំដើម្បីទទួលបានជំនួយ។",
+        "due_on_fulfillment": "ត្រូវបង់នៅពេលបំពេញតាមលក្ខខណ្ឌ",
+        "subscriptions": "ការជាវ",
+        "duties_label": "កាតព្វកិច្ច",
+        "duties_and_taxes_label": "កាតព្វកិច្ច និងពន្ធដារ",
+        "error_duties_tooltip": "ការបញ្ជាទិញនេះកំពុងដឹកជញ្ជូនពីប្រទេសមួយផ្សេងទៀត ដូច្នេះកាតព្វកិច្ច និងពន្ធអាចនឹងត្រូវបានគិតថ្លៃនៅពេលដឹកជញ្ជូន។",
+        "may_be_charged_on_delivery": "អាចនឹងត្រូវគិតថ្លៃនៅពេលដឹកជញ្ជូន",
+        "total_updated_label_with_price": "តម្លៃសរុបដែលបានអាប់ដេត: %{totalPrice}",
+        "updated_shipping_method": "វិធីសាស្រ្តដឹកជញ្ជូនដែលបានអាប់ដេត៖ %{shipping_method}",
+        "recurring_payments": "ការទូទាត់ដដែលៗ",
+        "recurring_total_multiple_label": "ការបញ្ជាទិញនេះមានការគិតថ្លៃដដែលៗសម្រាប់ទំនិញច្រើនមុខ។",
+        "deferred_total_due_date_label": "ចំនួនទឹកប្រាក់ដែលត្រូវបង់ {{date}}",
+        "deferred_total_due_date_label_next": "ដល់ថ្ងៃ %{date}",
+        "full_price": "តម្លៃពេញ៖ %{price}",
+        "custom_discount": "ការបញ្ចុះតម្លៃតាមបំណង",
+        "expand_component_information": {
+          "one": "បង្ហាញទំនិញ %{count} មុខ",
+          "other": "បង្ហាញវត្ថុ %{count}\n"
+        },
+        "collapse_component_information": {
+          "one": "លាក់ធាតុ %{count}",
+          "other": "លាក់វត្ថុ %{count}"
+        },
+        "discount_discovery": {
+          "add_code": "បន្ថែមការបញ្ចុះតម្លៃ",
+          "back_to_finalize_order": "ត្រឡប់ទៅបញ្ចប់ការបញ្ជាទិញ",
+          "merchandise_quantity_label": {
+            "one": "ទំនិញ %{count} មុខ",
+            "other": "%{count} ធាតុ"
+          }
+        },
+        "alternative_payment_currency_total": "គិតថ្លៃជា %{amount_due}",
+        "pay_merchant_label": "បង់ប្រាក់ទៅ %{merchant_name}",
+        "discount_applies_to_subscription_items_only": "ការបញ្ចុះតម្លៃនេះអនុវត្តចំពោះតែមុខទំនិញជាវប៉ុណ្ណោះ។"
       },
       "stock": {
         "unpurchasable_product": {
@@ -1119,6 +1182,67 @@
           "one": "ការបញ្ជាទិញរបស់អ្នកមិនអាចដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលបានជ្រើសរើសបានទេ។ សូមពិនិត្យអាសយដ្ឋានរបស់អ្នកឡើងវិញ ដើម្បីធានាថាវាត្រឹមត្រូវ ហើយព្យាយាមម្តងទៀត ឬជ្រើសរើសអាសយដ្ឋានផ្សេង។",
           "other": "ធាតុ​មួយ​ចំនួន​នៅ​ក្នុង​រទេះ​ទំនិញ​របស់​អ្នក មិន​អាច​ដឹក​ជញ្ជូន​ទៅ​កាន់​អាសយដ្ឋាន​ដែល​អ្នក​បាន​បញ្ចូល​បាន​ទេ។ សូម​ពិនិត្យ​មើល​អាសយដ្ឋាន​របស់​អ្នក​ម្ដង​ទៀត ដើម្បី​ឲ្យ​ប្រាកដ​ថា វា​ត្រឹមត្រូវ ហើយ​ព្យាយាម​ម្ដង​ទៀត ឬ​ជ្រើសរើស​អាសយដ្ឋាន​ផ្សេង។"
         }
+      },
+      "shipping": {
+        "title": "ការដឹកជញ្ជូន",
+        "delivery_title": "ការដឹកជញ្ជូន",
+        "shipping_method_title": "វិធីសាស្ត្រដឹកជញ្ជូន",
+        "shipping_method_rollup_accessibility_label": "ជម្រើសវិធីសាស្រ្តដឹកជញ្ជូន",
+        "shipping_method_one_time_purchase_group_title": "ទិញម្ដងប្រើបានរហូត",
+        "shipping_method_first_shipment_group_title": {
+          "one": "ការដឹកជញ្ជូនលើកទីមួយ",
+          "other": "ការដឹកជញ្ជូនលើកដំបូង"
+        },
+        "shipping_method_subscription_group_title": "ការជាវ",
+        "shipping_method_recurring_shipments_group_title": {
+          "one": "ការដឹកជញ្ជូនឡើងវិញ",
+          "other": "ការដឹកជញ្ជូនដែលកើតឡើងដដែលៗ"
+        },
+        "subscription_shipping": "ការដឹកជញ្ជូនតាមការជាវ",
+        "subscription_local_delivery": "ការជាវសម្រាប់ការដឹកជញ្ជូនក្នុងស្រុក",
+        "subscription_pickup": "ការទទួលទំនិញដែលបានជាវ",
+        "waiting_on_rate_notice": "កំពុងស្វែងរកអត្រាដឹកជញ្ជូនដែលមាន…",
+        "waiting_on_pickup_location_notice": "កំពុងទាញយកទីតាំងសម្រាប់ទៅទទួល...",
+        "no_rates_for_cart_or_destination_notice": "មិនមានវិធីសាស្រ្តដឹកជញ្ជូនសម្រាប់រទេះទិញទំនិញ ឬអាសយដ្ឋានរបស់អ្នកទេ",
+        "no_pickup_location_notice": "យ៉ាងហោចណាស់ផលិតផលរបស់អ្នកមួយចំនួនមិនអាចយកទៅបានទេ",
+        "no_rates_for_country_notice": "រកមិនឃើញអត្រាដឹកជញ្ជូនសម្រាប់អាសយដ្ឋាននេះទេ។",
+        "no_rates_contact_notice": "ទាក់ទងមកយើងសម្រាប់ព័ត៌មានបន្ថែម",
+        "free_rate_label": "ឥតគិតថ្លៃ",
+        "cheapest_rate_label": "ថោកបំផុត",
+        "estimated_delivery_date": {
+          "one": "%{count} ថ្ងៃធ្វើការ",
+          "other": "%{count} ថ្ងៃធ្វើការ"
+        },
+        "estimated_delivery_date_range": "ពី %{minimum} ទៅ %{maximum} ថ្ងៃនៃថ្ងៃធ្វើការ",
+        "delivery_date_range": "ម៉ោង %{min_time}–%{max_time}",
+        "estimated_delivery_time": "ប៉ាន់ស្មានថាដឹកជញ្ជូននៅ %{time}",
+        "estimated_delivery_time_range": "រយៈពេលដឹកជញ្ជូនប៉ាន់ស្មាន %{min_time}–%{max_time}",
+        "delivery_today": "ដឹកជញ្ជូនថ្ងៃតែមួយ %{time}",
+        "delivery_tomorrow": "ដឹកជញ្ជូនថ្ងៃស្អែក %{time}",
+        "two_day_delivery": "ដឹកជញ្ជូនក្នុងរយៈពេល 2 ថ្ងៃ %{time}",
+        "delivery": "ការដឹកជញ្ជូន %{time}",
+        "delivery_to": "ការដឹកជញ្ជូនទៅ",
+        "arrives_time": "មកដល់ម៉ោង %{time}",
+        "arrives_time_range": "មកដល់ម៉ោង %{min_time}–%{max_time}",
+        "estimated_time": "ប៉ាន់ស្មាន %{time}",
+        "estimated_time_range": "រយៈពេលប៉ាន់ស្មាន៖ %{min_time}–%{max_time}",
+        "default_description": "ដឹកជញ្ជូនក្នុងរយៈពេល 1 ថ្ងៃនៃថ្ងៃធ្វើការ",
+        "unbranded_default_description": "ត្រៀមដឹកជញ្ជូន",
+        "unbranded_description_same_day": "ដឹកជញ្ជូននៅថ្ងៃធ្វើការដដែល",
+        "unbranded_description_with_fulfillment_days": {
+          "one": "ដឹកជញ្ជូននៅថ្ងៃធ្វើការបន្ទាប់",
+          "other": "ដឹកជញ្ជូនក្នុងរយៈពេល %{count} ថ្ងៃនៃថ្ងៃធ្វើការ"
+        },
+        "unbranded_description_with_fulfillment_weeks": {
+          "one": "ដឹកជញ្ជូនក្នុង %{count} សប្តាហ៍",
+          "other": "ដឹកជញ្ជូនក្នុង %{count} សប្តាហ៍"
+        },
+        "shipping_line_phone_label": "លេខទូរសព្ទ (ចាំបាច់)",
+        "shipping_line_phone": "អ្នកនាំសំបុត្ររបស់អ្នកអាចប្រើលេខនេះដើម្បីទាក់ទងអ្នក។",
+        "shipping_line_delivery_phone_label": "លេខទូរសព្ទដៃ",
+        "shipping_line_delivery_phone": "អ្នកអាចនឹងត្រូវបានទាក់ទងអំពីបច្ចុប្បន្នភាពនៃការដឹកជញ្ជូនរបស់អ្នក។",
+        "optional_shipping_line_delivery_instructions_label": "ការណែនាំអំពីការដឹកជញ្ជូន (ស្រេចចិត្ត)",
+        "shipping_line_delivery_instructions": "បញ្ចូលព័ត៌មានចាំបាច់ ដូចជាលេខកូដទ្វារ ឬការណែនាំសម្រាប់ការទម្លាក់ទំនិញ។"
       }
     },
     "pagination": {
@@ -1754,12 +1878,179 @@
     },
     "errors": {
       "failed_to_revert": "មិនអាចទម្លាក់ការកំណត់គណនីអតិថិជនបានទេ។",
-      "revert_window_expired": "ពេលវេលាកំណត់សម្រាប់បកស្រាយបានផុតកំណត់ហើយ។"
+      "revert_window_expired": "ពេលវេលាកំណត់សម្រាប់បកស្រាយបានផុតកំណត់ហើយ។",
+      "address_deletion_error": {
+        "description": "មានបញ្ហាក្នុងការលុបអាសយដ្ឋាននេះ។ សូមព្យាយាមម្ដងទៀត ឬផ្ទុកទំព័រឡើងវិញ។"
+      },
+      "addresses_loading_issue": {
+        "description": "មានបញ្ហាក្នុងការតភ្ជាប់។ សូមពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក ហើយព្យាយាមម្ដងទៀត។"
+      },
+      "banner_title": {
+        "one": "There is {{count}} កំហុស",
+        "other": "មានកំហុស {{count}}"
+      },
+      "failed_address_creation": {
+        "description": "មានបញ្ហាក្នុងការបង្កើតអាសយដ្ឋានរបស់អ្នក។ សូមព្យាយាមផ្ទុកទំព័រនេះឡើងវិញ ឬពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+      },
+      "failed_address_update": {
+        "description": "មានបញ្ហាក្នុងការអាប់ដេតអាសយដ្ឋានរបស់អ្នក។ សូមព្យាយាមផ្ទុកទំព័រនេះឡើងវិញ ឬពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+      },
+      "load_address_form_error": {
+        "title": "មិនអាចទាញយកទម្រង់អាសយដ្ឋានបានទេ",
+        "description": "មិនអាចផ្ទុកទម្រង់អាសយដ្ឋានបានទេ។",
+        "refresh_button": "ផ្ទុកទំព័រឡើងវិញ"
+      },
+      "load_orders_error": {
+        "title": "មិនអាចទាញយកការបញ្ជាទិញបានទេ",
+        "description": "សូមព្យាយាមម្ដងទៀត ឬត្រឡប់មកវិញនៅពេលក្រោយ។",
+        "retry_button": "ព្យាយាមម្ដងទៀត"
+      },
+      "load_paypal_error": {
+        "description": "មានបញ្ហា​ពេលកំពុងផ្ទុក PayPal។ សូម​ព្យាយាមម្ដងទៀត។"
+      },
+      "logout_everywhere": {
+        "description": "មាន​អ្វី​មួយ​ខុសប្រក្រតី​ក្នុង​អំឡុង​ពេល​ចេញ​ពី​គណនី។ សូម​ព្យាយាម​ម្ដង​ទៀត។"
+      },
+      "no_access_to_locations": {
+        "description": "អ្នកមិនមានសិទ្ធិចូលប្រើទីតាំងណាមួយទេ។"
+      },
+      "not_found": {
+        "description": "ពិនិត្យ URL ឬព្យាយាមម្តងទៀតក្នុងរយៈពេលពីរបីនាទី។",
+        "title": "មានបញ្ហាក្នុងការផ្ទុកទំព័រនេះ"
+      },
+      "order_not_found": {
+        "description": "ការ​បញ្ជា​ទិញ​នេះ​មិន​មាន​ទេ ឬ​អ្នក​មិន​មាន​ការ​អនុញ្ញាត​ក្នុង​ការ​មើល។",
+        "title": "រកមិនឃើញការបញ្ជាទិញ"
+      },
+      "profile_update_error": {
+        "description": "មានបញ្ហាពេលអាប់ដេតប្រវត្តិរូបរបស់អ្នក។ សូមព្យាយាមផ្ទុកទំព័រនេះឡើងវិញ ឬពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+      },
+      "profile_name_update_error": {
+        "description": "មានបញ្ហាក្នុងការអាប់ដេតឈ្មោះរបស់អ្នក។ សូមព្យាយាមផ្ទុកទំព័រនេះឡើងវិញ ឬពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+      },
+      "retry_action_label": "ព្យាយាមម្ដងទៀត",
+      "resend_link": {
+        "too_many_requests": "សំណើច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+        "generic": "សំណើ​បាន​បរាជ័យ"
+      },
+      "load_extension_error": {
+        "title": "កំហុស",
+        "description": "ផ្ទុកទំព័រនេះឡើងវិញ ឬព្យាយាមម្ដងទៀតក្នុងរយៈពេលពីរបីនាទី។",
+        "refresh_button": "ផ្ទុកទំព័រឡើងវិញ"
+      },
+      "already_upgraded": "គណនីរបស់អតិថិជនបានធ្វើបច្ចុប្បន្នភាពរួចហើយ។",
+      "failed_to_upgrade": "ការកំណត់គណនីអតិថិជនបានដំឡើងកំណែបរាជ័យ។",
+      "not_upgraded": "គណនីអតិថិជនមិនត្រូវបានដំឡើងកំណែទេ។"
     },
     "throttle": {
       "too_many_attempts": {
         "message": "ព្យាយាម​ច្រើន​ដង​ពេក",
         "description": "សូមព្យាយាមម្ដងទៀតក្នុងរយៈពេលពីរបីនាទី។"
+      }
+    },
+    "B2B": {
+      "draft_order_details": {
+        "payment_status": {
+          "pending": {
+            "banner_due": {
+              "other": "ការទូទាត់របស់អ្នកនឹងផុតកំណត់ក្នុងរយៈពេល {{count}} ថ្ងៃ។"
+            },
+            "banner_due_today": "ការទូទាត់របស់អ្នកដល់កំណត់នៅថ្ងៃនេះ",
+            "banner_due_today_for_multiple_fulfillments": "ការទូទាត់ត្រូវដល់កំណត់នៅថ្ងៃនេះសម្រាប់ការបំពេញចំនួន {{count}}",
+            "banner_overdue_for_multiple_fulfillments": "ការទូទាត់ត្រូវដល់កំណត់សម្រាប់ {{count}} ការបំពេញ",
+            "title": "ដល់កំណត់បង់ប្រាក់",
+            "title_with_date": "ការទូទាត់ដល់កំណត់នៅ {{date}}",
+            "title_due_on_receipt": "មិនទាន់ដល់ថ្ងៃបង់ប្រាក់នៅឡើយទេ",
+            "title_due_on_fulfillment": "ការទូទាត់ត្រូវធ្វើឡើងនៅពេលបំពេញលក្ខខណ្ឌ",
+            "description_overdue": "ការទូទាត់របស់អ្នកយឺតហើយ។",
+            "description_partially_paid": "ការបញ្ជាទិញនេះត្រូវបានបង់មួយផ្នែក។ អ្នកមានទឹកប្រាក់ដែលនៅសេសសល់។",
+            "description_authorized": "វិធីបង់ប្រាក់របស់អ្នកនឹងត្រូវបានគិតថ្លៃនៅថ្ងៃកំណត់ ឬអ្នកក៏អាចបង់ប្រាក់ឥឡូវនេះបានដែរ។",
+            "description_waiting_for_manual_payment": "ការ​បញ្ជាទិញ​នេះ​មាន​ការ​ទូទាត់​ដែល​កំពុង​រង់ចាំ។ សមតុល្យ​នឹង​ត្រូវ​បាន​អាប់ដេត​នៅ​ពេល​ទទួល​បាន​ការ​ទូទាត់។",
+            "description_due_on_receipt": "អ្នកនឹងទទួលបានវិក្កយបត្រនៅពេលដែលដល់កាលបរិច្ឆេទទូទាត់។",
+            "description_due_on_receipt_partially_paid": "ការបញ្ជាទិញនេះត្រូវបានទូទាត់មួយផ្នែក។ អ្នកមានទឹកប្រាក់ដែលនៅសេសសល់។ អ្នកនឹងទទួលបានវិក្កយបត្រនៅពេលដល់កាលកំណត់ទូទាត់។",
+            "description_due_on_fulfillment": "ការទូទាត់ត្រូវធ្វើឡើងនៅពេលដែលមុខទំនិញទាំងអស់ក្នុងលំដាប់នេះត្រូវបានបំពេញ។",
+            "description_due_on_fulfillment_partially_paid": "ការបញ្ជាទិញនេះត្រូវបានទូទាត់មួយផ្នែក។ អ្នកនៅមានសមតុល្យនៅសល់។ ការទូទាត់នឹងដល់ពេលកំណត់នៅពេលដែលទំនិញទាំងអស់ក្នុងការបញ្ជាទិញនេះត្រូវបានបំពេញ។",
+            "description_due_on_fulfillment_partially_paid_next": "ការបញ្ជាទិញនេះត្រូវបានបង់មួយផ្នែក។ អ្នកមានទឹកប្រាក់ដែលនៅសេសសល់។"
+          },
+          "draft": {
+            "description": "ព័ត៌មានលម្អិតអំពីការទូទាត់នឹងត្រូវសម្រេចនៅពេលការបញ្ជាទិញត្រូវបានបញ្ជាក់។",
+            "title": "ការទូទាត់នៅមិនទាន់ដល់កំណត់ទេ។",
+            "in_review": {
+              "description": "ព័ត៌មានលម្អិតអំពីការទូទាត់នឹងត្រូវសម្រេចនៅពេលការបញ្ជាទិញត្រូវបានបញ្ជាក់។",
+              "title": "ការទូទាត់នៅមិនទាន់ដល់កំណត់ទេ។"
+            },
+            "submitted": {
+              "description": "សូមបង់ប្រាក់ដើម្បីបញ្ជាក់ការបញ្ជាទិញនេះ។",
+              "title": "បង់ប្រាក់ដើម្បីបញ្ជាក់",
+              "deposit": {
+                "title": "ការទូទាត់ត្រូវដល់កំណត់",
+                "due_later": "សមតុល្យត្រូវបានយោងតាមលក្ខខណ្ឌ {{translatedName}} ហើយនឹងត្រូវសងនៅថ្ងៃ {{dueDate}}។",
+                "due_on_fulfillment": "សមតុល្យត្រូវទូទាត់នៅពេលដែលទំនិញទាំងអស់នៅក្នុងការបញ្ជាទិញនេះត្រូវបានបំពេញ។",
+                "due_on_receipt": "អ្នក​នឹង​ទទួល​បាន​វិក្កយបត្រ​សម្រាប់​សមតុល្យ​ដែល​នៅ​សេសសល់។",
+                "due_on_date": "ការទូទាត់ដែលនៅសល់ត្រូវបង់នៅថ្ងៃទី {{dueDate}}។"
+              }
+            },
+            "deposit": {
+              "due_later": "{{depositAmount}} នឹងត្រូវទូទាត់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ ចំនួនទឹកប្រាក់ដែលនៅសល់នឹងត្រូវបានបង់តាមលក្ខខណ្ឌរបស់ {{translatedName}}។",
+              "due_on_fulfillment": "{{depositAmount}} នឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ សមតុល្យនឹងត្រូវបង់នៅពេលការបញ្ជាទិញត្រូវបានបំពេញ។",
+              "due_on_receipt": "{{depositAmount}} នឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ សមតុល្យដែលនៅសល់នឹងត្រូវបង់ពេលក្រោយ។",
+              "due_on_date": "{{depositAmount}} នឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ សមតុល្យនឹងត្រូវបង់នៅថ្ងៃ {{dueDate}}។"
+            }
+          },
+          "paid": {
+            "title": "បានបង់",
+            "title_with_date": "បានទូទាត់ {{date}}",
+            "description": "ការបញ្ជាទិញរបស់អ្នកបានបង់ប្រាក់រួចរាល់ហើយ។"
+          },
+          "refund": {
+            "title": "បានបង្វិលប្រាក់វិញ",
+            "title_with_date": "បានបង្វិលប្រាក់វិញ {{date}}",
+            "description_full_refund": "អ្នកបានទទួលការបង្វិលសងពេញលេញសម្រាប់ការបញ្ជាទិញនេះ។",
+            "description_single_refund": "អ្នក​បាន​ទទួល​ប្រាក់​សំណង​មួយ​ផ្នែក​សម្រាប់​ការ​បញ្ជា​ទិញ​នេះ។",
+            "description_multiple_refunds": "អ្នកបានទទួលប្រាក់បង្វិលមួយចំនួនសម្រាប់ការបញ្ជាទិញនេះ។"
+          },
+          "canceled": {
+            "title": "ការទូទាត់ត្រូវបានលុបចោល",
+            "description": "អ្នក​មិន​ត្រូវ​បាន​គិត​ថ្លៃ​ទេ។"
+          },
+          "due_date": "ครบ​កំណត់​នៅ​ថ្ងៃ​ទី {{date}}",
+          "total_balance": "សមតុល្យសរុប",
+          "pay_now": "បង់ប្រាក់ឥឡូវនេះ",
+          "pay_now_accessibility_label": "បង់ប្រាក់ឥឡូវនេះសម្រាប់កម្ម៉ង់ទិញ {{orderName}}",
+          "title": "ស្ថានភាពបង់ប្រាក់"
+        },
+        "order_timeline": {
+          "expand_events_label": "បង្ហាញព័ត៌មានលម្អិត",
+          "expand_events_accessibility_label": "បង្ហាញព័ត៌មានលម្អិតលំដាប់ពង្រាង",
+          "hide_events_label": "លាក់​ព័ត៌មាន​លម្អិត",
+          "hide_events_accessibility_label": "លាក់ព័ត៌មានលម្អិតការបញ្ជាទិញព្រាង"
+        },
+        "subtitle": "បានដាក់ស្នើ {{date}}",
+        "title": "ការបញ្ជាទិញ {{name}}"
+      },
+      "payment_methods": {
+        "payment_delete": {
+          "description_without_replacement": "វិធីទូទាត់ប្រាក់នេះនឹងមិនអាចប្រើសម្រាប់ការទិញទៅមុខពីទីតាំងនេះទៀតទេ។",
+          "description_with_replacement": "ការលុបវិធីទូទាត់នេះនឹងប៉ះពាល់ដល់ការទូទាត់ដែលបានអនុញ្ញាតជាមុនសម្រាប់ទីតាំងនេះ។ សូមជំនួសវាដោយវិធីទូទាត់ផ្សេងទៀតដើម្បីបន្តទទួលបានការបញ្ជាទិញនាពេលខាងមុខ។"
+        },
+        "payment_details": {
+          "order_label": "ការបញ្ជាទិញ {{name}}",
+          "draft_label": "សេចក្តីព្រាងលំដាប់ {{name}}"
+        }
+      },
+      "purchase_order_number": {
+        "add_accessibility_label": "បញ្ចូលលេខ PO",
+        "add_modal_title": "បញ្ចូលលេខ PO",
+        "cancel": "បោះបង់",
+        "close_modal_accessibility_label": "បិទម៉ូឌុលលេខ PO",
+        "discard": "បោះបង់",
+        "discard_changes_modal_title": "បោះបង់ការផ្លាស់ប្ដូរ?",
+        "edit_accessibility_label": "កែលេខ PO",
+        "edit_modal_title": "កែលេខ PO",
+        "empty_state": "គ្មានលេខ PO ទេ។",
+        "modal_po_number_input_label": "លេខ​បញ្ជាទិញ",
+        "modal_po_number_input_max_length_error": "លេខ PO មានចំនួនអក្សរអតិបរមា {{maxLength}} តួអក្សរ។",
+        "save": "រក្សាទុក"
       }
     }
   },
