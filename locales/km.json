@@ -1243,6 +1243,152 @@
         "shipping_line_delivery_phone": "អ្នកអាចនឹងត្រូវបានទាក់ទងអំពីបច្ចុប្បន្នភាពនៃការដឹកជញ្ជូនរបស់អ្នក។",
         "optional_shipping_line_delivery_instructions_label": "ការណែនាំអំពីការដឹកជញ្ជូន (ស្រេចចិត្ត)",
         "shipping_line_delivery_instructions": "បញ្ចូលព័ត៌មានចាំបាច់ ដូចជាលេខកូដទ្វារ ឬការណែនាំសម្រាប់ការទម្លាក់ទំនិញ។"
+      },
+      "thank_you": {
+        "customer_validation_error_phone": "សូមបញ្ចូលលេខទូរសព្ទ ឬលេខកូដបញ្ជាទិញត្រឹមត្រូវ។",
+        "login": "ចូលគណនី",
+        "unfulfilled_items_title": "កំពុងរៀបចំសម្រាប់ដឹកជញ្ជូន",
+        "unfulfilled_items_description": "យើងកំពុងត្រៀមរបស់របរទាំងនេះសម្រាប់ការដឹកជញ្ជូន។",
+        "marker": {
+          "current": "ទីតាំងនៃការដឹកជញ្ជូនបច្ចុប្បន្ន",
+          "shipping": "អាសយដ្ឋានដឹកជញ្ជូន"
+        },
+        "pick_up_in_store_marker": {
+          "current": "ទីតាំងនៃការដឹកជញ្ជូនបច្ចុប្បន្ន",
+          "shipping": "ទីតាំងទទួលអីវ៉ាន់"
+        },
+        "fulfillment": {
+          "fulfilled_table_title": "មុខទំនិញនៅក្នុងការដឹកជញ្ជូននេះ។",
+          "unfulfilled_table_title": "មុខទំនិញកំពុងត្រៀមដឹកជញ្ជូន",
+          "product_image_label": "រូបភាពផលិតផល",
+          "description_label": "ការពិពណ៌នា",
+          "quantity_label": "បរិមាណ"
+        },
+        "order_updates_description_missing": "អ្នកមិនទទួលបានព័ត៌មានថ្មីៗអំពីការដឹកជញ្ជូនទេ។",
+        "order_updates_subscribe_to_email_notifications": "ទទួលបានព័ត៌មានថ្មីៗអំពីការដឹកជញ្ជូនតាមរយៈអ៊ីមែល",
+        "order_updates_subscribe_to_email_or_phone_notifications": "ទទួលបានព័ត៌មានថ្មីៗអំពីការដឹកជញ្ជូនតាមអ៊ីម៉ែល ឬសារជាអក្សរ",
+        "order_updates_subscribe_to_phone_notifications": "ទទួលបានព័ត៌មានថ្មីៗអំពីការដឹកជញ្ជូនតាមរយៈសារជាអក្សរ",
+        "order_updates_submit_subscription": "ដាក់ស្នើ",
+        "track_shipment": "តាមដានការដឹកជញ្ជូន",
+        "other_options": "ជម្រើសផ្សេងទៀត។",
+        "delivery_information_label": "ព័ត៌មានដឹកជញ្ជូន:",
+        "gift_card_sent_confirmation": "បានផ្ញើកាតអំណោយ",
+        "qr_code": {
+          "send_link_to_phone": "ឬ​ផ្ញើ​តំណទៅ​ទូរសព្ទ​របស់អ្នក។",
+          "title": "តាមដាននៅលើទូរស័ព្ទរបស់អ្នក។"
+        },
+        "shop_qr_with_sms_upsell": {
+          "qr_code": {
+            "title": "ស្កែនដោយប្រើទូរស័ព្ទរបស់អ្នក។"
+          },
+          "sms": {
+            "title": "ឬ​ផ្ញើ​តំណទៅ​ទូរសព្ទ​របស់អ្នក។"
+          }
+        },
+        "view_business_customer_account": "មើលគណនី",
+        "breadcrumbs_submitted": "បានដាក់ស្នើ",
+        "breadcrumbs_in_review": "កំពុងត្រួតពិនិត្យ",
+        "breadcrumbs_confirmed": "បានបញ្ជាក់",
+        "missing_shipping_address_banner": {
+          "title": "ការបញ្ជាទិញគ្មានអាសយដ្ឋានដឹកជញ្ជូនទេ",
+          "text_html": "%{contact_us} ដើម្បីបន្ថែមអាសយដ្ឋានរបស់អ្នក",
+          "contact_us": "ទាក់ទងមកយើងខ្ញុំ"
+        },
+        "first_payment_complete": "ការបង់ប្រាក់លើកទីមួយបានបញ្ចប់",
+        "in_store_purchase": "ការទិញនៅហាង",
+        "company_location_section_title": "ក្រុមហ៊ុននិងទីតាំង",
+        "thank_you_ready_for_picked_up": "ការបញ្ជាទិញរបស់អ្នកត្រូវបានទៅយកនៅ %{address}។",
+        "ready_for_delivery": "ត្រៀម​រួចរាល់​សម្រាប់​ការ​ដឹក​ជញ្ជូន",
+        "order_updates_subscribe_to_email_notifications_failed": "យើងមិនអាចរក្សាទុកអ៊ីមែលនេះសម្រាប់ធ្វើបច្ចុប្បន្នភាពបានទេ។ សូមព្យាយាមម្ដងទៀត ឬប្រើអ៊ីមែលផ្សេងទៀត។",
+        "order_updates_subscribe_to_email_notifications_email_already_exists": "អ៊ីមែលដែលអ្នកបានបញ្ចូលមានរួចហើយ។",
+        "subscriptions_management": {
+          "title": "ការជាវ",
+          "description": "បន្តទៅកាន់គណនីរបស់អ្នកដើម្បីមើល និងគ្រប់គ្រងការជាវរបស់អ្នក។",
+          "button_label": "គ្រប់គ្រងការជាវរបស់អ្នក។"
+        },
+        "manage_order_label": "គ្រប់គ្រងការបញ្ជាទិញរបស់អ្នក។",
+        "gift_card_confirmation_by_text_typ": {
+          "one": "អ្នកនឹងទទួលបានសារដែលមានកាតអំណោយរបស់អ្នកក្នុងរយៈពេលពីរបីនាទីទៀត។",
+          "other": "អ្នកនឹងទទួលបានសារដែលមានកាតអំណោយរបស់អ្នកក្នុងរយៈពេលប៉ុន្មាននាទី។"
+        },
+        "gift_card_confirmation_by_email_typ": {
+          "one": "អ្នកនឹងទទួលបានអ៊ីមែលដែលមានកាតអំណោយរបស់អ្នកក្នុងរយៈពេលពីរបីនាទី។",
+          "other": "អ្នកនឹងទទួលបានអ៊ីមែលដែលមានប័ណ្ណអំណោយរបស់អ្នកក្នុងរយៈពេលពីរបីនាទី។"
+        },
+        "gift_card_email_title": {
+          "one": "បណ្ណ​ជូន​កាដូ​ត្រូវ​បាន​ផ្ញើ​តាម​អ៊ីមែល។",
+          "other": "បណ្ណ​ជូន​កាដូ​ត្រូវ​បាន​ផ្ញើ​តាម​អ៊ីមែល។"
+        },
+        "gift_card_text_title": {
+          "one": "បណ្ណអំណោយត្រូវបានផ្ញើតាមរយៈសារជាអក្សរ",
+          "other": "កាតអំណោយត្រូវបានផ្ញើតាមរយៈសារជាអក្សរ"
+        },
+        "resend_gift_cards_by_email": "ផ្ញើអ៊ីម៉ែលឡើងវិញ",
+        "resend_gift_cards_by_text": "ផ្ញើសារឡើងវិញ",
+        "gift_card_resent_confirmation": {
+          "one": "កាតអំណោយត្រូវបានផ្ញើម្ដងទៀត។",
+          "other": "កាត​អំណោយ​ត្រូវ​បាន​ផ្ញើ​ម្ដងទៀត។"
+        },
+        "gift_card_resend_failure": {
+          "one": "មានបញ្ហា​ពេល​ផ្ញើ​កាត​អំណោយ​របស់​អ្នក​ម្ដង​ទៀត​។ សូម​ព្យាយាម​ម្ដង​ទៀត ឬ​ទាក់ទង​មក​យើង​ខ្ញុំ។",
+          "other": "មានបញ្ហាក្នុងការផ្ញើកាតអំណោយរបស់អ្នកឡើងវិញ។ សូមព្យាយាមម្ដងទៀត ឬទាក់ទងមកយើងខ្ញុំ។"
+        },
+        "vat_invoices": {
+          "title": "វិក្កយបត្រអាករលើតម្លៃបន្ថែម"
+        },
+        "verify_shop_account_title": "ផ្ទៀងផ្ទាត់គណនី Shop របស់អ្នក។",
+        "verify_shop_account_message": "ព័ត៌មានរបស់អ្នកត្រូវបានរក្សាទុកជាមួយនឹង Shop សូមផ្ទៀងផ្ទាត់គណនីរបស់អ្នកដើម្បីប្រើប្រាស់វាដោយស្វ័យប្រវត្តិនៅលើហាងរាប់លាន។",
+        "verify_shop_account_cta": "ផ្ទៀងផ្ទាត់គណនីរបស់អ្នក",
+        "verify_shop_account_confirmation": "ព័ត៌មានលម្អិតសម្រាប់ការទូទាត់ត្រូវបានរក្សាទុក",
+        "announcement": {
+          "close": "បិទ",
+          "expand": "ពង្រីក",
+          "collapse": "បង្រួម"
+        }
+      },
+      "vaulted": {
+        "change_button": "ផ្លាស់ប្ដូរ"
+      },
+      "review": {
+        "title": "ពិនិត្យឡើងវិញ",
+        "review_title": "បញ្ចប់ការកម្មង់របស់អ្នក។",
+        "review_and_confirm_title": "សូមពិនិត្យ និងបញ្ជាក់",
+        "checkout_as_guest": "ទូទាត់ប្រាក់ជាភ្ញៀវ",
+        "account_more_actions": "សកម្មភាព​ច្រើនទៀត​សម្រាប់​គណនី​នេះ",
+        "checkout_a_different_way": "សូមពិនិត្យមើលវិធីផ្សេងទៀត។",
+        "blocks": {
+          "contact_method_title": "ទំនាក់ទំនង",
+          "billing_address_title": "ការចេញវិក្កយបត្រ",
+          "shipping_address_title": "ដឹកជញ្ជូនទៅ",
+          "shipping_method_title": "វិធីសាស្ត្រដឹកជញ្ជូន",
+          "payment_method_title": "វិធីសាស្រ្តបង់ប្រាក់",
+          "change_link_label": "ផ្លាស់ប្ដូរ",
+          "change_contact_method_link_label": "ប្ដូរព័ត៌មានទំនាក់ទំនង",
+          "change_billing_address_link_label": "ផ្លាស់ប្ដូរអាសយដ្ឋានចេញវិក្កយបត្រ",
+          "change_company_location_link_label": "ប្ដូរទីតាំងក្រុមហ៊ុន",
+          "change_shipping_address_link_label": "ផ្លាស់ប្ដូរអាសយដ្ឋានដឹកជញ្ជូន",
+          "change_shipping_method_link_label": "ប្ដូរវិធីដឹកជញ្ជូន",
+          "change_payment_method_link_label": "ប្ដូរវិធីបង់ប្រាក់",
+          "pick_up_in_store_shipping_method_html": "ទៅយកនៅហាង · %{location_name}",
+          "purchase_order_number_title": "លេខ​បញ្ជាទិញ",
+          "change_purchase_order_number_label": "ផ្លាស់ប្តូរលេខ PO",
+          "change_delivery_method_link_label": "ប្ដូរវិធីសាស្រ្តដឹកជញ្ជូន",
+          "no_address": "(គ្មានអាសយដ្ឋាន)",
+          "no_purchase_order_number": "(គ្មានលេខបញ្ជាទិញ)",
+          "due_after_order_reviewed_html": "ដល់កំណត់ក្រោយពីការបញ្ជាទិញត្រូវបានត្រួតពិនិត្យ",
+          "review_title_free_order": "ពិនិត្យ និងបញ្ចប់ការបញ្ជាទិញរបស់អ្នក",
+          "payment_method_saved_company_location": "រក្សាទុកកាតសម្រាប់ទីតាំងនេះ",
+          "company_location": "ទីតាំងក្រុមហ៊ុន",
+          "pickup_items_at": {
+            "one": "ទៅយកទំនិញ %{count} នៅ",
+            "other": "ទៅយកទំនិញ %{count} មុខនៅ"
+          },
+          "ship_items_to": {
+            "one": "ដឹកជញ្ជូនទំនិញ %{count} មុខទៅ",
+            "other": "ដឹកជញ្ជូនទំនិញចំនួន %{count} ទៅ"
+          }
+        },
+        "block_title": "ពិនិត្យមើលព័ត៌មានរបស់អ្នកឡើងវិញ"
       }
     },
     "pagination": {
