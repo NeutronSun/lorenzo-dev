@@ -3611,7 +3611,14 @@
       "signed_out_state": {
         "shop_login_button": "ចូលប្រើគណនីរបស់អ្នកជាមួយ Shop",
         "continue_with_google": "បន្តជាមួយ Google",
-        "continue_with_facebook": "បន្តជាមួយ Facebook"
+        "continue_with_facebook": "បន្តជាមួយ Facebook",
+        "sheet_title": "ចូលប្រើ ឬបង្កើតគណនី",
+        "section_divider": "វិធីជាច្រើនទៀតដើម្បីចូលប្រើ",
+        "alternate_divider": "ឬ",
+        "use_email_button": "ប្រើអ៊ីមែលជំនួសវិញ។",
+        "email_field_label": "អ៊ីមែល",
+        "orders_button": "ការបញ្ជាទិញ",
+        "profile_button": "ប្រវត្តិរូប"
       },
       "signed_in_state": {
         "greeting_with_name": "ជំរាបសួរ, {{first_name}}",
@@ -3768,8 +3775,119 @@
       "edit_summary": {
         "added": "បានបន្ថែម",
         "added_with_quantity": "បានបន្ថែម {{quantity}}",
-        "removed": "បានដកចេញ"
-      }
+        "removed": "បានដកចេញ",
+        "removed_with_quantity": "បានដកចេញ {{quantity}}",
+        "updated_at": "ការបញ្ជាទិញរបស់អ្នកត្រូវបានអាប់ដេតនៅថ្ងៃ {{date}}",
+        "returned": "បានត្រឡប់មកវិញ",
+        "returned_with_quantities": "បានត្រឡប់ {{delta}} នៃ {{total}}",
+        "removed_with_quantities": "បានលុប {{delta}} នៃ {{total}}",
+        "return_line_item_removed": "បានដកចេញពីការត្រឡប់មកវិញ",
+        "return_line_item_removed_with_quantities": "បានដកចេញ {{delta}} ពីការត្រឡប់មកវិញ"
+      },
+      "shop_pay": {
+        "order_completed_with": "ការបញ្ជាទិញបានបញ្ចប់ជាមួយ",
+        "learn_more": "ស្វែងយល់បន្ថែម"
+      },
+      "taxes": "ពន្ធដារ",
+      "taxes_included": "រួមទាំងពន្ធ {{amount}}",
+      "duties_and_taxes_included": "សរុបរួមទាំងកាតព្វកិច្ចពន្ធ និងពន្ធផ្សេងៗ។ គ្មាន​ការ​គិតថ្លៃ​បន្ថែម​ទៀត​លើ​ការ​ដឹកជញ្ជូន​ឡើយ។",
+      "duties": "កាតព្វកិច្ច",
+      "ok_duties_tooltip": "ការបញ្ជាទិញនេះត្រូវបានដឹកជញ្ជូនពីប្រទេសមួយផ្សេងទៀត ដូច្នេះកាតព្វកិច្ចត្រូវបានបន្ថែមទៅក្នុងចំនួនសរុបនៃការបញ្ជាទិញរបស់អ្នក។",
+      "error_duties_tooltip": "ការបញ្ជាទិញនេះកំពុងដឹកជញ្ជូនពីប្រទេសមួយផ្សេងទៀត ដូច្នេះកាតព្វកិច្ច និងពន្ធអាចនឹងត្រូវបានគិតថ្លៃនៅពេលដឹកជញ្ជូន។",
+      "zero_duties_tooltip": "ការបញ្ជាទិញនេះត្រូវបានដឹកជញ្ជូនពីប្រទេសមួយផ្សេងទៀត។ ពន្ធនឹងមិនត្រូវបានគិតលើការបញ្ជាទិញដែលមានតម្លៃនេះទេ។",
+      "tip": "ព័ត៌មានជំនួយ",
+      "title": "ការបញ្ជាទិញ {{name}}",
+      "total": "សរុប",
+      "unit_price": "{{price}}/មួយ",
+      "pagination": {
+        "load_more": "ផ្ទុកបន្ថែម",
+        "load_more_accessibility_label": "ផ្ទុកធាតុបន្ថែមទៀត",
+        "loading_accessibility_label": "កំពុងផ្ទុកធាតុ"
+      },
+      "login_to_view_all_order_details": "សូមចូលគណនីដើម្បីមើលព័ត៌មានលម្អិតនៃការបញ្ជាទិញទាំងអស់។",
+      "log_in": "ចូលគណនី",
+      "logged_in_account_no_permission_to_order": "អ្នកបានចូលក្នុងគណនីជា {{email}}។ គណនីនេះមិនមានសិទ្ធិគ្រប់គ្រងការបញ្ជាទិញនេះទេ។",
+      "log_in_to_a_different_account": "ចូលគណនីផ្សេង",
+      "fees": {
+        "restocking_fee": "ថ្លៃស្តុកទុកវិញ។",
+        "return_shipping_fee": "ការដឹកជញ្ជូនត្រឡប់មកវិញ"
+      },
+      "vat_invoices": {
+        "title": "វិក្កយបត្រអាករលើតម្លៃបន្ថែម"
+      },
+      "link_sent": "តំណភ្ជាប់បានផ្ញើរួចហើយ។",
+      "cash_rounding": "ការបង្គត់ប្រាក់",
+      "adjusted_payment": "ការទូទាត់ដែលបានកែសម្រួល",
+      "adjusted_total": "ផលបូកសរុបដែលបានកែសម្រួល",
+      "due_on_date": "ครบ​កំណត់​នៅ​ថ្ងៃ​ទី {{date}}",
+      "due_on_fulfillment": "ត្រូវបង់នៅពេលបំពេញតាមលក្ខខណ្ឌ",
+      "due_on_receipt": "ត្រូវ​បង់​ភ្លាម​ៗ​ពេល​ទទួល​បាន"
+    },
+    "addresses": {
+      "add_button": "បន្ថែមអាសយដ្ឋាន",
+      "add_button_text": "បន្ថែម",
+      "add_button_accessibility_label": "បន្ថែមអាសយដ្ឋាន",
+      "back_button": "ត្រឡប់",
+      "back_button_accessibility_label": "ត្រឡប់ទៅកែសម្រួលអាសយដ្ឋាន {{address}}",
+      "add_address_banner": "បន្ថែមអាសយដ្ឋានសម្រាប់ប្រើនៅពេលទូទាត់ប្រាក់",
+      "no_addresses_banner": "មិនទាន់បានបន្ថែមអាសយដ្ឋានទេ។",
+      "address_deleted_notification": "អាសយដ្ឋានត្រូវបានលុបចោល",
+      "cancel_adding_address_accessibility_label": "បោះបង់ការបន្ថែមអាសយដ្ឋាន",
+      "cancel_deletion_button": "បោះបង់",
+      "cancel_deletion_button_accessibility_label": "បោះបង់ការលុប {{address}}",
+      "default_address": {
+        "title": "អាសយដ្ឋានលំនាំដើម",
+        "title_accessibility_label": "អាសយដ្ឋានលំនាំដើម៖ {{address}}"
+      },
+      "delete_button": "លុប",
+      "delete_button_accessibility_label": "លុប {{address}}",
+      "delete_confirmation_button": "លុបអាសយដ្ឋាន",
+      "delete_confirmation_button_accessibility_label": "លុប {{address}}",
+      "delete_confirmation_message": "លុបអាសយដ្ឋាន? ការបញ្ជាទិញដែលមានស្រាប់មិនត្រូវបានប៉ះពាល់ទេ។",
+      "delete_confirmation_title": "លុបអាសយដ្ឋាន?",
+      "delete_confirmation_description": "ការបញ្ជាទិញដែលមានស្រាប់មិនត្រូវបានប៉ះពាល់ទេ។",
+      "edit_button": "កែសម្រួល",
+      "edit_button_accessibility_label": "កែប្រែ {{address}}",
+      "edit_section_accessibility_label": "កែប្រែ {{address}}",
+      "edit_modal_title": {
+        "default": "កែសម្រួលអាសយដ្ឋាន",
+        "billing": "កែសម្រួលអាសយដ្ឋានសម្រាប់ចេញវិក្កយបត្រ",
+        "shipping": "កែសម្រួលអាសយដ្ឋានដឹកជញ្ជូន"
+      },
+      "loading_accessibility_message": "កំពុងផ្ទុកអាសយដ្ឋាន",
+      "loading_addresses_accessibility_message": "កំពុងផ្ទុកអាសយដ្ឋាន",
+      "loading_billing_accessibility_message": "កំពុងផ្ទុកអាសយដ្ឋានចេញវិក្កយបត្រ",
+      "loading_finished_accessibility_message": "ទំព័រអាសយដ្ឋានថ្មីបានផ្ទុកឡើងហើយ។",
+      "loading_shipping_accessibility_message": "កំពុងផ្ទុកអាសយដ្ឋានដឹកជញ្ជូន",
+      "pagination": {
+        "load_more": "ផ្ទុកបន្ថែម",
+        "load_more_accessibility_label": "ផ្ទុកអាសយដ្ឋានបន្ថែមទៀត"
+      },
+      "save_new_address_accessibility_label": "រក្សាទុកអាសយដ្ឋាន",
+      "title": "អាសយដ្ឋាន",
+      "billing_address_dropdown_placeholder": "អាសយដ្ឋានចេញវិក្កយបត្រ"
+    },
+    "address_form": {
+      "attention": "ចំណាប់អារម្មណ៍",
+      "attention_company": "ក្រុមហ៊ុន/ទំនាក់ទំនង",
+      "attention_help_text": "ឈ្មោះបុគ្គល ឬនាយកដ្ឋាន",
+      "auto_complete_close_accessibility_label": "បិទការផ្ដល់យោបល់",
+      "auto_complete_title": "សំណូមពរ",
+      "billing_address": "ប្រើជាអាសយដ្ឋានចេញវិក្កយបត្រ",
+      "cancel": "បោះបង់",
+      "cancel_accessibility_label": "បោះបង់ការកែសម្រួលអាសយដ្ឋាន {{address}}",
+      "creation_success_notification": "បានបន្ថែមអាសយដ្ឋាន",
+      "default_address": "នេះជាអាសយដ្ឋានលំនាំដើមរបស់ខ្ញុំ។",
+      "default_address_creation_success_notification": "អាសយដ្ឋានលំនាំដើមត្រូវបានបន្ថែម",
+      "default_address_update_success_notification": "អាសយដ្ឋានលំនាំដើមបានអាប់ដេត",
+      "loading_add_form_accessibility_message": "កំពុងផ្ទុកទម្រង់អាសយដ្ឋានថ្មី។",
+      "loading_edit_form_accessibility_message": "កំពុងផ្ទុកទម្រង់កែសម្រួលអាសយដ្ឋាន",
+      "loading_form_accessibility_message": "កំពុងផ្ទុកទម្រង់អាសយដ្ឋាន",
+      "loading_finished_accessibility_message": "ទម្រង់អាសយដ្ឋានបានផ្ទុកឡើងហើយ។",
+      "save": "រក្សាទុក",
+      "save_accessibility_label": "រក្សាទុកអាសយដ្ឋាន {{address}}",
+      "section_title_accessibility_label": "បន្ថែមអាសយដ្ឋាន",
+      "update_success_notification": "បានធ្វើបច្ចុប្បន្នភាពអាសយដ្ឋាន"
     }
   },
   "404": {
