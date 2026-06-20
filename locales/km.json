@@ -1181,7 +1181,21 @@
         "shipping_method_not_available_generic": {
           "one": "ការបញ្ជាទិញរបស់អ្នកមិនអាចដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលបានជ្រើសរើសបានទេ។ សូមពិនិត្យអាសយដ្ឋានរបស់អ្នកឡើងវិញ ដើម្បីធានាថាវាត្រឹមត្រូវ ហើយព្យាយាមម្តងទៀត ឬជ្រើសរើសអាសយដ្ឋានផ្សេង។",
           "other": "ធាតុ​មួយ​ចំនួន​នៅ​ក្នុង​រទេះ​ទំនិញ​របស់​អ្នក មិន​អាច​ដឹក​ជញ្ជូន​ទៅ​កាន់​អាសយដ្ឋាន​ដែល​អ្នក​បាន​បញ្ចូល​បាន​ទេ។ សូម​ពិនិត្យ​មើល​អាសយដ្ឋាន​របស់​អ្នក​ម្ដង​ទៀត ដើម្បី​ឲ្យ​ប្រាកដ​ថា វា​ត្រឹមត្រូវ ហើយ​ព្យាយាម​ម្ដង​ទៀត ឬ​ជ្រើសរើស​អាសយដ្ឋាន​ផ្សេង។"
-        }
+        },
+        "shipping_method_not_available_due_to_unsatisfied_conditions": "ទំនិញនៅក្នុងកន្ត្រកមិនត្រូវតាមលក្ខខណ្ឌតម្លៃ ឬទម្ងន់សម្រាប់ការដឹកជញ្ជូនទេ។ សូមធ្វើបច្ចុប្បន្នកន្ត្រករបស់អ្នក រួចព្យាយាមម្ដងទៀត។",
+        "shipping_method_not_available_updated": {
+          "one": "ទំនិញដែលអ្នកបានបន្ថែមមិនអាចដឹកជញ្ជូនទៅកាន់ទីតាំងរបស់អ្នកបានទេ។ សូមលុបវាចេញដើម្បីបន្តការទូទាត់ ឬទាក់ទងហាង។",
+          "other": "មុខទំនិញមួយ ឬច្រើនដែលអ្នកបានបន្ថែមមិនអាចដឹកជញ្ជូនទៅកាន់ទីតាំងរបស់អ្នកបានទេ។ សូមលុបចេញ ដើម្បីបន្តពិនិត្យមើល ឬទាក់ទងហាង។"
+        },
+        "payment_method_not_supported": "អ្នកមិនអាចប្រើវិធីទូទាត់ប្រាក់នេះសម្រាប់ %{country} បានទេ។ សូមប្រើវិធីទូទាត់ផ្សេងទៀតដើម្បីដឹកជញ្ជូនទៅកាន់ប្រទេសនេះ។",
+        "empty_state": "បញ្ចូលអាសយដ្ឋានដឹកជញ្ជូនរបស់អ្នក ដើម្បីមើលវិធីសាស្រ្តដឹកជញ្ជូនដែលមាន។",
+        "title": "មិនមានសេវាកម្មដឹកជញ្ជូនទេ",
+        "invalid_selected_address": "អាសយដ្ឋានដឹកជញ្ជូនដែលបានជ្រើសរើសមិនត្រឹមត្រូវទេ។",
+        "invalid_selected_address_with_update_link": "អាសយដ្ឋានដឹកជញ្ជូនដែលបានជ្រើសរើសមិនត្រឹមត្រូវទេ។ %{update_address_link} ឬជ្រើសរើសអាសយដ្ឋានផ្សេង។",
+        "unavailable_addresses_only_countries": "ការបញ្ជាទិញរបស់អ្នកអាចដឹកជញ្ជូនបានតែទៅកាន់ {{countriesList}}។ បន្ថែមអាសយដ្ឋានថ្មីដើម្បីបន្ត។",
+        "unavailable_address_country": "ការដឹកជញ្ជូនមិនមាននៅក្នុងប្រទេសដែលអ្នកបានជ្រើសរើសនោះទេ។ សូមប្រើអាសយដ្ឋានផ្សេងដើម្បីបន្ត",
+        "unavailable_selected_address": "មិនអាចដឹកជញ្ជូនទៅកាន់អាសយដ្ឋានដែលបានជ្រើសរើសបានទេ។",
+        "unavailable_selected_address_for_region": "ការដឹកជញ្ជូនមិនមានសម្រាប់ {{region}} ទេ។ សូមជ្រើសរើសអាសយដ្ឋានផ្សេងដើម្បីបន្ត"
       },
       "shipping": {
         "title": "ការដឹកជញ្ជូន",
@@ -1344,7 +1358,15 @@
           "close": "បិទ",
           "expand": "ពង្រីក",
           "collapse": "បង្រួម"
-        }
+        },
+        "title": "សូមអរគុណចំពោះការជាវរបស់អ្នក!",
+        "confirmation_email_sent_text": "អ៊ីម៉ែលបញ្ជាក់មួយត្រូវបានផ្ញើទៅកាន់ %{email}",
+        "return_to_store_link_label": "បន្តការទិញទំនិញ",
+        "print_link_label": "បោះពុម្ពវិក្កយបត្រ",
+        "payment_information_title": "ព័ត៌មានបង់ប្រាក់",
+        "shipping_information_title": "ព័ត៌មានដឹកជញ្ជូន",
+        "page_title": "សូមអរគុណ %{display_name}!",
+        "page_title_no_name": "អរគុណ!"
       },
       "vaulted": {
         "change_button": "ផ្លាស់ប្ដូរ"
@@ -1389,6 +1411,112 @@
           }
         },
         "block_title": "ពិនិត្យមើលព័ត៌មានរបស់អ្នកឡើងវិញ"
+      },
+      "alternative_payment_method_banner": {
+        "express_checkout": "ការទូទាត់រហ័ស",
+        "or": "ឬ",
+        "or_pay_another_way": "ឬបង់តាមមធ្យោបាយផ្សេងទៀត។",
+        "or_check_out_another_way": "ឬពិនិត្យមើលវិធីផ្សេងទៀត",
+        "or_pay_with_credit_card": "ឬទូទាត់ជាមួយប័ណ្ណឥណទាន",
+        "show_more_options": "បង្ហាញជម្រើសបន្ថែមទៀត",
+        "hide_more_options": "លាក់ជម្រើសច្រើនទៀត"
+      },
+      "post_purchase": {
+        "page_title": "ក្រោយពេលទិញរួច",
+        "title": "ក្រោយពេលទិញរួច",
+        "escape_confirmation": "អ្នកបានទូទាត់ប្រាក់សម្រាប់ទំនិញរបស់អ្នករួចរាល់ហើយ។",
+        "escape_action": "មើលការបញ្ជាក់ការកម្ម៉ង់ ›",
+        "components": {
+          "close": "បិទ",
+          "expand": "មើលបន្ថែមទៀត",
+          "processing": "កំពុងដំណើរការ...",
+          "submit": "ដាក់ស្នើ"
+        }
+      },
+      "processing": {
+        "redirecting_page_title": "កំពុងបញ្ជូនបន្ត…",
+        "redirecting_title": "កំពុងបញ្ជូនបន្ត…",
+        "redirecting_notice": "សូមរង់ចាំបន្តិច ខណៈពេលដែលយើងកំពុងបញ្ជូនអ្នក។",
+        "redirecting_to_bank": "កំពុងបញ្ជូនបន្តទៅ {{bank}}",
+        "complete_your_purchase_title": "បញ្ចប់ការទិញរបស់អ្នក",
+        "continue_to_payment_gateway_notice": "បន្តទៅកាន់ការទូទាត់ ដើម្បីបន្ថែមព័ត៌មានទូទាត់របស់អ្នក។",
+        "continue_to_payment_gateway_button_label": "បន្តទៅការទូទាត់",
+        "complete_your_purchase_title_error": "កែប្រែព័ត៌មានទូទាត់របស់អ្នក",
+        "continue_to_payment_gateway_notice_error": "ព័ត៌មានការទូទាត់របស់អ្នកមិនអាចផ្ទៀងផ្ទាត់បានទេ។",
+        "continue_to_payment_gateway_button_label_error": "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានការទូទាត់",
+        "page_title": "កំពុងដំណើរការការបញ្ជាទិញ",
+        "title": "កំពុងដំណើរការការបញ្ជាទិញ",
+        "your_order_has_been_received_title": "អរគុណសម្រាប់ការកម្ម៉ង់របស់អ្នក។",
+        "you_will_receive_confirmation": "បច្ចុប្បន្ន​យើង​មាន​ការ​បញ្ជា​ទិញ​ច្រើន​ណាស់។ អ្នក​នឹង​ទទួល​បាន​ការ​បញ្ជាក់​តាម​រយៈ​អ៊ីមែល ឬ​សារ​ជា​អក្សរ​ក្នុង​ពេល​ឆាប់ៗ​នេះ។ ប្រសិនបើ​អ្នក​មិន​បាន​ទទួល​ក្នុង​រយៈ​ពេល​មួយ​ម៉ោង​បន្ទាប់​ទេ សូម​ជម្រាប​យើង។",
+        "you_will_not_be_charged": "អ្នកនឹងមិនត្រូវបានគិតលុយនៅឡើយទេ",
+        "wait": {
+          "short": "ការកម្ម៉ង់របស់អ្នកកំពុងត្រូវបានដំណើរការ។",
+          "medium": {
+            "one": "ការ​បញ្ជាទិញ​របស់​អ្នក​កំពុង​ដំណើរការ។ រង់ចាំ​ប្រហែល %{count} នាទី។",
+            "other": "ការបញ្ជាទិញរបស់អ្នកកំពុងត្រូវបានដំណើរការ។ រយៈពេលរង់ចាំប៉ាន់ស្មានគឺ %{count} នាទី។"
+          },
+          "long": "អ្នកនឹងទទួលបានអ៊ីមែលភ្លាមៗ នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានដំណើរការ។ បច្ចុប្បន្ន មានការបញ្ជាទិញច្រើន។",
+          "no_auto_refresh_html": "ប្រសិនបើអ្នកមិនត្រូវបានប្ដូរទិសដៅដោយស្វ័យប្រវត្តិទេ សូមចុច %{link}។",
+          "refresh_this_page": "ធ្វើឱ្យទំព័រនេះស្រស់ឡើងវិញ"
+        },
+        "remote_shops_payments_processing": "កំពុងដំណើរការទូទាត់",
+        "action_required": "ទាមទារសកម្មភាព",
+        "modal_notice": "យើងកំពុងទាក់ទង {{paymentMethod}}",
+        "remote_checkout_count": "%{current} នៃ %{total}"
+      },
+      "payment_challenge_modal": {
+        "instructions": "បញ្ចប់ការទិញរបស់អ្នកដោយប្រើលេខកូដ {{paymentMethod}} របស់អ្នក។",
+        "timer_message": "អ្នកមានពេល {{timeLeft}} សម្រាប់បង់ប្រាក់",
+        "copy_text": "ចម្លងកូដ {{paymentMethod}}",
+        "open_app_text": "បើកកម្មវិធី {{paymentMethod}}",
+        "header": "បង់ដោយ {{paymentMethod}}",
+        "qr_code": {
+          "instructions": "បញ្ចប់ការទិញរបស់អ្នកដោយប្រើលេខកូដ {{paymentMethod}} របស់អ្នក។"
+        },
+        "external": {
+          "instructions": "សូមបញ្ជាក់ការទូទាត់នៅក្នុងកម្មវិធីរបស់អ្នក ដើម្បីបញ្ចប់ការទិញនេះ"
+        },
+        "close": "បិទការប្រកួតប្រជែង"
+      },
+      "failed_payment": {
+        "page_title": "មិនអាចដំណើរការការទូទាត់បានទេ",
+        "title": "មិនអាចដំណើរការការទូទាត់បានទេ",
+        "payment_not_processed_title": "យើងមិនអាចដំណើរការការទូទាត់របស់អ្នកបានទេ",
+        "payment_not_processed_text": "អ្នកមិនទាន់បានបង់ប្រាក់ទេ។ សូមត្រឡប់ទៅកាន់កន្ត្រកទំនិញរបស់អ្នកវិញ ដើម្បីបំពេញការទិញរបស់អ្នក។",
+        "return_to_cart_button_label": "ត្រឡប់ទៅកន្ត្រកទំនិញ"
+      },
+      "payment_gateway": {
+        "credit_card_label": "កាតឥណទាន",
+        "bank_deposit_label": "ការដាក់ប្រាក់នៅធនាគារ",
+        "bank_account_label": "គណនីធនាគារ",
+        "cash_on_delivery_label": "បង់ប្រាក់ពេលទទួលទំនិញ (COD)",
+        "money_order_label": "ប័ណ្ណផ្ទេរប្រាក់",
+        "debit_card_label": "កាតឥណពន្ធ",
+        "credit_or_debit_card_label": "ឥណទាន/ឥណពន្ធ",
+        "deferred_payment_label": "ជ្រើសរើសវិធីទូទាត់ប្រាក់នៅពេលក្រោយ",
+        "fixed_payment_label": "ការទូទាត់របស់អ្នកនឹងផុតកំណត់នៅថ្ងៃ {{dueDate}}។",
+        "generic_payment_terms": "អ្នកកំពុងប្រើប្រាស់លក្ខខណ្ឌ {{translatedName}}។ ការទូទាត់របស់អ្នកនឹងផុតកំណត់នៅថ្ងៃ {{dueDate}}។",
+        "login_prompt": {
+          "no_access": {
+            "message": "{{logIn}} ចូលគណនីដែលមានសិទ្ធិចូលប្រើទីតាំងនេះ ដើម្បីបន្ថែម ឬប្រើវិធីទូទាត់ដែលបានរក្សាទុក។",
+            "link": "ចូលគណនី"
+          }
+        },
+        "direct_payment_terms": "អ្នកកំពុងប្រើលក្ខខណ្ឌ {{translatedName}}។ កាតរបស់អ្នកនឹងត្រូវគិតប្រាក់នៅថ្ងៃទី {{dueDate}}។",
+        "fixed_direct_payment_terms": "កាតរបស់អ្នកនឹងត្រូវគិតប្រាក់នៅថ្ងៃទី {{dueDate}}។",
+        "order_due_on_fulfillment_choose_later": "ការទូទាត់របស់អ្នកនឹងត្រូវបានកំណត់នៅពេលការកម្ម៉ង់របស់អ្នកត្រូវបានបំពេញ។",
+        "order_due_on_fulfillment_payment": "កាតរបស់អ្នកនឹងត្រូវបានគិតប្រាក់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបំពេញ។",
+        "order_due_on_receipt_choose_later": "ការទូទាត់របស់អ្នកនឹងផុតកំណត់នៅពេលទទួលបាន។",
+        "order_deposit_due_now": "{{depositAmount}} ត្រូវបង់ថ្ងៃនេះ។ សមតុល្យគឺនៅលើយ៉ាងយឺតបំផុត {{translatedName}} ហើយត្រូវបង់នៅ {{dueDate}}។",
+        "order_deposit_due_on_fulfillment": "{{depositAmount}} ត្រូវបង់ថ្ងៃនេះ។ សមតុល្យនឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបំពេញ។",
+        "order_deposit_due_on_receipt": "{{depositAmount}} ត្រូវបង់ថ្ងៃនេះ។ សមតុល្យដែលនៅសល់នឹងត្រូវបង់នៅពេលក្រោយ។",
+        "order_deposit_due_on_fixed_date": "{{depositAmount}} ត្រូវបង់ថ្ងៃនេះ។ សមតុល្យនឹងត្រូវបង់នៅថ្ងៃ {{dueDate}}។",
+        "draft_order_payment_due_later_no_terms": "ការទូទាត់របស់អ្នកនឹងផុតកំណត់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។",
+        "draft_order_payment_due_later_no_terms_payment_selected": "កាតរបស់អ្នកនឹងត្រូវគិតប្រាក់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។",
+        "draft_order_payment_due_later_terms": "អ្នកនឹងទទួលបានលក្ខខណ្ឌ {{translatedName}} នៅពេលដែលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។",
+        "draft_order_payment_due_on_fulfillment": "ការទូទាត់របស់អ្នកនឹងផុតកំណត់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់ និងបំពេញ។",
+        "draft_order_deposit_due_later": "{{depositAmount}} នឹងត្រូវទូទាត់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ ចំនួនទឹកប្រាក់ដែលនៅសល់នឹងត្រូវបានបង់តាមលក្ខខណ្ឌរបស់ {{translatedName}}។",
+        "draft_order_deposit_due_on_fulfillment": "{{depositAmount}} នឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបញ្ជាក់។ សមតុល្យនឹងត្រូវបង់នៅពេលការបញ្ជាទិញរបស់អ្នកត្រូវបានបំពេញ។"
       }
     },
     "pagination": {
@@ -2197,6 +2325,158 @@
         "modal_po_number_input_label": "លេខ​បញ្ជាទិញ",
         "modal_po_number_input_max_length_error": "លេខ PO មានចំនួនអក្សរអតិបរមា {{maxLength}} តួអក្សរ។",
         "save": "រក្សាទុក"
+      }
+    },
+    "orders": {
+      "order_list": {
+        "orders_title": "បានបញ្ជាក់",
+        "pagination": {
+          "nav_accessibility_label": "ប៊ូតុងរុករកការបញ្ជាទិញ",
+          "next": "បន្ទាប់",
+          "next_accessibility_label": "ការបញ្ជាទិញបន្ទាប់",
+          "previous": "មុន",
+          "previous_accessibility_label": "ការបញ្ជាទិញមុនៗ",
+          "load_more": "ផ្ទុកបន្ថែម",
+          "load_more_accessibility_label": "ផ្ទុកការបញ្ជាទិញបន្ថែមទៀត"
+        },
+        "order_status_message": {
+          "list_view": {
+            "view_order_for_details": "មើលការបញ្ជាទិញសម្រាប់ព័ត៌មានលម្អិត",
+            "estimated_delivery": "បានរំពឹងទុក {{date}}",
+            "last_updated": "បានធ្វើបច្ចុប្បន្នភាពចុងក្រោយ {{date}}"
+          },
+          "table_view": {
+            "estimated_delivery": "ការ​ដឹក​ជញ្ជូន​ប៉ាន់ស្មាន {{date}}"
+          }
+        },
+        "payment_status": {
+          "gallery_view": {
+            "overdue": "ផុតកំណត់បង់ប្រាក់",
+            "due": "ការទូទាត់ដល់កំណត់នៅ {{date}}",
+            "due_today": "ការទូទាត់ត្រូវដល់ថ្ងៃនេះ",
+            "due_without_date": "ដល់កំណត់បង់ប្រាក់",
+            "due_on_fulfillment": "ការទូទាត់ត្រូវធ្វើឡើងនៅពេលបំពេញលក្ខខណ្ឌ",
+            "pay_to_confirm": "បង់ប្រាក់ដើម្បីបញ្ជាក់",
+            "payment_not_due": "ការទូទាត់នៅមិនទាន់ដល់កំណត់ទេ។"
+          },
+          "list_view": {
+            "overdue": "ហួសពេលកំណត់",
+            "due": "ครบ​កំណត់​នៅ​ថ្ងៃ​ទី {{date}}",
+            "due_today": "ត្រូវ​ប្រគល់​ថ្ងៃនេះ",
+            "paid": "បានបង់",
+            "due_without_date": "ដល់កំណត់",
+            "due_on_fulfillment": "ត្រូវបង់នៅពេលបំពេញតាមលក្ខខណ្ឌ",
+            "pay_to_confirm": "បង់ប្រាក់ដើម្បីបញ្ជាក់",
+            "payment_not_due": "មិនទាន់ដល់កំណត់"
+          }
+        },
+        "sort_by": "តម្រៀបតាម៖ {{option}}",
+        "sort_hide_options_accessibility_label": "លាក់ជម្រើសតម្រៀបសម្រាប់បញ្ជាទិញដែលបានបញ្ជាក់។",
+        "sort_show_options_accessibility_label": "បង្ហាញជម្រើសតម្រៀបសម្រាប់បញ្ជាទិញដែលបានបញ្ជាក់។",
+        "sort_currently_sorted_by_accessibility_label": "បច្ចុប្បន្នត្រូវបានតម្រៀបតាម៖ {{option}}",
+        "sort_title": "តម្រៀប",
+        "sort": {
+          "date": {
+            "newest": "ថ្មីបំផុតទៅចាស់បំផុត។",
+            "oldest": "ចាស់បំផុតទៅថ្មីបំផុត។"
+          },
+          "location": {
+            "ascending": "ទីតាំង (អក្ខរក្រម A-Z)",
+            "descending": "ទីតាំង (Z-A)"
+          },
+          "order_number": {
+            "ascending": "លំដាប់លេខរៀង (ពីតិចទៅច្រើន)",
+            "descending": "លំដាប់លេខ (ខ្ពស់ទៅទាប)"
+          },
+          "order_total": {
+            "ascending": "តម្លៃបញ្ជាទិញសរុប (ពីទាបទៅខ្ពស់)",
+            "descending": "តម្លៃសរុប (ពីខ្ពស់ទៅទាប)"
+          }
+        },
+        "location_filter_picker": {
+          "all_location": "ទីតាំងទាំងអស់។",
+          "current_location": "ទីតាំងបច្ចុប្បន្ន",
+          "switch_view": "ប្ដូរទិដ្ឋភាព"
+        },
+        "filter_title": "ត្រង",
+        "filter": {
+          "clear_section": "ជម្រះផ្នែក",
+          "clear_all": "ជម្រះទាំងអស់។",
+          "apply": "ដាក់ពាក្យស្នើសុំ",
+          "date": {
+            "start_date": "កាលបរិច្ឆេទចាប់ផ្ដើម",
+            "end_date": "កាលបរិច្ឆេទបញ្ចប់",
+            "title": "កាលបរិច្ឆេទបញ្ជាទិញ",
+            "today": "ថ្ងៃនេះ",
+            "last_7_days": "៧ ថ្ងៃចុងក្រោយ",
+            "last_30_days": "30 ថ្ងៃចុងក្រោយ",
+            "last_90_days": "៩០ ថ្ងៃចុងក្រោយ",
+            "last_365_days": "១២ ខែចុងក្រោយ",
+            "custom": "ម៉ូដ​ផ្ទាល់​ខ្លួន"
+          }
+        },
+        "show_order_actions_accessibility_label": "បង្ហាញសកម្មភាពបញ្ជាទិញសម្រាប់លំដាប់ {{name}}",
+        "view_order": "មើលការបញ្ជាទិញ",
+        "view_order_accessibility_label": "មើលការបញ្ជាទិញ {{orderName}}"
+      },
+      "order_status": {
+        "attempted_delivery_label": "បានព្យាយាមដឹកជញ្ជូន",
+        "attempted_to_deliver_label": "បានប៉ុនប៉ងដឹកជញ្ជូន",
+        "preparing_for_shipping_label": "កំពុងរៀបចំសម្រាប់ដឹកជញ្ជូន",
+        "ready_for_pickup_label": "រួចរាល់សម្រាប់យក",
+        "ready_for_pickup_description": "ទំនិញទាំងនេះបានត្រៀមរួចរាល់សម្រាប់អ្នកមកយកហើយ។ សូមភ្ជាប់មកជាមួយនូវលេខបញ្ជាក់ការកម្ម៉ង់ ពេលអ្នកមកយកទំនិញ។",
+        "ready_for_pickup_location": "ការ​បញ្ជាទិញ​របស់​អ្នក​បាន​ត្រៀម​រួច​ហើយ​សម្រាប់​ការ​ទៅ​យក​នៅ​ទីតាំង។",
+        "picked_up_label": "បានទទួលយក",
+        "canceled_label": "បានលុបចោល",
+        "canceled_title": "ការបញ្ជាទិញរបស់អ្នកត្រូវបានលុបចោលហើយ។",
+        "come_back": "សូមត្រឡប់មកកាន់ទំព័រនេះម្ដងទៀត ដើម្បីមើលព័ត៌មានថ្មីៗអំពីស្ថានភាពដឹកជញ្ជូនរបស់អ្នក។",
+        "company_tracking_number": "{{company}} លេខតាមដាន៖",
+        "confirmed_label": "បានបញ្ជាក់",
+        "confirmed_title": "ការកម្ម៉ង់របស់អ្នកត្រូវបានបញ្ជាក់",
+        "confirmed_description_pickup": "អ្នកនឹងទទួលបានអ៊ីមែលនៅពេលការបញ្ជាទិញរបស់អ្នករួចរាល់សម្រាប់ការទៅយក។",
+        "confirmed_description_digital": "អ្នក​នឹង​ទទួល​បាន​អ៊ីមែល​មួយ​ពេល​ការ​បញ្ជា​ទិញ​របស់​អ្នក​រួចរាល់។",
+        "confirmed_description_gift_card_text": "អ្នកនឹងទទួលបានសារជាអក្សរនៅពេលការបញ្ជាទិញរបស់អ្នករួចរាល់។",
+        "complete_label": "បញ្ចប់",
+        "delivered_label": "បានដឹកជញ្ជូនរួចរាល់",
+        "delivered_description_gift_card": {
+          "one": "កាតអំណោយត្រូវបានផ្ញើតាមរយៈអ៊ីម៉ែល។",
+          "other": "បណ្ណអំណោយត្រូវបានផ្ញើតាមអ៊ីមែល។"
+        },
+        "delivered_description_gift_card_text": {
+          "one": "ប័ណ្ណ​អំណោយ​ត្រូវ​បាន​ផ្ញើ​តាម​សារ។",
+          "other": "ប័ណ្ណ​អំណោយ​ត្រូវ​បាន​ផ្ញើ​តាម​សារ។"
+        },
+        "gift_card_label": {
+          "one": "ប័ណ្ណ​ជូន​កាដូ",
+          "other": "ប័ណ្ណ​ជូន​កាដូ"
+        },
+        "gift_card_resend_button": {
+          "one": "ផ្ញើកាតអំណោយម្ដងទៀត",
+          "other": "ផ្ញើកាតអំណោយឡើងវិញ"
+        },
+        "gift_resend_success": {
+          "one": "កាតអំណោយបានផ្ញើឡើងវិញហើយ។",
+          "other": "កាតអំណោយត្រូវបានផ្ញើម្ដងទៀត"
+        },
+        "gift_resend_failure": {
+          "one": "មានបញ្ហា​ពេល​ផ្ញើ​កាត​អំណោយ​របស់​អ្នក​ម្ដង​ទៀត​។ សូម​ព្យាយាម​ម្ដង​ទៀត ឬ​ទាក់ទង​មក​យើង​ខ្ញុំ។",
+          "other": "មានបញ្ហាក្នុងការផ្ញើកាតអំណោយរបស់អ្នកឡើងវិញ។ សូមព្យាយាមម្ដងទៀត ឬទាក់ទងមកយើងខ្ញុំ។"
+        },
+        "confirmed_gift_card_additional_description": {
+          "one": "ប័ណ្ណ​ជូន​កាដូ​នឹង​ត្រូវ​បាន​ផ្ញើ​ក្នុង​អ៊ីមែល​ដាច់​ដោយ​ឡែក។",
+          "other": "កាតអំណោយនីមួយៗនឹងត្រូវបានផ្ញើនៅក្នុងអ៊ីមែលដាច់ដោយឡែក។"
+        },
+        "confirmed_gift_card_additional_description_text": {
+          "one": "ប័ណ្ណ​ជូនពរ​នឹង​ត្រូវ​បាន​ផ្ញើ​នៅ​ក្នុងសារជាអក្សរ​ផ្សេង​មួយ​ទៀត។",
+          "other": "ប័ណ្ណ​អំណោយ​នីមួយៗ​នឹង​ត្រូវ​ផ្ញើ​តាម​រយៈ​សារ​ជា​អក្សរ​ដាច់ដោយឡែក។"
+        },
+        "status_timestamp": "បានធ្វើបច្ចុប្បន្នភាព {{date}}",
+        "estimated_delivery": "បានរំពឹងទុក {{date}}",
+        "expected_by": "រំពឹងទុកដោយ {{date}}",
+        "was_expected_by": "ត្រូវបានរំពឹងទុកនៅត្រឹមថ្ងៃទី {{date}}",
+        "delivered": "បានមកដល់ {{date}}",
+        "buy_with_prime_logo_accessibility_label": "រូបសញ្ញា Amazon Buy with Prime",
+        "in_review_label": "កំពុងត្រួតពិនិត្យ"
       }
     }
   },
