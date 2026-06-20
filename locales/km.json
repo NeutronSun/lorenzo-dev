@@ -3123,7 +3123,19 @@
       "nav_label_accessibility_label": "ការរុករកចម្បង",
       "navigation_accessibility_message": "អ្នកបានចូលទៅ {{sectionName}}",
       "open_menu_accessibility_label": "បើកការរុករកមេ",
-      "shop_logo_accessibility_label": "{{shopName}} និមិត្តសញ្ញា"
+      "shop_logo_accessibility_label": "{{shopName}} និមិត្តសញ្ញា",
+      "settings_link": "ការកំណត់",
+      "country_switcher_toast_message": "ប្រទេសបានប្ដូរទៅ {{countryName}}",
+      "switch_country": "ប្ដូរប្រទេស",
+      "no_countries_found": "រកមិនឃើញប្រទេសណាមួយទេ",
+      "location_switcher_toast_message": "ទីតាំងត្រូវបានប្តូរទៅ {{locationName}}",
+      "switch_location": "ប្តូរទីតាំង",
+      "no_locations_found": "រកមិនឃើញទីតាំងណាមួយទេ។",
+      "try_new_search": "សាកល្បងស្វែងរកថ្មី",
+      "view_details": "មើល​ព័ត៌មាន​លម្អិត",
+      "company_location": "ទីតាំងក្រុមហ៊ុន",
+      "search": "ស្វែងរក",
+      "skip_to_content": "រំលងទៅមាតិកា"
     },
     "payment_methods": {
       "edit_payment_method": {
@@ -3761,7 +3773,49 @@
         },
         "show_order_actions_accessibility_label": "បង្ហាញសកម្មភាពបញ្ជាទិញសម្រាប់លំដាប់ {{name}}",
         "view_order": "មើលការបញ្ជាទិញ",
-        "view_order_accessibility_label": "មើលការបញ្ជាទិញ {{orderName}}"
+        "view_order_accessibility_label": "មើលការបញ្ជាទិញ {{orderName}}",
+        "column_headers": {
+          "order": "លំដាប់",
+          "total": "សរុប",
+          "actions_accessibility_label": "សកម្មភាព",
+          "products_accessibility_label": "ផលិតផល"
+        },
+        "delivered": "បានដឹកជញ្ជូននៅថ្ងៃទី {{date}}",
+        "empty_state_order_source_description": "មានតែការបញ្ជាទិញដែលបានដាក់ដោយ {{email}} ប៉ុណ្ណោះដែលនឹងបង្ហាញនៅទីនេះ។",
+        "empty_state_subtitle": "ទៅហាងដើម្បីដាក់បញ្ជាទិញ។",
+        "empty_state_title": "មិនទាន់មានការបញ្ជាទិញនៅឡើយទេ",
+        "empty_state_with_location_title": "គ្មានការបញ្ជាទិញសម្រាប់{{locationName}}ទេ",
+        "empty_state_title_for_pending_orders": "គ្មានការបញ្ជាទិញដែលមិនទាន់សម្រេចទេ។",
+        "no_order_banner": "ដើម្បីសាកល្បងផ្នែកបន្ថែមរបស់អ្នកនៅលើទំព័រស្ថានភាពការបញ្ជាទិញ សូមបង្កើតការបញ្ជាទិញមួយ។\n",
+        "estimated_shortform": "ប៉ាន់ស្មាន៖ {{date}}",
+        "estimated_delivery": "បានរំពឹងទុក {{date}}",
+        "one_images_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}}",
+        "two_images_accessibility_label": "ការ​បញ្ជា​ទិញ​រួម​មាន {{lineItemName1}}, {{lineItemName2}}",
+        "three_images_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}}, {{lineItemName2}}, {{lineItemName3}}",
+        "four_images_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}}, {{lineItemName2}}, {{lineItemName3}}, {{lineItemName4}}",
+        "more_than_three_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូលទាំង {{lineItemName1}}, {{lineItemName2}}, និង <span>{{numberOfAdditionalProducts}}</span> ផលិតផលផ្សេងទៀត",
+        "more_than_four_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}}, {{lineItemName2}}, {{lineItemName3}}, និងផលិតផលផ្សេងទៀតចំនួន {{numberOfAdditionalProducts}}",
+        "plus_more_products": "+{{numberOfAdditionalProducts}} ផលិតផល",
+        "carousel": {
+          "one_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}} ចំនួន {{lineItemQuantity1}}",
+          "two_products_accessibility_label": "ការកម្ម៉ង់រួមមាន {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}",
+          "three_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}, {{lineItemName3}} ចំនួន {{lineItemQuantity3}}",
+          "four_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}, {{lineItemName3}} ចំនួន {{lineItemQuantity3}}, {{lineItemName4}} ចំនួន {{lineItemQuantity4}}",
+          "five_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}, {{lineItemName3}} ចំនួន {{lineItemQuantity3}}, {{lineItemName4}} ចំនួន {{lineItemQuantity4}}, {{lineItemName5}} ចំនួន {{lineItemQuantity5}}",
+          "six_products_accessibility_label": "ការបញ្ជាទិញរួមបញ្ចូល {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}, {{lineItemName3}} ចំនួន {{lineItemQuantity3}}, {{lineItemName4}} ចំនួន {{lineItemQuantity4}}, {{lineItemName5}} ចំនួន {{lineItemQuantity5}}, {{lineItemName6}} ចំនួន {{lineItemQuantity6}}",
+          "six_and_more_products_accessibility_label": "ការ​បញ្ជា​ទិញ​មាន {{lineItemName1}} ចំនួន {{lineItemQuantity1}}, {{lineItemName2}} ចំនួន {{lineItemQuantity2}}, {{lineItemName3}} ចំនួន {{lineItemQuantity3}}, {{lineItemName4}} ចំនួន {{lineItemQuantity4}}, {{lineItemName5}} ចំនួន {{lineItemQuantity5}}, {{lineItemName6}} ចំនួន {{lineItemQuantity6}} និង​ច្រើន​ទៀត",
+          "view_order_details": "មើលព័ត៌មានលម្អិតការបញ្ជាទិញ",
+          "previous": "មុន",
+          "next": "បន្ទាប់"
+        },
+        "items": {
+          "one": "{{count}} មុខទំនិញ",
+          "other": "{{count}} មុខទំនិញ"
+        },
+        "no_filtered_results_description": "លុប ឬកែតម្រូវតម្រងដើម្បីមើលការបញ្ជាទិញរបស់អ្នក។",
+        "no_filtered_results_title": "គ្មានលទ្ធផលដែលត្រូវបានច្រោះ",
+        "order_link": "មើលការបញ្ជាទិញ {{name}}",
+        "order_number": "ការបញ្ជាទិញ {{name}}"
       },
       "order_status": {
         "attempted_delivery_label": "បានព្យាយាមដឹកជញ្ជូន",
@@ -3821,7 +3875,14 @@
         "delivered": "បានមកដល់ {{date}}",
         "buy_with_prime_logo_accessibility_label": "រូបសញ្ញា Amazon Buy with Prime",
         "in_review_label": "កំពុងត្រួតពិនិត្យ"
-      }
+      },
+      "list_layout_accessibility_label": "ជម្រើសប្លង់",
+      "list_title": "ការបញ្ជាទិញ",
+      "list_title_with_pending_orders": "ការបញ្ជាទិញ៖",
+      "list_title_confirmed_orders_accessibility_label": "ការបញ្ជាទិញ៖ បានបញ្ជាក់",
+      "list_title_pending_orders_accessibility_label": "ការបញ្ជាទិញ៖ កំពុងរង់ចាំ",
+      "switch_order_type_pending_orders_accessibility_label": "ប្ដូរប្រភេទលំដាប់លំដោយ កំពុងមើលការបញ្ជាទិញដែលមិនទាន់សម្រេច",
+      "switch_order_type_confirmed_orders_accessibility_label": "ប្ដូរប្រភេទលំដាប់លំដោយ កំពុងមើលការបញ្ជាទិញដែលបានបញ្ជាក់"
     },
     "account_menu": {
       "signed_out_state": {
@@ -4104,6 +4165,66 @@
       "save_accessibility_label": "រក្សាទុកអាសយដ្ឋាន {{address}}",
       "section_title_accessibility_label": "បន្ថែមអាសយដ្ឋាន",
       "update_success_notification": "បានធ្វើបច្ចុប្បន្នភាពអាសយដ្ឋាន"
+    },
+    "announcement_bar": {
+      "expand_label": "ពង្រីករបារសេចក្តីប្រកាស",
+      "collapse_label": "បង្រួមរបារសេចក្តីប្រកាស",
+      "close_label": "បិទរបារសេចក្ដីប្រកាស"
+    },
+    "account_information": {
+      "loading_accessibility_message": "កំពុងផ្ទុកព័ត៌មានគណនី",
+      "loading_finished_accessibility_message": "ព័ត៌មានគណនីត្រូវបានផ្ទុក",
+      "profile_card": {
+        "cancel": "បោះបង់",
+        "cancel_accessibility_label": "បោះបង់ការកែសម្រួលប្រវត្តិរូប",
+        "edit": "កែសម្រួល",
+        "edit_accessibility_label": "កែប្រែប្រវត្តិរូប",
+        "email_help_text": "អ៊ីមែលមិនអាចកែប្រែបានទេ។",
+        "editable_email_help_text": "អ៊ីមែលនេះត្រូវបានប្រើសម្រាប់ចូល និងធ្វើបច្ចុប្បន្នភាពការបញ្ជាទិញ។",
+        "first_name": "ឈ្មោះ​ខ្លួន",
+        "last_name": "នាមត្រកូល",
+        "email": "អ៊ីមែល",
+        "no_name_provided_accessibility_label": "គ្មាន​ឈ្មោះ​បាន​បន្ថែម​ទេ",
+        "phone_number_help_text": "លេខទូរសព្ទមិនអាចកែប្រែបានទេ",
+        "save": "រក្សាទុក",
+        "save_accessibility_label": "រក្សាទុកប្រវត្តិរូប",
+        "title": "ប្រវត្តិរូប",
+        "errors": {
+          "name_too_long": "{{fieldName}} វែងពេកហើយ (អតិបរមាគឺ 255 តួអក្សរ)",
+          "name_cannot_contain_url": "{{fieldName}} មិនអាចមាន URL បានទេ",
+          "name_cannot_contain_html_tags": "{{fieldName}} មិនអាចមានស្លាក HTML បានទេ",
+          "email_cant_be_blank": "អ៊ីមែលមិនអាចទទេបានទេ",
+          "invalid_email_format": "សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ"
+        }
+      },
+      "verify_new_email_modal": {
+        "title": "ផ្ទៀងផ្ទាត់អ៊ីមែល",
+        "description": "បញ្ចូលលេខកូដដែលបានផ្ញើទៅ {{email}}",
+        "one_time_password_label": "លេខសម្ងាត់ ៦ខ្ទង់",
+        "email_resend_button": "ផ្ញើលេខកូដម្ដងទៀត",
+        "email_resend_button_accessibility_label": "ផ្ញើលេខកូដផ្ទៀងផ្ទាត់ឡើងវិញ",
+        "verify_button": "ផ្ទៀងផ្ទាត់",
+        "verify_button_accessibility_label": "ផ្ទៀងផ្ទាត់លេខសម្ងាត់ប្រើបានតែម្ដង",
+        "cancel_button": "បោះបង់",
+        "cancel_button_accessibility_label": "បោះបង់ការកែសម្រួលអ៊ីម៉ែល",
+        "email_resend_button_success_toast_message": "លេខកូដ​ផ្ទៀងផ្ទាត់​ត្រូវ​បាន​ផ្ញើ​ហើយ។",
+        "email_resend_button_failure_banner_message": "មិនអាចផ្ញើលេខកូដផ្ទៀងផ្ទាត់បានទេ។"
+      },
+      "email_update_success_modal": {
+        "title": "ផ្ទៀងផ្ទាត់អ៊ីមែល",
+        "description": "អ៊ីមែលត្រូវបានអាប់ដេតដោយជោគជ័យ។ កំពុងបញ្ជូនទៅកាន់ការចូល។"
+      },
+      "profile_update_confirmation_message": "ព័ត៌មាន​បាន​អាប់ដេត​ហើយ។",
+      "email_update_confirmation_message": "អ៊ីមែលត្រូវបានធ្វើបច្ចុប្បន្នភាពទៅ {{email}}",
+      "title": "ប្រវត្តិរូប",
+      "people": {
+        "pagination": {
+          "load_more": "ផ្ទុកបន្ថែម",
+          "load_more_accessibility_label": "ផ្ទុកមនុស្សបន្ថែមទៀត",
+          "loading_accessibility_label": "កំពុងផ្ទុករូបភាពមនុស្ស"
+        }
+      },
+      "add_button": "បន្ថែម"
     }
   },
   "404": {
