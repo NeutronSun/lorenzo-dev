@@ -7,16 +7,27 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "type": "aside",
   "name": "Dialog",
   "sections": {
     "search": {
       "type": "search-dialog",
       "settings": {
-        "suggested_queries": "",
-        "collections": [],
-        "featured_products": []
+        "suggested_queries": "veo\nmatrix\ndageth",
+        "collections": [
+          "all-movies-dragon-ball",
+          "all-movies-matrix",
+          "all-movies-attack-on-titan",
+          "all-movies-the-boys"
+        ],
+        "featured_products": [
+          "agent-smithone",
+          "buulerio",
+          "dageth",
+          "davide-the-king"
+        ],
+        "empty_collection": "all-historical"
       }
     },
     "localization": {
