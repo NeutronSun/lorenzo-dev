@@ -137,7 +137,78 @@
         "confirm_order_button_label": "បញ្ជាក់ការបញ្ជាទិញ",
         "submit_order_button_label": "ដាក់បញ្ជាទិញ",
         "submit_for_review_button_label": "ដាក់ស្នើសម្រាប់ត្រួតពិនិត្យ",
-        "submit_for_review_notice_label": "ការទូទាត់នឹងមិនត្រូវធ្វើឡើងទេ រហូតដល់ការបញ្ជាទិញរបស់អ្នកត្រូវបានត្រួតពិនិត្យរួចរាល់។"
+        "submit_for_review_notice_label": "ការទូទាត់នឹងមិនត្រូវធ្វើឡើងទេ រហូតដល់ការបញ្ជាទិញរបស់អ្នកត្រូវបានត្រួតពិនិត្យរួចរាល់។",
+        "continue_to_payment_plans_button_label": "បន្តទៅផែនការទូទាត់",
+        "back_button_label": "ត្រឡប់មកវិញ",
+        "choose_delivery_strategy": "ជ្រើសរើសវិធីសាស្ត្រដឹកជញ្ជូន",
+        "autocomplete_zero_item": "គ្មានធាតុដែលអាចប្រើបាន",
+        "autocomplete_powered_by_google": "ផ្ដល់​កម្លាំង​ដោយ {{brandName}}",
+        "submit": "ដាក់ស្នើ",
+        "processing": "កំពុងដំណើរការ...",
+        "stepper": {
+          "increase": "បង្កើន {{type}}",
+          "decrease": "បន្ថយ {{type}}",
+          "minimum_reached": "អប្បរមានៃ {{value}} ត្រូវបានសម្រេច",
+          "maximum_reached": "អតិបរមា {{value}} ត្រូវបានឈានដល់"
+        },
+        "remove_chip": "លុបធាតុ",
+        "remove_item": "លុប %{label}",
+        "remove_tag": "ដកស្លាកចេញ",
+        "dates": {
+          "weekdays": {
+            "monday": "ថ្ងៃច័ន្ទ",
+            "tuesday": "ថ្ងៃអង្គារ",
+            "wednesday": "ថ្ងៃពុធ",
+            "thursday": "ថ្ងៃព្រហស្បតិ៍",
+            "friday": "ថ្ងៃសុក្រ",
+            "saturday": "ថ្ងៃសៅរ៍",
+            "sunday": "ថ្ងៃអាទិត្យ"
+          },
+          "weekdays_abbreviation": {
+            "monday": "ម៉ូ",
+            "tuesday": "ទូ",
+            "wednesday": "យើង",
+            "thursday": "ធី",
+            "friday": "បារាំង",
+            "saturday": "សា",
+            "sunday": "ស៊ូ"
+          },
+          "months": {
+            "january": "មករា",
+            "february": "កុម្ភៈ",
+            "march": "ខែមីនា",
+            "april": "មេសា",
+            "may": "ឧសភា",
+            "june": "មិថុនា",
+            "july": "កក្កដា",
+            "august": "ខែសីហា",
+            "september": "ខែកញ្ញា",
+            "october": "ខែតុលា",
+            "november": "វិច្ឆិកា",
+            "december": "ធ្នូ"
+          }
+        },
+        "datepicker": {
+          "show_previous_month": "បង្ហាញខែមុន, {{month}} {{year}}",
+          "show_next_month": "បង្ហាញខែបន្ទាប់, {{month}} {{year}}",
+          "range_start": "ចាប់ផ្ដើមជួរ",
+          "in_range": "ក្នុងជួរ",
+          "range_end": "ជួរចុង"
+        },
+        "map": {
+          "cluster_title": {
+            "one": "ចង្កោមសញ្ញាសម្គាល់ចំនួន {{number}}",
+            "other": "ចង្កោមសញ្ញាសម្គាល់ {{number}}"
+          }
+        },
+        "sheet": {
+          "expand": "ពង្រីក"
+        },
+        "dropzone": {
+          "add_file": "បន្ថែមឯកសារ",
+          "invalid_file_type": "ប្រភេទឯកសារមិនត្រូវបានគាំទ្រទេ",
+          "dragged_over": "ទម្លាក់ឯកសារដើម្បីផ្ទុកឡើង"
+        }
       },
       "payment": {
         "name_on_card_placeholder": "ឈ្មោះនៅលើកាត",
@@ -2147,6 +2218,67 @@
           "tax_credential_tr": "លេខសម្គាល់ពលរដ្ឋ/អាករលើតម្លៃបន្ថែមប្រទេសទួរគី",
           "shipping_credential_tr": "លេខសម្គាល់ពលរដ្ឋ/អាករលើតម្លៃបន្ថែមប្រទេសទួរគី"
         }
+      },
+      "embed": {
+        "header": {
+          "review_order": "ពិនិត្យមើលការបញ្ជាទិញរបស់អ្នក"
+        },
+        "shipping": {
+          "shipping_options": "មើលជម្រើសដឹកជញ្ជូនទាំងអស់"
+        },
+        "payment": {
+          "payment_options": "មើលជម្រើសទូទាត់ទាំងអស់។"
+        }
+      },
+      "payment_collection": {
+        "cancelled": "ការទូទាត់នេះលែងត្រូវបានទាមទារទៀតហើយ។ សូមចូលទៅកាន់ទំព័រការបញ្ជាទិញសម្រាប់ព័ត៌មានលម្អិត។",
+        "paid": "ការទូទាត់នេះត្រូវបានដាក់ស្នើហើយ។ សូមចូលទៅកាន់ទំព័រការបញ្ជាទិញសម្រាប់ព័ត៌មានលម្អិត។"
+      },
+      "contact": {
+        "title": "ព័ត៌មាន",
+        "address_title": "អាសយដ្ឋាន",
+        "shipping_used_as_billing_notice": "អាសយដ្ឋាននេះក៏នឹងត្រូវប្រើជាអាសយដ្ឋានសម្រាប់ចេញវិក្កយបត្រសម្រាប់ការបញ្ជាទិញនេះផងដែរ។",
+        "delivery_option_title": "វិធីសាស្ត្រដឹកជញ្ជូន",
+        "contact_method_title": "ទំនាក់ទំនង",
+        "email_label": "អ៊ីមែល",
+        "email_rollup_accessibility_label": "ជម្រើសអ៊ីមែល",
+        "email_placeholder": "អ៊ីមែល",
+        "email_or_phone_label": "អ៊ីមែល ឬលេខទូរសព្ទ",
+        "email_or_phone_placeholder": "អ៊ីមែល ឬលេខទូរសព្ទ",
+        "field_saved_label": "រក្សាទុក",
+        "field_tooltip_helper_text": "ប្រើសម្រាប់បញ្ជាក់ការបញ្ជាទិញរបស់អ្នក និងការរំលឹកអំពីកន្ត្រកទំនិញ",
+        "field_tooltip_accessibility_label": "ព័ត៌មាន​បន្ថែម​អំពី​របៀប​ដែល​ព័ត៌មាន​ទំនាក់ទំនង​របស់​អ្នក​ត្រូវ​បាន​ប្រើ",
+        "stored_addresses_label": "អាសយដ្ឋានដែលបានរក្សាទុក",
+        "available_addresses_label": "អាសយដ្ឋានដែលមានស្រាប់",
+        "new_address_label": "ប្រើអាសយដ្ឋានថ្មី",
+        "first_name_label": "ឈ្មោះ​ខ្លួន",
+        "optional_first_name_label": "ឈ្មោះ (ស្រេចតែចិត្ត)",
+        "last_name_label": "នាមត្រកូល",
+        "company_label": "ក្រុមហ៊ុន",
+        "storefront_link": "គេហទំព័រ​របស់​ឈ្មួញ",
+        "company_attention_label": "ក្រុមហ៊ុន/យោង",
+        "optional_company_attention_label": "ក្រុមហ៊ុន/ជូនចំពោះ (ស្រេចលើអ្នក)",
+        "optional_company_label": "ក្រុមហ៊ុន (ស្រេចចិត្ត)",
+        "address1_label": "អាសយដ្ឋាន",
+        "optional_street_name_label": "លេខផ្ទះនិងផ្លូវ (ស្រេចចិត្ត)",
+        "address2_label": "ផ្ទះល្វែង បន្ទប់ស្នាក់នៅជាដើម។",
+        "optional_address2_label": "អាផាតមិន, ឈុត, ជាដើម (ស្រេចតែនឹងជ្រើសរើស)",
+        "subdistrict_label": "អនុស្រុក",
+        "optional_subdistrict_label": "ឃុំ/សង្កាត់ (ស្រេចចិត្ត)",
+        "city_label": "ទីក្រុង",
+        "suburb_label": "ជាយក្រុង",
+        "country_label": "ប្រទេស/តំបន់",
+        "country_code": "លេខកូដប្រទេស/តំបន់",
+        "province_label": "ខេត្ត",
+        "province_placeholder": "ខេត្ត",
+        "county_label": "ស្រុក",
+        "county_placeholder": "ស្រុក",
+        "state_label": "រដ្ឋ",
+        "state_placeholder": "រដ្ឋ",
+        "region_label": "តំបន់",
+        "region_placeholder": "តំបន់",
+        "region_none": "គ្មានការជ្រើសរើស",
+        "prefecture_label": "ខេត្ត"
       }
     },
     "pagination": {
