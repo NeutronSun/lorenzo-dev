@@ -479,7 +479,49 @@
           "confirmation": "តើអ្នកប្រាកដថាចង់លុប {{brandName}} ដែលមានលេខបញ្ចប់ {{lastDigits}} ឬទេ?",
           "cancel": "បោះបង់",
           "delete": "លុប"
-        }
+        },
+        "network_card_payment_options": "ជ្រើសរើសបណ្ដាញកាត",
+        "network_card_persistence_description": "បណ្តាញដែលបានជ្រើសរើសនឹងត្រូវបានរក្សាទុកជាមួយវិធីបង់ប្រាក់របស់អ្នកសម្រាប់ការទូទាត់នាពេលអនាគត។",
+        "amazon_payments_login_hint": "អ្នកនឹងត្រូវបានស្នើសុំឱ្យចូលដោយប្រើគណនី Amazon។",
+        "amazon_payments_logout": "ចេញពីគណនី Amazon Pay",
+        "amazon_payments_failed_mfa_challenge": "វិធីសាស្ត្រទូទាត់ដែលបានជ្រើសរើសមិនអាចប្រើប្រាស់បានទេ។ សូមជ្រើសរើសវិធីសាស្ត្រផ្សេងទៀត ឬទាក់ទងធនាគារ ឬក្រុមហ៊ុនចេញប័ណ្ណរបស់អ្នក។",
+        "amazon_payments_abandoned_mfa_challenge": "ការទូទាត់របស់អ្នកមិនអាចបញ្ចប់បានទេ។ សូមសាកល្បងវិធីទូទាត់ផ្សេងទៀត ឬទាក់ទងធនាគារ ឬអ្នកចេញប័ណ្ណរបស់អ្នក។",
+        "amazon_payments_could_not_enqueue_authorize": "មាន​បញ្ហា​ក្នុង​ការ​ដំណើរការ​ការ​ទូទាត់​របស់​អ្នក។ សូម​ព្យាយាម​ម្ដងទៀត ឬ​ប្រើ​វិធីសាស្ត្រ​ទូទាត់​ផ្សេង។",
+        "title": "ការទូទាត់",
+        "amount_left_to_pay_label": "ថ្ងៃកំណត់ទូទាត់ប្រាក់:",
+        "discount_button_action_label": "ដាក់លេខកូដបញ្ចុះតម្លៃ",
+        "discount_codes_removed_summary": {
+          "one": "លេខកូដបញ្ចុះតម្លៃ %{count} ត្រូវបានដកចេញហើយ។",
+          "other": "ប័ណ្ណបញ្ចុះតម្លៃចំនួន %{count} ត្រូវបានដកចេញ"
+        },
+        "discount_codes_modified_summary": {
+          "one": "លេខកូដបញ្ចុះតម្លៃ %{count} ត្រូវបានកែប្រែ",
+          "other": "លេខកូដ​បញ្ចុះតម្លៃ %{count} ត្រូវបានកែប្រែ"
+        },
+        "discount_codes_removed_or_modified_summary": {
+          "one": "លេខកូដបញ្ចុះតម្លៃ %{count} ត្រូវបានដកចេញ ឬកែប្រែ",
+          "other": "មានលេខកូដបញ្ចុះតម្លៃចំនួន %{count} ត្រូវបានដកចេញ ឬកែប្រែ"
+        },
+        "discount_show_more_warnings": {
+          "one": "បង្ហាញបន្ថែម %{count} ទៀត។",
+          "other": "បង្ហាញបន្ថែម %{count} ទៀត។"
+        },
+        "gift_card_code_label": "លេខកូដប័ណ្ណអំណោយ",
+        "apply_gift_card_button_label": "ដាក់ពាក្យស្នើសុំ",
+        "gift_card_balance_label": "សមតុល្យ៖",
+        "supported_card_brands_more_label": "និងច្រើនទៀត…",
+        "detected_card_brand": "បានរកឃើញម៉ាកកាត៖ {brand}",
+        "credit_card_vaulting_sign_in_banner_title": "រក្សាទុកកាតឥណទានរបស់អ្នក",
+        "credit_card_vaulting_sign_in_banner_info": "ចូលគណនី ឬបង្កើតគណនី ដើម្បីរក្សាទុកកាតឥណទានរបស់អ្នកសម្រាប់ការទិញនាពេលអនាគត។",
+        "credit_card_vaulting_sign_in_banner_button_label": "ចូលគណនី",
+        "ftd_vault_credit_card_label": "រក្សាទុកកាតឥណទាននេះទៅក្នុងគណនីរបស់ខ្ញុំ សម្រាប់ការទូទាត់កាន់តែលឿន",
+        "card_number_label": "លេខប័ណ្ណ",
+        "card_number_placeholder": "លេខប័ណ្ណ",
+        "card_pay_with": "បង់ដោយ៖",
+        "card_security_notice": "រាល់ប្រតិបត្តិការទាំងអស់មានសុវត្ថិភាព និងបានអ៊ិនគ្រីប។",
+        "card_security_vault_notice": "យើងខ្ញុំត្រូវការព័ត៌មានលម្អិតរបស់អ្នកសម្រាប់ការទូទាត់នាពេលអនាគត។ រាល់ប្រតិបត្តិការទាំងអស់ត្រូវបានធានាសុវត្ថិភាព និងអ៊ិនគ្រីប។",
+        "card_information_notice": "ប្រតិបត្តិការទាំងអស់មានសុវត្ថិភាព និងត្រូវបានអ៊ិនគ្រីប។ ព័ត៌មានប័ណ្ណឥណទានមិនដែលត្រូវបានរក្សាទុកទេ។",
+        "name_on_card_label": "ឈ្មោះនៅលើកាត"
       },
       "order_summary": {
         "applied_discount_message": "បញ្ចុះតម្លៃ %{amount} លើតម្លៃសរុបនៃការបញ្ជាទិញ",
@@ -1419,7 +1461,185 @@
         "shipping_line_delivery_phone_label": "លេខទូរសព្ទដៃ",
         "shipping_line_delivery_phone": "អ្នកអាចនឹងត្រូវបានទាក់ទងអំពីបច្ចុប្បន្នភាពនៃការដឹកជញ្ជូនរបស់អ្នក។",
         "optional_shipping_line_delivery_instructions_label": "ការណែនាំអំពីការដឹកជញ្ជូន (ស្រេចចិត្ត)",
-        "shipping_line_delivery_instructions": "បញ្ចូលព័ត៌មានចាំបាច់ ដូចជាលេខកូដទ្វារ ឬការណែនាំសម្រាប់ការទម្លាក់ទំនិញ។"
+        "shipping_line_delivery_instructions": "បញ្ចូលព័ត៌មានចាំបាច់ ដូចជាលេខកូដទ្វារ ឬការណែនាំសម្រាប់ការទម្លាក់ទំនិញ។",
+        "missing_shipping_address": "អាសយដ្ឋានដឹកជញ្ជូនបាត់",
+        "split_shipping_merchandise_quantity_label_standard": "%{quantity} មុខទំនិញ",
+        "split_shipping_merchandise_quantity_label_additional": "នៅសល់ %{quantity} ទៀត",
+        "split_shipping_merchandise_shipment_number": "ការដឹកជញ្ជូន %{number} ក្នុងចំណោម %{total}",
+        "pre_order_ships_now": "កប៉ាល់ឥឡូវនេះ",
+        "pre_order_ships_later": "ដឹកជញ្ជូនពេលក្រោយ",
+        "pre_order_ships_date": "ដឹកជញ្ជូនថ្ងៃ %{date}",
+        "split_shipping_shipped_by_shop": "ដឹកជញ្ជូនដោយ %{shop_name}",
+        "split_shipping_multiple_shipment_label": "ការដឹកជញ្ជូនច្រើនដង",
+        "split_shipping_shipping_label": "វិធីសាស្រ្ត",
+        "split_shipping_shipment_notice": "ការកម្ម៉ង់របស់អ្នកនឹងមកដល់ក្នុង %{quantity_shipments}",
+        "split_shipping_first_shipment_notice": "ការបញ្ជាទិញដំបូងរបស់អ្នកនឹងមកដល់ក្នុងរយៈពេល %{quantity_shipments}",
+        "split_shipping_multiple_shipment_quantity_label": "ការដឹកជញ្ជូន %{quantity}",
+        "split_shipping_multiple_shipment_notice": "ការកម្ម៉ង់របស់អ្នកនឹងត្រូវដឹកជញ្ជូនជាច្រើនលើក",
+        "split_shipping_multiple_shipment_notice_one_time_purchase": "ការបញ្ជាទិញរបស់អ្នកនឹងមកដល់ក្នុងការដឹកជញ្ជូនចំនួន %{quantity} ដង។",
+        "split_shipping_more_shipping_options": "ជម្រើសដឹកជញ្ជូនបន្ថែម",
+        "split_shipping_shipment_number": "ការដឹកជញ្ជូន %{number}",
+        "split_shipping_merchandise_quantity_label_inline_primary": "បរិមាណ៖ %{quantity}",
+        "split_shipping_option_free": "ដឹកជញ្ជូនដោយឥតគិតថ្លៃ",
+        "split_shipping_option_lowest_price": "តម្លៃទាបបំផុត។",
+        "split_shipping_option_fastest": "លឿនបំផុត។",
+        "split_shipping_option_recommended": "បានណែនាំ",
+        "split_shipping_option_custom": "ម៉ូដ​ផ្ទាល់​ខ្លួន",
+        "add_shipping_address": "បន្ថែមអាសយដ្ឋានដឹកជញ្ជូន",
+        "add_new_delivery_address": "បន្ថែមអាសយដ្ឋានដឹកជញ្ជូនថ្មី",
+        "choose_new_address": "ជ្រើសរើសអាសយដ្ឋានថ្មី",
+        "other_method": {
+          "zero": "គ្មានវិធីសាស្រ្តផ្សេងទៀតដែលអាចប្រើបានទេ",
+          "one": "មានវិធីសាស្រ្តផ្សេងទៀតចំនួន %{count} ដែលអាចប្រើបាននៅ",
+          "other": "មានវិធីសាស្រ្តផ្សេងទៀតចំនួន %{count} ដែលអាចប្រើបានចាប់ផ្ដើមពី"
+        },
+        "shipping_rate_discounted_amount": "ពីមុន៖ %{original_amount}។ ឥឡូវ៖ %{amount}",
+        "local_delivery": "ដឹកជញ្ជូនក្នុងស្រុក",
+        "prime_not_available": {
+          "default": "ការដឹកជញ្ជូនបែប Prime មិនមានសម្រាប់គណនីរបស់អ្នកទេ។ ជម្រើសនៃការដឹកជញ្ជូនរបស់អ្នកត្រូវបានអាប់ដេតហើយ។"
+        },
+        "subscription_delivery_description": {
+          "free_shipping_cycles": {
+            "one": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់ %{count} ដឹកជញ្ជូនទៀត",
+            "other": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់ការដឹកជញ្ជូន %{count} បន្ថែមទៀត"
+          },
+          "free_shipping_cycles_delivery_not_included": {
+            "one": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់ការដឹកជញ្ជូន %{count}",
+            "other": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់​ការដឹកជញ្ជូន %{count} ដង"
+          },
+          "first_n_order_free_with_cycle": {
+            "one": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់ %{count} ការដឹកជញ្ជូនបន្ថែម បន្ទាប់មក %{recurring_order_shipping_price}",
+            "other": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់ការដឹកជញ្ជូន %{count} បន្ថែមទៀត បន្ទាប់មក %{recurring_order_shipping_price}"
+          },
+          "first_n_order_free_with_cycle_delivery_not_included": {
+            "one": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់​ការដឹកជញ្ជូន %{count} បន្ទាប់មក %{recurring_order_shipping_price}",
+            "other": "ឥតគិតថ្លៃសម្រាប់ការដឹកជញ្ជូន %{count} ដង បន្ទាប់មក %{recurring_order_shipping_price}"
+          },
+          "max_cycles_base_shipping": {
+            "one": "នៅសល់ %{count} ទៀតសម្រាប់ការដឹកជញ្ជូនក្នុងតម្លៃ %{shipping_price}",
+            "other": "ការដឹកជញ្ជូន %{count} បន្ថែមទៀត សម្រាប់ %{shipping_price} ក្នុងមួយមុខ"
+          },
+          "max_cycles_base_shipping_delivery_not_included": {
+            "one": "ការដឹកជញ្ជូន %{count} សម្រាប់ %{shipping_price}",
+            "other": "ការដឹកជញ្ជូន %{count} បន្ថែមទៀត សម្រាប់ %{shipping_price} ក្នុងមួយមុខ"
+          },
+          "prepaid_free_shipping_with_cycles": {
+            "one": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់រយៈពេល %{cycle} ដំបូង បន្ទាប់មក %{recurring_order_shipping_price}",
+            "other": "ដឹកជញ្ជូនឥតគិតថ្លៃសម្រាប់រយៈពេល %{cycle} ដំបូង បន្ទាប់មក %{recurring_order_shipping_price}"
+          },
+          "prepaid_order_one_cycle": {
+            "one": "%{shipping_price} សម្រាប់ការដឹកជញ្ជូន %{count} បន្ថែមទៀត",
+            "other": "%{shipping_price} សម្រាប់​ការ​ដឹកជញ្ជូន %{count} បន្ថែមទៀត (%{per_delivery_cost})"
+          },
+          "prepaid_order_one_cycle_delivery_not_included": {
+            "one": "%{shipping_price} សម្រាប់​ការ​ដឹក​ជញ្ជូន %{count}",
+            "other": "%{shipping_price} សម្រាប់​ការ​ដឹកជញ្ជូន %{count} ដង (%{per_delivery_cost} ក្នុង​មួយ​ដង)"
+          },
+          "prepaid_order_no_cycle": {
+            "one": "%{shipping_price} សម្រាប់​ការ​ដឹកជញ្ជូន​ចំនួន %{count} បន្ថែម បន្ទាប់មក %{recurring_order_shipping_price}",
+            "other": "%{shipping_price} សម្រាប់​ការ​ដឹកជញ្ជូន​ចំនួន %{count} បន្ថែម (%{per_delivery_cost}) បន្ទាប់មក %{recurring_order_shipping_price}"
+          },
+          "prepaid_order_no_cycle_delivery_not_included": {
+            "one": "%{shipping_price} សម្រាប់​ការ​ដឹក​ជញ្ជូន %{count} បន្ទាប់មក %{recurring_order_shipping_price}",
+            "other": "%{shipping_price} សម្រាប់ %{count} ការដឹកជញ្ជូន (%{per_delivery_cost}) បន្ទាប់មក %{recurring_order_shipping_price}"
+          },
+          "subscription_free_with_frequency_label": "ដឹកជញ្ជូនឥតគិតថ្លៃ %{delivery_frequency}",
+          "prepaid_delivery_frequency": {
+            "one": "សម្រាប់​ការ​ដឹក​ជញ្ជូន %{count}",
+            "other": "សម្រាប់ការដឹកជញ្ជូន %{count} ដង"
+          },
+          "subscription_delivery_frequency": {
+            "day": {
+              "one": "រៀងរាល់ថ្ងៃ",
+              "other": "រៀងរាល់ %{count} ថ្ងៃម្ដង"
+            },
+            "week": {
+              "one": "រៀងរាល់សប្តាហ៍",
+              "other": "រៀងរាល់ %{count} សប្តាហ៍"
+            },
+            "month": {
+              "one": "រៀងរាល់ខែ",
+              "other": "រៀងរាល់ %{count} ខែម្តង"
+            },
+            "year": {
+              "one": "ជារៀងរាល់ឆ្នាំ",
+              "other": "រៀងរាល់ %{count} ឆ្នាំម្ដង"
+            }
+          },
+          "multiple_subscriptions_shipping_price_label": "%{shipping_price} ក្នុង​ការដឹកជញ្ជូនម្ដងៗ",
+          "prepaid_shipping_price_label": "%{shipping_price} ក្នុង​ការ​ដឹកជញ្ជូន x %{delivery_interval_count}",
+          "initial_order_discounted": "ថ្លៃដឹកជញ្ជូនដំបូង %{discounted_shipping_cost} បន្ទាប់មក %{frequency_description}",
+          "prepaid_initial_order_discounted": "តម្លៃដឹកជញ្ជូនដំបូង %{discounted_shipping_price} %{prepaid_delivery_frequency}",
+          "prepaid_initial_order_discounted_with_per_delivery_price": "ថ្លៃដឹកជញ្ជូនលើកដំបូង %{discounted_shipping_price} %{prepaid_delivery_frequency} (%{discounted_cost_per_delivery})",
+          "prepaid_initial_order_discounted_with_renewal": "តម្លៃដឹកជញ្ជូនដំបូង %{discounted_shipping_price} %{prepaid_delivery_frequency} បន្ទាប់មក %{shipping_price} %{billing_cycle}",
+          "prepaid_initial_order_discounted_with_per_delivery_price_and_renewal": "តម្លៃដឹកជញ្ជូនដំបូង %{discounted_shipping_price} %{prepaid_delivery_frequency} (%{discounted_cost_per_delivery}) បន្ទាប់មក %{shipping_price} %{billing_cycle}",
+          "shipping_price_included": "រួមបញ្ចូល",
+          "recurring_order_shipping_price": "បន្ទាប់មក %{recurring_order_shipping_price}",
+          "first_order_shipping_price_included": "ការបញ្ជាទិញដំបូងរួមបញ្ចូល បន្ទាប់មក %{recurring_order_shipping_price}",
+          "first_order_different_shipping_price": "%{first_order_shipping_price} (%{per_delivery_price} ក្នុង​មួយ​ការ​ដឹកជញ្ជូន) បន្ទាប់មក %{recurring_order_shipping_price}",
+          "first_n_order_free": {
+            "one": "ការបញ្ជាទិញលើកដំបូងឥតគិតថ្លៃ",
+            "other": "ការបញ្ជាទិញ %{count}ដំបូងឥតគិតថ្លៃ"
+          },
+          "free_for_first_n_order": {
+            "one": "សម្រាប់លំដាប់ទីមួយ",
+            "other": "សម្រាប់​ការបញ្ជាទិញ %{count} លើក​ដំបូង"
+          }
+        },
+        "one_time_purchase_shipping": "ដឹកជញ្ជូនតែម្តង",
+        "duties_and_taxes_title": "កាតព្វកិច្ច និងពន្ធដារ",
+        "shipping_information_required_notice": "ព័ត៌មាន​ដឹក​ជញ្ជូន​ត្រូវ​បាន​ទាមទារ។ {{link}}.",
+        "shipping_information_redirect_link": "បញ្ចូលព័ត៌មានរបស់អ្នកនៅទីនេះ",
+        "loading_progressive_rates": "កំពុងស្វែងរកអត្រាបន្ថែមទៀត...",
+        "no_other_methods_available": "គ្មានវិធីសាស្រ្តផ្សេងទៀតដែលអាចប្រើបានទេ",
+        "duties_and_taxes_options": {
+          "ddu_title": "បង់ប្រាក់ពេលទទួលទំនិញ",
+          "ddu_caption": "ថ្លៃសេវាបន្ថែមអាចនឹងត្រូវបានគិតថ្លៃ។",
+          "ddp_title": "បង់ប្រាក់ឥឡូវនេះ",
+          "ddp_caption": "គ្មានថ្លៃសេវាបន្ថែមលើការដឹកជញ្ជូនទេ"
+        },
+        "shipping_method_combinations": {
+          "combination": "%{rest} និង %{current}"
+        },
+        "shipping_used_as_billing_notice": "អាសយដ្ឋាននេះក៏នឹងត្រូវប្រើជាអាសយដ្ឋានសម្រាប់ចេញវិក្កយបត្រសម្រាប់ការបញ្ជាទិញនេះផងដែរ។",
+        "address_update": "ធ្វើបច្ចុប្បន្នភាពអាសយដ្ឋាន",
+        "shipping_address_title": "ដឹកជញ្ជូនទៅ",
+        "shipping_address_rollup_accessibility_label": "ជម្រើស​អាសយដ្ឋាន​សម្រាប់​ដឹកជញ្ជូន",
+        "third_party_address_timeout": "មិនអាចផ្ទុកអាសយដ្ឋានបានទេ។ ព្យាយាមម្ដងទៀត ឬប្រើអាសយដ្ឋានផ្សេង។",
+        "third_party_address_error": "មាន​បញ្ហា​ពេល​ផ្ទុក​ការ​ជ្រើសរើស​អាសយដ្ឋាន។ សូម​បញ្ចូល​អាសយដ្ឋាន​របស់​អ្នក​ដោយ​ដៃ​នៅ​ខាងក្រោម។",
+        "third_party_payment_timeout": "មិនអាចផ្ទុកវិធីបង់ប្រាក់។ សូមសាកល្បងម្ដងទៀត ឬប្រើវិធីបង់ប្រាក់ផ្សេង។",
+        "third_party_payment_error": "មាន​បញ្ហា​ពេល​ផ្ទុក​ការ​ជ្រើសរើស​ការ​ទូទាត់។ សូម​ប្រើ​វិធីសាស្ត្រ​ទូទាត់​ផ្សេង។",
+        "add_address": "ប្រើអាសយដ្ឋានផ្សេង",
+        "add_delivery_instructions": "បញ្ចូលការណែនាំសម្រាប់ការដឹកជញ្ជូន",
+        "edit": "កែសម្រួល",
+        "delete": "លុប",
+        "back": "ត្រឡប់",
+        "address_more": "សកម្មភាព​បន្ថែម​ទៀត​សម្រាប់​អាសយដ្ឋាន​នេះ។",
+        "address_edit": "កែសម្រួលអាសយដ្ឋាន",
+        "address_delete": "លុបអាសយដ្ឋាន",
+        "address_confirm": "តើ​អ្នក​ពិតជា​ចង់​លុប​អាសយដ្ឋាន​នេះ​ចេញពី​គណនី​របស់​អ្នក​មែនទេ?",
+        "address_default": "កំណត់ជាលំនាំដើម",
+        "address_form": {
+          "add_address": "បន្ថែមអាសយដ្ឋាន",
+          "save": "រក្សាទុក",
+          "cancel": "បោះបង់",
+          "edit": "កែសម្រួលអាសយដ្ឋាន",
+          "update": "រក្សាទុកការផ្លាស់ប្ដូរ",
+          "generic_error": "មានបញ្ហាក្នុងការរក្សាទុកអាសយដ្ឋានរបស់អ្នក។ សូម​ព្យាយាម​ម្ដង​ទៀត។",
+          "one_time_address_subtitle": "សូមប្រើអាសយដ្ឋានប្រើតែម្តងសម្រាប់ឥវ៉ាន់នេះ"
+        },
+        "different_shipping_method_summary": "បញ្ចូលអាសយដ្ឋានដឹកជញ្ជូនផ្សេងដើម្បីមើលវិធីដឹកជញ្ជូនដែលមាន។",
+        "invalid_shipping_method_summary": "សូមបញ្ចូលអាសយដ្ឋានដឹកជញ្ជូនត្រឹមត្រូវ ដើម្បីមើលវិធីសាស្រ្តដឹកជញ្ជូនដែលមាន។",
+        "invalid_shipping_method_summary_selected": "ជ្រើសរើសអាសយដ្ឋានដឹកជញ្ជូនផ្សេងដើម្បីមើលវិធីសាស្ត្រដឹកជញ្ជូនដែលមាន។",
+        "method_summary": {
+          "incomplete_address_entered": "សូមបញ្ចូលអាសយដ្ឋានដឹកជញ្ជូនពេញលេញ ដើម្បីមើលវិធីសាស្រ្តដឹកជញ្ជូនដែលមាន។",
+          "incomplete_address_selected": "សូមជ្រើសរើសអាសយដ្ឋានដឹកជញ្ជូនពេញលេញ ដើម្បីមើលវិធីដឹកជញ្ជូនដែលអាចរកបាន"
+        },
+        "local_pickup": {
+          "search_address": "ស្វែងរកអាសយដ្ឋាន",
+          "rollup_title": "ទីតាំងទទួលអីវ៉ាន់",
+          "rollup_accessibility_label": "ជម្រើសទីតាំងសម្រាប់ទៅយកទំនិញ"
+        }
       },
       "thank_you": {
         "customer_validation_error_phone": "សូមបញ្ចូលលេខទូរសព្ទ ឬលេខកូដបញ្ជាទិញត្រឹមត្រូវ។",
@@ -1796,6 +2016,36 @@
           "killswitch_enabled": "ការទូទាត់មិនអាចធ្វើបានជាបណ្ដោះអាសន្នទេ",
           "policy_violation": "មិនអាចបញ្ចប់ការទូទាត់បានទេ ដោយសារការរឹតបន្តឹងការកំណត់រចនាសម្ព័ន្ធគោលការណ៍",
           "unrecoverable_failure": "មិនអាចផ្ទុកការទូទាត់បានទេ។ សូមព្យាយាមម្ដងទៀត"
+        }
+      },
+      "localized_fields": {
+        "additional_information": {
+          "title": "ព័ត៌មាន​បន្ថែម",
+          "shipping_credential_kr": "លេខកូដគយផ្ទាល់ខ្លួន",
+          "shipping_credential_cn": "លេខអត្តសញ្ញាណបណ្ណប្រជាពលរដ្ឋ",
+          "tax_credential_it": "លេខអត្តសញ្ញាណសារពើពន្ធ (ស្រេចចិត្ត)",
+          "tax_email_it": "PEC (ស្រេចតែនឹងជ្រើសរើស)",
+          "tax_credential_co": "លេខសម្គាល់/អាករ",
+          "tax_credential_type_co": "ប្រភេទសន្លឹកបោះឆ្នោត",
+          "shipping_credential_co": "លេខសម្គាល់/អាករ",
+          "shipping_credential_type_co": "ប្រភេទសន្លឹកបោះឆ្នោត",
+          "tax_credential_cr": "លេខសម្គាល់/RUT",
+          "shipping_credential_cr": "លេខសម្គាល់/RUT",
+          "tax_credential_gt": "លេខអត្តសញ្ញាណប័ណ្ណពន្ធដារ/អាករលើតម្លៃបន្ថែម",
+          "shipping_credential_gt": "លេខអត្តសញ្ញាណប័ណ្ណពន្ធដារ/អាករលើតម្លៃបន្ថែម",
+          "tax_credential_id": "អត្តសញ្ញាណប័ណ្ណពន្ធ",
+          "shipping_credential_id": "អត្តសញ្ញាណប័ណ្ណពន្ធ",
+          "tax_credential_my": "លេខអត្តសញ្ញាណសារពើពន្ធ/លេខចុះបញ្ជី",
+          "shipping_credential_my": "លេខអត្តសញ្ញាណសារពើពន្ធ/លេខចុះបញ្ជី",
+          "tax_credential_type_mx": "របបសារពើពន្ធ",
+          "tax_credential_use_mx": "ការប្រើប្រាស់ CFDI",
+          "tax_credential_pe": "អត្តសញ្ញាណប័ណ្ណ/RUC/CE",
+          "shipping_credential_pe": "អត្តសញ្ញាណប័ណ្ណ/RUC/CE",
+          "tax_credential_pt": "លេខអត្តសញ្ញាណសារពើពន្ធ/អាករលើតម្លៃបន្ថែម",
+          "shipping_credential_pt": "លេខអត្តសញ្ញាណសារពើពន្ធ/អាករលើតម្លៃបន្ថែម",
+          "shipping_credential_tw": "លេខអត្តសញ្ញាណប័ណ្ណ/អាករលើតម្លៃបន្ថែម",
+          "tax_credential_tr": "លេខសម្គាល់ពលរដ្ឋ/អាករលើតម្លៃបន្ថែមប្រទេសទួរគី",
+          "shipping_credential_tr": "លេខសម្គាល់ពលរដ្ឋ/អាករលើតម្លៃបន្ថែមប្រទេសទួរគី"
         }
       }
     },
