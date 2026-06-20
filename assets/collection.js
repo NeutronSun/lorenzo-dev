@@ -5,6 +5,7 @@ class Filters {
   static SELECTOR = 'filters';
   static CLEAR_SELECTOR = '[data-filters-clear]';
   static CLOSE_SELECTOR = '[data-filters-close]';
+  static PERSISTENT_INPUT_SELECTOR = 'input[type="hidden"][name]';
   static TEMPLATE_VIEW = 'filters';
 
   constructor() {
@@ -61,8 +62,10 @@ class Filters {
 
       event.preventDefault();
       form.reset();
-      this.publish(new URLSearchParams());
-      await this.render(new URLSearchParams(), form.closest(Filters.SELECTOR));
+      const params = this.getPersistentSearchParams(form);
+
+      this.publish(params);
+      await this.render(params, form.closest(Filters.SELECTOR));
     }
 
     if (close instanceof HTMLElement) {
@@ -102,6 +105,23 @@ class Filters {
       if (!value) continue;
 
       params.append(key, value.toString());
+    }
+
+    return params;
+  }
+
+  /**
+   * @param {HTMLFormElement} form
+   * @returns {URLSearchParams}
+   */
+  getPersistentSearchParams(form) {
+    const params = new URLSearchParams();
+
+    for (const input of form.querySelectorAll(Filters.PERSISTENT_INPUT_SELECTOR)) {
+      if (!(input instanceof HTMLInputElement)) continue;
+      if (!input.value) continue;
+
+      params.append(input.name, input.value);
     }
 
     return params;

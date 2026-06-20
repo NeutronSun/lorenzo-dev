@@ -28,6 +28,7 @@
     --header-spacing-top: var(--spacing);
     --header-spacing: var(--header-spacing-top);
     --filters-drawer-width: min(420px, calc(100dvw - var(--spacing) * 2));
+    --localization-drawer-width: min(440px, calc(100dvw - var(--spacing) * 2));
     --z-index-overlay: 80;
     --z-index-drawer: 90;
     --z-index-header: 100;

@@ -1,0 +1,387 @@
+{%- liquid
+  assign form_id = 'LocalizationForm-' | append: section.id
+-%}
+
+<dialog-component name="localization" non-modal>
+  <dialog ref="dialog" class="drawer from-right localization-drawer">
+    <localization-form>
+      {% form 'localization', id: form_id %}
+        <input
+          ref="countryInput"
+          type="hidden"
+          name="country_code"
+          value="{{ localization.country.iso_code }}"
+        >
+        <input
+          ref="languageInput"
+          type="hidden"
+          name="language_code"
+          value="{{ localization.language.iso_code }}"
+        >
+
+        <header class="localization-drawer-header">
+          <div>
+            <p class="localization-drawer-eyebrow font-mono">/LOCALIZATION</p>
+            <h2 class="localization-drawer-title font-heading">Country and language</h2>
+          </div>
+          <button
+            type="button"
+            class="localization-drawer-close"
+            data-localization-close
+            aria-label="Close localization"
+          >
+            {% render 'icon-close', size: 16 %}
+          </button>
+        </header>
+
+        <label class="localization-search">
+          {% render 'icon-search', size: 18 %}
+          <input
+            ref="search"
+            type="search"
+            placeholder="Search country or language"
+            aria-label="Search country or language"
+            autocomplete="off"
+          >
+        </label>
+
+        <div class="localization-countries">
+          {% for country in localization.available_countries %}
+            <details
+              ref="countries[]"
+              data-localization-country
+              data-country-code="{{ country.iso_code }}"
+              data-country-name="{{ country.name | escape }}"
+              {% if country.iso_code == localization.country.iso_code %}data-selected{% endif %}
+              {% if country.iso_code == localization.country.iso_code %}open{% endif %}
+            >
+              <summary>
+                <span class="localization-country-name" data-country-label>{{ country.name }}</span>
+                <span class="localization-country-meta font-mono">
+                  {{ country.iso_code }} / {{ country.currency.iso_code }}
+                </span>
+                {% render 'icon-chevron', size: 16 %}
+              </summary>
+              <div class="localization-languages">
+                {% for language in country.available_languages %}
+                  <button
+                    ref="languages[]"
+                    type="button"
+                    class="localization-language"
+                    data-localization-language
+                    data-country-code="{{ country.iso_code }}"
+                    data-language-code="{{ language.iso_code }}"
+                    data-language-name="{{ language.name | escape }}"
+                    data-language-endonym="{{ language.endonym_name | escape }}"
+                    aria-pressed="{% if country.iso_code == localization.country.iso_code and language.iso_code == localization.language.iso_code %}true{% else %}false{% endif %}"
+                  >
+                    <span class="font-mono localization-language-name" data-language-label>{{ language.endonym_name }}</span>
+                    <span class="font-mono">{{ language.iso_code | upcase }}</span>
+                  </button>
+                {% endfor %}
+              </div>
+            </details>
+          {% endfor %}
+
+          <p ref="empty" class="localization-empty" role="status" hidden>
+            No countries or languages found.
+          </p>
+        </div>
+
+        <footer class="localization-drawer-footer">
+          <button type="submit" class="localization-confirm font-mono">
+            Confirm selection
+          </button>
+        </footer>
+      {% endform %}
+    </localization-form>
+  </dialog>
+</dialog-component>
+
+{% stylesheet %}
+  .localization-drawer {
+    --drawer-width: var(--localization-drawer-width);
+
+    z-index: var(--z-index-drawer);
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--black);
+    overflow: hidden;
+    view-transition-name: localization-drawer;
+  }
+
+  body:has(.localization-drawer[open])::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index-overlay);
+    background: rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(1px);
+    pointer-events: auto;
+    cursor: pointer;
+    view-transition-name: active-overlay;
+  }
+
+  body:has(.localization-drawer[open]) .uyn-header {
+    @media screen and (min-width: 750px) {
+      width: calc(100% - var(--localization-drawer-width) - var(--spacing));
+    }
+  }
+
+  localization-form {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    mark {
+      padding: 0;
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .shopify-localization-form {
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .localization-drawer-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .localization-drawer-eyebrow,
+    .localization-drawer-title {
+      margin: 0;
+    }
+
+    .localization-drawer-eyebrow {
+      font-size: 11px;
+    }
+
+    .localization-drawer-title {
+      margin-top: 4px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .localization-drawer-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--black);
+      cursor: pointer;
+    }
+
+    .localization-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--white);
+
+      svg {
+        flex: 0 0 auto;
+      }
+
+      input {
+        width: 100%;
+        min-width: 0;
+        min-height: 52px;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--black);
+        font: inherit;
+      }
+
+      input::placeholder {
+        color: var(--secondary-black);
+      }
+
+      input::-webkit-search-cancel-button {
+        cursor: pointer;
+      }
+    }
+
+    .localization-countries {
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    details {
+      border-bottom: 1px solid var(--border-color);
+
+      &[hidden] {
+        display: none;
+      }
+
+      &[data-selected] summary {
+        background: var(--background-darken);
+      }
+
+      &[open] summary svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 10px 20px;
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &:hover {
+        background: var(--background-darken);
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+        transition: transform var(--motion-fast) var(--ease-in-out);
+      }
+    }
+
+    .localization-country-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .localization-country-meta {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    .localization-languages {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .localization-language {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 44px;
+      padding: 0 20px 0 32px;
+      border: 0;
+      background: var(--white);
+      color: var(--black);
+      text-align: start;
+      cursor: pointer;
+
+      & + .localization-language {
+        border-top: 1px solid var(--border-color);
+      }
+
+      &:hover {
+        background: var(--background-darken);
+      }
+
+      &[aria-pressed="true"] {
+        background: var(--background-darken);
+        color: var(--black);
+      }
+
+      .font-mono {
+        color: currentColor;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+      }
+
+      .localization-language-name {
+        font-size: 12px;
+      }
+    }
+
+    .localization-empty {
+      margin: 0;
+      padding: 40px 20px;
+      color: var(--secondary-black);
+      text-align: center;
+    }
+
+    .localization-drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .localization-confirm {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: var(--white);
+      font-size: 12px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .localization-drawer {
+      --drawer-top-spacing: var(--header-spacing, var(--spacing));
+      --drawer-height: calc(100dvh - var(--drawer-top-spacing) - var(--drawer-bottom-spacing));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .localization-drawer {
+      --localization-dock-clearance: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing));
+      --drawer-height: calc(100dvh - var(--spacing) - var(--localization-dock-clearance));
+      --origin-x: 0;
+      --origin-y: calc(100% + var(--localization-dock-clearance));
+
+      inset:
+        var(--spacing)
+        var(--drawer-right-spacing)
+        var(--localization-dock-clearance)
+        var(--drawer-left-spacing);
+      width: auto;
+      height: var(--drawer-height);
+      max-width: none;
+      max-height: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Localization drawer",
+  "settings": []
+}
+{% endschema %}

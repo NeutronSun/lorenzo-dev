@@ -11,12 +11,26 @@
   "type": "aside",
   "name": "Dialog",
   "sections": {
+    "search": {
+      "type": "search-dialog",
+      "settings": {
+        "suggested_queries": "",
+        "collections": [],
+        "featured_products": []
+      }
+    },
+    "localization": {
+      "type": "localization-drawer",
+      "settings": {}
+    },
     "dialog": {
       "type": "cart-drawer",
       "settings": {}
     }
   },
   "order": [
+    "search",
+    "localization",
     "dialog"
   ]
 }

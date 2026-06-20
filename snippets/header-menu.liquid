@@ -34,8 +34,7 @@
     .header-menu-item {
       &[open] {
         summary {
-          color: var(--black);
-          background-color: var(--accent);
+          background-color: transparent;
           svg {
             transform: rotate(180deg);
           }
@@ -50,6 +49,8 @@
         align-items: center;
         gap: 4px;
         padding: 6px 10px;
+        position: relative;
+        z-index: 2;
 
         &::-webkit-details-marker {
           display: none;

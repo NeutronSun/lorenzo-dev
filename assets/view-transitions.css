@@ -106,7 +106,8 @@
     }
 
     ::view-transition-group(cart-drawer),
-    ::view-transition-group(filters-drawer) {
+    ::view-transition-group(filters-drawer),
+    ::view-transition-group(localization-drawer) {
       z-index: 80;
       animation-duration: var(--motion-panel);
       animation-timing-function: var(--ease-base);
@@ -119,7 +120,8 @@
     ::view-transition-image-pair(product-breadcrumb),
     ::view-transition-image-pair(active-overlay),
     ::view-transition-image-pair(cart-drawer),
-    ::view-transition-image-pair(filters-drawer) {
+    ::view-transition-image-pair(filters-drawer),
+    ::view-transition-image-pair(localization-drawer) {
       isolation: isolate;
     }
 
@@ -176,7 +178,9 @@
     ::view-transition-old(cart-drawer),
     ::view-transition-new(cart-drawer),
     ::view-transition-old(filters-drawer),
-    ::view-transition-new(filters-drawer) {
+    ::view-transition-new(filters-drawer),
+    ::view-transition-old(localization-drawer),
+    ::view-transition-new(localization-drawer) {
       mix-blend-mode: normal;
       object-fit: fill;
     }

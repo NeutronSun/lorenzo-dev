@@ -5,6 +5,10 @@
   assign menu_active = false
   assign collection_active = false
   assign product_active = false
+  assign search_active = false
+  assign filter_drawer_name = 'filters-collection'
+  assign localization_language_code = localization.language.iso_code | split: '-' | first | upcase
+  assign localization_currency_code = localization.country.currency.iso_code | upcase
 
   if request.page_type == 'index'
     assign home_active = true
@@ -18,6 +22,11 @@
     assign product_active = true
   endif
 
+  if request.page_type == 'search'
+    assign search_active = true
+    assign filter_drawer_name = 'filters-search'
+  endif
+
   if request.page_type contains 'customers/'
     assign account_active = true
   endif
@@ -26,12 +35,13 @@
     assign cart_active = true
   endif
 
-  if home_active == false and account_active == false and cart_active == false and collection_active == false and product_active == false
+  if home_active == false and account_active == false and cart_active == false and collection_active == false and product_active == false and search_active == false
     assign menu_active = true
   endif
 -%}
 
 <sticky-header>
+  <span ref="desktopActive" class="header-desktop-active" aria-hidden="true"></span>
   <header ref="header">
     <div class="header-left mobile-hidden">
       <a href="{{ routes.root_url }}" class="header-logo">
@@ -56,10 +66,14 @@
           {% render 'icon-account', size: 18 %}
           <span class="font-mono font-12">ACCOUNT</span>
         </a>
-        <a href="{{ routes.cart_url }}" class="header-mobile-menu-footer-item header-link">
-          {% render 'icon-bag', size: 18 %}
-          <span class="font-mono font-12">BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
-        </a>
+        <button
+          type="button"
+          class="header-mobile-menu-footer-item header-localization-trigger"
+          on:click="openLocalization"
+          aria-label="Country and language"
+        >
+          <span class="font-mono font-12">{{ localization_language_code }} / {{ localization_currency_code }}</span>
+        </button>
       </nav>
     </div>
     <div class="header-right header-group{% if product_active %} header-right-product{% endif %}">
@@ -88,9 +102,19 @@
         >
       {% endif %}
       <nav class="header-desktop-actions mobile-hidden" aria-label="Desktop shortcuts">
-        <a href="{{ routes.search_url }}" class="header-desktop-action header-link" aria-label="Search">
-          {% render 'icon-search', size: 18 %}
-        </a>
+        <button
+          type="button"
+          class="header-desktop-action header-localization-trigger font-mono font-12"
+          on:click="openLocalization"
+          aria-label="Country and language"
+        >
+          {{ localization_language_code }} / {{ localization_currency_code }}
+        </button>
+        <dialog-opener name="search">
+          <button type="button" class="header-desktop-action header-link" on:click="publish" aria-label="Search">
+            {% render 'icon-search', size: 18 %}
+          </button>
+        </dialog-opener>
         <a href="{{ routes.account_url }}" class="header-desktop-action header-link" aria-label="Account">
           {% render 'icon-account', size: 18 %}
         </a>
@@ -165,12 +189,12 @@
       >
         ADD TO BAG
       </button>
-      <div class="header-mobile-dock-actions mobile-only{% if collection_active %} header-mobile-dock-actions-collection{% endif %}{% if product_active %} header-mobile-dock-actions-product{% endif %}">
+      <div class="header-mobile-dock-actions mobile-only{% if collection_active or search_active %} header-mobile-dock-actions-collection{% endif %}{% if product_active %} header-mobile-dock-actions-product{% endif %}">
         <dialog-opener
-          name="filters-collection"
+          name="{{ filter_drawer_name }}"
           class="header-mobile-dock-action header-mobile-filter-button"
           aria-label="Filters"
-          {% unless collection_active %}aria-hidden="true" tabindex="-1"{% endunless %}
+          {% unless collection_active or search_active %}aria-hidden="true" tabindex="-1"{% endunless %}
         >
           <button type="button" on:click="publish" aria-label="Filters">
             {% render 'icon-filter', size: 22 %}
@@ -184,9 +208,11 @@
         >
           {% render 'icon-product', size: 22 %}
         </label>
-        <a href="{{ routes.search_url }}" class="header-mobile-dock-action header-mobile-search-button header-link" aria-label="Search">
-          {% render 'icon-search', size: 22 %}
-        </a>
+        <dialog-opener name="search" class="header-mobile-dock-action header-mobile-search-button" aria-label="Search">
+          <button type="button" on:click="publish" aria-label="Search">
+            {% render 'icon-search', size: 22 %}
+          </button>
+        </dialog-opener>
         <label
           {% if product_active %}for="header-product-dock-menu-{{ section.id }}"{% endif %}
           class="header-mobile-dock-action header-mobile-gear-button"
@@ -232,9 +258,49 @@
       border: 1px solid var(--border-color);
       position: relative;
 
+      .header-desktop-active {
+        display: none;
+      }
+
       @media screen and (min-width: 750px) {
         margin-top: var(--header-spacing);
         margin-bottom: 0;
+
+        .header-desktop-active {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 1;
+          display: block;
+          width: var(--header-desktop-active-width, 0);
+          height: var(--header-desktop-active-height, 0);
+          background-color: var(--accent);
+          opacity: 0;
+          pointer-events: none;
+          transform: translate3d(
+            var(--header-desktop-active-x, 0),
+            var(--header-desktop-active-y, 0),
+            0
+          );
+          transition:
+            width var(--motion-dock) var(--ease-dock),
+            height var(--motion-dock) var(--ease-dock),
+            background-color var(--motion-base) var(--ease-base),
+            opacity var(--motion-base) var(--ease-base),
+            transform var(--motion-dock) var(--ease-dock);
+        }
+
+        &[desktop-active-ready] .header-desktop-active {
+          opacity: 1;
+        }
+
+        &[desktop-active-open] .header-desktop-active {
+          background-color: var(--black);
+        }
+
+        &[desktop-active-open] .header-desktop-active-target {
+          color: var(--white);
+        }
       }
 
       header {
@@ -297,17 +363,27 @@
           min-width: 40px;
           min-height: 40px;
           padding: 0 12px;
+          border: 0;
           border-inline-start: 1px solid var(--border-color);
+          background: transparent;
           color: var(--black);
+          cursor: pointer;
+          position: relative;
+          z-index: 2;
         }
 
-        .header-desktop-action:first-child {
+        .header-desktop-actions > dialog-opener {
+          display: flex;
+        }
+
+        .header-desktop-actions > .header-desktop-action:first-child,
+        .header-desktop-actions > :first-child .header-desktop-action {
           border-inline-start: 0;
         }
 
         .header-desktop-bag {
-          background: var(--black);
-          color: var(--white);
+          background: transparent;
+          color: var(--black);
           letter-spacing: 0.12em;
         }
 
@@ -846,7 +922,11 @@
             gap: 6px;
             min-width: 0;
             padding: 14px 8px;
+            border: 0;
             border-inline-start: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--black);
+            cursor: pointer;
 
             &:first-child {
               border-inline-start: none;
