@@ -12,9 +12,214 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "css_features": {
+      "type": "css-feature",
+      "blocks": {
+        "custom_functions": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Custom functions",
+            "feature_key": "custom-functions",
+            "description": "Funzioni CSS riutilizzabili con parametri, custom properties e logica condizionale.",
+            "code": "@function --space(--step) { result: calc(var(--step) * 4px); }",
+            "support_query": "@supports (z-index: --css-feature-function-test())",
+            "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/function/"
+          }
+        },
+        "if_function": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Conditional if()",
+            "feature_key": "conditional-if",
+            "description": "Condizioni inline basate su style query, media query o feature support.",
+            "code": "color: if(style(--danger: true): red; else: black);",
+            "support_query": "@supports (color: if(else: red))",
+            "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/if/"
+          }
+        },
+        "anchor_positioning": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Anchor positioning",
+            "feature_key": "anchor-positioning",
+            "description": "Posiziona tooltip, menu e popover rispetto a un altro elemento senza calcoli JavaScript.",
+            "code": "position-area: bottom span-right;",
+            "support_query": "@supports (anchor-name: --css-feature-anchor)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning"
+          }
+        },
+        "css_carousels": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "CSS carousels",
+            "feature_key": "css-carousels",
+            "description": "Il browser genera controlli e indicatori accessibili per gli scroller, senza JavaScript.",
+            "code": "&::scroll-button(inline-end) { content: '→' / 'Next'; }",
+            "support_query": "@supports selector(::scroll-button(inline-end))",
+            "source_url": "https://developer.chrome.com/blog/carousels-with-css"
+          }
+        },
+        "sibling_functions": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Sibling functions",
+            "feature_key": "sibling-functions",
+            "description": "Usa indice e numero dei sibling direttamente nei calcoli CSS.",
+            "code": "animation-delay: calc(sibling-index() * 80ms);",
+            "support_query": "@supports (z-index: sibling-index())",
+            "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/sibling-count/"
+          }
+        },
+        "random_function": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Random values",
+            "feature_key": "random-values",
+            "description": "Genera valori casuali nativi per layout, rotazioni, timing e variazioni visuali.",
+            "code": "rotate: random(-4deg, 4deg);",
+            "support_query": "@supports (order: random(1, 2))",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/random"
+          }
+        },
+        "corner_shape": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Corner shapes",
+            "feature_key": "corner-shapes",
+            "description": "Crea squircle, notch, scoop e bevel sopra un normale border-radius.",
+            "code": "corner-shape: squircle;",
+            "support_query": "@supports (corner-shape: squircle)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/corner-shape"
+          }
+        },
+        "scroll_animations": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Scroll-driven animations",
+            "feature_key": "scroll-driven-animations",
+            "description": "Collega una CSS animation alla posizione di scroll o all'ingresso nel viewport.",
+            "code": "animation-timeline: view();",
+            "support_query": "@supports (animation-timeline: view())",
+            "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/scroll-driven-animations/"
+          }
+        },
+        "typed_attr": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Typed attr()",
+            "feature_key": "typed-attr",
+            "description": "Usa attributi HTML come length, number, color e altri tipi direttamente nei valori CSS.",
+            "code": "width: attr(data-width type(<length>), 0px);",
+            "support_query": "@supports (width: attr(data-width type(<length>), 0px))",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/attr"
+          }
+        },
+        "contrast_color": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Automatic contrast color",
+            "feature_key": "contrast-color",
+            "description": "Sceglie automaticamente un colore leggibile rispetto al background indicato.",
+            "code": "color: contrast-color(var(--background));",
+            "support_query": "@supports (color: contrast-color(white))",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/contrast-color"
+          }
+        },
+        "shape_function": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Responsive shape()",
+            "feature_key": "responsive-shape",
+            "description": "Disegna clip-path complessi e responsivi con unità CSS invece di path SVG rigidi.",
+            "code": "clip-path: shape(from 0 0, curve to 100% 100%);",
+            "support_query": "@supports (clip-path: shape(from 0 0, line to 100% 100%))",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/shape"
+          }
+        },
+        "open_pseudo_class": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": ":open pseudo-class",
+            "feature_key": "open-pseudo-class",
+            "description": "Seleziona lo stato aperto di dialog, details, select e input con un unico selettore.",
+            "code": ":open { opacity: 1; }",
+            "support_query": "@supports selector(:open)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:open"
+          }
+        },
+        "customizable_select": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Customizable select",
+            "feature_key": "customizable-select",
+            "description": "Permette di personalizzare il select nativo mantenendo semantica e comportamento del browser.",
+            "code": "select { appearance: base-select; }",
+            "support_query": "@supports (appearance: base-select)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select"
+          }
+        },
+        "field_sizing": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Content-sized form fields",
+            "feature_key": "field-sizing",
+            "description": "Fa crescere input e textarea in base al contenuto senza misure calcolate in JavaScript.",
+            "code": "textarea { field-sizing: content; }",
+            "support_query": "@supports (field-sizing: content)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing"
+          }
+        },
+        "gap_decorations": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "Gap decorations",
+            "feature_key": "gap-decorations",
+            "description": "Disegna separatori nei gap di grid e flex senza border, pseudo-elementi o markup extra.",
+            "code": "grid { row-rule: 1px solid; column-rule: 1px solid; }",
+            "support_query": "@supports (row-rule: 1px solid black)",
+            "source_url": "https://developer.chrome.com/blog/gap-decorations-stable"
+          }
+        },
+        "view_transitions": {
+          "type": "css-feature-row",
+          "settings": {
+            "title": "View transitions",
+            "feature_key": "view-transitions",
+            "description": "Anima in modo nativo il passaggio tra stati e pagine, con fallback naturale.",
+            "code": "view-transition-name: product-image;",
+            "support_query": "@supports (view-transition-name: none)",
+            "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API"
+          }
+        }
+      },
+      "block_order": [
+        "custom_functions",
+        "if_function",
+        "anchor_positioning",
+        "css_carousels",
+        "sibling_functions",
+        "random_function",
+        "corner_shape",
+        "scroll_animations",
+        "typed_attr",
+        "contrast_color",
+        "shape_function",
+        "open_pseudo_class",
+        "customizable_select",
+        "field_sizing",
+        "gap_decorations",
+        "view_transitions"
+      ],
+      "settings": {
+        "title": "Modern CSS, nel tuo browser",
+        "description": "<p>Le novità CSS più attese, verificate dal vivo con @supports. Verde significa disponibile; rosso richiede un fallback.</p>",
+        "updated_at": "Aggiornato al 21 giugno 2026"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "css_features"
   ]
 }

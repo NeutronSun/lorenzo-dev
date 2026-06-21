@@ -11,13 +11,14 @@
   assign bundle_products = bundle_data.products.value
   assign bundle_name = bundle_data.name.value | default: bundle_data.name
   assign bundle_key = bundle_data.system.id | default: bundle_data.system.handle | default: bundle_name
+  assign bundle_display_product = bundle_data.bundle.value
   assign bundle_parent_product = product.metafields.bundle.bundle.value | default: bundle_data.bundle.value
   assign bundle_parent_variant = bundle_parent_product.first_available_variant
   assign bundle_id = bundle_parent_variant.id | append: '||' | append: bundle_key
   assign bundle_discount = bundle_data.discount_percentage.value | default: bundle_data.discount_percentage | default: 0 | plus: 0
-  assign bundle_total = current_variant.price
-  assign bundle_available = current_variant.available
-  assign bundle_items_count = 1
+  assign bundle_total = 0
+  assign bundle_available = true
+  assign bundle_items_count = 0
 
   unless bundle_parent_variant
     assign bundle_available = false
@@ -33,12 +34,17 @@
   endif
 
   for bundle_product in bundle_products
-    assign bundle_variant = bundle_product.first_available_variant
+    if bundle_product.id == product.id
+      assign bundle_variant = current_variant
+    else
+      assign bundle_variant = bundle_product.first_available_variant
+    endif
+
     assign bundle_items_count = bundle_items_count | plus: 1
     assign bundle_product_price = bundle_variant.price | default: bundle_product.price
     assign bundle_total = bundle_total | plus: bundle_product_price
 
-    unless bundle_variant
+    unless bundle_variant.available
       assign bundle_available = false
     endunless
   endfor
@@ -86,7 +92,7 @@
   {% if bundle_data != blank and bundle_products != blank %}
     <section class="panel bundle-panel">
       <h2 class="bundle-title font-mono">
-        <span>Fusion bundle</span>
+        <span>{{ bundle_display_product.title | default: 'Fusion bundle' }}</span>
 
         {% if bundle_discount > 0 %}
           <span class="bundle-discount">-{{ bundle_discount }}%</span>
@@ -98,13 +104,16 @@
           {
             "bundleId": {{ bundle_id | json }},
             "items": [
-              {
-                "id": {{ current_variant.id | json }},
-                "available": {{ current_variant.available | json }}
-              }
               {% for bundle_product in bundle_products %}
-                {% assign bundle_variant = bundle_product.first_available_variant %}
-                ,{
+                {% liquid
+                  if bundle_product.id == product.id
+                    assign bundle_variant = current_variant
+                  else
+                    assign bundle_variant = bundle_product.first_available_variant
+                  endif
+                %}
+                {% unless forloop.first %},{% endunless %}
+                {
                   "id": {% if bundle_variant %}{{ bundle_variant.id | json }}{% else %}null{% endif %},
                   "available": {{ bundle_variant.available | default: false | json }}
                 }
@@ -114,38 +123,14 @@
         </script>
 
         <div class="bundle-products">
-          {% liquid
-            assign current_variant_title = current_variant.title
-
-            if current_variant_title == 'Default Title'
-              assign current_variant_title = 'Included'
-            endif
-          %}
-
-          <a class="bundle-product" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
-            <span class="bundle-product-image">
-              {% if product.featured_image %}
-                <img
-                  src="{{ product.featured_image | image_url: width: 128 }}"
-                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                  width="56"
-                  height="56"
-                  loading="lazy"
-                >
-              {% endif %}
-            </span>
-
-            <span class="bundle-product-info">
-              <span class="bundle-product-title">{{ product.title }}</span>
-              <span class="bundle-product-variant font-mono">{{ current_variant_title }}</span>
-            </span>
-
-            <span class="bundle-product-price">{{ current_variant.price | money }}</span>
-          </a>
-
           {% for bundle_product in bundle_products %}
             {% liquid
-              assign bundle_variant = bundle_product.first_available_variant
+              if bundle_product.id == product.id
+                assign bundle_variant = current_variant
+              else
+                assign bundle_variant = bundle_product.first_available_variant
+              endif
+
               assign bundle_product_price = bundle_variant.price | default: bundle_product.price
               assign bundle_variant_title = bundle_variant.title | default: 'Sold out'
 
