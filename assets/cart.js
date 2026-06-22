@@ -631,6 +631,170 @@ if (!customElements.get('cart-drawer')) {
 }
 
 /**
+ * @typedef {Object} CartPageRefs
+ * @property {HTMLElement} count
+ * @property {HTMLElement} items
+ * @property {HTMLElement} overview
+ */
+
+/**
+ * @extends {HTMLComponent<CartPageRefs>}
+ */
+class CartPage extends HTMLComponent {
+  static CART_ITEM_SELECTOR = 'cart-item';
+  static SECTION_SELECTOR = 'cart-page';
+  static REF_NAMES = Object.freeze(['count', 'items', 'overview']);
+
+  constructor() {
+    super();
+
+    this.cart = null;
+    this.pendingKey = '';
+    this.requestId = 0;
+    this.onCartLoading = this.onCartLoading.bind(this);
+    this.onCartUpdated = this.onCartUpdated.bind(this);
+    this.onCartError = this.onCartError.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener(OnCartLoadingEvent.TYPE, this.onCartLoading);
+    document.addEventListener(OnCartUpdateEvent.TYPE, this.onCartUpdated);
+    document.addEventListener(OnCartErrorEvent.TYPE, this.onCartError);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(OnCartLoadingEvent.TYPE, this.onCartLoading);
+    document.removeEventListener(OnCartUpdateEvent.TYPE, this.onCartUpdated);
+    document.removeEventListener(OnCartErrorEvent.TYPE, this.onCartError);
+    super.disconnectedCallback();
+  }
+
+  /**
+   * @param {OnCartLoadingEvent} event
+   */
+  onCartLoading(event) {
+    this.requestId += 1;
+    this.pendingKey = event.key || '';
+    this.toggleAttribute('pending', true);
+    this.updatePendingItems();
+  }
+
+  /**
+   * @param {OnCartUpdateEvent} event
+   */
+  async onCartUpdated(event) {
+    const requestId = this.requestId + 1;
+
+    this.requestId = requestId;
+    this.cart = event.cart;
+    this.pendingKey = '';
+
+    const updated = await this.render(requestId);
+
+    if (!updated) return;
+
+    this.toggleAttribute('pending', false);
+    this.updatePendingItems();
+  }
+
+  /**
+   * @param {OnCartErrorEvent} event
+   */
+  async onCartError(event) {
+    const requestId = this.requestId + 1;
+
+    this.requestId = requestId;
+    this.pendingKey = '';
+
+    if (event.cart) {
+      this.cart = event.cart;
+      await this.render(requestId);
+    }
+
+    if (requestId !== this.requestId) return;
+
+    this.toggleAttribute('pending', false);
+    this.updatePendingItems();
+  }
+
+  /**
+   * @param {number} requestId
+   * @returns {Promise<boolean>}
+   */
+  async render(requestId) {
+    if (!this.cart) return false;
+
+    const section = await this.fetchSection();
+
+    if (!this.isConnected) return false;
+    if (requestId !== this.requestId) return false;
+    if (!section) return false;
+
+    this.replaceRefs(section);
+    this.toggleAttribute('empty', (this.cart.item_count || 0) === 0);
+
+    return true;
+  }
+
+  updatePendingItems() {
+    for (const item of this.querySelectorAll(CartPage.CART_ITEM_SELECTOR)) {
+      item.toggleAttribute('pending', Boolean(this.pendingKey) && item.getAttribute('key') === this.pendingKey);
+    }
+  }
+
+  /**
+   * @returns {Promise<HTMLElement | null>}
+   */
+  async fetchSection() {
+    const sectionId = this.dataset.sectionId;
+
+    if (!sectionId) return null;
+
+    const url = new URL(window.Theme?.routes?.cart_url || '/cart', window.location.origin);
+
+    url.searchParams.set('section_id', sectionId);
+
+    const response = await fetch(url.toString(), {
+      headers: { Accept: 'text/html' },
+    });
+    const result = await response.text();
+
+    if (!response.ok) return null;
+
+    const html = new DOMParser().parseFromString(result, 'text/html');
+    const section = html.querySelector(CartPage.SECTION_SELECTOR);
+
+    if (!(section instanceof HTMLElement)) return null;
+
+    return section;
+  }
+
+  /**
+   * @param {HTMLElement} section
+   */
+  replaceRefs(section) {
+    const refs = HTMLComponent.getRefs(section);
+
+    for (const name of CartPage.REF_NAMES) {
+      const current = this.refs[name];
+      const next = refs[name];
+
+      if (!(current instanceof Element)) continue;
+      if (!(next instanceof Element)) continue;
+
+      current.replaceWith(next);
+    }
+
+    this.updateRefs();
+  }
+}
+
+if (!customElements.get('cart-page')) {
+  customElements.define('cart-page', CartPage);
+}
+
+/**
  * @typedef {Object} PDPBundleRefs
  * @property {HTMLScriptElement} bundleData
  * @property {HTMLButtonElement} add
