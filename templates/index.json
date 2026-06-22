@@ -9,6 +9,20 @@
  */
 {
   "sections": {
+    "schema_org_HQcyLR": {
+      "type": "schema-org",
+      "name": "Organization Schema",
+      "settings": {
+        "org_name": "lorenzo dev store",
+        "org_logo": "shopify://shop_images/ChatGPT_Image_3_giu_2026_11_42_03.png",
+        "org_email": "lorenzo.sanseverino@cooder.it",
+        "org_phone": "3298236955",
+        "org_description": "the best shopify theme",
+        "instagram": "shopify://collections/common",
+        "facebook": "shopify://blogs/news",
+        "tiktok": "shopify://blogs/news"
+      }
+    },
     "main": {
       "type": "hello-world",
       "settings": {}
@@ -25,7 +39,8 @@
             "code": "@function --space(--step) { result: calc(var(--step) * 4px); }",
             "support_query": "@supports (z-index: --css-feature-function-test())",
             "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/function/"
-          }
+          },
+          "blocks": {}
         },
         "if_function": {
           "type": "css-feature-row",
@@ -36,7 +51,8 @@
             "code": "color: if(style(--danger: true): red; else: black);",
             "support_query": "@supports (color: if(else: red))",
             "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/if/"
-          }
+          },
+          "blocks": {}
         },
         "anchor_positioning": {
           "type": "css-feature-row",
@@ -47,7 +63,8 @@
             "code": "position-area: bottom span-right;",
             "support_query": "@supports (anchor-name: --css-feature-anchor)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning"
-          }
+          },
+          "blocks": {}
         },
         "css_carousels": {
           "type": "css-feature-row",
@@ -58,7 +75,8 @@
             "code": "&::scroll-button(inline-end) { content: '→' / 'Next'; }",
             "support_query": "@supports selector(::scroll-button(inline-end))",
             "source_url": "https://developer.chrome.com/blog/carousels-with-css"
-          }
+          },
+          "blocks": {}
         },
         "sibling_functions": {
           "type": "css-feature-row",
@@ -69,7 +87,8 @@
             "code": "animation-delay: calc(sibling-index() * 80ms);",
             "support_query": "@supports (z-index: sibling-index())",
             "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/sibling-count/"
-          }
+          },
+          "blocks": {}
         },
         "random_function": {
           "type": "css-feature-row",
@@ -80,7 +99,8 @@
             "code": "rotate: random(-4deg, 4deg);",
             "support_query": "@supports (order: random(1, 2))",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/random"
-          }
+          },
+          "blocks": {}
         },
         "corner_shape": {
           "type": "css-feature-row",
@@ -91,7 +111,8 @@
             "code": "corner-shape: squircle;",
             "support_query": "@supports (corner-shape: squircle)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/corner-shape"
-          }
+          },
+          "blocks": {}
         },
         "scroll_animations": {
           "type": "css-feature-row",
@@ -102,7 +123,8 @@
             "code": "animation-timeline: view();",
             "support_query": "@supports (animation-timeline: view())",
             "source_url": "https://web-platform-dx.github.io/web-features-explorer/features/scroll-driven-animations/"
-          }
+          },
+          "blocks": {}
         },
         "typed_attr": {
           "type": "css-feature-row",
@@ -110,10 +132,11 @@
             "title": "Typed attr()",
             "feature_key": "typed-attr",
             "description": "Usa attributi HTML come length, number, color e altri tipi direttamente nei valori CSS.",
-            "code": "width: attr(data-width type(<length>), 0px);",
-            "support_query": "@supports (width: attr(data-width type(<length>), 0px))",
+            "code": "width: attr(data-width type(<length>), 0px);</length>",
+            "support_query": "@supports (width: attr(data-width type(<length>), 0px))</length>",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/attr"
-          }
+          },
+          "blocks": {}
         },
         "contrast_color": {
           "type": "css-feature-row",
@@ -124,7 +147,8 @@
             "code": "color: contrast-color(var(--background));",
             "support_query": "@supports (color: contrast-color(white))",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/contrast-color"
-          }
+          },
+          "blocks": {}
         },
         "shape_function": {
           "type": "css-feature-row",
@@ -135,7 +159,8 @@
             "code": "clip-path: shape(from 0 0, curve to 100% 100%);",
             "support_query": "@supports (clip-path: shape(from 0 0, line to 100% 100%))",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/shape"
-          }
+          },
+          "blocks": {}
         },
         "open_pseudo_class": {
           "type": "css-feature-row",
@@ -146,7 +171,8 @@
             "code": ":open { opacity: 1; }",
             "support_query": "@supports selector(:open)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:open"
-          }
+          },
+          "blocks": {}
         },
         "customizable_select": {
           "type": "css-feature-row",
@@ -157,7 +183,8 @@
             "code": "select { appearance: base-select; }",
             "support_query": "@supports (appearance: base-select)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select"
-          }
+          },
+          "blocks": {}
         },
         "field_sizing": {
           "type": "css-feature-row",
@@ -168,7 +195,8 @@
             "code": "textarea { field-sizing: content; }",
             "support_query": "@supports (field-sizing: content)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing"
-          }
+          },
+          "blocks": {}
         },
         "gap_decorations": {
           "type": "css-feature-row",
@@ -179,7 +207,8 @@
             "code": "grid { row-rule: 1px solid; column-rule: 1px solid; }",
             "support_query": "@supports (row-rule: 1px solid black)",
             "source_url": "https://developer.chrome.com/blog/gap-decorations-stable"
-          }
+          },
+          "blocks": {}
         },
         "view_transitions": {
           "type": "css-feature-row",
@@ -190,7 +219,8 @@
             "code": "view-transition-name: product-image;",
             "support_query": "@supports (view-transition-name: none)",
             "source_url": "https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API"
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -219,6 +249,7 @@
     }
   },
   "order": [
+    "schema_org_HQcyLR",
     "main",
     "css_features"
   ]
