@@ -16,8 +16,19 @@
             <a href="{{ child.url }}" class="font-mono font-12">{{ child.title | upcase }}</a>
             <ul>
               {% for child in child.links %}
+                {%-liquid
+                  assign collection = child.object
+                  assign name = collection.title | split: ' - ' | last | strip
+                  assign reference = collection.metafields.valeverce.reference.value
+                  assign icon = reference.icon.value
+                %}
                 <li>
-                  <a href="{{ child.url }}" class="font-body font-14 header-menu-link">{{ child.title | upcase }}</a>
+                  <a href="{{ child.url }}" class="font-body font-14 header-menu-link">
+                    {% if icon != blank %}
+                      <span class="header-menu-link-icon">{{ icon | image_url: width: 720 | image_tag: width: 16, height: 16, loading: 'lazy' }}</span>
+                    {% endif %}
+                    <span>{{ name }}</span>
+                  </a>
                 </li>
               {% endfor %}
             </ul>
@@ -96,10 +107,29 @@
 
           .header-menu-link {
             color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .header-menu-link-icon {
+              display: none;
+              transform: translateX(-100%);
+
+              width: 16px;
+              height: 16px;
+              transition:
+                opacity var(--motion-base) var(--ease-base),
+                transform var(--motion-base) var(--ease-base);
+            }
 
             &:hover {
               text-decoration: underline;
               text-underline-offset: 2px;
+
+              .header-menu-link-icon {
+                display: block;
+                transform: translateX(0);
+              }
             }
           }
       }
