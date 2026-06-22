@@ -260,7 +260,6 @@ if (!customElements.get('product-form')) {
  * @property {HTMLElement} body
  * @property {HTMLElement} subtotal
  * @property {HTMLButtonElement} checkout
- * @property {HTMLElement} checkoutTotal
  */
 
 /**
@@ -397,7 +396,6 @@ class CartDrawer extends HTMLComponent {
     const itemCount = this.cart.item_count || 0;
 
     this.refs.subtotal?.setAttribute('value', total);
-    this.refs.checkoutTotal?.setAttribute('value', total);
     this.refs.checkout && (this.refs.checkout.disabled = itemCount === 0);
   }
 

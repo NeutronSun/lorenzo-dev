@@ -111,8 +111,16 @@
           {{ localization_language_code }} / {{ localization_currency_code }}
         </button>
         <dialog-opener name="search">
-          <button type="button" class="header-desktop-action header-link" on:click="publish" aria-label="Search">
+          <button
+            type="button"
+            class="header-desktop-action header-desktop-search header-link font-mono"
+            on:click="publish"
+            aria-label="Search"
+            aria-keyshortcuts="Meta+F Control+F"
+          >
             {% render 'icon-search', size: 18 %}
+            <span class="header-desktop-search-label">SEARCH</span>
+            <kbd class="header-desktop-search-shortcut" aria-hidden="true">⌘F</kbd>
           </button>
         </dialog-opener>
         <a href="{{ routes.account_url }}" class="header-desktop-action header-link" aria-label="Account">
@@ -301,6 +309,10 @@
         &[desktop-active-open] .header-desktop-active-target {
           color: var(--white);
         }
+
+        &[desktop-active-open] .header-desktop-search.header-desktop-active-target {
+          background-color: transparent;
+        }
       }
 
       header {
@@ -379,6 +391,34 @@
         .header-desktop-actions > .header-desktop-action:first-child,
         .header-desktop-actions > :first-child .header-desktop-action {
           border-inline-start: 0;
+        }
+
+        .header-desktop-search {
+          justify-content: flex-start;
+          gap: 8px;
+          width: auto;
+          padding: 4px 8px;
+          background-color: var(--background);
+          color: var(--secondary-black);
+          font-size: 10px;
+          letter-spacing: 0.14em;
+
+          .header-desktop-search-label {
+            white-space: nowrap;
+          }
+
+          .header-desktop-search-shortcut {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-inline-start: auto;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            color: var(--secondary-black);
+            font: inherit;
+            letter-spacing: 0;
+          }
         }
 
         .header-desktop-bag {

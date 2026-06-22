@@ -93,15 +93,26 @@
           <span class="font-mono">SUBTOTAL</span>
           <cart-money ref="subtotal" value="{{ cart.total_price }}"></cart-money>
         </div>
-        <button
-          type="button"
-          ref="checkout"
-          class="cart-drawer-checkout font-mono"
-          onclick="window.location.href = '{{ routes.cart_url }}'"
-          {% if cart.item_count == 0 %}disabled{% endif %}
-        >
-          CHECKOUT — <cart-money ref="checkoutTotal" value="{{ cart.total_price }}"></cart-money>
-        </button>
+        <div class="cart-drawer-actions">
+          <button
+            type="button"
+            class="cart-drawer-action button button-primary font-mono"
+            onclick="window.location.href = '{{ routes.cart_url }}'"
+          >
+            {% render 'icon-bag', size: 16 %}
+            <span>BAG</span>
+          </button>
+          <button
+            type="button"
+            ref="checkout"
+            class="cart-drawer-action button button-accent font-mono"
+            onclick="window.location.href = '{{ routes.root_url }}checkout'"
+            {% if cart.item_count == 0 %}disabled{% endif %}
+          >
+            <span>CHECKOUT</span>
+            {% render 'icon-arrow-right', size: 16 %}
+          </button>
+        </div>
       </footer>
     </cart-drawer>
   </dialog>
@@ -426,26 +437,27 @@
     font-weight: 700;
   }
 
-  .cart-drawer-checkout {
+  .cart-drawer-actions {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+    gap: 8px;
     width: 100%;
-    box-sizing: border-box;
-    min-height: 40px;
-    border: 1px solid var(--black);
-    background: var(--black);
-    color: var(--white);
-    font-size: 12px;
-    cursor: pointer;
   }
 
-  .cart-drawer-checkout:disabled {
-    border-color: var(--background-darken);
-    background: var(--background-darken);
-    color: var(--secondary-black);
-    cursor: not-allowed;
+  .cart-drawer-action {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+
+    svg {
+      flex: 0 0 auto;
+    }
+
+    &:disabled {
+      border-color: var(--color-disabled);
+    }
   }
 
   @media screen and (min-width: 750px) {
