@@ -11,7 +11,7 @@
     "store:share": "shopify theme share -e store",
     "prod:pull": "shopify theme pull -e prod",
     "prod:push": "npm-run-all prod:push-only",
-    "prod:profile": "shopify theme profile -e prod"
+    "prod:profile": "shopify theme profile -e prod --url /collections/all"
   },
   "author": "sunyx",
   "license": "ISC"

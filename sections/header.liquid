@@ -118,16 +118,16 @@
             aria-label="Search"
             aria-keyshortcuts="Meta+F Control+F"
           >
-            {% render 'icon-search', size: 18 %}
+            {% render 'icon-search', size: 14 %}
             <span class="header-desktop-search-label">SEARCH</span>
             <kbd class="header-desktop-search-shortcut" aria-hidden="true">⌘F</kbd>
           </button>
         </dialog-opener>
         <a href="{{ routes.account_url }}" class="header-desktop-action header-link" aria-label="Account">
-          {% render 'icon-account', size: 18 %}
+          {% render 'icon-account', size: 14 %}
         </a>
         <a href="{{ routes.cart_url }}" class="header-desktop-action header-desktop-bag header-link font-mono font-12" aria-label="Bag">
-          {% render 'icon-bag', size: 16 %}
+          {% render 'icon-bag', size: 14 %}
           <span>BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
         </a>
       </nav>
@@ -373,7 +373,6 @@
           justify-content: center;
           gap: 8px;
           min-width: 40px;
-          min-height: 40px;
           padding: 0 12px;
           border: 0;
           border-inline-start: 1px solid var(--border-color);
