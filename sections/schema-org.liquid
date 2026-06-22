@@ -1,0 +1,99 @@
+{% liquid
+  assign org_name = section.settings.org_name | default: shop.name
+  assign org_url = shop.url
+  assign org_logo = section.settings.org_logo
+  assign org_email = section.settings.org_email
+  assign org_phone = section.settings.org_phone
+  assign org_description = section.settings.org_description
+%}
+
+{% capture schema_stores %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% capture schema_json %}
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": {{ org_url | append: '#organization' | json }},
+      "name": {{ org_name | json }},
+      "url": {{ org_url | json }}
+      {%- if org_logo != blank -%}
+      ,
+      "logo": {{ org_logo | image_url: width: 600 | prepend: 'https:' | json }}
+      {%- endif -%}
+      {%- if org_email != blank -%}
+      ,
+      "email": {{ org_email | json }}
+      {%- endif -%}
+      {%- if org_phone != blank -%}
+      ,
+      "telephone": {{ org_phone | json }}
+      {%- endif -%}
+      {%- if org_description != blank -%}
+      ,
+      "description": {{ org_description | json }}
+      {%- endif -%}
+      ,
+      "sameAs": [
+        {%- assign same_as_started = false -%}
+        {%- if section.settings.instagram != blank -%}
+          {{ section.settings.instagram | json }}
+          {%- assign same_as_started = true -%}
+        {%- endif -%}
+        {%- if section.settings.facebook != blank -%}
+          {%- if same_as_started -%},{%- endif -%}
+          {{ section.settings.facebook | json }}
+          {%- assign same_as_started = true -%}
+        {%- endif -%}
+        {%- if section.settings.tiktok != blank -%}
+          {%- if same_as_started -%},{%- endif -%}
+          {{ section.settings.tiktok | json }}
+        {%- endif -%}
+      ]
+    }{{ schema_stores | strip }}
+  ]
+}
+{% endcapture %}
+
+<pre class="schema-org-debug">{{ schema_json | strip }}</pre>
+
+<script type="application/ld+json">
+  {{ schema_json | strip }}
+</script>
+
+{% stylesheet %}
+  .schema-org-debug {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: oklch(from var(--black) l c h / 0.04);
+    border: 1px solid oklch(from var(--black) l c h / 0.12);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Organization Schema",
+  "settings": [
+    { "type": "text", "id": "org_name", "label": "Organization Name" },
+    { "type": "image_picker", "id": "org_logo", "label": "Logo" },
+    { "type": "text", "id": "org_email", "label": "Email" },
+    { "type": "text", "id": "org_phone", "label": "Phone" },
+    { "type": "textarea", "id": "org_description", "label": "Description" },
+    { "type": "url", "id": "instagram", "label": "Instagram" },
+    { "type": "url", "id": "facebook", "label": "Facebook" },
+    { "type": "url", "id": "tiktok", "label": "TikTok" }
+  ],
+  "blocks": [{ "type": "schema-store" }],
+  "max_blocks": 10,
+  "presets": [{ "name": "Organization Schema" }]
+}
+{% endschema %}

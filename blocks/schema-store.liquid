@@ -1,0 +1,65 @@
+{% liquid
+  assign org_url = shop.url
+%}
+
+{% capture opening_hours %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% liquid
+  assign opening_hours_json = opening_hours | strip
+  if opening_hours_json != blank
+    assign opening_hours_json = opening_hours_json | slice: 1, opening_hours_json.size
+  endif
+%}
+
+,
+{
+  "@type": "Store",
+  "@id": {{ org_url | append: '#store-' | append: block.id | json }},
+  "name": {{ block.settings.name | json }},
+  "parentOrganization": {
+    "@id": {{ org_url | append: '#organization' | json }}
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ block.settings.address | json }},
+    "addressLocality": {{ block.settings.city | json }},
+    "postalCode": {{ block.settings.zip | json }},
+    "addressCountry": {{ block.settings.country | json }}
+  }
+  {%- if block.settings.phone != blank -%}
+  ,
+  "telephone": {{ block.settings.phone | json }}
+  {%- endif -%}
+  {%- if block.settings.lat != blank and block.settings.lng != blank -%}
+  ,
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ block.settings.lat | json }},
+    "longitude": {{ block.settings.lng | json }}
+  }
+  {%- endif -%}
+  ,
+  "openingHoursSpecification": [
+    {{ opening_hours_json }}
+  ]
+}
+
+{% schema %}
+{
+  "name": "Store",
+  "blocks": [{ "type": "schema-opening-hours" }],
+  "settings": [
+    { "type": "text", "id": "name", "label": "Name" },
+    { "type": "text", "id": "address", "label": "Street Address" },
+    { "type": "text", "id": "city", "label": "City" },
+    { "type": "text", "id": "zip", "label": "Postal Code" },
+    { "type": "text", "id": "country", "label": "Country Code (IT, FR...)" },
+    { "type": "text", "id": "phone", "label": "Phone" },
+    { "type": "text", "id": "lat", "label": "Latitude" },
+    { "type": "text", "id": "lng", "label": "Longitude" }
+  ],
+  "tag": null
+}
+{% endschema %}

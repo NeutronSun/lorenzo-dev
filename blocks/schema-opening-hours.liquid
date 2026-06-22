@@ -1,0 +1,33 @@
+,
+{
+  "@type": "OpeningHoursSpecification",
+  "dayOfWeek": {{ block.settings.day | json }},
+  "opens": {{ block.settings.opens | json }},
+  "closes": {{ block.settings.closes | json }}
+}
+
+{% schema %}
+{
+  "name": "Opening Hours",
+  "settings": [
+    {
+      "type": "select",
+      "id": "day",
+      "label": "Day",
+      "options": [
+        { "value": "Monday", "label": "Monday" },
+        { "value": "Tuesday", "label": "Tuesday" },
+        { "value": "Wednesday", "label": "Wednesday" },
+        { "value": "Thursday", "label": "Thursday" },
+        { "value": "Friday", "label": "Friday" },
+        { "value": "Saturday", "label": "Saturday" },
+        { "value": "Sunday", "label": "Sunday" }
+      ]
+    },
+    { "type": "text", "id": "opens", "label": "Opens", "default": "09:00" },
+    { "type": "text", "id": "closes", "label": "Closes", "default": "18:00" }
+  ],
+  "tag": null,
+  "presets": [{ "name": "Opening Hours" }]
+}
+{% endschema %}
