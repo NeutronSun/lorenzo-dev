@@ -1,0 +1,84 @@
+{% liquid
+  assign language_items = block.settings.languages | split: ','
+%}
+
+,
+{
+  "@type": "ContactPoint",
+  "contactType": {{ block.settings.contact_type | json }}
+  {%- if block.settings.telephone != blank -%}
+  ,
+  "telephone": {{ block.settings.telephone | json }}
+  {%- endif -%}
+  {%- if block.settings.email != blank -%}
+  ,
+  "email": {{ block.settings.email | json }}
+  {%- endif -%}
+  {%- capture language_json -%}
+    {%- assign language_started = false -%}
+    {%- for language in language_items -%}
+      {%- assign language = language | strip -%}
+      {%- if language != blank -%}
+        {%- if language_started -%},{%- endif -%}
+        {{ language | json }}
+        {%- assign language_started = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- assign language_json = language_json | strip -%}
+  {%- if language_json != blank -%}
+  ,
+  "availableLanguage": [{{ language_json }}]
+  {%- endif -%}
+}
+
+{% schema %}
+{
+  "name": "Contact Point",
+  "settings": [
+    {
+      "type": "select",
+      "id": "contact_type",
+      "label": "Contact type",
+      "default": "customer support",
+      "options": [
+        { "value": "customer support", "label": "Customer support" },
+        { "value": "sales", "label": "Sales" },
+        { "value": "technical support", "label": "Technical support" },
+        { "value": "billing support", "label": "Billing support" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "telephone",
+      "label": "Telephone",
+      "info": "Use international format, e.g. +39 329 823 6955"
+    },
+    { "type": "text", "id": "email", "label": "Email" },
+    {
+      "type": "text",
+      "id": "languages",
+      "label": "Available languages",
+      "info": "Optional. Comma-separated, e.g. Italian, English"
+    }
+  ],
+  "tag": null,
+  "presets": [
+    {
+      "name": "Customer support",
+      "settings": {
+        "contact_type": "customer support",
+        "telephone": "+39 329 823 6955",
+        "languages": "Italian, English"
+      }
+    },
+    {
+      "name": "Sales",
+      "settings": {
+        "contact_type": "sales",
+        "telephone": "+39 329 823 6955"
+      }
+    }
+  ]
+}
+{% endschema %}

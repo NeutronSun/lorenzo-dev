@@ -1,59 +1,19 @@
-{% liquid
-  assign org_name = section.settings.org_name | default: shop.name
-  assign org_url = shop.url
-  assign org_logo = section.settings.org_logo
-  assign org_email = section.settings.org_email
-  assign org_phone = section.settings.org_phone
-  assign org_description = section.settings.org_description
-%}
-
-{% capture schema_stores %}
+{% capture graph_nodes %}
   {% content_for 'blocks' %}
 {% endcapture %}
+
+{% liquid
+  assign graph_json = graph_nodes | strip
+  if graph_json != blank
+    assign graph_json = graph_json | slice: 1, graph_json.size
+  endif
+%}
 
 {% capture schema_json %}
 {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": {{ org_url | append: '#organization' | json }},
-      "name": {{ org_name | json }},
-      "url": {{ org_url | json }}
-      {%- if org_logo != blank -%}
-      ,
-      "logo": {{ org_logo | image_url: width: 600 | prepend: 'https:' | json }}
-      {%- endif -%}
-      {%- if org_email != blank -%}
-      ,
-      "email": {{ org_email | json }}
-      {%- endif -%}
-      {%- if org_phone != blank -%}
-      ,
-      "telephone": {{ org_phone | json }}
-      {%- endif -%}
-      {%- if org_description != blank -%}
-      ,
-      "description": {{ org_description | json }}
-      {%- endif -%}
-      ,
-      "sameAs": [
-        {%- assign same_as_started = false -%}
-        {%- if section.settings.instagram != blank -%}
-          {{ section.settings.instagram | json }}
-          {%- assign same_as_started = true -%}
-        {%- endif -%}
-        {%- if section.settings.facebook != blank -%}
-          {%- if same_as_started -%},{%- endif -%}
-          {{ section.settings.facebook | json }}
-          {%- assign same_as_started = true -%}
-        {%- endif -%}
-        {%- if section.settings.tiktok != blank -%}
-          {%- if same_as_started -%},{%- endif -%}
-          {{ section.settings.tiktok | json }}
-        {%- endif -%}
-      ]
-    }{{ schema_stores | strip }}
+    {{ graph_json }}
   ]
 }
 {% endcapture %}
@@ -85,15 +45,64 @@
   "settings": [
     { "type": "text", "id": "org_name", "label": "Organization Name" },
     { "type": "image_picker", "id": "org_logo", "label": "Logo" },
-    { "type": "text", "id": "org_email", "label": "Email" },
-    { "type": "text", "id": "org_phone", "label": "Phone" },
+    {
+      "type": "text",
+      "id": "org_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "org_phone",
+      "label": "Phone",
+      "info": "Use international format, e.g. +39 329 823 6955"
+    },
     { "type": "textarea", "id": "org_description", "label": "Description" },
+    {
+      "type": "header",
+      "content": "Social profiles (sameAs)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Only full URLs to social profiles. Internal Shopify paths are ignored."
+    },
     { "type": "url", "id": "instagram", "label": "Instagram" },
     { "type": "url", "id": "facebook", "label": "Facebook" },
-    { "type": "url", "id": "tiktok", "label": "TikTok" }
+    { "type": "url", "id": "tiktok", "label": "TikTok" },
+    { "type": "url", "id": "youtube", "label": "YouTube" },
+    { "type": "url", "id": "x", "label": "X (Twitter)" },
+    { "type": "url", "id": "linkedin", "label": "LinkedIn" }
   ],
-  "blocks": [{ "type": "schema-store" }],
-  "max_blocks": 10,
-  "presets": [{ "name": "Organization Schema" }]
+  "blocks": [
+    { "type": "schema-organization" },
+    { "type": "schema-store" }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Organization Schema",
+      "blocks": [
+        {
+          "type": "schema-organization",
+          "blocks": [
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "customer support",
+                "telephone": "+39 329 823 6955",
+                "languages": "Italian, English"
+              }
+            },
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "sales",
+                "telephone": "+39 329 823 6955"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}

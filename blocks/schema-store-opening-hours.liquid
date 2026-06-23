@@ -1,0 +1,25 @@
+{% capture opening_hours %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% liquid
+  assign opening_hours_json = opening_hours | strip
+  if opening_hours_json != blank
+    assign opening_hours_json = opening_hours_json | slice: 1, opening_hours_json.size
+  endif
+%}
+
+,
+"openingHoursSpecification": [
+  {{ opening_hours_json }}
+]
+
+{% schema %}
+{
+  "name": "Opening hours",
+  "blocks": [{ "type": "schema-opening-hours" }],
+  "settings": [],
+  "tag": null,
+  "presets": [{ "name": "Opening hours" }]
+}
+{% endschema %}

@@ -4,6 +4,14 @@
   "dayOfWeek": {{ block.settings.day | json }},
   "opens": {{ block.settings.opens | json }},
   "closes": {{ block.settings.closes | json }}
+  {%- if block.settings.valid_from != blank -%}
+  ,
+  "validFrom": {{ block.settings.valid_from | json }}
+  {%- endif -%}
+  {%- if block.settings.valid_through != blank -%}
+  ,
+  "validThrough": {{ block.settings.valid_through | json }}
+  {%- endif -%}
 }
 
 {% schema %}
@@ -25,7 +33,19 @@
       ]
     },
     { "type": "text", "id": "opens", "label": "Opens", "default": "09:00" },
-    { "type": "text", "id": "closes", "label": "Closes", "default": "18:00" }
+    { "type": "text", "id": "closes", "label": "Closes", "default": "18:00" },
+    {
+      "type": "text",
+      "id": "valid_from",
+      "label": "Valid from",
+      "info": "Optional. Format YYYY-MM-DD"
+    },
+    {
+      "type": "text",
+      "id": "valid_through",
+      "label": "Valid through",
+      "info": "Optional. Format YYYY-MM-DD"
+    }
   ],
   "tag": null,
   "presets": [{ "name": "Opening Hours" }]

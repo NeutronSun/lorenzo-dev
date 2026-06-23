@@ -1,22 +1,18 @@
 {% liquid
   assign org_url = shop.url
-%}
-
-{% capture opening_hours %}
-  {% content_for 'blocks' %}
-{% endcapture %}
-
-{% liquid
-  assign opening_hours_json = opening_hours | strip
-  if opening_hours_json != blank
-    assign opening_hours_json = opening_hours_json | slice: 1, opening_hours_json.size
+  assign store_slug = block.settings.name | handleize
+  if store_slug == blank
+    assign store_slug = block.id
   endif
+  assign store_id = org_url | append: '#store-' | append: store_slug
+  assign latitude = block.settings.lat | replace: ',', '.' | plus: 0
+  assign longitude = block.settings.lng | replace: ',', '.' | plus: 0
 %}
 
 ,
 {
-  "@type": "Store",
-  "@id": {{ org_url | append: '#store-' | append: block.id | json }},
+  "@type": ["Store", "LocalBusiness"],
+  "@id": {{ store_id | json }},
   "name": {{ block.settings.name | json }},
   "parentOrganization": {
     "@id": {{ org_url | append: '#organization' | json }}
@@ -36,33 +32,103 @@
   ,
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": {{ block.settings.lat | json }},
-    "longitude": {{ block.settings.lng | json }}
+    "latitude": {{ latitude }},
+    "longitude": {{ longitude }}
   }
   {%- endif -%}
+  {%- if block.settings.price_range != blank -%}
   ,
-  "openingHoursSpecification": [
-    {{ opening_hours_json }}
-  ]
+  "priceRange": {{ block.settings.price_range | json }}
+  {%- endif -%}
+  {%- if block.settings.payment_accepted != blank -%}
+  ,
+  "paymentAccepted": {{ block.settings.payment_accepted | json }}
+  {%- endif -%}
+  {%- if block.settings.currencies_accepted != blank -%}
+  ,
+  "currenciesAccepted": {{ block.settings.currencies_accepted | json }}
+  {%- endif -%}
+  {%- if block.settings.area_served != blank -%}
+  ,
+  "areaServed": {{ block.settings.area_served | json }}
+  {%- endif -%}
+  {% content_for 'blocks' %}
 }
 
 {% schema %}
 {
   "name": "Store",
-  "blocks": [{ "type": "schema-opening-hours" }],
+  "blocks": [
+    { "type": "schema-store-contact-points" },
+    { "type": "schema-store-opening-hours" }
+  ],
   "settings": [
     { "type": "text", "id": "name", "label": "Name" },
     { "type": "text", "id": "address", "label": "Street Address" },
     { "type": "text", "id": "city", "label": "City" },
     { "type": "text", "id": "zip", "label": "Postal Code" },
     { "type": "text", "id": "country", "label": "Country Code (IT, FR...)" },
-    { "type": "text", "id": "phone", "label": "Phone" },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "info": "Use international format, e.g. +39 329 823 6955"
+    },
     { "type": "text", "id": "lat", "label": "Latitude" },
-    { "type": "text", "id": "lng", "label": "Longitude" }
+    { "type": "text", "id": "lng", "label": "Longitude" },
+    {
+      "type": "text",
+      "id": "price_range",
+      "label": "Price range",
+      "default": "€€"
+    },
+    {
+      "type": "text",
+      "id": "payment_accepted",
+      "label": "Payment accepted",
+      "default": "Cash, Credit Card, PayPal"
+    },
+    {
+      "type": "text",
+      "id": "currencies_accepted",
+      "label": "Currencies accepted",
+      "default": "EUR"
+    },
+    {
+      "type": "text",
+      "id": "area_served",
+      "label": "Area served",
+      "default": "IT"
+    }
   ],
   "tag": null,
   "presets": [
-    { "name": "Store" }
+    {
+      "name": "Store",
+      "blocks": [
+        {
+          "type": "schema-store-contact-points",
+          "blocks": [
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "customer support",
+                "telephone": "+39 329 823 6955",
+                "languages": "Italian, English"
+              }
+            },
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "sales",
+                "telephone": "+39 329 823 6955"
+              }
+            }
+          ]
+        },
+        { "type": "schema-store-opening-hours" }
+      ]
+    }
   ]
 }
 {% endschema %}
