@@ -30,7 +30,7 @@
                     {% elsif color != blank %}
                       <span class="header-menu-link-color" style="--header-menu-link-color: {{ color }};"></span>
                     {% endif %}
-                    <span class="header-menu-link-label">{{ name }}</span>
+                    <span class="header-menu-link-label">{{ name | capitalize }}</span>
                   </a>
                 </li>
               {% endfor %}
@@ -229,6 +229,8 @@
             flex-direction: column;
             padding: 0;
             gap: 0;
+            overflow-y: auto;
+            max-height: calc(100dvh - var(--header-mobile-menu-footer-height) - var(--header-mobile-menu-header-height) - var(--header-mobile-bar-height) - 60px);
           }
 
           .header-menu-column {
@@ -239,6 +241,9 @@
               padding: 18px 16px 8px;
               letter-spacing: 0.2em;
               color: var(--secondary-black);
+              position: sticky;
+              top: 0;
+              background-color: var(--white);
             }
 
             > ul {

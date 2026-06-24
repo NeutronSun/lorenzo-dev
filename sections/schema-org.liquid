@@ -18,7 +18,9 @@
 }
 {% endcapture %}
 
-<pre class="schema-org-debug">{{ schema_json | strip }}</pre>
+{% if section.settings.debug %}
+  <pre class="schema-org-debug">{{ schema_json | strip }}</pre>
+{% endif %}
 
 <script type="application/ld+json">
   {{ schema_json | strip }}
@@ -43,6 +45,12 @@
 {
   "name": "Organization Schema",
   "settings": [
+    {
+      "type": "checkbox",
+      "default": false,
+      "id": "debug",
+      "label": "debug"
+    },
     { "type": "text", "id": "org_name", "label": "Organization Name" },
     { "type": "image_picker", "id": "org_logo", "label": "Logo" },
     {
