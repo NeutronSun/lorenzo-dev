@@ -54,6 +54,9 @@ class PDPsiblings extends HTMLComponent {
       this.themeTag ? this.fetchProducts(this.themeTag) : [],
       this.fusionTag ? this.fetchProducts(this.fusionTag) : [],
     ]);
+
+    if (!this.isConnected) return;
+
     const tabs = this.getTabs(themeProducts, fusionProducts, currentProduct);
 
     if (!tabs.length) {

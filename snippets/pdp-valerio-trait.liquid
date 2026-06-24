@@ -7,10 +7,10 @@
   @param {string} value - Trait value
 {% enddoc %}
 
-<div class="trait" tabindex="0">
-  <div class="stats stat-{{ stat }} orb">
+<button type="button" class="trait" aria-label="{{ label | escape }}">
+  <span class="stats stat-{{ stat }} orb">
     <span class="num font-mono">{{ value }}</span>
     <span class="mark font-mono" aria-hidden="true">{{ letter }}</span>
-    <span class="tip font-mono" role="tooltip">{{ label }}</span>
-  </div>
-</div>
+    <span class="tip font-mono">{{ label }}</span>
+  </span>
+</button>

@@ -22,27 +22,20 @@
   <h2 class="pdp-dossier-title font-mono">/Stats</h2>
 
   <div class="pdp-dossier-body">
-    <div class="combat">
-      <dl class="stat">
-        <dt class="font-mono">Attack</dt>
-        <dd>{{ attack }}</dd>
-      </dl>
-
-      <dl class="stat">
-        <dt class="font-mono">Defense</dt>
-        <dd>{{ defense }}</dd>
-      </dl>
-    </div>
+    <dl class="combat">
+      <dt class="font-mono">Attack</dt>
+      <dd>{{ attack }}</dd>
+      <dt class="font-mono">Defense</dt>
+      <dd>{{ defense }}</dd>
+    </dl>
 
     <div class="meters">
       <div
         class="meter is-health"
         style="--meter-value: {{ health | default: 0 }};"
-        role="img"
-        aria-label="Health {{ health | default: 0 }}"
       >
         <span class="sheen" aria-hidden="true"></span>
-        <span class="label font-mono" aria-hidden="true">
+        <span class="label font-mono">
           <span class="name">Health</span>
           <span class="max"><span class="count"></span> / {{ health | default: 0 }}</span>
         </span>
@@ -52,12 +45,10 @@
         <div
           class="meter is-mana"
           style="--meter-value: {{ mana | default: 0 }};"
-          role="img"
-          aria-label="Mana {{ mana | default: 0 }}"
         >
           <span class="fill" aria-hidden="true"></span>
           <span class="sheen" aria-hidden="true"></span>
-          <span class="label font-mono" aria-hidden="true">
+          <span class="label font-mono">
             <span class="name">Mana</span>
             <span class="max"><span class="count"></span> / {{ mana | default: 0 }}</span>
           </span>
@@ -66,12 +57,10 @@
         <div
           class="meter is-energy"
           style="--meter-value: {{ energy | default: 0 }};"
-          role="img"
-          aria-label="Energy {{ energy | default: 0 }}"
         >
           <span class="fill" aria-hidden="true"></span>
           <span class="sheen" aria-hidden="true"></span>
-          <span class="label font-mono" aria-hidden="true">
+          <span class="label font-mono">
             <span class="name">Energy</span>
             <span class="max"><span class="count"></span> / {{ energy | default: 0 }}</span>
           </span>
@@ -160,30 +149,13 @@
     }
 
     .combat {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      grid-auto-flow: column;
       gap: 12px;
       min-width: 0;
-
-      .stat {
-        flex: 1 1 0;
-        margin: 0;
-        min-width: 0;
-      }
-
-      dt {
-        margin: 0 0 8px;
-        color: var(--secondary-black);
-        font-size: 10px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      dd {
-        margin: 0;
-        color: var(--black);
-        font-size: 16px;
-        line-height: 1.2;
-      }
+      margin: 0;
     }
 
     .meters {
@@ -330,7 +302,11 @@
       flex: 1 1 0;
       justify-content: center;
       min-width: 0;
-      outline: none;
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      cursor: pointer;
 
       &:hover .tip,
       &:focus-visible .tip {

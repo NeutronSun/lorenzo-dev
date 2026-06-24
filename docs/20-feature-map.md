@@ -5,14 +5,30 @@
 File principali:
 
 - `sections/product.liquid`
+- `sections/product-breadcrumb.liquid`
 - `blocks/pdp-product-dossier.liquid`
+- `blocks/pdp-dossier-edition.liquid`
+- `blocks/pdp-card-stats.liquid`
+- `blocks/pdp-dossier-description.liquid`
+- `blocks/pdp-dossier-tech.liquid`
+- `blocks/pdp-dossier-tech-row.liquid`
 - `blocks/pdp-gallery.liquid`
 - `blocks/pdp-product-info.liquid`
 - `snippets/pdp-variant-picker.liquid`
+- `snippets/pdp-valerio-trait.liquid`
 - `assets/product.js`
 - `assets/pdp-siblings.js`
 
 La PDP e' composta da tre blocchi dentro `product-page`: dossier, gallery e info. Le altezze sticky/mobile sono coordinate da `assets/product.js` tramite CSS custom properties, non da layout JS invasivo.
+
+Il dossier (`pdp-product-dossier`) compone nested blocks via `{% content_for 'blocks' %}`:
+
+- `pdp-dossier-edition` — season, number, series
+- `pdp-card-stats` — combat, meters (health/mana/energy), tratti valerio
+- `pdp-dossier-description` — note prodotto
+- `pdp-dossier-tech` — righe tecniche (`pdp-dossier-tech-row`)
+
+Gli orb valerio sono renderizzati dal snippet `pdp-valerio-trait` dentro `pdp-card-stats`.
 
 Quando aggiungi una parte PDP, preferisci un block se deve essere gestibile in editor. Usa snippet solo per un frammento interno riusabile.
 

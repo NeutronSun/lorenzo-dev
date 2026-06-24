@@ -50,20 +50,21 @@
     .pdp-dossier-edition .values {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      grid-auto-flow: column;
       gap: 16px;
+      margin: 0;
     }
 
-    .pdp-dossier-edition dt,
-    .pdp-dossier-tech-row dt {
-      margin: 0 0 10px;
+    .pdp-dossier-panel dt {
+      margin: 0 0 8px;
       color: var(--secondary-black);
       font-size: 10px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
-    .pdp-dossier-edition dd,
-    .pdp-dossier-tech-row dd {
+    .pdp-dossier-panel dd {
       margin: 0;
       color: var(--black);
       font-size: 16px;
