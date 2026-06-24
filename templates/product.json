@@ -32,6 +32,11 @@
               },
               "blocks": {}
             },
+            "stats": {
+              "type": "pdp-card-stats",
+              "settings": {},
+              "blocks": {}
+            },
             "description": {
               "type": "pdp-dossier-description",
               "settings": {
@@ -68,6 +73,7 @@
           },
           "block_order": [
             "edition",
+            "stats",
             "description",
             "technical"
           ]

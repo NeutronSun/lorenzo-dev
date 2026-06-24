@@ -1,0 +1,16 @@
+{% doc %}
+  Renders a Valerio trait orb with hover label.
+
+  @param {string} letter - Single letter mark
+  @param {string} stat - Stat token (v, a, l, e, r, i, o)
+  @param {string} label - Trait name
+  @param {string} value - Trait value
+{% enddoc %}
+
+<div class="trait" tabindex="0">
+  <div class="stats stat-{{ stat }} orb">
+    <span class="num font-mono">{{ value }}</span>
+    <span class="mark font-mono" aria-hidden="true">{{ letter }}</span>
+    <span class="tip font-mono" role="tooltip">{{ label }}</span>
+  </div>
+</div>

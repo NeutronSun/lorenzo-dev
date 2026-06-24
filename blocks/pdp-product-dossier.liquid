@@ -12,8 +12,11 @@
     align-content: start;
     gap: 16px;
     min-width: 0;
+    overflow-x: clip;
 
     .pdp-dossier-panel {
+      min-width: 0;
+      overflow-x: clip;
       border: 1px solid var(--border-color);
       background: var(--white);
       box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
@@ -129,6 +132,7 @@
   "tag": null,
   "blocks": [
     { "type": "pdp-dossier-edition" },
+    { "type": "pdp-card-stats" },
     { "type": "pdp-dossier-description" },
     { "type": "pdp-dossier-tech" }
   ],

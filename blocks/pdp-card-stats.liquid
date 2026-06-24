@@ -1,0 +1,501 @@
+{% doc %}
+  Renders PDP card stats panel.
+{% enddoc %}
+
+{% liquid
+  assign attack = product.metafields.valeverce.attack.value
+  assign defense = product.metafields.valeverce.defense.value
+  assign health = product.metafields.valeverce.health.value
+  assign mana = product.metafields.valeverce.mana.value
+  assign energy = product.metafields.valeverce.energy.value
+
+  assign vigore = product.metafields.valeverce.vigore.value
+  assign astuzia = product.metafields.valeverce.astuzia.value
+  assign lucidita = product.metafields.valeverce.lucidita.value
+  assign ego = product.metafields.valeverce.ego.value
+  assign rigore = product.metafields.valeverce.rigore.value
+  assign istinto = product.metafields.valeverce.istinto.value
+  assign oppurtunismo = product.metafields.valeverce.oppurtunismo.value | default: product.metafields.valeverce.opportunismo.value
+%}
+
+<section class="pdp-dossier-panel pdp-card-stats" {{ block.shopify_attributes }}>
+  <h2 class="pdp-dossier-title font-mono">/Stats</h2>
+
+  <div class="pdp-dossier-body">
+    <div class="combat">
+      <dl class="stat">
+        <dt class="font-mono">Attack</dt>
+        <dd>{{ attack }}</dd>
+      </dl>
+
+      <dl class="stat">
+        <dt class="font-mono">Defense</dt>
+        <dd>{{ defense }}</dd>
+      </dl>
+    </div>
+
+    <div class="meters">
+      <div
+        class="meter is-health"
+        style="--meter-value: {{ health | default: 0 }};"
+        role="img"
+        aria-label="Health {{ health | default: 0 }}"
+      >
+        <span class="sheen" aria-hidden="true"></span>
+        <span class="label font-mono" aria-hidden="true">
+          <span class="name">Health</span>
+          <span class="max"><span class="count"></span> / {{ health | default: 0 }}</span>
+        </span>
+      </div>
+
+      <div class="row">
+        <div
+          class="meter is-mana"
+          style="--meter-value: {{ mana | default: 0 }};"
+          role="img"
+          aria-label="Mana {{ mana | default: 0 }}"
+        >
+          <span class="fill" aria-hidden="true"></span>
+          <span class="sheen" aria-hidden="true"></span>
+          <span class="label font-mono" aria-hidden="true">
+            <span class="name">Mana</span>
+            <span class="max"><span class="count"></span> / {{ mana | default: 0 }}</span>
+          </span>
+        </div>
+
+        <div
+          class="meter is-energy"
+          style="--meter-value: {{ energy | default: 0 }};"
+          role="img"
+          aria-label="Energy {{ energy | default: 0 }}"
+        >
+          <span class="fill" aria-hidden="true"></span>
+          <span class="sheen" aria-hidden="true"></span>
+          <span class="label font-mono" aria-hidden="true">
+            <span class="name">Energy</span>
+            <span class="max"><span class="count"></span> / {{ energy | default: 0 }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="valerio">
+      <p class="heading font-mono">valerio</p>
+
+      <div class="traits">
+        {% render 'pdp-valerio-trait', letter: 'v', stat: 'v', label: 'Vigore', value: vigore %}
+        {% render 'pdp-valerio-trait', letter: 'a', stat: 'a', label: 'Astuzia', value: astuzia %}
+        {% render 'pdp-valerio-trait', letter: 'l', stat: 'l', label: 'Lucidità', value: lucidita %}
+        {% render 'pdp-valerio-trait', letter: 'e', stat: 'e', label: 'Ego', value: ego %}
+        {% render 'pdp-valerio-trait', letter: 'r', stat: 'r', label: 'Rigore', value: rigore %}
+        {% render 'pdp-valerio-trait', letter: 'i', stat: 'i', label: 'Istinto', value: istinto %}
+        {% render 'pdp-valerio-trait', letter: 'o', stat: 'o', label: 'Opportunismo', value: oppurtunismo %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  @property --meter-count {
+    syntax: '<integer>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @keyframes card-meter-count {
+    to {
+      --meter-count: var(--meter-value);
+    }
+  }
+
+  @keyframes card-meter-fill {
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes card-meter-fluid {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes card-meter-sheen {
+    0% {
+      translate: -160% 0;
+    }
+
+    100% {
+      translate: 160% 0;
+    }
+  }
+
+  @keyframes card-health-color {
+    to {
+      background-color: var(--green);
+      border-color: var(--green);
+    }
+  }
+
+  .pdp-card-stats {
+    --meter-duration: 1.4s;
+    --meter-fluid-duration: 3.6s;
+    --meter-sheen-duration: 2.8s;
+    --meter-mana: oklch(from var(--blue) calc(l + 0.08) calc(c * 1.08) h);
+    --meter-energy: var(--yellow);
+    min-width: 0;
+    overflow-x: clip;
+
+    .pdp-dossier-body {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+      overflow-x: clip;
+    }
+
+    .combat {
+      display: flex;
+      gap: 12px;
+      min-width: 0;
+
+      .stat {
+        flex: 1 1 0;
+        margin: 0;
+        min-width: 0;
+      }
+
+      dt {
+        margin: 0 0 8px;
+        color: var(--secondary-black);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      dd {
+        margin: 0;
+        color: var(--black);
+        font-size: 16px;
+        line-height: 1.2;
+      }
+    }
+
+    .meters {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+
+      .row {
+        display: flex;
+        gap: 10px;
+        min-width: 0;
+
+        .meter {
+          flex: 1 1 0;
+          min-width: 0;
+        }
+      }
+    }
+
+    .meter {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      isolation: isolate;
+      min-width: 0;
+      min-height: 38px;
+      padding: 8px 12px;
+      container-type: inline-size;
+      background: oklch(from var(--meter-fill) l c h / 0.2);
+      border: 1px solid var(--meter-fill);
+      animation: card-meter-count var(--meter-duration) ease-out forwards;
+
+      &.is-health {
+        background-color: var(--red);
+        border: 1px solid var(--red);
+        animation:
+          card-meter-count var(--meter-duration) ease-out forwards,
+          card-health-color var(--meter-duration) ease-out forwards;
+
+        .label {
+          z-index: 2;
+        }
+      }
+
+      &.is-mana {
+        --meter-fill: var(--meter-mana);
+      }
+
+      &.is-energy {
+        --meter-fill: var(--meter-energy);
+      }
+
+      .fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        z-index: 0;
+        width: 0;
+        background: linear-gradient(
+          90deg,
+          oklch(from var(--meter-fill) calc(l - 0.1) calc(c * 1.1) h),
+          var(--meter-fill),
+          oklch(from var(--meter-fill) calc(l + 0.08) calc(c * 1.15) h),
+          var(--meter-fill),
+          oklch(from var(--meter-fill) calc(l - 0.1) calc(c * 1.1) h)
+        );
+        background-size: 220% 100%;
+        animation:
+          card-meter-fill var(--meter-duration) ease-out forwards,
+          card-meter-fluid var(--meter-fluid-duration) ease-in-out infinite;
+      }
+
+      .sheen {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+          105deg,
+          transparent 36%,
+          rgb(255 255 255 / 0.08) 44%,
+          rgb(255 255 255 / 0.45) 50%,
+          rgb(255 255 255 / 0.08) 56%,
+          transparent 64%
+        );
+        translate: -160% 0;
+        animation: card-meter-sheen var(--meter-sheen-duration) ease-in-out infinite;
+        pointer-events: none;
+        will-change: translate;
+      }
+
+      .label {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        align-items: baseline;
+        max-width: 100%;
+        color: var(--white);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        paint-order: stroke fill;
+        -webkit-text-stroke: 0.4px oklch(from var(--black) l c h / 0.55);
+        text-shadow:
+          1px 0 0 oklch(from var(--black) l c h / 0.4),
+          -1px 0 0 oklch(from var(--black) l c h / 0.4),
+          0 1px 0 oklch(from var(--black) l c h / 0.4),
+          0 -1px 0 oklch(from var(--black) l c h / 0.4),
+          0 0 3px oklch(from var(--black) l c h / 0.35);
+      }
+
+      .count::before {
+        counter-reset: meter-count var(--meter-count);
+        content: counter(meter-count);
+      }
+    }
+
+    .valerio {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+
+      .heading {
+        margin: 0;
+        color: var(--secondary-black);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+    }
+
+    .traits {
+      display: flex;
+      min-width: 0;
+    }
+
+    .trait {
+      display: flex;
+      flex: 1 1 0;
+      justify-content: center;
+      min-width: 0;
+      outline: none;
+
+      &:hover .tip,
+      &:focus-visible .tip {
+        opacity: 1;
+        visibility: visible;
+        translate: -50% 0;
+      }
+
+      &:first-child:hover .tip,
+      &:first-child:focus-visible .tip {
+        translate: 0 0;
+      }
+
+      &:last-child:hover .tip,
+      &:last-child:focus-visible .tip {
+        left: auto;
+        right: 0;
+        translate: 0 0;
+      }
+    }
+
+    .orb {
+      --orb-tone: oklch(from var(--color) 0.48 calc(c * 1.3) h);
+
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      max-width: 40px;
+      aspect-ratio: 1;
+      background: linear-gradient(
+        145deg,
+        oklch(from var(--orb-tone) calc(l + 0.06) c h),
+        var(--orb-tone),
+        oklch(from var(--orb-tone) calc(l - 0.12) c h)
+      );
+      border-radius: 50%;
+      box-shadow:
+        inset 0 -6px 12px oklch(from var(--orb-tone) calc(l - 0.18) c h / 0.55),
+        inset 0 4px 8px rgb(255 255 255 / 0.12);
+
+      .num {
+        color: var(--white);
+        font-size: 13px;
+        letter-spacing: 0;
+        line-height: 1;
+        text-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
+      }
+
+      .mark {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        display: grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        color: oklch(from var(--orb-tone) calc(l - 0.06) c h);
+        font-size: 10px;
+        letter-spacing: 0;
+        line-height: 1;
+        text-transform: lowercase;
+        translate: 35% 35%;
+      }
+
+      .tip {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        z-index: 1;
+        padding: 6px 10px;
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+        color: var(--black);
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        line-height: 1;
+        pointer-events: none;
+        text-transform: uppercase;
+        translate: -50% 4px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.18s ease,
+          translate 0.18s ease,
+          visibility 0.18s ease;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          width: 8px;
+          height: 8px;
+          background: var(--white);
+          border-right: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--border-color);
+          translate: -50% -4px;
+          rotate: 45deg;
+        }
+      }
+    }
+
+    .trait:first-child .tip {
+      left: 0;
+      translate: 0 4px;
+
+      &::after {
+        left: 20px;
+      }
+    }
+
+    .trait:last-child .tip {
+      left: auto;
+      right: 0;
+      translate: 0 4px;
+
+      &::after {
+        left: auto;
+        right: 20px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pdp-card-stats .meter {
+      --meter-count: var(--meter-value);
+      animation: card-meter-count 0.01s ease-out forwards;
+
+      &.is-health {
+        animation:
+          card-meter-count 0.01s ease-out forwards,
+          card-health-color 0.01s ease-out forwards;
+      }
+
+      .fill {
+        width: 100%;
+        animation: none;
+        background-position: 50% 50%;
+      }
+
+      .sheen {
+        animation: none;
+        opacity: 0;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Card Stats",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Card Stats",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
