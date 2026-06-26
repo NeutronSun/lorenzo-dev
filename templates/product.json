@@ -94,7 +94,6 @@
     },
     "product_recommendations_carousel_zgrpCX": {
       "type": "product-recommendations-carousel",
-      "name": "Product recommendations",
       "blocks": {
         "product-card": {
           "type": "product-card",
@@ -134,7 +133,7 @@
                   "type": "product-card-swatches",
                   "static": true,
                   "settings": {
-                    "match_prefix": "Model_",
+                    "match_prefix": "Tema_",
                     "siblings_limit": 10
                   },
                   "blocks": {}
@@ -146,6 +145,7 @@
           "block_order": []
         }
       },
+      "name": "Product recommendations",
       "settings": {
         "eyebrow": "/PAIR WITH",
         "title": "More from the drop",
