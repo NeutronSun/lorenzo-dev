@@ -13,6 +13,7 @@ import "@theme/product";
 import "@theme/color-sibling";
 import "@theme/pdp-siblings";
 import "@theme/product-card";
+import "@theme/deferred-section";
 
 console.log(`
                       __

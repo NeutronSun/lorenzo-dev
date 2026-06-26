@@ -106,3 +106,15 @@ File principali:
 - `assets/critical.css`
 
 Header e dialog hanno gia' custom elements e classi globali. Prima di aggiungere drawer, overlay, menu o azioni sticky, cerca questi componenti e riusa pattern, eventi e classi esistenti.
+
+## Swiper carousel
+
+File principali:
+
+- `assets/deferred-section.js`
+- `assets/swiper-element-bundle.min.js`
+- `snippets/swiper.liquid`
+- `snippets/deferred-section-skeleton.liquid`
+- `sections/product-recommendations-carousel.liquid`
+
+`deferred-section` fetcha `routes.product_recommendations_url` con `section_id`, `product_id`, `limit` e `intent`. Shopify risponde con `recommendations.performed` e la section monta il body carousel usando `section.settings` senza serializzare tutti i parametri carousel nell'URL.

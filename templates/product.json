@@ -92,10 +92,28 @@
         }
       },
       "settings": {}
+    },
+    "product_recommendations": {
+      "type": "product-recommendations-carousel",
+      "settings": {
+        "eyebrow": "/PAIR WITH",
+        "title": "More from the drop",
+        "view_all_label": "VIEW ALL",
+        "intent": "related",
+        "product_limit": 8,
+        "slides_count": 3,
+        "slides_count_mobile": 1.15,
+        "gap": 12,
+        "loop": false,
+        "navigation": true,
+        "pagination": true,
+        "default_spacing": true
+      }
     }
   },
   "order": [
     "breadcrumb",
-    "main"
+    "main",
+    "product_recommendations"
   ]
 }

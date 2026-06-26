@@ -1,0 +1,154 @@
+{% doc %}
+  Product recommendations carousel body for deferred-section alternate templates.
+
+  @param {product} product - Current product
+  @param {array} [recommended_products] - Products from recommendations API
+  @param {string} intent - related or complementary
+  @param {string} [eyebrow]
+  @param {string} [title]
+  @param {string} [view_all_label]
+  @param {string} [view_all_url]
+  @param {number} [product_limit]
+  @param {number} [slides_count]
+  @param {number} [slides_count_mobile]
+  @param {number} [gap]
+  @param {boolean} [loop]
+  @param {boolean} [navigation]
+  @param {boolean} [pagination]
+  @param {string} [scope_id]
+{% enddoc %}
+
+{% liquid
+  assign intent = intent | default: 'related'
+  assign product_limit = product_limit | default: 8
+  assign slides_count = slides_count | default: 3
+  assign slides_count_mobile = slides_count_mobile | default: 1.5
+  assign gap = gap | default: 12
+  assign loop = loop | default: false
+  assign navigation = navigation | default: true
+  assign pagination = pagination | default: true
+  assign delimiter = '|||'
+  assign slide_buffer = ''
+  assign scope_id = scope_id | default: 'recommendations'
+
+  if recommended_products == blank
+    assign discovery = product.metafields['shopify--discovery--product_recommendation']
+
+    if intent == 'complementary'
+      assign recommended_products = discovery.complementary_products.value
+    else
+      assign recommended_products = discovery.related_products.value
+    endif
+  endif
+%}
+
+<div data-deferred-content class="product-recommendations-carousel__inner page-width">
+  {% if recommended_products != blank %}
+    <header class="product-recommendations-carousel__header">
+      <div class="product-recommendations-carousel__copy">
+        {% if eyebrow != blank %}
+          <p class="product-recommendations-carousel__eyebrow font-mono">{{ eyebrow | escape }}</p>
+        {% endif %}
+
+        {% if title != blank %}
+          <h2 class="product-recommendations-carousel__title font-heading">{{ title | escape }}</h2>
+        {% endif %}
+      </div>
+
+      {% if view_all_url != blank and view_all_label != blank %}
+        <a class="product-recommendations-carousel__link font-mono" href="{{ view_all_url }}">
+          {{ view_all_label | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+      {% endif %}
+    </header>
+
+    {% for recommendation in recommended_products limit: product_limit %}
+      {% if recommendation.id == product.id %}
+        {% continue %}
+      {% endif %}
+
+      {% capture labels %}
+        {% render 'product-card-labels',
+          product: recommendation,
+          show_new_in: true,
+          show_sold_out: true,
+          show_rarity: true,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% capture media %}
+        {% render 'product-card-media',
+          product: recommendation,
+          show_new_in: true,
+          show_sold_out: true,
+          show_rarity: true,
+          labels: labels,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% capture details %}
+        {% render 'product-card-details',
+          product: recommendation,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% capture swatches %}
+        {% render 'product-card-swatches',
+          product: recommendation,
+          match_prefix: 'Model_',
+          siblings_limit: 10,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% capture info %}
+        {% render 'product-card-info',
+          product: recommendation,
+          match_prefix: 'Model_',
+          siblings_limit: 10,
+          details: details,
+          swatches: swatches,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% capture card %}
+        {% render 'product-card',
+          product: recommendation,
+          show_new_in: true,
+          show_sold_out: true,
+          show_rarity: true,
+          match_prefix: 'Model_',
+          siblings_limit: 10,
+          media: media,
+          info: info,
+          attributes: ''
+        %}
+      {% endcapture %}
+
+      {% if slide_buffer == blank %}
+        {% assign slide_buffer = card %}
+      {% else %}
+        {% assign slide_buffer = slide_buffer | append: delimiter | append: card %}
+      {% endif %}
+    {% endfor %}
+
+    {% if slide_buffer != blank %}
+      {% render 'swiper',
+        slides: slide_buffer,
+        delimiter: delimiter,
+        slides_count: slides_count,
+        slides_count_mobile: slides_count_mobile,
+        gap: gap,
+        loop: loop,
+        navigation: navigation,
+        pagination: pagination,
+        id: scope_id
+      %}
+    {% endif %}
+  {% endif %}
+</div>

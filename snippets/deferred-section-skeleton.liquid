@@ -1,0 +1,82 @@
+{% doc %}
+  Skeleton placeholder for deferred-section while remote content loads.
+
+  @param {string} [variant] - Skeleton layout variant
+  @param {number} [slides_count] - Visible slide placeholders on desktop
+  @param {number} [slides_count_mobile] - Visible slide placeholders on mobile
+{% enddoc %}
+
+{% liquid
+  assign variant = variant | default: 'carousel'
+  assign slides_count = slides_count | default: 3
+  assign slides_count_mobile = slides_count_mobile | default: 1.5
+%}
+
+<div ref="skeleton" class="deferred-section__skeleton deferred-section__skeleton--{{ variant }}" hidden>
+  {% if variant == 'carousel' %}
+    <div
+      class="deferred-section__skeleton-track"
+      style="--skeleton-slides: {{ slides_count }}; --skeleton-slides-mobile: {{ slides_count_mobile }};"
+    >
+      {% for index in (1..slides_count) %}
+        <div class="deferred-section__skeleton-slide" aria-hidden="true"></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<div ref="mount" class="deferred-section__mount" hidden></div>
+
+{% stylesheet %}
+  deferred-section {
+    display: block;
+  }
+
+  deferred-section[loading] .deferred-section__skeleton {
+    display: block;
+  }
+
+  deferred-section:not([loading]) .deferred-section__skeleton {
+    display: none;
+  }
+
+  .deferred-section__skeleton-track {
+    --skeleton-slides: 3;
+    --skeleton-slides-mobile: 1.5;
+    --skeleton-gap: 12px;
+
+    display: flex;
+    gap: var(--skeleton-gap);
+    overflow: hidden;
+  }
+
+  .deferred-section__skeleton-slide {
+    flex: 0 0 calc((100% - ((var(--skeleton-slides-mobile) - 1) * var(--skeleton-gap))) / var(--skeleton-slides-mobile));
+    aspect-ratio: 3 / 4;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(
+      90deg,
+      oklch(from var(--black) l c h / 0.04) 0%,
+      oklch(from var(--black) l c h / 0.08) 50%,
+      oklch(from var(--black) l c h / 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: deferred-section-shimmer 1.2s ease-in-out infinite;
+  }
+
+  @keyframes deferred-section-shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .deferred-section__skeleton-slide {
+      flex-basis: calc((100% - ((var(--skeleton-slides) - 1) * var(--skeleton-gap))) / var(--skeleton-slides));
+    }
+  }
+{% endstylesheet %}

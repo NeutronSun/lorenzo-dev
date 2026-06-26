@@ -1,0 +1,153 @@
+{% doc %}
+  Reusable Swiper Element wrapper with theme navigation and pagination styles.
+
+  @param {string} slides - Concatenated slide HTML separated by delimiter
+  @param {string} [delimiter] - Slide separator string
+  @param {number} [slides_count] - Visible slides on desktop
+  @param {number} [slides_count_mobile] - Visible slides on mobile
+  @param {number} [gap] - Space between slides in px
+  @param {boolean} [loop] - Enable infinite loop
+  @param {boolean} [navigation] - Show prev/next controls
+  @param {boolean} [pagination] - Show pagination dots
+  @param {string} [id] - Section or block id for scoped CSS
+  @param {string} [class] - Extra host class names
+{% enddoc %}
+
+{% liquid
+  assign delimiter = delimiter | default: '|||'
+  assign slides_count = slides_count | default: 3
+  assign slides_count_mobile = slides_count_mobile | default: 1.15
+  assign gap = gap | default: 12
+  assign loop = loop | default: false
+  assign navigation = navigation | default: true
+  assign pagination = pagination | default: true
+  assign host_class = class | default: ''
+  assign scope_id = id | default: 'swiper'
+%}
+
+{% if slides != blank %}
+  <div
+    class="swiper-host swiper-host--{{ scope_id }} {{ host_class }}"
+    style="--swiper-slides: {{ slides_count }}; --swiper-slides-mobile: {{ slides_count_mobile }}; --swiper-gap: {{ gap }}px;"
+  >
+    <swiper-container
+      slides-per-view="auto"
+      space-between="{{ gap }}"
+      {% if loop %}loop="true"{% endif %}
+      {% if navigation %}navigation="true"{% endif %}
+      {% if pagination %}
+        pagination="true"
+        pagination-clickable="true"
+      {% endif %}
+    >
+      {% assign slide_parts = slides | split: delimiter %}
+      {% for slide_html in slide_parts %}
+        {% if slide_html != blank %}
+          <swiper-slide class="swiper-host__slide">{{ slide_html }}</swiper-slide>
+        {% endif %}
+      {% endfor %}
+    </swiper-container>
+  </div>
+
+  <script src="{{ 'swiper-element-bundle.min.js' | asset_url }}" defer></script>
+{% endif %}
+
+{% stylesheet %}
+  .swiper-host {
+    --swiper-navigation-size: 40px;
+    --swiper-navigation-color: var(--black);
+    --swiper-pagination-color: var(--black);
+    --swiper-pagination-bullet-size: 6px;
+    --swiper-pagination-bullet-horizontal-gap: 6px;
+    --swiper-pagination-bottom: 0px;
+
+    position: relative;
+    padding-bottom: calc(var(--swiper-pagination-bullet-size) + 20px);
+  }
+
+  .swiper-host swiper-container {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-host swiper-slide {
+    width: calc((100% - ((var(--swiper-slides-mobile) - 1) * var(--swiper-gap))) / var(--swiper-slides-mobile));
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .swiper-host swiper-slide product-card {
+    height: 100%;
+  }
+
+  .swiper-host swiper-container::part(button-prev),
+  .swiper-host swiper-container::part(button-next),
+  .swiper-host .swiper-button-prev,
+  .swiper-host .swiper-button-next {
+    top: 50%;
+    width: var(--swiper-navigation-size);
+    height: var(--swiper-navigation-size);
+    margin-top: calc(var(--swiper-navigation-size) / -2);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    background: var(--white);
+    opacity: 0;
+    transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .swiper-host:hover swiper-container::part(button-prev),
+  .swiper-host:hover swiper-container::part(button-next),
+  .swiper-host:hover .swiper-button-prev,
+  .swiper-host:hover .swiper-button-next {
+    opacity: 1;
+  }
+
+  .swiper-host swiper-container::part(button-prev):hover,
+  .swiper-host swiper-container::part(button-next):hover,
+  .swiper-host .swiper-button-prev:hover,
+  .swiper-host .swiper-button-next:hover {
+    border-color: var(--black);
+    background: var(--white);
+  }
+
+  .swiper-host swiper-container::part(button-prev).swiper-button-disabled,
+  .swiper-host swiper-container::part(button-next).swiper-button-disabled,
+  .swiper-host .swiper-button-prev.swiper-button-disabled,
+  .swiper-host .swiper-button-next.swiper-button-disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .swiper-host swiper-container::part(pagination),
+  .swiper-host .swiper-pagination {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--swiper-pagination-bullet-horizontal-gap);
+  }
+
+  .swiper-host swiper-container::part(bullet),
+  .swiper-host swiper-container::part(bullet-active),
+  .swiper-host .swiper-pagination-bullet {
+    width: var(--swiper-pagination-bullet-size);
+    height: var(--swiper-pagination-bullet-size);
+    margin: 0;
+    border-radius: 0;
+    background: oklch(from var(--black) l c h / 0.2);
+    opacity: 1;
+  }
+
+  .swiper-host swiper-container::part(bullet-active),
+  .swiper-host .swiper-pagination-bullet-active {
+    background: var(--black);
+  }
+
+  @media screen and (min-width: 750px) {
+    .swiper-host swiper-slide {
+      width: calc((100% - ((var(--swiper-slides) - 1) * var(--swiper-gap))) / var(--swiper-slides));
+    }
+  }
+{% endstylesheet %}
