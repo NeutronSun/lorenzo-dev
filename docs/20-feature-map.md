@@ -117,4 +117,4 @@ File principali:
 - `snippets/deferred-section-skeleton.liquid`
 - `sections/product-recommendations-carousel.liquid`
 
-`deferred-section` fetcha `routes.product_recommendations_url` con `section_id`, `product_id`, `limit` e `intent`. Shopify risponde con `recommendations.performed` e la section monta il body carousel usando `section.settings` senza serializzare tutti i parametri carousel nell'URL.
+`deferred-section` fetcha `routes.product_recommendations_url` con `section_id`, `product_id`, `limit` e `intent`. Le card usano `{% content_for 'block', type: 'product-card' %}` come collection/search.
