@@ -1,0 +1,75 @@
+{% doc %}
+  PDP sibling tab config: tag query and label for pdp-siblings.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+  assign tag_template = block.settings.tag | strip
+  assign resolved_tag = tag_template | replace: '{handle}', picker_product.handle
+
+  if resolved_tag == tag_template and tag_template != blank
+    assign prefix_size = tag_template.size
+
+    for product_tag in picker_product.tags
+      assign product_tag_prefix = product_tag | slice: 0, prefix_size
+
+      if product_tag_prefix == tag_template
+        assign resolved_tag = product_tag
+        break
+      endif
+    endfor
+  endif
+
+  assign include_current = false
+
+  if resolved_tag != blank
+    for product_tag in picker_product.tags
+      if product_tag == resolved_tag
+        assign include_current = true
+        break
+      endif
+    endfor
+  endif
+
+  assign tab_label = block.settings.label | default: resolved_tag | default: tag_template
+%}
+
+{% if resolved_tag != blank %}
+  <div
+    ref="tabs[]"
+    data-id="{{ block.id }}"
+    data-tag="{{ resolved_tag | escape }}"
+    data-label="{{ tab_label | escape }}"
+    data-include-current="{% if include_current %}true{% else %}false{% endif %}"
+    hidden
+    {{ block.shopify_attributes }}
+  ></div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Sibling tab",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag",
+      "info": "Tag to query on Storefront API. Use {handle} for the current product handle, or a prefix like Tema_ to match a tag on the product."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Tab label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sibling tab",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

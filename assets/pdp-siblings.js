@@ -1,10 +1,18 @@
 /**
- * PDP variant picker: theme/fusion sibling tabs built from Liquid templates and Storefront API data.
+ * PDP variant picker: sibling tabs from theme blocks and Storefront API queries.
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
 import { ColorSibling } from '@theme/color-sibling';
 import { TemplateHandler } from '@theme/utilities';
+
+/**
+ * @typedef {Object} PdpSiblingTabConfig
+ * @property {string} id
+ * @property {string} tag
+ * @property {string} label
+ * @property {boolean} includeCurrent
+ */
 
 /**
  * @typedef {Object} PdpSiblingsRefs
@@ -14,31 +22,21 @@ import { TemplateHandler } from '@theme/utilities';
  * @property {HTMLTemplateElement} panelTemplate
  * @property {HTMLTemplateElement} chipTemplate
  * @property {HTMLElement} mount
+ * @property {HTMLElement[]} tabs
  */
 
 /**
- * PDP variant picker with theme and fusion sibling tabs.
+ * PDP variant picker with block-configured sibling tabs.
  * @extends {HTMLComponent<PdpSiblingsRefs>}
  */
 class PdpSiblings extends HTMLComponent {
   static DEFAULT_LIMIT = 250;
-  static FUSION_TAG_PREFIX = 'Fusion_';
-  static TAB_FUSION = 'fusion';
-  static TAB_THEME = 'theme';
 
   renderId = 0;
   currentProduct = null;
 
-  get themeTag() {
-    return this.dataset.themeTag || '';
-  }
-
   get currentHandle() {
     return this.dataset.currentHandle || '';
-  }
-
-  get fusionTag() {
-    return this.currentHandle ? `${PdpSiblings.FUSION_TAG_PREFIX}${this.currentHandle}` : '';
   }
 
   get limit() {
@@ -53,14 +51,6 @@ class PdpSiblings extends HTMLComponent {
 
   get labelVariants() {
     return this.dataset.labelVariants || 'Variants';
-  }
-
-  get labelTheme() {
-    return this.dataset.labelTheme || 'Tema';
-  }
-
-  get labelFusion() {
-    return this.dataset.labelFusion || 'Fusion';
   }
 
   set isLoading(value) {
@@ -78,26 +68,57 @@ class PdpSiblings extends HTMLComponent {
     this.render();
   }
 
+  /** @returns {PdpSiblingTabConfig[]} */
+  getTabConfigs() {
+    const configs = [];
+
+    for (const node of this.refs.tabs || []) {
+      if (!(node instanceof HTMLElement)) continue;
+
+      const tag = node.dataset.tag?.trim() || '';
+      const label = node.dataset.label?.trim() || tag;
+      const id = node.dataset.id?.trim() || tag;
+
+      if (!tag) continue;
+
+      configs.push({
+        id,
+        tag,
+        label,
+        includeCurrent: node.dataset.includeCurrent === 'true',
+      });
+    }
+
+    return configs;
+  }
+
   /** Fetches sibling data and renders tabs into the mount node. */
   async render() {
     const renderId = ++this.renderId;
+    const tabConfigs = this.getTabConfigs();
 
-    if (!this.themeTag && !this.fusionTag) {
+    if (!tabConfigs.length) {
       this.isLoading = false;
       this.hidden = true;
       return;
     }
 
     this.isLoading = true;
+    this.hidden = false;
 
-    const [themeProducts, fusionProducts] = await Promise.all([
-      this.themeTag ? ColorSibling.fetchPdp(this.themeTag, this.limit) : [],
-      this.fusionTag ? ColorSibling.fetchPdp(this.fusionTag, this.limit) : [],
-    ]);
+    const productGroups = await Promise.all(
+      tabConfigs.map((config) => ColorSibling.fetchPdp(config.tag, this.limit))
+    );
 
     if (!this.isConnected || renderId !== this.renderId) return;
 
-    const tabs = this.getTabs(themeProducts, fusionProducts, this.currentProduct);
+    const tabs = [];
+
+    for (const [index, config] of tabConfigs.entries()) {
+      const tab = this.buildTab(config, productGroups[index]);
+
+      tab && tabs.push(tab);
+    }
 
     if (!tabs.length) {
       this.isLoading = false;
@@ -113,6 +134,27 @@ class PdpSiblings extends HTMLComponent {
     this.isLoading = false;
     this.hidden = false;
     this.renderTabs(tabs);
+  }
+
+  /**
+   * @param {PdpSiblingTabConfig} config
+   * @param {Array} products
+   * @returns {{ name: string, label: string, products: Array } | null}
+   */
+  buildTab(config, products) {
+    const siblings = products.filter((product) => product.handle !== this.currentHandle);
+    const includeCurrent = config.includeCurrent && this.currentProduct;
+
+    if (!siblings.length && !includeCurrent) return null;
+
+    return {
+      name: config.id,
+      label: config.label,
+      products: PdpSiblings.sortProducts([
+        ...(includeCurrent ? [this.currentProduct] : []),
+        ...siblings,
+      ]),
+    };
   }
 
   /**
@@ -139,24 +181,53 @@ class PdpSiblings extends HTMLComponent {
     if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
 
     for (const [index, tab] of tabs.entries()) {
-      const tabNode = this.buildTab(tab, tabName, index === 0);
-      const panelNode = this.buildPanel(tab);
+      const tabNode = this.buildTabNode(tab, tabName, index === 0);
+      const panelNode = this.buildPanel(tab, index === 0);
 
       tabNode && tablist.appendChild(tabNode);
       panelNode && panels.appendChild(panelNode);
     }
 
     this.refs.mount.replaceChildren(group);
+    this.bindPanelSync(group, tabs[0]?.name || '');
   }
 
   /**
-   * Builds a tab label from the tab template.
+   * @param {HTMLElement} group
+   * @param {string} activeId
+   */
+  bindPanelSync(group, activeId) {
+    const tablist = group.querySelector('.tabs');
+    const panels = group.querySelector('.panels');
+
+    if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
+
+    const syncPanels = (value) => {
+      for (const panel of panels.querySelectorAll('.panel')) {
+        if (!(panel instanceof HTMLElement)) continue;
+
+        panel.toggleAttribute('hidden', panel.dataset.tab !== value);
+      }
+    };
+
+    syncPanels(activeId);
+
+    tablist.addEventListener('change', (event) => {
+      const input = event.target;
+
+      if (!(input instanceof HTMLInputElement) || input.type !== 'radio') return;
+
+      syncPanels(input.value);
+    });
+  }
+
+  /**
    * @param {{ name: string, label: string }} tab
    * @param {string} tabName
    * @param {boolean} checked
    * @returns {HTMLElement | null}
    */
-  buildTab(tab, tabName, checked) {
+  buildTabNode(tab, tabName, checked) {
     if (!(this.refs.tabTemplate instanceof HTMLTemplateElement)) return null;
 
     const label = TemplateHandler.clone(this.refs.tabTemplate);
@@ -179,11 +250,11 @@ class PdpSiblings extends HTMLComponent {
   }
 
   /**
-   * Builds a tab panel with product chips.
    * @param {{ name: string, products: Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }> }} tab
+   * @param {boolean} visible
    * @returns {HTMLElement | null}
    */
-  buildPanel(tab) {
+  buildPanel(tab, visible) {
     if (!(this.refs.panelTemplate instanceof HTMLTemplateElement)) return null;
     if (!(this.refs.chipTemplate instanceof HTMLTemplateElement)) return null;
 
@@ -194,6 +265,7 @@ class PdpSiblings extends HTMLComponent {
     if (!(values instanceof HTMLElement)) return null;
 
     panel.dataset.tab = tab.name;
+    panel.toggleAttribute('hidden', !visible);
 
     for (const product of tab.products) {
       const chip = this.buildChip(product);
@@ -205,7 +277,6 @@ class PdpSiblings extends HTMLComponent {
   }
 
   /**
-   * Builds a single product chip link from the chip template.
    * @param {{ handle: string, title: string, url: string, image: string, imageAlt: string }} product
    * @returns {HTMLElement | null}
    */
@@ -236,39 +307,6 @@ class PdpSiblings extends HTMLComponent {
   }
 
   /**
-   * Builds theme and fusion tabs from fetched sibling products.
-   * @param {Array} themeProducts
-   * @param {Array} fusionProducts
-   * @param {Object | null} currentProduct
-   * @returns {Array<{ name: string, label: string, products: Array }>}
-   */
-  getTabs(themeProducts, fusionProducts, currentProduct) {
-    const themeSiblings = themeProducts.filter((product) => product.handle !== this.currentHandle);
-    const fusionSiblings = fusionProducts.filter((product) => product.handle !== this.currentHandle);
-    const tabs = [];
-
-    themeSiblings.length || currentProduct
-      ? tabs.push({
-        name: PdpSiblings.TAB_THEME,
-        label: this.labelTheme,
-        products: PdpSiblings.sortProducts([
-          ...(currentProduct ? [currentProduct] : []),
-          ...themeSiblings,
-        ]),
-      })
-      : null;
-
-    fusionSiblings.length && tabs.push({
-      name: PdpSiblings.TAB_FUSION,
-      label: this.labelFusion,
-      products: PdpSiblings.sortProducts(fusionSiblings),
-    });
-
-    return tabs;
-  }
-
-  /**
-   * Sorts sibling products by numeric Shopify id.
    * @param {Array<{ id: string | number }>} products
    * @returns {Array<{ id: string | number }>}
    */

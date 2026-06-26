@@ -14,7 +14,7 @@ File principali:
 - `blocks/pdp-dossier-tech-row.liquid`
 - `blocks/pdp-gallery.liquid`
 - `blocks/pdp-product-info.liquid`
-- `snippets/pdp-variant-picker.liquid`
+- `blocks/pdp-sibling-tab.liquid`
 - `snippets/pdp-valerio-trait.liquid`
 - `assets/product.js`
 - `assets/pdp-siblings.js`
@@ -39,12 +39,12 @@ File principali:
 - `assets/color-sibling.js`
 - `assets/pdp-siblings.js`
 - `assets/product-card.js`
-- `snippets/pdp-variant-picker.liquid`
+- `blocks/pdp-sibling-tab.liquid`
 - `snippets/product-card-swatches.liquid`
 
 `ColorSibling` e' l'helper globale per Storefront API, query per tag, mapping base e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici se puoi usare `ColorSibling.fetchQuery`.
 
-`pdp-siblings` usa `ColorSibling` per tabs Tema/Fusion sul PDP. `product-card-swatches` usa lo stesso helper per swatches delle card. Se serve un nuovo sibling, parti da questi custom elements.
+`pdp-siblings` legge tab da blocchi `pdp-sibling-tab` (solo tag + label) e fa N query via `ColorSibling`. Template e chip restano in `pdp-product-info`.
 
 ## Product card
 

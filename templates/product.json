@@ -86,8 +86,42 @@
         "info": {
           "type": "pdp-product-info",
           "static": true,
-          "settings": {},
-          "blocks": {}
+          "settings": {
+            "siblings_limit": 250,
+            "label_color": "Color",
+            "label_variants": "Variants"
+          },
+          "blocks": {
+            "sibling-tab-tema": {
+              "type": "pdp-sibling-tab",
+              "settings": {
+                "tag": "Tema_",
+                "label": "Tema"
+              },
+              "blocks": {}
+            },
+            "sibling-tab-fusion": {
+              "type": "pdp-sibling-tab",
+              "settings": {
+                "tag": "Fusion_{handle}",
+                "label": "Fusion"
+              },
+              "blocks": {}
+            },
+            "sibling-tab-universe": {
+              "type": "pdp-sibling-tab",
+              "settings": {
+                "tag": "Universe_{handle}",
+                "label": "Universe"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "sibling-tab-tema",
+            "sibling-tab-fusion",
+            "sibling-tab-universe"
+          ]
         }
       },
       "settings": {}
