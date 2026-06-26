@@ -12,7 +12,7 @@ import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from "@th
  * @extends {HTMLComponent<DialogComponentRefs>}
  */
 export class DialogComponent extends HTMLComponent {
-  static SELECTOR = 'dialog-component';
+  static SELECTOR = 'dialog-component, search-dialog';
   static HEADER_SELECTOR = '.uyn-header';
 
   /** @type {((event: OnDialogOpenEvent) => void) | null} */

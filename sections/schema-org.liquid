@@ -1,0 +1,116 @@
+{% capture graph_nodes %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% liquid
+  assign graph_json = graph_nodes | strip
+  if graph_json != blank
+    assign graph_json = graph_json | slice: 1, graph_json.size
+  endif
+%}
+
+{% capture schema_json %}
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {{ graph_json }}
+  ]
+}
+{% endcapture %}
+
+{% if section.settings.debug %}
+  <pre class="schema-org-debug">{{ schema_json | strip }}</pre>
+{% endif %}
+
+<script type="application/ld+json">
+  {{ schema_json | strip }}
+</script>
+
+{% stylesheet %}
+  .schema-org-debug {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: oklch(from var(--black) l c h / 0.04);
+    border: 1px solid oklch(from var(--black) l c h / 0.12);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Organization Schema",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "debug",
+      "label": "Show generated JSON",
+      "default": false
+    },
+    { "type": "text", "id": "org_name", "label": "Organization Name" },
+    { "type": "image_picker", "id": "org_logo", "label": "Logo" },
+    {
+      "type": "text",
+      "id": "org_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "org_phone",
+      "label": "Phone",
+      "info": "Use international format, e.g. +39 329 823 6955"
+    },
+    { "type": "textarea", "id": "org_description", "label": "Description" },
+    {
+      "type": "header",
+      "content": "Social profiles (sameAs)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Only full URLs to social profiles. Internal Shopify paths are ignored."
+    },
+    { "type": "url", "id": "instagram", "label": "Instagram" },
+    { "type": "url", "id": "facebook", "label": "Facebook" },
+    { "type": "url", "id": "tiktok", "label": "TikTok" },
+    { "type": "url", "id": "youtube", "label": "YouTube" },
+    { "type": "url", "id": "x", "label": "X (Twitter)" },
+    { "type": "url", "id": "linkedin", "label": "LinkedIn" }
+  ],
+  "blocks": [
+    { "type": "schema-organization" },
+    { "type": "schema-store" }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Organization Schema",
+      "blocks": [
+        {
+          "type": "schema-organization",
+          "blocks": [
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "customer support",
+                "telephone": "+39 329 823 6955",
+                "languages": "Italian, English"
+              }
+            },
+            {
+              "type": "schema-contact-point",
+              "settings": {
+                "contact_type": "sales",
+                "telephone": "+39 329 823 6955"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

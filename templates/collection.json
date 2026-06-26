@@ -69,9 +69,17 @@
         }
       },
       "settings": {}
+    },
+    "product_breadcrumb_w9jXgW": {
+      "type": "product-breadcrumb",
+      "name": "Breadcrumbs",
+      "settings": {
+        "separator": "/"
+      }
     }
   },
   "order": [
+    "product_breadcrumb_w9jXgW",
     "main"
   ]
 }

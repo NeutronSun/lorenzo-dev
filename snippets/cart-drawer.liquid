@@ -67,7 +67,7 @@
                 </div>
               </div>
               <div class="cart-item-meta">
-                <cart-money class="cart-item-price" value="{{ item.final_line_price }}"></cart-money>
+                {% render 'cart-line-price', price: item.final_line_price, compare_at_price: item.original_line_price, class: 'cart-item-price' %}
                 <button type="button" class="cart-item-remove font-mono" on:click="removeItem" aria-label="Remove {{ item.product.title | escape }}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M3 6h18"></path>
@@ -112,6 +112,7 @@
     background: var(--white);
     color: var(--black);
     overflow: hidden;
+    view-transition-name: cart-drawer;
   }
 
   body:has(.cart-drawer[open])::after {
@@ -123,6 +124,7 @@
     backdrop-filter: blur(1px);
     pointer-events: auto;
     cursor: pointer;
+    view-transition-name: active-overlay;
   }
 
   body:has(.cart-drawer[open]) .uyn-header {
@@ -305,9 +307,19 @@
   }
 
   .cart-item-price {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px;
     font-family: var(--font-mono--family);
     font-size: 12px;
     white-space: nowrap;
+  }
+
+  .cart-item-price s {
+    color: var(--red);
+    font-size: 10px;
+    text-decoration-thickness: 1px;
   }
 
   .cart-item-remove {

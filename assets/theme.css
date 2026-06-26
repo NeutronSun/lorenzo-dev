@@ -24,10 +24,19 @@
     --black: oklch(17.9480% 0.0104 253.58);
     --white: oklch(100% 0 0);
 
+    --stat-v: oklch(71.54% 0.1834 18.38);
+    --stat-a: oklch(84.16% 0.1324 46.72);
+    --stat-l: oklch(81.38% 0.0618 192.31);
+    --stat-e: oklch(81.98% 0.1013 351.92);
+    --stat-r: oklch(83.43% 0.0829 101.23);
+    --stat-i: oklch(76.10% 0.0717 266.94);
+    --stat-o: oklch(83.44% 0.1325 36.20);
+
     --spacing: 20px;
     --header-spacing-top: var(--spacing);
     --header-spacing: var(--header-spacing-top);
     --filters-drawer-width: min(420px, calc(100dvw - var(--spacing) * 2));
+    --localization-drawer-width: min(440px, calc(100dvw - var(--spacing) * 2));
     --z-index-overlay: 80;
     --z-index-drawer: 90;
     --z-index-header: 100;
@@ -67,6 +76,18 @@
   .color-black { --color: var(--black); }
   .color-white { --color: var(--white);}
 
+  .stat-v { --color: var(--stat-v); }
+  .stat-a { --color: var(--stat-a); }
+  .stat-l { --color: var(--stat-l); }
+  .stat-e { --color: var(--stat-e); }
+  .stat-r { --color: var(--stat-r); }
+  .stat-i { --color: var(--stat-i); }
+  .stat-o { --color: var(--stat-o); }
+
+  .stats {
+    background: var(--color);
+  }
+
   ::-webkit-scrollbar,
   ::-webkit-scrollbar {
     width: 4px;
@@ -79,11 +100,11 @@
 
 
   body {
-    @media screen and (min-width: 750px) {
+    /* @media screen and (min-width: 750px) {
       &:has(sticky-header) main {
         margin-top: calc(var(--header-height) * -1) !important;
       }
-    }
+    } */
 
     &:has(dialog[open]),
     &:has(.header-nav-toggle:checked) {

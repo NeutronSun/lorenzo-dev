@@ -1,98 +1,5 @@
 import { HTMLComponent } from "@theme/HTMLComponent";
-
-class ColorSibling {
-  static CACHE_PREFIX = 'product-card-siblings:';
-  static hasWarnedMissingConfig = false;
-
-  /**
-   * @param {string} tag
-   * @param {number} limit
-   * @returns {Promise<Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }>>}
-   */
-  static async fetch(tag, limit) {
-    const storefront = window.storefront;
-
-    if (!storefront?.apiUrl || !storefront?.accessToken) {
-      if (!ColorSibling.hasWarnedMissingConfig) {
-        console.warn('Storefront API config missing: product card siblings cannot be fetched.');
-        ColorSibling.hasWarnedMissingConfig = true;
-      }
-
-      return [];
-    }
-
-    const cacheKey = `${ColorSibling.CACHE_PREFIX}${tag}:${limit}`;
-    const cached = sessionStorage.getItem(cacheKey);
-
-    if (cached) return JSON.parse(cached);
-
-    const response = await fetch(storefront.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': storefront.accessToken,
-      },
-      body: JSON.stringify(ColorSibling.getQuery(tag, limit)),
-    });
-    const json = await response.json();
-
-    if (json.errors?.length) {
-      console.warn('Product card siblings GraphQL error:', json.errors);
-      return [];
-    }
-
-    const siblings = (json.data?.products?.edges || []).map(({ node }) => ({
-      handle: node.handle,
-      title: node.title,
-      url: node.onlineStoreUrl || `/products/${node.handle}`,
-      image: node.featuredImage?.url || '',
-      imageAlt: node.featuredImage?.altText || node.title,
-    }));
-
-    sessionStorage.setItem(cacheKey, JSON.stringify(siblings));
-
-    return siblings;
-  }
-
-  /**
-   * @param {string} tag
-   * @param {number} limit
-   * @returns {{ query: string, variables: { first: number, query: string } }}
-   */
-  static getQuery(tag, limit) {
-    return {
-      query: `
-        query ProductCardSiblings($first: Int!, $query: String!) {
-          products(first: $first, query: $query) {
-            edges {
-              node {
-                handle
-                title
-                onlineStoreUrl
-                featuredImage {
-                  url(transform: { maxWidth: 80, maxHeight: 80, crop: CENTER })
-                  altText
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: {
-        first: limit,
-        query: ColorSibling.getSearchQuery(tag),
-      },
-    };
-  }
-
-  /**
-   * @param {string} tag
-   * @returns {string}
-   */
-  static getSearchQuery(tag) {
-    return `tag:'${tag.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-  }
-}
+import { ColorSibling } from "@theme/color-sibling";
 
 /**
  * @typedef {Object} ProductCardSiblingsRefs
@@ -218,6 +125,8 @@ class ProductCardSiblings extends HTMLComponent {
 class ProductCard extends HTMLComponent {
   static CACHE_PREFIX = 'product-card:';
   static TEMPLATE_VIEW = 'card';
+  static VIEW_TRANSITION_SELECTOR = '[data-view-transition]';
+  static VIEW_TRANSITION_RESET_DELAY = 1200;
 
   get handle() {
     return this.dataset.handle || '';
@@ -229,6 +138,26 @@ class ProductCard extends HTMLComponent {
 
   set isLoading(value) {
     this.classList.toggle('is-loading', value);
+  }
+
+  prepareViewTransition() {
+    this.clearViewTransitionNames();
+
+    for (const element of this.querySelectorAll(ProductCard.VIEW_TRANSITION_SELECTOR)) {
+      if (!(element instanceof HTMLElement)) continue;
+
+      element.style.viewTransitionName = element.dataset.viewTransition || '';
+    }
+
+    window.setTimeout(() => this.clearViewTransitionNames(), ProductCard.VIEW_TRANSITION_RESET_DELAY);
+  }
+
+  clearViewTransitionNames() {
+    for (const element of document.querySelectorAll(ProductCard.VIEW_TRANSITION_SELECTOR)) {
+      if (!(element instanceof HTMLElement)) continue;
+
+      element.style.viewTransitionName = '';
+    }
   }
 
   /**

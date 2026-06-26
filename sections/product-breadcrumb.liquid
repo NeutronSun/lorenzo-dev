@@ -1,0 +1,213 @@
+{%- liquid
+  assign template_name = template | split: '.' | first
+  assign separator = section.settings.separator | default: '/'
+
+  assign leaf_label = ''
+  assign pm_label = ''
+  assign pm_url = ''
+  assign department_label = ''
+  assign department_url = ''
+  assign macro_label = ''
+  assign macro_url = ''
+  assign micro_label = ''
+  assign micro_url = ''
+
+  if template_name == 'product' and product
+    assign leaf_label = product.title
+
+    assign pm_value = product.metafields.valeverce.pm.value | default: product.metafields.valeverce.pm
+    assign department_value = product.metafields.elastick.department.value | default: product.metafields.elastick.department | default: product.metafields.valeverce.department.value | default: product.metafields.valeverce.department
+    assign macro_value = product.metafields.elastick.filter_meta_macro.value | default: product.metafields.elastick.filter_meta_macro
+    assign macro_value = macro_value | split: '_' | last | default: product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
+    assign micro_value = product.metafields.elastick.filter_microcategory.value | default: product.metafields.elastick.filter_microcategory | default: product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+
+    assign pm_handle = pm_value | handleize | downcase
+    assign department_handle = department_value | handleize | downcase
+    assign macro_handle = macro_value | handleize | downcase
+    assign micro_handle = micro_value | handleize | downcase
+
+    if pm_handle != blank
+      assign pm_label = pm_value
+      assign pm_url = '/collections/' | append: pm_handle
+
+      if department_handle != blank
+        assign department_label = department_value
+        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+      endif
+
+      if macro_handle != blank
+        assign macro_label = macro_value
+        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
+      endif
+
+      if micro_handle != blank
+        assign micro_label = micro_value
+        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
+      endif
+    endif
+  elsif template_name == 'collection' and collection
+    assign leaf_label = collection.title
+
+    assign handle_parts = collection.handle | split: '-'
+    assign pm_value = collection.metafields.valeverce.pm.value | default: collection.metafields.valeverce.pm | default: handle_parts.first
+    assign department_value = collection.metafields.valeverce.department.value | default: collection.metafields.valeverce.department
+    assign macro_value = collection.metafields.valeverce.macro_category.value | default: collection.metafields.valeverce.macro_category
+    assign micro_value = collection.metafields.valeverce.micro_category.value | default: collection.metafields.valeverce.micro_category
+
+    assign pm_handle = pm_value | handleize | downcase
+    assign department_handle = department_value | handleize | downcase
+    assign macro_handle = macro_value | handleize | downcase
+    assign micro_handle = micro_value | handleize | downcase
+
+    if pm_handle != blank and collection.handle != pm_handle
+      assign pm_label = pm_value
+      assign pm_url = '/collections/' | append: pm_handle
+
+      if department_handle != blank
+        assign department_label = department_value
+        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+      endif
+
+      if macro_handle != blank
+        assign macro_label = macro_value
+        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
+      endif
+
+      if micro_handle != blank
+        assign micro_label = micro_value
+        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
+      endif
+    endif
+  else
+    assign leaf_label = page.title | default: search.terms | default: blog.title | default: article.title
+  endif
+-%}
+
+<pdp-breadcrumb class="section" data-pdp-breadcrumb style="view-transition-name: product-breadcrumb;">
+  <nav class="bar page-width font-mono" aria-label="Breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a>
+
+    {% if pm_label != blank %}
+      <span class="separator" aria-hidden="true">{{ separator }}</span>
+      {% if pm_url != blank %}
+        <a href="{{ pm_url }}">{{ pm_label }}</a>
+      {% else %}
+        <span>{{ pm_label }}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if department_label != blank %}
+      <span class="separator" aria-hidden="true">{{ separator }}</span>
+      {% if department_url != blank %}
+        <a href="{{ department_url }}">{{ department_label }}</a>
+      {% else %}
+        <span>{{ department_label }}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if macro_label != blank %}
+      <span class="separator" aria-hidden="true">{{ separator }}</span>
+      {% if macro_url != blank %}
+        <a href="{{ macro_url }}">{{ macro_label }}</a>
+      {% else %}
+        <span>{{ macro_label }}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if micro_label != blank %}
+      <span class="separator" aria-hidden="true">{{ separator }}</span>
+      {% if micro_url != blank %}
+        <a href="{{ micro_url }}">{{ micro_label }}</a>
+      {% else %}
+        <span>{{ micro_label }}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if leaf_label != blank %}
+      <span class="separator" aria-hidden="true">{{ separator }}</span>
+      <span aria-current="page">{{ leaf_label }}</span>
+    {% endif %}
+  </nav>
+</pdp-breadcrumb>
+
+{% stylesheet %}
+  pdp-breadcrumb {
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    background: var(--background);
+
+    .bar {
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      padding: 0 16px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    a,
+    span {
+      min-width: 0;
+      color: inherit;
+      overflow: hidden;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    a:hover {
+      color: var(--black);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .separator {
+      flex: 0 0 auto;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .breadcrumb-wrapper {
+      position: sticky;
+      top: calc(var(--header-height, 0px) + var(--spacing));
+      z-index: 30;
+      padding-block: var(--spacing);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .breadcrumb-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding-block: calc(var(--spacing) + env(safe-area-inset-top, 0px));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "class": "breadcrumb-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "/"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumbs"
+    }
+  ]
+}
+{% endschema %}

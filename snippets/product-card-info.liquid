@@ -9,7 +9,7 @@
   @param {string} attributes - Optional attributes for the product-card-info element
 {% enddoc %}
 
-<product-card-info {{ attributes }}>
+<product-card-info data-view-transition="product-info" {{ attributes }}>
   {% if details != blank %}
     {{ details }}
   {% else %}

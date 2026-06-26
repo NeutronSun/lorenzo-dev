@@ -1,0 +1,36 @@
+{% doc %}
+  Renders PDP dossier description.
+{% enddoc %}
+
+{% liquid
+  assign text = block.settings.text | default: 'Lightweight technical longsleeve engineered for layering. Brushed inner face, 4-way stretch, flat-lock seams.'
+%}
+
+<section class="pdp-dossier-panel pdp-dossier-description" {{ block.shopify_attributes }}>
+  <h2 class="pdp-dossier-title font-mono">/Notes</h2>
+
+  <div class="pdp-dossier-body">
+    <div class="content">{{ text }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Dossier Description",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Lightweight technical longsleeve engineered for layering. Brushed inner face, 4-way stretch, flat-lock seams.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Dossier Description",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

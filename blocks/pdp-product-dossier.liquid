@@ -1,0 +1,148 @@
+{% doc %}
+  Renders PDP product dossier.
+{% enddoc %}
+
+<div ref="dossier" class="pdp-product-dossier" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .pdp-product-dossier {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    min-width: 0;
+    overflow-x: clip;
+
+    .pdp-dossier-panel {
+      min-width: 0;
+      overflow-x: clip;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
+    }
+
+    .pdp-dossier-title {
+      margin: 0;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .pdp-dossier-body {
+      padding: 18px 20px 22px;
+    }
+
+    .pdp-dossier-edition .season {
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--black);
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .pdp-dossier-edition .values {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      grid-auto-flow: column;
+      gap: 16px;
+      margin: 0;
+    }
+
+    .pdp-dossier-panel dt {
+      margin: 0 0 8px;
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .pdp-dossier-panel dd {
+      margin: 0;
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .pdp-dossier-description .content {
+      color: var(--secondary-black);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .pdp-dossier-description .content > * {
+      margin: 0;
+    }
+
+    .pdp-dossier-description .content > p {
+      color: inherit;
+      font: inherit;
+      line-height: inherit;
+    }
+
+    .pdp-dossier-description .content > p + p {
+      margin-top: 14px;
+    }
+
+    .pdp-dossier-description .content strong {
+      color: var(--black);
+      font-weight: 400;
+    }
+
+    .pdp-dossier-description .content br {
+      display: none;
+    }
+
+    .pdp-dossier-tech .rows {
+      display: grid;
+    }
+
+    .pdp-dossier-tech-row {
+      display: grid;
+      grid-template-columns: minmax(90px, 0.8fr) minmax(0, 1fr);
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .pdp-dossier-tech-row:last-child {
+      border-bottom: 0;
+    }
+
+    .pdp-dossier-tech-row dt {
+      margin-bottom: 0;
+    }
+
+    .pdp-dossier-tech-row dd {
+      font-size: 13px;
+      text-align: right;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Dossier",
+  "tag": null,
+  "blocks": [
+    { "type": "pdp-dossier-edition" },
+    { "type": "pdp-card-stats" },
+    { "type": "pdp-dossier-description" },
+    { "type": "pdp-dossier-tech" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Dossier",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

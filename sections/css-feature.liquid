@@ -1,0 +1,256 @@
+<section class="css-features section" aria-labelledby="css-features-title-{{ section.id }}">
+  <div class="css-features__inner page-width">
+    <header class="css-features__intro">
+      <p class="css-features__eyebrow font-mono">CSS browser support</p>
+      <h2 id="css-features-title-{{ section.id }}" class="css-features__title font-heading">
+        {{ section.settings.title | escape }}
+      </h2>
+      <div class="css-features__description font-body">
+        {{ section.settings.description }}
+      </div>
+
+      <div class="css-features__meta font-body">
+        <p>{{ section.settings.updated_at | escape }}</p>
+        <p>Il risultato riguarda questo browser.</p>
+      </div>
+    </header>
+
+    <div class="css-features__rows">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .css-features {
+    --css-feature-border: oklch(from var(--black) l c h / 0.12);
+    --css-feature-surface: oklch(from var(--black) l c h / 0.025);
+    --css-feature-supported: var(--green);
+    --css-feature-unsupported: var(--red);
+
+    .css-features__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding-block: 3rem 4rem;
+    }
+
+    .css-features__intro {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .css-features__eyebrow {
+      color: var(--secondary-black);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .css-features__title {
+      max-width: 18ch;
+      font-size: clamp(2rem, 7vw, 4.5rem);
+      line-height: 0.95;
+    }
+
+    .css-features__description {
+      max-width: 68ch;
+      color: var(--secondary-black);
+      line-height: 1.5;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .css-features__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1.25rem;
+      justify-content: space-between;
+      padding-top: 0.75rem;
+      color: var(--secondary-black);
+      font-size: 0.75rem;
+    }
+
+    .css-features__rows {
+      display: flex;
+      flex-direction: column;
+      border-block-start: 1px solid var(--css-feature-border);
+    }
+
+    @media screen and (min-width: 750px) {
+      .css-features__inner {
+        gap: 3rem;
+        padding-block: 5rem 6rem;
+      }
+
+    }
+  }
+
+  @function --css-feature-function-test() {
+    result: 1;
+  }
+
+  @supports (z-index: --css-feature-function-test()) {
+    .css-feature-row[data-feature='custom-functions'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (color: if(else: red)) {
+    .css-feature-row[data-feature='conditional-if'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (anchor-name: --css-feature-anchor) {
+    .css-feature-row[data-feature='anchor-positioning'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports selector(::scroll-button(inline-end)) and selector(::scroll-marker) {
+    .css-feature-row[data-feature='css-carousels'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (z-index: sibling-index()) {
+    .css-feature-row[data-feature='sibling-functions'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (order: random(1, 2)) {
+    .css-feature-row[data-feature='random-values'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (corner-shape: squircle) {
+    .css-feature-row[data-feature='corner-shapes'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .css-feature-row[data-feature='scroll-driven-animations'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (width: attr(data-width type(<length>), 0px)) {
+    .css-feature-row[data-feature='typed-attr'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (color: contrast-color(white)) {
+    .css-feature-row[data-feature='contrast-color'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (clip-path: shape(from 0 0, line to 100% 100%)) {
+    .css-feature-row[data-feature='responsive-shape'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports selector(:open) {
+    .css-feature-row[data-feature='open-pseudo-class'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (appearance: base-select) {
+    .css-feature-row[data-feature='customizable-select'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (field-sizing: content) {
+    .css-feature-row[data-feature='field-sizing'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (row-rule: 1px solid black) {
+    .css-feature-row[data-feature='gap-decorations'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+
+  @supports (view-transition-name: none) {
+    .css-feature-row[data-feature='view-transitions'] {
+      --css-feature-status: var(--css-feature-supported);
+      --css-feature-supported-display: inline;
+      --css-feature-unsupported-display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CSS Features",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Modern CSS, nel tuo browser"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Le novità CSS più attese, verificate dal vivo con feature query native.</p>"
+    },
+    {
+      "type": "text",
+      "id": "updated_at",
+      "label": "Last update",
+      "default": "Aggiornato al 21 giugno 2026"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CSS Features",
+      "category": "Demo"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,488 @@
+{% if predictive_search.performed %}
+  {% assign suggestions_count = 0 %}
+  {% capture collection_suggestions %}
+    {%- for collection in predictive_search.resources.collections limit: 5 -%}
+      {%- if collection.products_count >= 2 -%}
+        {%- assign suggestions_count = suggestions_count | plus: 1 -%}
+        {%- assign collection_title = collection.title | split: ' - ' | last | strip -%}
+        <a href="{{ collection.url }}" class="search-dialog-chip font-mono" data-search-option role="option">
+          {{ collection_title | escape }}
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  {% endcapture %}
+  <div data-search-suggestions data-count="{{ suggestions_count }}">
+    {{ collection_suggestions }}
+  </div>
+{% else %}
+  <search-dialog name="search" section-id="{{ section.id }}">
+    <dialog ref="dialog" class="search-dialog" aria-label="Search">
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+        class="search-dialog-form"
+        on:keydown="handleKeydown"
+        on:submit="handleSubmit"
+      >
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+
+        <header class="search-dialog-header">
+          {% render 'icon-search', size: 24 %}
+          <input
+            ref="input"
+            type="search"
+            name="q"
+            placeholder="Search products, collections, SKU..."
+            autocomplete="off"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="search-dialog-results-{{ section.id }}"
+            aria-autocomplete="list"
+            on:input="handleInput"
+          >
+          <button type="button" class="search-dialog-escape font-mono" on:click="close">ESC</button>
+        </header>
+
+        <div id="search-dialog-results-{{ section.id }}" class="search-dialog-body" role="listbox">
+          <div class="search-dialog-base">
+            {% render 'search-dialog-initial',
+              suggested_queries: section.settings.suggested_queries,
+              collections: section.settings.collections,
+              products: section.settings.featured_products
+            %}
+          </div>
+
+          <div class="search-dialog-results" aria-live="polite">
+            <div ref="products"></div>
+          </div>
+
+          <div class="search-dialog-loading font-mono" aria-live="polite">Searching…</div>
+
+          <div class="search-dialog-empty">
+            {% render 'icon-search', size: 38 %}
+            <p>No results found</p>
+            <span class="font-mono">Try a different term or browse the collection</span>
+            {% if section.settings.empty_collection != blank %}
+              <a href="{{ section.settings.empty_collection.url }}" class="button button-secondary font-mono">
+                Browse collection ↗
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <footer class="search-dialog-footer font-mono">
+          <span><kbd>↑↓</kbd> Navigate</span>
+          <span><kbd>↵</kbd> Open</span>
+          <span><kbd>ESC</kbd> Close</span>
+          <span class="search-dialog-footer-title">{{ shop.name | upcase }} — Search</span>
+        </footer>
+      </form>
+    </dialog>
+  </search-dialog>
+{% endif %}
+
+{% stylesheet %}
+  .search-dialog {
+    position: fixed;
+    inset: 0;
+    width: calc(100dvw - var(--spacing) * 2);
+    height: fit-content;
+    max-width: 672px;
+    max-height: min(720px, calc(100dvh - var(--spacing) * 2));
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--black);
+    overflow: hidden;
+
+    &::backdrop {
+      background: rgb(0 0 0 / 0.35);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  search-dialog {
+    .search-dialog-form {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      height: auto;
+      max-height: inherit;
+      min-height: 0;
+    }
+
+    .search-dialog-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 50px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-dialog-header > svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .search-dialog-header input {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--black);
+      font-size: 14px;
+    }
+
+    .search-dialog-header input::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    .search-dialog-escape {
+      flex: 0 0 auto;
+      padding: 4px 7px;
+      border: 1px solid var(--border-color);
+      background: var(--background);
+      color: var(--secondary-black);
+      cursor: pointer;
+    }
+
+    .search-dialog-body {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+      min-height: 0;
+      padding: 14px 16px;
+      overflow: auto;
+    }
+
+    .search-dialog-initial,
+    .search-dialog-results,
+    [data-search-suggestions],
+    [data-search-products] {
+      display: grid;
+      gap: 18px;
+    }
+
+    [data-search-initial-content] {
+      position: relative;
+      display: grid;
+      gap: 18px;
+    }
+
+    .search-dialog-group,
+    [data-search-group] {
+      display: grid;
+      gap: 8px;
+    }
+
+    .search-dialog-label,
+    [data-search-label] {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .search-dialog-label svg {
+      flex: 0 0 auto;
+    }
+
+    .search-dialog-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .search-dialog-chip {
+      padding: 7px 10px;
+      border: 1px solid var(--border-color);
+      background: var(--background);
+      color: var(--secondary-black);
+      font-size: 10px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .search-dialog-chip:is(:hover, :focus-visible) {
+      background: var(--accent);
+      color: var(--black);
+      outline: 0;
+    }
+
+    .search-dialog-dynamic-suggestions {
+      display: contents;
+    }
+
+    .search-dialog-collections {
+      display: grid;
+    }
+
+    .search-dialog-collection {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 0 8px;
+      color: var(--black);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .search-dialog-collection:is(:hover, :focus-visible) {
+      background: var(--background-darken);
+      outline: 0;
+    }
+
+    .search-dialog-collection > span:first-child {
+      color: var(--secondary-black);
+    }
+
+    .search-dialog-featured-products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .search-dialog-featured-product {
+      display: grid;
+      gap: 5px;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .search-dialog-featured-product img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      background: var(--background-darken);
+    }
+
+    .search-dialog-featured-product span {
+      overflow: hidden;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    search-predictive-products {
+      display: grid;
+      border-top: 1px solid var(--border-color);
+    }
+
+    [data-search-product] {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 64px;
+      padding: 8px 4px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    [data-search-product]:is(:hover, :focus-visible) {
+      background: var(--background-darken);
+      outline: 0;
+    }
+
+    [data-search-product] img {
+      width: 40px;
+      height: 48px;
+      object-fit: cover;
+      background: var(--background-darken);
+    }
+
+    [data-search-product-copy] {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    [data-search-product-title] {
+      overflow: hidden;
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    [data-search-product-meta] {
+      overflow: hidden;
+      font-size: 10px;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    [data-search-product-price] {
+      padding-inline-end: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .search-dialog-results,
+    .search-dialog-loading,
+    .search-dialog-empty {
+      display: none;
+    }
+
+    &[searching]:not([loading]) [data-search-initial-content] {
+      display: none;
+    }
+
+    &[loading] .search-dialog-loading {
+      display: grid;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      place-items: center;
+      background: rgb(255 255 255 / 0.12);
+      backdrop-filter: blur(10px);
+      color: var(--black);
+      --color: var(--black);
+      font-size: 11px;
+      text-transform: uppercase;
+      cursor: wait;
+    }
+
+    &[has-results]:not([loading]) .search-dialog-results {
+      display: grid;
+      gap: 18px;
+    }
+
+    &[empty]:not([loading]) .search-dialog-empty {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 10px;
+      min-height: 100%;
+      text-align: center;
+    }
+
+    .search-dialog-empty p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .search-dialog-empty > span {
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .search-dialog-empty .button {
+      margin-top: 8px;
+      font-size: 11px;
+      text-decoration: none;
+    }
+
+    .search-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 42px;
+      padding: 6px 16px;
+      border-top: 1px solid var(--border-color);
+      background: var(--background);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .search-dialog-footer span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .search-dialog-footer kbd {
+      padding: 3px 5px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    .search-dialog-footer-title {
+      margin-inline-start: auto;
+    }
+
+    @media screen and (min-width: 750px) {
+      .search-dialog-featured-products {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 749px) {
+      .search-dialog {
+        inset: 12px 0 auto;
+        width: calc(100dvw - 24px);
+        height: auto;
+        max-height: calc(100dvh - var(--header-mobile-bar-height, 58px) - 36px);
+        margin: 0 auto;
+      }
+
+      .search-dialog-header {
+        min-height: 48px;
+        padding: 9px 12px;
+      }
+
+      .search-dialog-body {
+        padding: 12px;
+      }
+
+      .search-dialog-footer {
+        gap: 10px;
+        padding-inline: 14px;
+      }
+
+      .search-dialog-footer-title,
+      .search-dialog-footer span:nth-child(2) {
+        display: none;
+      }
+
+      .search-dialog-form {
+        height: auto;
+        max-height: inherit;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Search dialog",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "suggested_queries",
+      "label": "Suggested searches",
+      "info": "One search per line"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections",
+      "limit": 8
+    },
+    {
+      "type": "product_list",
+      "id": "featured_products",
+      "label": "Featured products",
+      "limit": 8
+    },
+    {
+      "type": "collection",
+      "id": "empty_collection",
+      "label": "No results collection"
+    }
+  ]
+}
+{% endschema %}

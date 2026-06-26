@@ -1,49 +1,118 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Product page section without breadcrumb.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<product-page class="section">
+  <div class="layout page-width">
+    {% content_for 'block', type: 'pdp-product-dossier', id: 'dossier', product: product %}
+    {% content_for 'block', type: 'pdp-gallery', id: 'gallery', product: product %}
+    {% content_for 'block', type: 'pdp-product-info', id: 'info', product: product %}
+  </div>
+</product-page>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+{% stylesheet %}
+  product-page {
+    --layout-gap: 20px;
+    --gallery-gap: 20px;
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --sticky-top: calc(var(--header-height, 0px) + var(--breadcrumb-height, 0px) + var(--spacing));
+    --pdp-card-height: max(0px, calc(100dvh - var(--sticky-top) - var(--spacing)));
+    --thumb-size: clamp(92px, 10vw, 142px);
 
-<product-form class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    padding-block: var(--spacing);
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+    .layout {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--layout-gap);
+    }
 
-    <input type="text" name="quantity" min="1" value="1">
+    .pdp-product-dossier,
+    .pdp-gallery,
+    .pdp-product-info {
+      width: 100%;
+      min-width: 0;
+    }
+  }
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</product-form>
+  @media screen and (min-width: 990px) {
+    product-page {
+      .layout {
+        flex-direction: row;
+      }
+
+      .pdp-product-dossier,
+      .pdp-product-info {
+        flex: 1 1 260px;
+        position: sticky;
+        top: var(--sticky-top);
+        align-self: start;
+        width: auto;
+        max-height: var(--pdp-card-height);
+        overflow: auto;
+      }
+
+      .pdp-gallery {
+        flex: 1.35 1 360px;
+        width: auto;
+      }
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    product-page {
+      .pdp-gallery {
+        order: 1;
+      }
+
+      .pdp-product-info {
+        order: 2;
+      }
+
+      .pdp-product-dossier {
+        order: 3;
+      }
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    product-page {
+      --thumb-size: clamp(72px, 21vw, 92px);
+      --dock-clearance-fallback: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing) + var(--safe-area-bottom));
+      --sticky-top: calc(var(--breadcrumb-height, 0px) + var(--spacing));
+      --pdp-card-height: max(0px, calc(100dvh - var(--sticky-top) - var(--dock-clearance, var(--dock-clearance-fallback))));
+
+      padding-block: var(--spacing) calc(var(--dock-clearance, var(--dock-clearance-fallback)) + var(--spacing));
+
+      .layout {
+        gap: 16px;
+      }
+
+      .pdp-product-info {
+        margin-block-start: max(0px, calc(var(--dock-clearance, var(--dock-clearance-fallback)) - 16px));
+      }
+
+      .pdp-gallery {
+        position: static;
+        top: auto;
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.product",
+  "blocks": [
+    { "type": "pdp-product-dossier" },
+    { "type": "pdp-gallery" },
+    { "type": "pdp-product-info" }
+  ],
   "settings": [],
   "disabled_on": {
     "groups": ["header", "footer"]

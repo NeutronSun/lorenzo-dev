@@ -1,0 +1,21 @@
+{% layout none %}
+{% assign visible_search_terms = search.terms | remove: '*' %}
+
+<product-grid>
+  {% paginate search.results by 18 %}
+    {% for product in search.results %}
+      {% if product.object_type == 'product' %}
+        {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
+      {% endif %}
+    {% endfor %}
+
+    {% if search.results_count == 0 %}
+      <search-page-empty>
+        {% render 'icon-search', size: 38 %}
+        <p>No results found for “{{ visible_search_terms | escape }}”</p>
+      </search-page-empty>
+    {% endif %}
+
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+</product-grid>

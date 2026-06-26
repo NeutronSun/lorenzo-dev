@@ -1,7 +1,7 @@
 {% doc %}
-  Renders collection filters and sorting.
+  Renders filters and sorting.
 
-  @param {collection} source - Collection object
+  @param {object} source - Collection or search object
   @param {string} drawer_id - Drawer id
 {% enddoc %}
 
@@ -20,6 +20,12 @@
   <dialog ref="dialog" class="drawer from-right filters-drawer">
     <filters>
       <form>
+        {% if source.terms != blank %}
+          <input type="hidden" name="q" value="{{ source.terms | escape }}">
+          <input type="hidden" name="type" value="product">
+          <input type="hidden" name="options[prefix]" value="last">
+        {% endif %}
+
         <header>
           <p class="eyebrow font-mono">/Filter</p>
           <h2 class="title font-heading">Refine</h2>
@@ -179,6 +185,7 @@
     border: 1px solid var(--border-color);
     background: var(--white);
     color: var(--black);
+    view-transition-name: filters-drawer;
   }
 
   body:has(.filters-drawer[open])::after {
@@ -190,6 +197,7 @@
     backdrop-filter: blur(1px);
     pointer-events: auto;
     cursor: pointer;
+    view-transition-name: active-overlay;
   }
 
   filters {

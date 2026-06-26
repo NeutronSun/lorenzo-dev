@@ -1,0 +1,19 @@
+{% doc %}
+  Wraps comma-prefixed ContactPoint JSON fragments in a contactPoint array.
+
+  @param items {string} Capture output from schema-contact-point blocks
+{% enddoc %}
+
+{% liquid
+  assign items_json = items | strip
+  if items_json != blank
+    assign items_json = items_json | slice: 1, items_json.size
+  endif
+%}
+
+{% if items_json != blank %}
+,
+"contactPoint": [
+  {{ items_json }}
+]
+{% endif %}

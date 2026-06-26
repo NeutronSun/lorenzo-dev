@@ -1,4 +1,14 @@
-{% render "filters", source: collection, drawer_id: 'collection' %}
+{% liquid
+  assign filter_source = collection
+  assign filter_drawer_id = 'collection'
+
+  if request.page_type == 'search'
+    assign filter_source = search
+    assign filter_drawer_id = 'search'
+  endif
+%}
+
+{% render 'filters', source: filter_source, drawer_id: filter_drawer_id %}
 
 
 {% schema %}

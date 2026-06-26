@@ -1,6 +1,6 @@
 <dialog-component name="cart-drawer" non-modal>
   <dialog ref="dialog" class="drawer from-right cart-drawer">
-    <cart-drawer>
+    <cart-drawer data-section-id="{{ section.id }}">
       <header class="cart-drawer-header">
         <div>
           <p class="cart-drawer-eyebrow font-mono">/BAG</p>
@@ -24,62 +24,11 @@
           </div>
         {% else %}
           {% for item in cart.items %}
-            <cart-item key="{{ item.key | escape }}" quantity="{{ item.quantity }}">
-              <a class="cart-item-image" href="{{ item.url }}">
-                {% if item.image %}
-                  <img
-                    src="{{ item.image | image_url: width: 192 }}"
-                    alt="{{ item.product.title | escape }}"
-                    width="96"
-                    height="96"
-                    loading="lazy"
-                  >
-                {% endif %}
-              </a>
-              <div class="cart-item-info">
-                <div class="cart-item-copy">
-                  <a class="cart-item-title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
-                  {% if item.variant.title != 'Default Title' %}
-                    <p class="cart-item-variant font-mono">{{ item.variant.title | escape }}</p>
-                  {% endif %}
-                  {% assign visible_properties = false %}
-                  {% for property in item.properties %}
-                    {% assign property_first = property.first | slice: 0 %}
-                    {% if property.last != blank and property_first != '_' %}
-                      {% assign visible_properties = true %}
-                    {% endif %}
-                  {% endfor %}
-                  {% if visible_properties %}
-                    <p class="cart-item-properties font-mono">
-                      {% for property in item.properties %}
-                        {% assign property_first = property.first | slice: 0 %}
-                        {% if property.last != blank and property_first != '_' %}
-                          <span>{{ property.first | escape }}: {{ property.last | escape }}</span>
-                        {% endif %}
-                      {% endfor %}
-                    </p>
-                  {% endif %}
-                </div>
-                <div class="cart-item-actions">
-                  <button type="button" on:click="decrease" aria-label="Decrease quantity">-</button>
-                  <span ref="quantity">{{ item.quantity }}</span>
-                  <button type="button" on:click="increase" aria-label="Increase quantity">+</button>
-                </div>
-              </div>
-              <div class="cart-item-meta">
-                <cart-money class="cart-item-price" value="{{ item.final_line_price }}"></cart-money>
-                <button type="button" class="cart-item-remove font-mono" on:click="removeItem" aria-label="Remove {{ item.product.title | escape }}">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M3 6h18"></path>
-                    <path d="M8 6V4h8v2"></path>
-                    <path d="M6 6l1 16h10l1-16"></path>
-                    <path d="M10 11v6"></path>
-                    <path d="M14 11v6"></path>
-                  </svg>
-                  <span>REMOVE</span>
-                </button>
-              </div>
-            </cart-item>
+            {% if item.item_components != blank %}
+              {% render 'bundle-fusion-line-item', item: item %}
+            {% else %}
+              {% render 'cart-line-item', item: item %}
+            {% endif %}
           {% endfor %}
         {% endif %}
       </div>
@@ -89,15 +38,26 @@
           <span class="font-mono">SUBTOTAL</span>
           <cart-money ref="subtotal" value="{{ cart.total_price }}"></cart-money>
         </div>
-        <button
-          type="button"
-          ref="checkout"
-          class="cart-drawer-checkout font-mono"
-          onclick="window.location.href = '{{ routes.cart_url }}'"
-          {% if cart.item_count == 0 %}disabled{% endif %}
-        >
-          CHECKOUT — <cart-money ref="checkoutTotal" value="{{ cart.total_price }}"></cart-money>
-        </button>
+        <div class="cart-drawer-actions">
+          <button
+            type="button"
+            class="cart-drawer-action button button-primary font-mono"
+            onclick="window.location.href = '{{ routes.cart_url }}'"
+          >
+            {% render 'icon-bag', size: 16 %}
+            <span>BAG</span>
+          </button>
+          <button
+            type="button"
+            ref="checkout"
+            class="cart-drawer-action button button-accent font-mono"
+            onclick="window.location.href = '{{ routes.root_url }}checkout'"
+            {% if cart.item_count == 0 %}disabled{% endif %}
+          >
+            <span>CHECKOUT</span>
+            {% render 'icon-arrow-right', size: 16 %}
+          </button>
+        </div>
       </footer>
     </cart-drawer>
   </dialog>
@@ -112,6 +72,7 @@
     background: var(--white);
     color: var(--black);
     overflow: hidden;
+    view-transition-name: cart-drawer;
   }
 
   body:has(.cart-drawer[open])::after {
@@ -123,6 +84,7 @@
     backdrop-filter: blur(1px);
     pointer-events: auto;
     cursor: pointer;
+    view-transition-name: active-overlay;
   }
 
   body:has(.cart-drawer[open]) .uyn-header {
@@ -305,9 +267,19 @@
   }
 
   .cart-item-price {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px;
     font-family: var(--font-mono--family);
     font-size: 12px;
     white-space: nowrap;
+  }
+
+  .cart-item-price s {
+    color: var(--red);
+    font-size: 10px;
+    text-decoration-thickness: 1px;
   }
 
   .cart-item-remove {
@@ -325,6 +297,56 @@
 
   .cart-item-remove svg {
     flex: 0 0 auto;
+  }
+
+  .bundle-fusion-line-item .cart-item-info {
+    justify-content: start;
+  }
+
+  .bundle-fusion-components {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .bundle-fusion-component {
+    display: block;
+    flex: 0 0 auto;
+    width: 32px;
+    aspect-ratio: 251 / 376;
+    border: 1px solid var(--border-color);
+    background: var(--background-darken);
+    color: inherit;
+    overflow: hidden;
+  }
+
+  .bundle-fusion-component-main {
+    border-color: var(--black);
+  }
+
+  .bundle-fusion-nested {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .bundle-fusion-component img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bundle-fusion-arrow {
+    flex: 0 0 auto;
+    color: var(--secondary-black);
+    font-size: 10px;
+    letter-spacing: 0.12em;
   }
 
   .cart-drawer-footer {
@@ -360,26 +382,27 @@
     font-weight: 700;
   }
 
-  .cart-drawer-checkout {
+  .cart-drawer-actions {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+    gap: 8px;
     width: 100%;
-    box-sizing: border-box;
-    min-height: 40px;
-    border: 1px solid var(--black);
-    background: var(--black);
-    color: var(--white);
-    font-size: 12px;
-    cursor: pointer;
   }
 
-  .cart-drawer-checkout:disabled {
-    border-color: var(--background-darken);
-    background: var(--background-darken);
-    color: var(--secondary-black);
-    cursor: not-allowed;
+  .cart-drawer-action {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+
+    svg {
+      flex: 0 0 auto;
+    }
+
+    &:disabled {
+      border-color: var(--color-disabled);
+    }
   }
 
   @media screen and (min-width: 750px) {

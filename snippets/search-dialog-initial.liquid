@@ -1,0 +1,74 @@
+{% doc %}
+  Renders the initial search dialog content.
+
+  @param {string} suggested_queries - Suggested queries separated by new lines
+  @param {object} collections - Featured collections
+  @param {object} products - Featured products
+{% enddoc %}
+
+{% assign queries = suggested_queries | newline_to_br | split: '<br />' %}
+{% capture collection_links %}
+  {%- for collection in collections -%}
+    {%- if collection.products_count >= 2 -%}
+      {%- assign collection_title = collection.title | split: ' - ' | last | strip -%}
+      <a href="{{ collection.url }}" class="search-dialog-collection" data-search-option role="option">
+        <span aria-hidden="true">↗</span>
+        <span>{{ collection_title | escape }}</span>
+      </a>
+    {%- endif -%}
+  {%- endfor -%}
+{% endcapture %}
+
+<div class="search-dialog-initial">
+  <section class="search-dialog-group">
+    <h2 class="search-dialog-label font-mono">
+      {% render 'icon-sparkles', size: 12 %}
+      <span>Suggested</span>
+    </h2>
+    <div class="search-dialog-chips">
+      {% if suggested_queries != blank %}
+        {% for query in queries %}
+          {% assign query = query | strip %}
+          {% if query != blank %}
+            <a
+              href="{{ routes.search_url }}?q={{ query | url_encode }}&type=product&options%5Bprefix%5D=last"
+              class="search-dialog-chip font-mono"
+              data-search-option
+              role="option"
+            >
+              {{ query | escape }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      <span ref="suggestions" class="search-dialog-dynamic-suggestions"></span>
+    </div>
+  </section>
+
+  <div data-search-initial-content>
+    {% if collection_links != blank %}
+      <section class="search-dialog-group">
+        <h2 class="search-dialog-label font-mono">Jump to</h2>
+        <div class="search-dialog-collections">
+          {{ collection_links }}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if products != blank %}
+      <section class="search-dialog-group">
+        <h2 class="search-dialog-label font-mono">Featured products</h2>
+        <div class="search-dialog-featured-products">
+          {% for product in products limit: 4 %}
+            <a href="{{ product.url }}" class="search-dialog-featured-product" data-search-option role="option">
+              {% if product.featured_image %}
+                {{ product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', alt: product.title }}
+              {% endif %}
+              <span>{{ product.title | escape }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
+</div>

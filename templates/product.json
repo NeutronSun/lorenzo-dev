@@ -9,12 +9,93 @@
  */
 {
   "sections": {
+    "breadcrumb": {
+      "type": "product-breadcrumb",
+      "settings": {
+        "separator": "/"
+      }
+    },
     "main": {
       "type": "product",
+      "blocks": {
+        "dossier": {
+          "type": "pdp-product-dossier",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "edition": {
+              "type": "pdp-dossier-edition",
+              "settings": {
+                "season": "{{ closest.product.metafields.valeverce.edition.value }}",
+                "number": "{{ closest.product.metafields.valeverce.number.value }}",
+                "series": "{{ closest.product.metafields.valeverce.micro_category.value }}"
+              },
+              "blocks": {}
+            },
+            "stats": {
+              "type": "pdp-card-stats",
+              "settings": {},
+              "blocks": {}
+            },
+            "description": {
+              "type": "pdp-dossier-description",
+              "settings": {
+                "text": "{{ closest.product.description }}"
+              },
+              "blocks": {}
+            },
+            "technical": {
+              "type": "pdp-dossier-tech",
+              "settings": {},
+              "blocks": {
+                "material": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Material",
+                    "value": "{{ closest.product.metafields.valeverce.material | metafield_text }}"
+                  },
+                  "blocks": {}
+                },
+                "weight": {
+                  "type": "pdp-dossier-tech-row",
+                  "settings": {
+                    "label": "Weight",
+                    "value": "{{ closest.product.metafields.valeverce.weight | metafield_text }}"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "material",
+                "weight"
+              ]
+            }
+          },
+          "block_order": [
+            "edition",
+            "stats",
+            "description",
+            "technical"
+          ]
+        },
+        "gallery": {
+          "type": "pdp-gallery",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "info": {
+          "type": "pdp-product-info",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
       "settings": {}
     }
   },
   "order": [
+    "breadcrumb",
     "main"
   ]
 }

@@ -1,0 +1,31 @@
+{% layout none %}
+
+{% paginate search.results by 5 %}
+  <div data-search-products data-count="{{ search.results_count }}">
+    {% if search.results_count > 0 %}
+      <section data-search-group>
+        <h2 data-search-label class="font-mono">Products · {{ search.results_count }}</h2>
+        <search-predictive-products>
+          {% for product in search.results %}
+            <a href="{{ product.url }}" data-search-product data-search-option role="option">
+              {% if product.featured_image %}
+                {{ product.featured_image | image_url: width: 144 | image_tag: loading: 'lazy', alt: product.title }}
+              {% endif %}
+              <span data-search-product-copy>
+                <span data-search-product-title>{{ product.title | escape }}</span>
+                <span data-search-product-meta class="font-mono">
+                  {{ product.type | escape }}
+                  {% if product.selected_or_first_available_variant.sku != blank %}
+                    · {{ product.selected_or_first_available_variant.sku | escape }}
+                  {% endif %}
+                  {% unless product.available %} · Sold out{% endunless %}
+                </span>
+              </span>
+              <span data-search-product-price>{{ product.price | money }}</span>
+            </a>
+          {% endfor %}
+        </search-predictive-products>
+      </section>
+    {% endif %}
+  </div>
+{% endpaginate %}

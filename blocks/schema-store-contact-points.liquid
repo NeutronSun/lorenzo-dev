@@ -1,0 +1,36 @@
+{% capture contact_points %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% render 'schema-contact-point-array', items: contact_points %}
+
+{% schema %}
+{
+  "name": "Contact points",
+  "blocks": [{ "type": "schema-contact-point" }],
+  "settings": [],
+  "tag": null,
+  "presets": [
+    {
+      "name": "Contact points",
+      "blocks": [
+        {
+          "type": "schema-contact-point",
+          "settings": {
+            "contact_type": "customer support",
+            "telephone": "+39 329 823 6955",
+            "languages": "Italian, English"
+          }
+        },
+        {
+          "type": "schema-contact-point",
+          "settings": {
+            "contact_type": "sales",
+            "telephone": "+39 329 823 6955"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

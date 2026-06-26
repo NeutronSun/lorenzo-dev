@@ -1,0 +1,57 @@
+{% doc %}
+  Renders PDP dossier edition details.
+{% enddoc %}
+
+{% liquid
+  assign season = block.settings.season | default: 'SS/26 - DROP 04'
+  assign number = block.settings.number | default: '04/24'
+  assign series = block.settings.series | default: 'A'
+%}
+
+<section class="pdp-dossier-panel pdp-dossier-edition" {{ block.shopify_attributes }}>
+  <h2 class="pdp-dossier-title font-mono">/Edition</h2>
+
+  <div class="pdp-dossier-body">
+    <p class="season font-mono">{{ season }}</p>
+
+    <dl class="values">
+      <dt class="font-mono">N&deg;</dt>
+      <dd>{{ number }}</dd>
+      <dt class="font-mono">Series</dt>
+      <dd>{{ series }}</dd>
+    </dl>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Dossier Edition",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "season",
+      "label": "Season",
+      "default": "SS/26 - DROP 04"
+    },
+    {
+      "type": "text",
+      "id": "number",
+      "label": "Number",
+      "default": "04/24"
+    },
+    {
+      "type": "text",
+      "id": "series",
+      "label": "Series",
+      "default": "A"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Dossier Edition",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

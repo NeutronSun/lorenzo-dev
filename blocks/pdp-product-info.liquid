@@ -1,0 +1,480 @@
+{% doc %}
+  Renders PDP product info.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign macro_category = product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
+  assign bundle_data = product.metafields.montura.bundle_data.value
+  assign bundle_products = bundle_data.products.value
+  assign bundle_name = bundle_data.name.value | default: bundle_data.name
+  assign bundle_key = bundle_data.system.id | default: bundle_data.system.handle | default: bundle_name
+  assign bundle_display_product = bundle_data.bundle.value
+  assign bundle_parent_product = product.metafields.bundle.bundle.value | default: bundle_data.bundle.value
+  assign bundle_parent_variant = bundle_parent_product.first_available_variant
+  assign bundle_id = bundle_parent_variant.id | append: '||' | append: bundle_key
+  assign bundle_discount = bundle_data.discount_percentage.value | default: bundle_data.discount_percentage | default: 0 | plus: 0
+  assign bundle_total = 0
+  assign bundle_available = true
+  assign bundle_items_count = 0
+
+  unless bundle_parent_variant
+    assign bundle_available = false
+    assign bundle_id = blank
+  endunless
+
+  if bundle_discount < 0
+    assign bundle_discount = 0
+  endif
+
+  if bundle_discount > 100
+    assign bundle_discount = 100
+  endif
+
+  for bundle_product in bundle_products
+    if bundle_product.id == product.id
+      assign bundle_variant = current_variant
+    else
+      assign bundle_variant = bundle_product.first_available_variant
+    endif
+
+    assign bundle_items_count = bundle_items_count | plus: 1
+    assign bundle_product_price = bundle_variant.price | default: bundle_product.price
+    assign bundle_total = bundle_total | plus: bundle_product_price
+
+    unless bundle_variant.available
+      assign bundle_available = false
+    endunless
+  endfor
+
+  assign bundle_multiplier = 100 | minus: bundle_discount
+  assign bundle_discounted_total = bundle_total | times: bundle_multiplier | divided_by: 100
+%}
+
+<div ref="info" class="pdp-product-info" style="view-transition-name: product-info;" {{ block.shopify_attributes }}>
+  <section class="panel heading">
+    <div class="meta font-mono">
+      <span>{{ macro_category | default: product.type }}</span>
+      <span>{{ current_variant.sku | default: product.handle }}</span>
+    </div>
+
+    <h1>{{ product.title }}</h1>
+
+    <div class="price-row">
+      <span class="price">{{ current_variant.price | money }}</span>
+      <span class="rate font-mono">or 3x {{ current_variant.price | divided_by: 3 | money }}</span>
+    </div>
+  </section>
+
+  <section class="panel config">
+    <h2 class="font-mono">/Configure</h2>
+
+    {% render 'pdp-variant-picker', product: product %}
+
+    <product-form>
+      {% form 'product', product %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="add font-mono" {% unless current_variant.available %}disabled{% endunless %}>
+          {% render 'icon-bag', size: 16 %}
+          <span>{% if current_variant.available %}Add to bag{% else %}Sold out{% endif %}</span>
+          <span>{{ current_variant.price | money }} -></span>
+        </button>
+      {% endform %}
+    </product-form>
+
+    <p class="shipping font-mono">Free EU shipping &middot; 30-day returns</p>
+  </section>
+
+  {% if bundle_data != blank and bundle_products != blank %}
+    <section class="panel bundle-panel">
+      <h2 class="bundle-title font-mono">
+        <span>{{ bundle_display_product.title | default: 'Fusion bundle' }}</span>
+
+        {% if bundle_discount > 0 %}
+          <span class="bundle-discount">-{{ bundle_discount }}%</span>
+        {% endif %}
+      </h2>
+
+      <pdp-bundle class="bundle">
+        <script type="application/json" ref="bundleData">
+          {
+            "bundleId": {{ bundle_id | json }},
+            "items": [
+              {% for bundle_product in bundle_products %}
+                {% liquid
+                  if bundle_product.id == product.id
+                    assign bundle_variant = current_variant
+                  else
+                    assign bundle_variant = bundle_product.first_available_variant
+                  endif
+                %}
+                {% unless forloop.first %},{% endunless %}
+                {
+                  "id": {% if bundle_variant %}{{ bundle_variant.id | json }}{% else %}null{% endif %},
+                  "available": {{ bundle_variant.available | default: false | json }}
+                }
+              {% endfor %}
+            ]
+          }
+        </script>
+
+        <div class="bundle-products">
+          {% for bundle_product in bundle_products %}
+            {% liquid
+              if bundle_product.id == product.id
+                assign bundle_variant = current_variant
+              else
+                assign bundle_variant = bundle_product.first_available_variant
+              endif
+
+              assign bundle_product_price = bundle_variant.price | default: bundle_product.price
+              assign bundle_variant_title = bundle_variant.title | default: 'Sold out'
+
+              if bundle_variant_title == 'Default Title'
+                assign bundle_variant_title = 'Included'
+              endif
+            %}
+
+            <a class="bundle-product" href="{{ bundle_product.url }}" aria-label="{{ bundle_product.title | escape }}">
+              <span class="bundle-product-image">
+                {% if bundle_product.featured_image %}
+                  <img
+                    src="{{ bundle_product.featured_image | image_url: width: 128 }}"
+                    alt="{{ bundle_product.featured_image.alt | default: bundle_product.title | escape }}"
+                    width="56"
+                    height="56"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </span>
+
+              <span class="bundle-product-info">
+                <span class="bundle-product-title">{{ bundle_product.title }}</span>
+                <span class="bundle-product-variant font-mono">{{ bundle_variant_title }}</span>
+              </span>
+
+              <span class="bundle-product-price">{{ bundle_product_price | money }}</span>
+            </a>
+          {% endfor %}
+        </div>
+
+        <div class="bundle-total font-mono">
+          <span>{{ bundle_items_count }} pieces</span>
+          <span class="bundle-prices">
+            {% if bundle_discount > 0 %}
+              <s>{{ bundle_total | money }}</s>
+            {% endif %}
+
+            <strong>{{ bundle_discounted_total | money }}</strong>
+          </span>
+        </div>
+
+        <button type="button" class="add bundle-add font-mono" ref="add" on:click="addToCart" {% unless bundle_available %}disabled{% endunless %}>
+          {% render 'icon-bag', size: 16 %}
+          <span>{% if bundle_available %}Add bundle{% else %}Bundle sold out{% endif %}</span>
+          <span>{{ bundle_discounted_total | money }} -></span>
+        </button>
+      </pdp-bundle>
+    </section>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .pdp-product-info {
+    display: grid;
+    gap: 16px;
+
+    .panel {
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
+    }
+
+    .heading {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .meta,
+    .shipping {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .meta span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    h1 {
+      margin: 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--black);
+      font-family: var(--font-body--family);
+      font-size: clamp(26px, 2.6vw, 34px);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .price {
+      color: var(--black);
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .rate {
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    .config {
+      display: grid;
+    }
+
+    .bundle-panel {
+      display: grid;
+    }
+
+    .config > h2,
+    .bundle-panel > h2 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .bundle-title > span {
+      min-width: 0;
+    }
+
+    .bundle-title .bundle-discount {
+      flex: 0 0 auto;
+      color: var(--green);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-align: right;
+    }
+
+    product-form {
+      display: block;
+      padding: 16px 20px 8px;
+    }
+
+    .bundle {
+      display: grid;
+      gap: 14px;
+      padding: 16px 20px;
+    }
+
+    .bundle-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .bundle-total span {
+      min-width: 0;
+    }
+
+    .bundle-products {
+      display: grid;
+      gap: 8px;
+    }
+
+    .bundle-product {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .bundle-product-image {
+      display: block;
+      width: 56px;
+      height: 56px;
+      border: 1px solid var(--border-color);
+      background: var(--background-darken);
+      overflow: hidden;
+    }
+
+    .bundle-product-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .bundle-product-info {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .bundle-product-title,
+    .bundle-product-variant {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bundle-product-title {
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .bundle-product-variant {
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .bundle-product-price {
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .bundle-prices {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .bundle-prices s {
+      color: var(--secondary-black);
+      font-weight: 400;
+    }
+
+    .bundle-prices strong {
+      color: var(--black);
+      font-weight: 400;
+    }
+
+    .bundle-add {
+      margin-top: 2px;
+    }
+
+    .bundle[pending] .bundle-add {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .add {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: var(--white);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .add:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .add svg {
+      flex: 0 0 auto;
+    }
+
+    .shipping {
+      justify-content: center;
+      padding: 0 20px 18px;
+      font-size: 10px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pdp-product-info {
+      h1 {
+        font-size: 32px;
+      }
+
+      product-form,
+      .shipping {
+        display: none;
+      }
+
+      .bundle {
+        padding-inline: 16px;
+      }
+
+      .bundle-product {
+        grid-template-columns: 48px minmax(0, 1fr);
+      }
+
+      .bundle-product-image {
+        width: 48px;
+        height: 48px;
+      }
+
+      .bundle-product-price {
+        grid-column: 2;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Product Info",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Product Info",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

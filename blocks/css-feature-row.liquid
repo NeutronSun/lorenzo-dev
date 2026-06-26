@@ -1,0 +1,216 @@
+{% doc %}
+  Renders one CSS feature with live browser support status.
+{% enddoc %}
+
+<article class="css-feature-row" data-feature="{{ block.settings.feature_key }}" {{ block.shopify_attributes }}>
+  <div class="css-feature-row__content">
+    <div class="css-feature-row__heading">
+      <h3 class="font-heading">{{ block.settings.title | escape }}</h3>
+      {% if block.settings.source_url != blank %}
+        <a
+          class="css-feature-row__source font-mono"
+          href="{{ block.settings.source_url }}"
+          target="_blank"
+          rel="noopener"
+          aria-label="Documentazione di {{ block.settings.title | escape }}"
+        >
+          Docs ↗
+        </a>
+      {% endif %}
+    </div>
+
+    <p class="css-feature-row__description font-body">{{ block.settings.description | escape }}</p>
+    <code class="css-feature-row__code">{{ block.settings.code | escape }}</code>
+    <code class="css-feature-row__query">{{ block.settings.support_query | escape }}</code>
+  </div>
+
+  <p class="css-feature-row__status font-body" aria-label="Supporto nel browser corrente">
+    <span class="css-feature-row__dot" aria-hidden="true"></span>
+    <span class="css-feature-row__supported">Supportata</span>
+    <span class="css-feature-row__unsupported">Non supportata</span>
+  </p>
+</article>
+
+{% stylesheet %}
+  .css-feature-row {
+    --css-feature-status: var(--css-feature-unsupported);
+    --css-feature-supported-display: none;
+    --css-feature-unsupported-display: inline;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem 0;
+    border-block-end: 1px solid var(--css-feature-border);
+
+    .css-feature-row__content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      min-width: 0;
+    }
+
+    .css-feature-row__heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+
+      h3 {
+        font-size: 1.25rem;
+        line-height: 1.15;
+      }
+    }
+
+    .css-feature-row__source {
+      flex: 0 0 auto;
+      color: var(--secondary-black);
+      font-size: 0.6875rem;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      &:hover {
+        color: var(--black);
+        text-decoration: underline;
+        text-underline-offset: 0.25em;
+      }
+    }
+
+    .css-feature-row__description {
+      max-width: 64ch;
+      color: var(--secondary-black);
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+
+    .css-feature-row__code {
+      width: fit-content;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.25rem;
+      background: var(--css-feature-surface);
+      font-family: monospace;
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .css-feature-row__query {
+      color: var(--secondary-black);
+      font-family: monospace;
+      font-size: 0.6875rem;
+      line-height: 1.4;
+    }
+
+    .css-feature-row__status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+      color: var(--css-feature-status);
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .css-feature-row__dot {
+      display: inline-block;
+      flex: 0 0 auto;
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      background: var(--css-feature-status);
+    }
+
+    .css-feature-row__supported {
+      display: var(--css-feature-supported-display);
+    }
+
+    .css-feature-row__unsupported {
+      display: var(--css-feature-unsupported-display);
+    }
+
+    @media screen and (min-width: 750px) {
+      & {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: center;
+        padding: 1.5rem 1rem;
+      }
+
+      &:hover {
+        background: var(--css-feature-surface);
+      }
+
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CSS Feature Row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Feature",
+      "default": "CSS feature"
+    },
+    {
+      "type": "select",
+      "id": "feature_key",
+      "label": "Support test",
+      "default": "anchor-positioning",
+      "options": [
+        { "value": "custom-functions", "label": "Custom functions" },
+        { "value": "conditional-if", "label": "Conditional if()" },
+        { "value": "anchor-positioning", "label": "Anchor positioning" },
+        { "value": "css-carousels", "label": "CSS carousels" },
+        { "value": "sibling-functions", "label": "Sibling functions" },
+        { "value": "random-values", "label": "Random values" },
+        { "value": "corner-shapes", "label": "Corner shapes" },
+        { "value": "scroll-driven-animations", "label": "Scroll-driven animations" },
+        { "value": "typed-attr", "label": "Typed attr()" },
+        { "value": "contrast-color", "label": "contrast-color()" },
+        { "value": "responsive-shape", "label": "Responsive shape()" },
+        { "value": "open-pseudo-class", "label": ":open" },
+        { "value": "customizable-select", "label": "Customizable select" },
+        { "value": "field-sizing", "label": "field-sizing" },
+        { "value": "gap-decorations", "label": "Gap decorations" },
+        { "value": "view-transitions", "label": "View transitions" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Descrizione della feature e del suo utilizzo."
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Syntax",
+      "default": "property: value;"
+    },
+    {
+      "type": "text",
+      "id": "support_query",
+      "label": "Feature query",
+      "default": "@supports (property: value)"
+    },
+    {
+      "type": "url",
+      "id": "source_url",
+      "label": "Documentation URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CSS Feature Row",
+      "category": "Demo"
+    }
+  ]
+}
+{% endschema %}
