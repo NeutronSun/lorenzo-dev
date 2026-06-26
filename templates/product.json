@@ -9,12 +9,6 @@
  */
 {
   "sections": {
-    "breadcrumb": {
-      "type": "product-breadcrumb",
-      "settings": {
-        "separator": "/"
-      }
-    },
     "main": {
       "type": "product",
       "blocks": {
@@ -23,7 +17,7 @@
           "static": true,
           "settings": {},
           "blocks": {
-            "edition": {
+            "pdp_dossier_edition_m6WELq": {
               "type": "pdp-dossier-edition",
               "settings": {
                 "season": "{{ closest.product.metafields.valeverce.edition.value }}",
@@ -32,32 +26,37 @@
               },
               "blocks": {}
             },
-            "stats": {
+            "pdp_card_stats_kkDj3i": {
               "type": "pdp-card-stats",
+              "name": "PDP Card Stats",
               "settings": {},
               "blocks": {}
             },
-            "description": {
+            "pdp_dossier_description_ByQMxb": {
               "type": "pdp-dossier-description",
+              "name": "PDP Dossier Description",
               "settings": {
                 "text": "{{ closest.product.description }}"
               },
               "blocks": {}
             },
-            "technical": {
+            "pdp_dossier_tech_BkgHXF": {
               "type": "pdp-dossier-tech",
+              "name": "PDP Dossier Technical",
               "settings": {},
               "blocks": {
-                "material": {
+                "pdp_dossier_tech_row_RyPxG8": {
                   "type": "pdp-dossier-tech-row",
+                  "name": "PDP Dossier Technical Row",
                   "settings": {
                     "label": "Material",
                     "value": "{{ closest.product.metafields.valeverce.material | metafield_text }}"
                   },
                   "blocks": {}
                 },
-                "weight": {
+                "pdp_dossier_tech_row_mrdxGq": {
                   "type": "pdp-dossier-tech-row",
+                  "name": "PDP Dossier Technical Row",
                   "settings": {
                     "label": "Weight",
                     "value": "{{ closest.product.metafields.valeverce.weight | metafield_text }}"
@@ -66,16 +65,16 @@
                 }
               },
               "block_order": [
-                "material",
-                "weight"
+                "pdp_dossier_tech_row_RyPxG8",
+                "pdp_dossier_tech_row_mrdxGq"
               ]
             }
           },
           "block_order": [
-            "edition",
-            "stats",
-            "description",
-            "technical"
+            "pdp_dossier_edition_m6WELq",
+            "pdp_card_stats_kkDj3i",
+            "pdp_dossier_description_ByQMxb",
+            "pdp_dossier_tech_BkgHXF"
           ]
         },
         "gallery": {
@@ -93,27 +92,32 @@
       },
       "settings": {}
     },
-    "product_recommendations": {
+    "product_recommendations_carousel_zgrpCX": {
       "type": "product-recommendations-carousel",
+      "name": "Product recommendations",
       "settings": {
         "eyebrow": "/PAIR WITH",
         "title": "More from the drop",
         "view_all_label": "VIEW ALL",
+        "view_all_url": "",
         "intent": "related",
-        "product_limit": 8,
-        "slides_count": 3,
-        "slides_count_mobile": 1.15,
+        "product_limit": 12,
+        "slides_count": 5,
+        "slides_count_mobile": 1.5,
         "gap": 12,
         "loop": false,
         "navigation": true,
         "pagination": true,
-        "default_spacing": true
+        "default_spacing": true,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "padding_top_desktop": 0,
+        "padding_bottom_desktop": 0
       }
     }
   },
   "order": [
-    "breadcrumb",
     "main",
-    "product_recommendations"
+    "product_recommendations_carousel_zgrpCX"
   ]
 }
