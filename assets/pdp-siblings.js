@@ -75,21 +75,31 @@ class PdpSiblings extends HTMLComponent {
     for (const node of this.refs.tabs || []) {
       if (!(node instanceof HTMLElement)) continue;
 
-      const tag = node.dataset.tag?.trim() || '';
-      const label = node.dataset.label?.trim() || tag;
-      const id = node.dataset.id?.trim() || tag;
+      const template = node.dataset.tag?.trim() || '';
+      const label = node.dataset.label?.trim() || template;
+      const id = node.dataset.id?.trim() || template;
 
-      if (!tag) continue;
+      if (!template) continue;
 
       configs.push({
         id,
-        tag,
+        tag: template,
         label,
-        includeCurrent: node.dataset.includeCurrent === 'true',
+        includeCurrent: this.includesCurrentProductTag(template),
       });
     }
 
     return configs;
+  }
+
+  /**
+   * @param {string} tag
+   * @returns {boolean}
+   */
+  includesCurrentProductTag(tag) {
+    const tags = this.currentProduct?.tags;
+
+    return Array.isArray(tags) && tags.includes(tag);
   }
 
   /** Fetches sibling data and renders tabs into the mount node. */

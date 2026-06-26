@@ -2,6 +2,8 @@
  * Storefront API helper for product color siblings on cards and PDP variant picker.
  */
 
+import { CacheHandler } from '@theme/utilities';
+
 class ColorSibling {
   static CACHE_PREFIX = 'product-card-siblings:';
   static PDP_CACHE_PREFIX = 'pdp-siblings:v7:';
@@ -86,13 +88,9 @@ class ColorSibling {
     }
 
     const cacheKey = `${cachePrefix}${tag}:${limit}`;
-    const cached = sessionStorage.getItem(cacheKey);
+    const cached = CacheHandler.get(cacheKey);
 
-    if (cached) {
-      const parsed = JSON.parse(cached);
-
-      if (Array.isArray(parsed)) return parsed;
-    }
+    if (Array.isArray(cached)) return cached;
 
     const response = await fetch(storefront.apiUrl, {
       method: 'POST',
@@ -111,7 +109,7 @@ class ColorSibling {
 
     const products = (result.data?.products?.edges || []).map(({ node }) => mapNode(node));
 
-    products.length && sessionStorage.setItem(cacheKey, JSON.stringify(products));
+    products.length && CacheHandler.set(cacheKey, products);
 
     return products;
   }

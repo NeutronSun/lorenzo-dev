@@ -238,6 +238,43 @@ export class TemplateHandler {
   }
 }
 
+/** sessionStorage cache with JSON serialization and a global enable flag. */
+export class CacheHandler {
+  static ENABLED = true;
+
+  /**
+   * Reads and parses a cached value, or null when missing, disabled, or invalid.
+   * @param {string} key
+   * @returns {unknown}
+   */
+  static get(key) {
+    if (!CacheHandler.ENABLED || !key) return null;
+
+    try {
+      const raw = sessionStorage.getItem(key);
+
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Serializes and stores a value when caching is enabled.
+   * @param {string} key
+   * @param {unknown} value
+   */
+  static set(key, value) {
+    if (!CacheHandler.ENABLED || !key) return;
+
+    try {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Ignore quota or serialization errors.
+    }
+  }
+}
+
 /** URL builders for Liquid partial views and section rendering. */
 export class UrlUtils {
   /**

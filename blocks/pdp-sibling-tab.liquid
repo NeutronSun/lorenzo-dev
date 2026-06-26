@@ -1,48 +1,34 @@
 {% doc %}
-  PDP sibling tab config: tag query and label for pdp-siblings.
+  PDP sibling tab config: resolves a product tag by prefix and exposes it to pdp-siblings.
 
   @param {product} product - Product object
 {% enddoc %}
 
 {% liquid
   assign picker_product = product | default: closest.product
-  assign tag_template = block.settings.tag | strip
-  assign resolved_tag = tag_template | replace: '{handle}', picker_product.handle
+  assign prefix = block.settings.tag | strip
+  assign resolved_tag = blank
 
-  if resolved_tag == tag_template and tag_template != blank
-    assign prefix_size = tag_template.size
+  for product_tag in picker_product.tags
+    if product_tag contains prefix
+      assign resolved_tag = product_tag
+      break
+    endif
+  endfor
 
-    for product_tag in picker_product.tags
-      assign product_tag_prefix = product_tag | slice: 0, prefix_size
-
-      if product_tag_prefix == tag_template
-        assign resolved_tag = product_tag
-        break
-      endif
-    endfor
+  if block.settings.use_tag_value_as_label
+    assign tab_label = resolved_tag | remove_first: prefix | strip
+  else
+    assign tab_label = block.settings.label | default: resolved_tag
   endif
-
-  assign include_current = false
-
-  if resolved_tag != blank
-    for product_tag in picker_product.tags
-      if product_tag == resolved_tag
-        assign include_current = true
-        break
-      endif
-    endfor
-  endif
-
-  assign tab_label = block.settings.label | default: resolved_tag | default: tag_template
 %}
 
-{% if resolved_tag != blank %}
+{% if prefix != blank and resolved_tag != blank %}
   <div
     ref="tabs[]"
     data-id="{{ block.id }}"
     data-tag="{{ resolved_tag | escape }}"
     data-label="{{ tab_label | escape }}"
-    data-include-current="{% if include_current %}true{% else %}false{% endif %}"
     hidden
     {{ block.shopify_attributes }}
   ></div>
@@ -56,8 +42,15 @@
     {
       "type": "text",
       "id": "tag",
-      "label": "Tag",
-      "info": "Tag to query on Storefront API. Use {handle} for the current product handle, or a prefix like Tema_ to match a tag on the product."
+      "label": "Tag prefix",
+      "info": "Example: Universe_ resolves to the product tag Universe_League of legends."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_tag_value_as_label",
+      "label": "Use tag value as label",
+      "info": "Uses the tag text after the prefix as the tab label (Universe_Anime shows Anime).",
+      "default": false
     },
     {
       "type": "text",

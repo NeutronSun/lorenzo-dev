@@ -103,7 +103,7 @@
             "sibling-tab-fusion": {
               "type": "pdp-sibling-tab",
               "settings": {
-                "tag": "Fusion_{handle}",
+                "tag": "Fusion_",
                 "label": "Fusion"
               },
               "blocks": {}
@@ -111,7 +111,7 @@
             "sibling-tab-universe": {
               "type": "pdp-sibling-tab",
               "settings": {
-                "tag": "Universe_{handle}",
+                "tag": "Universe_",
                 "label": "Universe"
               },
               "blocks": {}
