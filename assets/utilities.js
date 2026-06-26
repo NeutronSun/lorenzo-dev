@@ -1,9 +1,14 @@
+/**
+ * Shared theme utilities: CSS helpers, HTML safety, partial fetch, template cloning.
+ */
+
+import { HTMLComponent } from './HTMLComponent.js';
+
+/** CSS layout and visibility helpers for sticky headers and scroll-driven UI. */
 export class CSSUtils {
-
-
   /**
-   * 
-   * @param {HTMLElement} element 
+   * Whether an element is currently stuck at its CSS `top` offset.
+   * @param {HTMLElement} element
    * @returns {boolean}
    */
   static isElementSticking(element) {
@@ -13,29 +18,28 @@ export class CSSUtils {
   }
 
   /**
-   * 
-   * @param {string} property 
-   * @param {HTMLElement} element 
+   * Reads a numeric CSS custom property from an element.
+   * @param {string} property
+   * @param {HTMLElement} [element]
    * @returns {string}
    */
   static getProperty(property, element = document.documentElement) {
-    return getComputedStyle(element).getPropertyValue(property).trim().replace('px','');
+    return getComputedStyle(element).getPropertyValue(property).trim().replace('px', '');
   }
 
   /**
-   * 
-   * @param {string} property 
-   * @param {string} value 
-   * @param {HTMLElement} element 
-   * @returns {void}
+   * Sets a numeric CSS custom property on an element.
+   * @param {string} property
+   * @param {string | number} value
+   * @param {HTMLElement} [element]
    */
   static setValue(property, value, element = document.documentElement) {
-    element.style.setProperty(property, value + 'px');
-  } 
-  
+    element.style.setProperty(property, `${value}px`);
+  }
+
   /**
-   * 
-   * @param {HTMLElement} element 
+   * Whether an element is fully inside the viewport.
+   * @param {HTMLElement} element
    * @returns {boolean}
    */
   static isElementVisible(element) {
@@ -43,9 +47,238 @@ export class CSSUtils {
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
+  }
+}
+
+/** HTML escaping and string normalization for safe rendering and search. */
+export class HtmlUtils {
+  static HTML_ENTITIES = Object.freeze({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  });
+
+  /**
+   * Escapes HTML-sensitive characters in a value.
+   * @param {unknown} value
+   * @returns {string}
+   */
+  static escape(value) {
+    return String(value).replace(/[&<>"']/g, (character) => HtmlUtils.HTML_ENTITIES[character]);
+  }
+
+  /**
+   * Normalizes a string for accent-insensitive, case-insensitive matching.
+   * @param {string} value
+   * @returns {string}
+   */
+  static normalize(value) {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLocaleLowerCase();
+  }
+}
+
+/** HTML fetch, parse, clone, and data-binding helpers for Liquid partials. */
+export class TemplateHandler {
+  /**
+   * Parses an HTML string into a document.
+   * @param {string} text
+   * @returns {Document}
+   */
+  static parseHtml(text) {
+    return new DOMParser().parseFromString(text, 'text/html');
+  }
+
+  /**
+   * Fetches a URL and returns its response text, or an empty string on failure.
+   * @param {string | URL} url
+   * @param {RequestInit} [init]
+   * @returns {Promise<string>}
+   */
+  static async fetchText(url, init) {
+    const response = await fetch(url.toString(), init);
+
+    if (!response.ok) return '';
+
+    return await response.text();
+  }
+
+  /**
+   * Fetches an HTML partial and returns the first matching element.
+   * @param {string | URL} url
+   * @param {string} selector
+   * @param {RequestInit} [init]
+   * @returns {Promise<HTMLElement | null>}
+   */
+  static async fetchPartial(url, selector, init) {
+    const text = await TemplateHandler.fetchText(url, init);
+
+    if (!text) return null;
+
+    const parsed = TemplateHandler.parseHtml(text);
+    const node = parsed.querySelector(selector);
+
+    if (!(node instanceof HTMLElement)) return null;
+
+    return node;
+  }
+
+  /**
+   * Clones the root element of a template or HTMLElement.
+   * @param {HTMLTemplateElement | Element} template
+   * @returns {HTMLElement | null}
+   */
+  static clone(template) {
+    if (template instanceof HTMLTemplateElement) {
+      const node = template.content.firstElementChild;
+
+      if (!(node instanceof HTMLElement)) return null;
+
+      return /** @type {HTMLElement} */ (node.cloneNode(true));
+    }
+
+    if (template instanceof HTMLElement) {
+      return /** @type {HTMLElement} */ (template.cloneNode(true));
+    }
+
+    return null;
+  }
+
+  /**
+   * Binds data to nodes marked with `data-ref` and optional `data-bind`.
+   * @param {HTMLElement} root
+   * @param {Record<string, string | number | boolean | null | undefined>} data
+   */
+  static fill(root, data) {
+    for (const [key, value] of Object.entries(data)) {
+      if (value === null || value === undefined) continue;
+
+      const nodes = root.querySelectorAll(`[data-ref="${key}"]`);
+
+      for (const node of nodes) {
+        if (!(node instanceof HTMLElement)) continue;
+
+        const bind = node.getAttribute('data-bind') || 'text';
+
+        switch (bind) {
+          case 'href':
+            node instanceof HTMLAnchorElement && (node.href = String(value));
+            break;
+          case 'src':
+            node instanceof HTMLImageElement && (node.src = String(value));
+            break;
+          case 'srcset':
+            node instanceof HTMLImageElement && node.setAttribute('srcset', String(value));
+            break;
+          case 'alt':
+            node instanceof HTMLImageElement && (node.alt = String(value));
+            break;
+          case 'aria-label':
+            node.setAttribute('aria-label', String(value));
+            break;
+          case 'value':
+            node instanceof HTMLInputElement && (node.value = String(value));
+            break;
+          case 'checked':
+            node instanceof HTMLInputElement && (node.checked = Boolean(value));
+            break;
+          case 'attribute': {
+            const attribute = node.getAttribute('data-attribute');
+
+            attribute && node.setAttribute(attribute, String(value));
+            break;
+          }
+          default:
+            node.textContent = String(value);
+        }
+      }
+    }
+  }
+
+  /**
+   * Replaces named refs on a target element with matching refs from a source.
+   * @param {HTMLElement} target
+   * @param {HTMLElement} source
+   * @param {readonly string[]} refNames
+   */
+  static replaceRefs(target, source, refNames) {
+    const refs = HTMLComponent.getRefs(source);
+
+    for (const name of refNames) {
+      const current = HTMLComponent.getRefs(target)[name];
+      const next = refs[name];
+
+      if (!(current instanceof Element)) continue;
+      if (!(next instanceof Element)) continue;
+
+      current.replaceWith(next);
+    }
+  }
+
+  /**
+   * Copies inner HTML from a source node into a target element.
+   * @param {HTMLElement} target
+   * @param {ParentNode} source
+   * @param {string} selector
+   */
+  static replaceInner(target, source, selector) {
+    const next = source.querySelector(selector);
+
+    if (!(next instanceof HTMLElement)) return;
+
+    target.innerHTML = next.innerHTML;
+  }
+}
+
+/** URL builders for Liquid partial views and section rendering. */
+export class UrlUtils {
+  /**
+   * Adds or replaces the `view` search param on a URL.
+   * @param {string | URL} url
+   * @param {string} view
+   * @returns {URL}
+   */
+  static withView(url, view) {
+    const next = url instanceof URL ? new URL(url) : new URL(url, window.location.origin);
+
+    next.searchParams.set('view', view);
+
+    return next;
+  }
+
+  /**
+   * Adds or replaces the `section_id` search param on a URL.
+   * @param {string | URL} url
+   * @param {string} sectionId
+   * @returns {URL}
+   */
+  static withSectionId(url, sectionId) {
+    const next = url instanceof URL ? new URL(url) : new URL(url, window.location.origin);
+
+    next.searchParams.set('section_id', sectionId);
+
+    return next;
+  }
+
+  /**
+   * Replaces the search string on a URL with the given params.
+   * @param {string | URL} url
+   * @param {URLSearchParams} params
+   * @returns {URL}
+   */
+  static withSearchParams(url, params) {
+    const next = url instanceof URL ? new URL(url) : new URL(url, window.location.origin);
+
+    next.search = params.toString();
+
+    return next;
   }
 }

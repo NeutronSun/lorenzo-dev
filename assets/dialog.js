@@ -1,33 +1,31 @@
-import { HTMLComponent } from "@theme/HTMLComponent";
-import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from "@theme/events";
+/**
+ * Dialog custom elements: modal drawer host and declarative open triggers.
+ */
+
+import { HTMLComponent } from '@theme/HTMLComponent';
+import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from '@theme/events';
 
 /**
- * Dialog component.
- *
  * @typedef {Object} DialogComponentRefs
- * @property {HTMLDialogElement} dialog - The dialog element.
+ * @property {HTMLDialogElement} dialog
  */
 
 /**
+ * Modal and non-modal dialog host with global open/close coordination.
  * @extends {HTMLComponent<DialogComponentRefs>}
  */
 export class DialogComponent extends HTMLComponent {
   static SELECTOR = 'dialog-component, search-dialog';
   static HEADER_SELECTOR = '.uyn-header';
 
-  /** @type {((event: OnDialogOpenEvent) => void) | null} */
-  onDialogOpen = null;
-  /** @type {(() => void) | null} */
-  onDialogClose = null;
-  /** @type {((event: KeyboardEvent) => void) | null} */
-  onDialogKeydown = null;
-  /** @type {((event: MouseEvent) => void) | null} */
-  onDocumentClick = null;
+  /** @returns {string} Dialog name used by open events. */
+  get name() {
+    return this.getAttribute('name') || '';
+  }
 
-  connectedCallback() {
-    super.connectedCallback();
+  constructor() {
+    super();
 
-    this.name = this.getAttribute('name');
     this.onDialogOpen = (event) => {
       if (event.name === this.name) {
         this.open();
@@ -38,7 +36,9 @@ export class DialogComponent extends HTMLComponent {
         this.close();
       }
     };
+
     this.onDialogClose = () => this.dispatchClosed();
+
     this.onDialogKeydown = (event) => {
       if (event.key !== 'Escape') return;
       if (!this.refs.dialog?.open) return;
@@ -46,6 +46,7 @@ export class DialogComponent extends HTMLComponent {
       event.preventDefault();
       this.close();
     };
+
     this.onDocumentClick = (event) => {
       if (!this.refs.dialog?.open) return;
       if (this.hasAttribute('persistent')) return;
@@ -62,6 +63,10 @@ export class DialogComponent extends HTMLComponent {
 
       this.close();
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
 
     document.addEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
     document.addEventListener('keydown', this.onDialogKeydown);
@@ -81,6 +86,7 @@ export class DialogComponent extends HTMLComponent {
     super.disconnectedCallback();
   }
 
+  /** Opens the dialog, closing other non-persistent dialogs first. */
   open() {
     if (!this.refs.dialog) return;
     if (this.refs.dialog.open) return;
@@ -97,10 +103,12 @@ export class DialogComponent extends HTMLComponent {
     this.dispatchOpened();
   }
 
+  /** Closes the dialog when it is open. */
   close() {
     this.refs.dialog?.open && this.refs.dialog.close();
   }
 
+  /** Closes other open dialogs before opening this one. */
   closeOthers() {
     for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
       if (!(dialog instanceof DialogComponent)) continue;
@@ -110,6 +118,7 @@ export class DialogComponent extends HTMLComponent {
     }
   }
 
+  /** Dispatches dialog:opened for this dialog name. */
   dispatchOpened() {
     this.dispatchEvent(
       new OnDialogOpenedEvent({
@@ -118,6 +127,7 @@ export class DialogComponent extends HTMLComponent {
     );
   }
 
+  /** Dispatches dialog:closed for this dialog name. */
   dispatchClosed() {
     this.dispatchEvent(
       new OnDialogClosedEvent({
@@ -132,14 +142,16 @@ if (!customElements.get('dialog-component')) {
 }
 
 /**
+ * Declarative trigger that dispatches dialog:open by name.
  * @extends {HTMLComponent<{}>}
  */
 class DialogOpener extends HTMLComponent {
-  connectedCallback() {
-    super.connectedCallback();
-    this.name = this.getAttribute('name');
+  /** @returns {string} Target dialog name. */
+  get name() {
+    return this.getAttribute('name') || '';
   }
 
+  /** Dispatches dialog:open for this opener name. */
   publish() {
     document.dispatchEvent(
       new OnDialogOpenEvent({

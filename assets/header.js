@@ -1,20 +1,23 @@
+/**
+ * Sticky header: desktop active indicator, mobile bar, dialog/cart/localization integration.
+ */
+
 import { HTMLComponent } from '@theme/HTMLComponent';
+import { DialogComponent } from '@theme/dialog';
 import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from '@theme/events';
 import { CSSUtils } from '@theme/utilities';
 
-
 /**
  * @typedef {Object} StickyHeaderRefs
- * @property {HTMLHeadElement} header - The header element.
- * @property {HTMLElement} desktopActive - The desktop active indicator.
- * @property {HTMLElement} mobileBar - The mobile bottom navigation.
- * @property {HTMLElement} mobileMenuHeader - The mobile drawer header.
- * @property {HTMLElement} mobileMenuFooter - The mobile drawer footer.
+ * @property {HTMLHeadElement} header
+ * @property {HTMLElement} desktopActive
+ * @property {HTMLElement} mobileBar
+ * @property {HTMLElement} mobileMenuHeader
+ * @property {HTMLElement} mobileMenuFooter
  */
 
 /**
- * Sticky header component.
- * 
+ * Sticky header with desktop active indicator and mobile dialog integration.
  * @extends {HTMLComponent<StickyHeaderRefs>}
  */
 class StickyHeader extends HTMLComponent {
@@ -29,37 +32,20 @@ class StickyHeader extends HTMLComponent {
     search: '.header-desktop-actions dialog-opener[name="search"] .header-desktop-action',
   });
   static LOCAL_STATE_INPUT_SELECTOR = '.header-nav-toggle, .header-product-dock-mode';
-  static CART_DRAWER_SELECTOR = 'dialog-component[name="cart-drawer"] dialog';
-  static DIALOG_COMPONENT_SELECTOR = 'dialog-component, search-dialog';
+  static CART_DRAWER_NAME = 'cart-drawer';
   static LOCALIZATION_DRAWER_NAME = 'localization';
   static LOCALIZATION_FORM_SELECTOR = 'localization-form';
 
-  /**
-   * @type {ResizeObserver | null}
-   */
-  resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => this.onResize()) : null;
+  constructor() {
+    super();
 
-  /**
-   * @type {EventListener}
-   */
-  boundMobileBarClick = (event) => this.transitionMobileBarState(event);
-
-  /**
-   * @type {EventListener}
-   */
-  boundDesktopDialogOpen = (event) => this.onDesktopDialogOpen(event);
-
-  /**
-   * @type {EventListener}
-   */
-  boundDesktopStateChange = () => this.scheduleDesktopStateUpdate();
-
-  /**
-   * @type {EventListener}
-   */
-  boundDesktopMenuToggle = (event) => this.onDesktopMenuToggle(event);
-
-  desktopStateFrame = 0;
+    this.resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => this.onResize()) : null;
+    this.desktopStateFrame = 0;
+    this.boundMobileBarClick = (event) => this.transitionMobileBarState(event);
+    this.boundDesktopDialogOpen = (event) => this.onDesktopDialogOpen(event);
+    this.boundDesktopStateChange = () => this.scheduleDesktopStateUpdate();
+    this.boundDesktopMenuToggle = (event) => this.onDesktopMenuToggle(event);
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -86,16 +72,19 @@ class StickyHeader extends HTMLComponent {
     super.disconnectedCallback();
   }
 
+  /** Re-collects refs and re-attaches layout observers after DOM changes. */
   updateRefs() {
     super.updateRefs();
     this.observeLayout();
   }
 
+  /** Toggles the sticking attribute based on scroll position. */
   onScroll() {
     const sticking = !(window.scrollY > 0);
     this.toggleAttribute('sticking', sticking);
   }
 
+  /** Writes header height custom properties from current layout. */
   onResize() {
     CSSUtils.setValue('--header-height', this.offsetHeight);
     CSSUtils.setValue('--header-mobile-menu-gap', StickyHeader.MOBILE_MENU_GAP, this);
@@ -106,6 +95,7 @@ class StickyHeader extends HTMLComponent {
     this.scheduleDesktopStateUpdate();
   }
 
+  /** Observes header elements that affect mobile layout custom properties. */
   observeLayout() {
     this.resizeObserver?.disconnect();
     this.resizeObserver?.observe(this);
@@ -115,18 +105,28 @@ class StickyHeader extends HTMLComponent {
     this.observeElement(this.refs.mobileMenuFooter);
   }
 
+  /**
+   * @param {HTMLElement | undefined} element
+   */
   observeElement(element) {
     if (!(element instanceof HTMLElement)) return;
 
     this.resizeObserver?.observe(element);
   }
 
+  /**
+   * @param {string} property
+   * @param {HTMLElement | undefined} element
+   */
   setElementHeight(property, element) {
     if (!(element instanceof HTMLElement)) return;
 
     CSSUtils.setValue(property, element.offsetHeight, this);
   }
 
+  /**
+   * @param {Event} event
+   */
   onDesktopDialogOpen(event) {
     if (!window.matchMedia(StickyHeader.DESKTOP_MEDIA_QUERY).matches) return;
     if (!(event instanceof OnDialogOpenEvent)) return;
@@ -136,6 +136,9 @@ class StickyHeader extends HTMLComponent {
     this.scheduleDesktopStateUpdate();
   }
 
+  /**
+   * @param {Event} event
+   */
   onDesktopMenuToggle(event) {
     if (!window.matchMedia(StickyHeader.DESKTOP_MEDIA_QUERY).matches) return;
 
@@ -148,6 +151,9 @@ class StickyHeader extends HTMLComponent {
     this.scheduleDesktopStateUpdate();
   }
 
+  /**
+   * Defers desktop active indicator updates to the next animation frame.
+   */
   scheduleDesktopStateUpdate() {
     if (this.desktopStateFrame) return;
 
@@ -158,6 +164,7 @@ class StickyHeader extends HTMLComponent {
     });
   }
 
+  /** Positions the desktop active indicator over the current target. */
   updateDesktopState() {
     const currentTarget = this.querySelector(`.${StickyHeader.DESKTOP_ACTIVE_TARGET_CLASS}`);
 
@@ -186,9 +193,13 @@ class StickyHeader extends HTMLComponent {
     this.toggleAttribute('desktop-active-ready', true);
   }
 
+  /**
+   * Resolves the current desktop active target from open dialogs or menus.
+   * @returns {{ target: HTMLElement, open: boolean } | null}
+   */
   getDesktopState() {
-    for (const dialog of document.querySelectorAll(StickyHeader.DIALOG_COMPONENT_SELECTOR)) {
-      const selector = StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name')];
+    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
+      const selector = StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name') ?? ''];
 
       if (!selector || !dialog.querySelector('dialog[open]')) continue;
 
@@ -208,15 +219,19 @@ class StickyHeader extends HTMLComponent {
     return null;
   }
 
+  /** Closes desktop dialogs when a menu item opens. */
   closeDesktopDialogs() {
-    for (const dialog of document.querySelectorAll(StickyHeader.DIALOG_COMPONENT_SELECTOR)) {
-      if (!StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name')]) continue;
+    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
+      if (!StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name') ?? '']) continue;
       if (typeof dialog.close !== 'function') continue;
 
       dialog.close();
     }
   }
 
+  /**
+   * @param {MouseEvent} event
+   */
   transitionMobileBarState(event) {
     if (!(event instanceof MouseEvent)) return;
     if (!('startViewTransition' in document)) return;
@@ -241,6 +256,10 @@ class StickyHeader extends HTMLComponent {
     });
   }
 
+  /**
+   * @param {MouseEvent} event
+   * @returns {HTMLLabelElement | null}
+   */
   getLocalStateLabel(event) {
     const target = event.target;
 
@@ -254,6 +273,9 @@ class StickyHeader extends HTMLComponent {
     return label;
   }
 
+  /**
+   * @param {HTMLInputElement} input
+   */
   setLocalStateInput(input) {
     if (input.type === 'checkbox') {
       input.checked = !input.checked;
@@ -269,14 +291,17 @@ class StickyHeader extends HTMLComponent {
     input.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
+  /** Closes the cart drawer from mobile header interactions. */
   closeCartDrawer() {
-    const dialog = document.querySelector(StickyHeader.CART_DRAWER_SELECTOR);
+    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
+      if (dialog.getAttribute('name') !== StickyHeader.CART_DRAWER_NAME) continue;
+      if (!(dialog instanceof DialogComponent)) continue;
 
-    if (!(dialog instanceof HTMLDialogElement)) return;
-
-    dialog.open && dialog.close();
+      dialog.close();
+    }
   }
 
+  /** Opens the localization drawer and resets its search field. */
   openLocalization() {
     const open = () => {
       this.closeMobileMenu();
@@ -296,6 +321,7 @@ class StickyHeader extends HTMLComponent {
     document.startViewTransition(open);
   }
 
+  /** Resets the localization form search when opening the drawer. */
   resetLocalizationSearch() {
     const localizationForm = document.querySelector(StickyHeader.LOCALIZATION_FORM_SELECTOR);
 
@@ -304,6 +330,7 @@ class StickyHeader extends HTMLComponent {
     localizationForm.resetSearch();
   }
 
+  /** Closes the mobile navigation menu and open desktop menu items. */
   closeMobileMenu() {
     const input = this.querySelector('.header-nav-toggle');
 
@@ -320,6 +347,9 @@ class StickyHeader extends HTMLComponent {
     }
   }
 
+  /**
+   * @param {HTMLLabelElement} label
+   */
   publishLocalDialog(label) {
     const dialogOpener = label.closest('dialog-opener');
 
@@ -329,18 +359,21 @@ class StickyHeader extends HTMLComponent {
     dialogOpener.publish();
   }
 
+  /**
+   * @param {Element} dialogOpener
+   * @returns {boolean}
+   */
   hasDialogComponent(dialogOpener) {
     const name = dialogOpener.getAttribute('name');
 
     if (!name) return false;
 
-    for (const dialog of document.querySelectorAll(StickyHeader.DIALOG_COMPONENT_SELECTOR)) {
+    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
       if (dialog.getAttribute('name') === name) return true;
     }
 
     return false;
   }
-
 }
 
 if (!customElements.get('sticky-header')) {

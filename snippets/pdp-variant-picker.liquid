@@ -26,6 +26,10 @@
   data-current-handle="{{ product.handle | escape }}"
   data-current-url="{{ product.url | escape }}"
   data-limit="{{ siblings_limit }}"
+  data-label-color="Color"
+  data-label-variants="Variants"
+  data-label-theme="Tema"
+  data-label-fusion="Fusion"
   class="{% if theme_tag != blank %}is-loading{% endif %}"
   aria-busy="{% if theme_tag != blank %}true{% else %}false{% endif %}"
   {% if theme_tag == blank %}hidden{% endif %}
@@ -45,21 +49,56 @@
       }
     </script>
 
-    <div class="group skeleton" aria-hidden="true">
-      <div class="head font-mono">
-        <span></span>
-        <span></span>
+    <template ref="groupTemplate">
+      <div class="group">
+        <div class="head font-mono">
+          <span data-ref="colorLabel"></span>
+          <span data-ref="variantsLabel"></span>
+        </div>
+        <div class="tabs font-mono" role="tablist" ref="tablist"></div>
+        <div class="panels" ref="panels"></div>
       </div>
+    </template>
 
-      <div class="tabs font-mono">
-        <span></span>
-        <span></span>
+    <template ref="tabTemplate">
+      <label class="tab" role="tab">
+        <input type="radio" value="" data-bind="value" data-attribute="value">
+        <span data-ref="label"></span>
+      </label>
+    </template>
+
+    <template ref="panelTemplate">
+      <div class="panel" data-ref="tabName" data-bind="attribute" data-attribute="data-tab">
+        <div class="values" ref="values"></div>
       </div>
+    </template>
 
-      <div class="values">
-        <span></span>
-        <span></span>
-        <span></span>
+    <template ref="chipTemplate">
+      <a class="chip" href="#" data-ref="url" data-bind="href" aria-label="">
+        <span class="swatch">
+          <img data-ref="image" data-bind="src" alt="" loading="lazy" width="18" height="18" hidden>
+        </span>
+        <span class="chip-label" data-ref="title"></span>
+      </a>
+    </template>
+
+    <div ref="mount">
+      <div class="group skeleton" aria-hidden="true">
+        <div class="head font-mono">
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="tabs font-mono">
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="values">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
   {% endif %}

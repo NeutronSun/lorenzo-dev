@@ -4,7 +4,7 @@
 
 <dialog-component name="localization" non-modal>
   <dialog ref="dialog" class="drawer from-right localization-drawer">
-    <localization-form>
+    <localization-form on:click="handleClick" on:input="handleInput">
       {% form 'localization', id: form_id %}
         <input
           ref="countryInput"
@@ -27,7 +27,7 @@
           <button
             type="button"
             class="localization-drawer-close"
-            data-localization-close
+            on:click="close"
             aria-label="Close localization"
           >
             {% render 'icon-close', size: 16 %}
@@ -42,6 +42,7 @@
             placeholder="Search country or language"
             aria-label="Search country or language"
             autocomplete="off"
+            on:input="handleInput"
           >
         </label>
 
@@ -68,7 +69,7 @@
                     ref="languages[]"
                     type="button"
                     class="localization-language"
-                    data-localization-language
+                    on:click="select"
                     data-country-code="{{ country.iso_code }}"
                     data-language-code="{{ language.iso_code }}"
                     data-language-name="{{ language.name | escape }}"

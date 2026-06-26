@@ -1,3 +1,7 @@
+/**
+ * Theme entrypoint: loads shared utilities and registers feature modules.
+ */
+
 import { CSSUtils } from "@theme/utilities";
 import "@theme/header";
 import "@theme/dialog";

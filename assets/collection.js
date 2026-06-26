@@ -1,99 +1,115 @@
-import { HTMLComponent } from "@theme/HTMLComponent";
-import { OnFiltersApplyEvent } from "@theme/events";
+/**
+ * Collection filters and product grid: async partial updates via Liquid views.
+ */
 
-class Filters {
-  static SELECTOR = 'filters';
-  static CLEAR_SELECTOR = '[data-filters-clear]';
-  static CLOSE_SELECTOR = '[data-filters-close]';
-  static PERSISTENT_INPUT_SELECTOR = 'input[type="hidden"][name]';
-  static TEMPLATE_VIEW = 'filters';
+import { HTMLComponent } from '@theme/HTMLComponent';
+import { OnFiltersApplyEvent } from '@theme/events';
+import { TemplateHandler, UrlUtils } from '@theme/utilities';
 
-  constructor() {
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onChange = this.onChange.bind(this);
-  }
+/** URL builders for collection filter and grid Liquid partials. */
+class CollectionPartial {
+  static VIEW = Object.freeze({
+    FILTERS: 'filters',
+    GRID: 'grid',
+  });
 
-  connectedCallback() {
-    try {
-      document.addEventListener('submit', this.onSubmit);
-      document.addEventListener('click', this.onClick);
-      document.addEventListener('change', this.onChange);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('submit', this.onSubmit);
-    document.removeEventListener('click', this.onClick);
-    document.removeEventListener('change', this.onChange);
-  }
+  static SELECTOR = Object.freeze({
+    FILTERS: 'collection-filters',
+    GRID: 'product-grid',
+  });
 
   /**
-   * @param {SubmitEvent} event
+   * Builds a collection partial URL with search params and view name.
+   * @param {URLSearchParams} params
+   * @param {string} view
+   * @returns {URL}
    */
-  onSubmit(event) {
-    const form = event.target;
+  static buildUrl(params, view) {
+    const url = UrlUtils.withSearchParams(window.location.href, params);
 
-    if (!(form instanceof HTMLFormElement)) return;
-    if (!form.closest(Filters.SELECTOR)) return;
+    return UrlUtils.withView(url, view);
+  }
+}
+
+/**
+ * @typedef {Object} FiltersRefs
+ * @property {HTMLInputElement[]} persistent
+ */
+
+/**
+ * Collection filter form with async partial refresh.
+ * @extends {HTMLComponent<FiltersRefs>}
+ */
+class Filters extends HTMLComponent {
+  requestId = 0;
+
+  /**
+   * Applies filters on form submit and closes the filter dialog.
+   * @param {SubmitEvent} event
+   * @param {Element} element
+   */
+  handleSubmit(event, element) {
+    if (!(element instanceof HTMLFormElement)) return;
 
     event.preventDefault();
-    this.publish(this.getSearchParams(form));
-    this.close(form);
+    this.publish(this.getSearchParams(element));
+    this.closeDialog();
   }
 
   /**
-   * @param {MouseEvent} event
-   */
-  async onClick(event) {
-    const target = event.target;
-
-    if (!(target instanceof Element)) return;
-
-    const clear = target.closest(Filters.CLEAR_SELECTOR);
-    const close = target.closest(Filters.CLOSE_SELECTOR);
-
-    if (clear instanceof HTMLElement) {
-      const form = clear.closest('form');
-
-      if (!(form instanceof HTMLFormElement)) return;
-
-      event.preventDefault();
-      form.reset();
-      const params = this.getPersistentSearchParams(form);
-
-      this.publish(params);
-      await this.render(params, form.closest(Filters.SELECTOR));
-    }
-
-    if (close instanceof HTMLElement) {
-      event.preventDefault();
-      this.close(close);
-    }
-  }
-
-  /**
+   * Applies filters on input change and refreshes the filter partial.
    * @param {Event} event
+   * @param {Element} element
    */
-  async onChange(event) {
-    const target = event.target;
+  async handleChange(event, element) {
+    if (!(element instanceof HTMLFormElement)) return;
 
-    if (!(target instanceof HTMLInputElement)) return;
-
-    const filters = target.closest(Filters.SELECTOR);
-    const form = target.form;
-
-    if (!filters || !(form instanceof HTMLFormElement)) return;
-
-    const params = this.getSearchParams(form);
+    const params = this.getSearchParams(element);
 
     this.publish(params);
-    await this.render(params, filters);
+    await this.render(params);
   }
 
   /**
+   * Clears the filter form while preserving persistent params.
+   * @param {Event} event
+   * @param {Element} element
+   */
+  async clear(event, element) {
+    const form = element.closest('form');
+
+    if (!(form instanceof HTMLFormElement)) return;
+
+    event.preventDefault();
+    form.reset();
+
+    const params = this.getPersistentSearchParams(form);
+
+    this.publish(params);
+    await this.render(params);
+  }
+
+  /**
+   * Closes the parent filter dialog.
+   * @param {Event} event
+   * @param {Element} element
+   */
+  close(event, element) {
+    event.preventDefault();
+    this.closeDialog();
+  }
+
+  /** Closes the nearest dialog-component ancestor. */
+  closeDialog() {
+    const dialog = this.closestTag('dialog-component');
+
+    if (!dialog || typeof dialog.close !== 'function') return;
+
+    dialog.close();
+  }
+
+  /**
+   * Serializes a filter form into URL search params.
    * @param {HTMLFormElement} form
    * @returns {URLSearchParams}
    */
@@ -111,13 +127,14 @@ class Filters {
   }
 
   /**
+   * Reads persistent hidden inputs that survive filter clears.
    * @param {HTMLFormElement} form
    * @returns {URLSearchParams}
    */
   getPersistentSearchParams(form) {
     const params = new URLSearchParams();
 
-    for (const input of form.querySelectorAll(Filters.PERSISTENT_INPUT_SELECTOR)) {
+    for (const input of this.refs.persistent || []) {
       if (!(input instanceof HTMLInputElement)) continue;
       if (!input.value) continue;
 
@@ -128,17 +145,7 @@ class Filters {
   }
 
   /**
-   * @param {Element} element
-   */
-  close(element) {
-    const dialog = element.closest('dialog');
-
-    if (dialog instanceof HTMLDialogElement) {
-      dialog.close();
-    }
-  }
-
-  /**
+   * Dispatches a filters:apply event with the current params.
    * @param {URLSearchParams} params
    */
   publish(params) {
@@ -150,38 +157,25 @@ class Filters {
   }
 
   /**
+   * Refreshes the filter form markup from a Liquid partial.
    * @param {URLSearchParams} params
-   * @param {Element | null} filters
    */
-  async render(params, filters) {
-    if (!filters) return;
+  async render(params) {
+    const requestId = ++this.requestId;
+    const url = CollectionPartial.buildUrl(params, CollectionPartial.VIEW.FILTERS);
+    const nextFilters = await TemplateHandler.fetchPartial(url, CollectionPartial.SELECTOR.FILTERS, {
+      headers: { Accept: 'text/html' },
+    });
 
-    try {
-      const url = this.getTemplateUrl(params);
-      const response = await fetch(url.toString());
-      const text = await response.text();
-      const html = new DOMParser().parseFromString(text, 'text/html');
-      const nextFilters = html.querySelector(Filters.SELECTOR);
+    if (!this.isConnected || requestId !== this.requestId) return;
+    if (!nextFilters) return;
 
-      if (!nextFilters) return;
+    const form = this.querySelector('form');
 
-      filters.innerHTML = nextFilters.innerHTML;
-    } catch (error) {
-      console.error(error);
-    }
-  }
+    if (!(form instanceof HTMLFormElement)) return;
 
-  /**
-   * @param {URLSearchParams} params
-   * @returns {URL}
-   */
-  getTemplateUrl(params) {
-    const url = new URL(window.location.href);
-
-    url.search = params.toString();
-    url.searchParams.set('view', Filters.TEMPLATE_VIEW);
-
-    return url;
+    TemplateHandler.replaceInner(form, nextFilters, 'form');
+    this.updateRefs();
   }
 }
 
@@ -190,82 +184,78 @@ class Filters {
  */
 
 /**
+ * Collection product grid with async partial updates on filter changes.
  * @extends {HTMLComponent<ProductGridRefs>}
  */
 class ProductGrid extends HTMLComponent {
-  static TEMPLATE_VIEW = 'grid';
+  requestId = 0;
 
   constructor() {
     super();
 
     this.onFilter = this.onFilter.bind(this);
+    this.onPopState = this.onPopState.bind(this);
   }
 
   connectedCallback() {
-    try {
-      super.connectedCallback();
-      document.addEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
-    } catch (error) {
-      console.error(error);
-    }
+    super.connectedCallback();
+    document.addEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
+    window.addEventListener('popstate', this.onPopState);
   }
 
   disconnectedCallback() {
     document.removeEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
+    window.removeEventListener('popstate', this.onPopState);
     super.disconnectedCallback();
   }
 
   /**
+   * Re-renders the grid when filters are applied.
    * @param {OnFiltersApplyEvent} event
    */
   async onFilter(event) {
+    if (!event.params) return;
+
     await this.render(event.params);
   }
 
+  /** Re-renders the grid when browser history changes. */
+  onPopState() {
+    this.render(new URLSearchParams(window.location.search));
+  }
+
   /**
+   * Refreshes grid markup from a Liquid partial and updates the URL.
    * @param {URLSearchParams} params
    */
   async render(params) {
-    try {
-      const url = this.getTemplateUrl(params);
-      const response = await fetch(url.toString());
-      const text = await response.text();
-      const html = new DOMParser().parseFromString(text, 'text/html');
-      const nextGrid = html.querySelector('product-grid');
+    const requestId = ++this.requestId;
+    const url = CollectionPartial.buildUrl(params, CollectionPartial.VIEW.GRID);
+    const nextGrid = await TemplateHandler.fetchPartial(url, CollectionPartial.SELECTOR.GRID, {
+      headers: { Accept: 'text/html' },
+    });
 
-      this.innerHTML = nextGrid?.innerHTML ?? html.body.innerHTML;
-      this.updateUrl(params);
-    } catch (error) {
-      console.error(error);
-    }
+    if (!this.isConnected || requestId !== this.requestId) return;
+    if (!nextGrid) return;
+
+    this.innerHTML = nextGrid.innerHTML;
+    this.updateUrl(params);
   }
 
   /**
-   * @param {URLSearchParams} params
-   * @returns {URL}
-   */
-  getTemplateUrl(params) {
-    const url = new URL(window.location.href);
-
-    url.search = params.toString();
-    url.searchParams.set('view', ProductGrid.TEMPLATE_VIEW);
-
-    return url;
-  }
-
-  /**
+   * Pushes filter params into browser history without reloading.
    * @param {URLSearchParams} params
    */
   updateUrl(params) {
-    const url = new URL(window.location.href);
+    const url = UrlUtils.withSearchParams(window.location.href, params);
 
-    url.search = params.toString();
     history.pushState({}, '', url.toString());
   }
 }
 
-const filters = new Filters();
-filters.connectedCallback();
+if (!customElements.get('collection-filters')) {
+  customElements.define('collection-filters', Filters);
+}
 
 if (!customElements.get('product-grid')) {
   customElements.define('product-grid', ProductGrid);

@@ -29,6 +29,22 @@
     data-limit="{{ siblings_limit }}"
     {{ attributes }}
   >
+    <template ref="siblingTemplate">
+      <label class="product-card-sibling">
+        <input
+          ref="input[]"
+          type="radio"
+          value=""
+          data-handle=""
+          data-url=""
+          on:change="select"
+        >
+        <span aria-label="">
+          <img data-ref="image" data-bind="src" alt="" loading="lazy" width="40" height="40" hidden>
+        </span>
+      </label>
+    </template>
+
     <fieldset ref="fieldset">
       <label class="product-card-sibling">
         <input

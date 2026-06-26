@@ -1,53 +1,41 @@
-import { HTMLComponent } from "@theme/HTMLComponent";
-import { ColorSibling } from "@theme/color-sibling";
+/**
+ * Product card async partial updates and color swatches via sibling-change events.
+ */
+
+import { HTMLComponent } from '@theme/HTMLComponent';
+import { ColorSibling } from '@theme/color-sibling';
+import { OnSiblingChangeEvent } from '@theme/events';
+import { HtmlUtils, TemplateHandler, UrlUtils } from '@theme/utilities';
 
 /**
  * @typedef {Object} ProductCardSiblingsRefs
+ * @property {HTMLTemplateElement} siblingTemplate
  * @property {HTMLFieldSetElement} fieldset
  * @property {HTMLInputElement[]} input
  */
 
 /**
+ * Renders color swatches for a product card and emits sibling-change events.
  * @extends {HTMLComponent<ProductCardSiblingsRefs>}
  */
 class ProductCardSiblings extends HTMLComponent {
-  /**
-   * @param {{ handle: string, title: string, url: string, image: string, imageAlt: string }} sibling
-   * @param {string} name
-   * @param {string} activeHandle
-   * @returns {string}
-   */
-  static build(sibling, name, activeHandle) {
-    const checked = sibling.handle === activeHandle ? ' checked' : '';
-    const image = sibling.image
-      ? `<img src="${ProductCardSiblings.escape(sibling.image)}" alt="${ProductCardSiblings.escape(sibling.imageAlt)}" loading="lazy" width="40" height="40">`
-      : '';
-
-    return `
-      <label class="product-card-sibling">
-        <input
-          ref="input[]"
-          type="radio"
-          name="${ProductCardSiblings.escape(name)}"
-          value="${ProductCardSiblings.escape(sibling.handle)}"
-          data-handle="${ProductCardSiblings.escape(sibling.handle)}"
-          data-url="${ProductCardSiblings.escape(sibling.url)}"
-          on:change="select"
-          ${checked}
-        >
-        <span aria-label="${ProductCardSiblings.escape(sibling.title)}">
-          ${image}
-        </span>
-      </label>
-    `;
-  }
+  renderId = 0;
 
   connectedCallback() {
     super.connectedCallback();
     this.render();
   }
 
+  /** @returns {string} Radio group name scoped to the parent card id. */
+  get name() {
+    const card = this.closestTag('product-card');
+    const cardId = card?.dataset.id || 'default';
+
+    return `product-card-sibling-${cardId}`;
+  }
+
   /**
+   * Handles swatch selection and dispatches a sibling-change event.
    * @param {Event} event
    * @param {Element} element
    */
@@ -62,10 +50,22 @@ class ProductCardSiblings extends HTMLComponent {
     event.preventDefault();
     event.stopPropagation();
 
-    await this.publish(card, element);
+    const handle = element.dataset.handle;
+    const productUrl = element.dataset.url;
+    const cardId = card.dataset.id;
+
+    if (!handle || !productUrl || !cardId) return;
+
+    document.dispatchEvent(new OnSiblingChangeEvent({
+      cardId,
+      handle,
+      url: productUrl,
+    }));
   }
 
+  /** Fetches sibling swatches and appends them to the fieldset. */
   async render() {
+    const renderId = ++this.renderId;
     const tag = this.dataset.matchTag;
     const limit = Number(this.dataset.limit || 10);
     const card = this.closestTag('product-card');
@@ -76,62 +76,106 @@ class ProductCardSiblings extends HTMLComponent {
 
     const siblings = await ColorSibling.fetch(tag, limit);
 
+    if (!this.isConnected || renderId !== this.renderId) return;
     if (!siblings.length) return;
 
-    this.refs.fieldset.innerHTML = siblings
-      .map((sibling) => ProductCardSiblings.build(sibling, this.name, card.handle))
-      .join('');
-  }
+    const parts = [];
+    const activeHandle = card.handle;
 
-  get name() {
-    return `product-card-sibling-${this.dataset.matchTag || 'default'}`;
+    for (const sibling of siblings) {
+      if (sibling.handle === activeHandle) continue;
+
+      const node = ProductCardSiblings.createSibling(
+        sibling,
+        this.name,
+        activeHandle,
+        this.refs.siblingTemplate,
+      );
+
+      node && parts.push(node.outerHTML);
+    }
+
+    const currentInput = this.refs.fieldset.querySelector('input[checked], input:checked');
+    const currentHtml = currentInput?.closest('.product-card-sibling')?.outerHTML || '';
+
+    if (!currentHtml && !parts.length) return;
+
+    this.refs.fieldset.innerHTML = currentHtml + parts.join('');
+    this.updateRefs();
   }
 
   /**
-   * @param {ProductCard} card
-   * @param {HTMLInputElement} input
+   * Clones and fills a swatch node from the Liquid template.
+   * @param {{ handle: string, title: string, url: string, image: string, imageAlt: string }} sibling
+   * @param {string} name
+   * @param {string} activeHandle
+   * @param {HTMLTemplateElement | undefined} template
+   * @returns {HTMLElement | null}
    */
-  async publish(card, input) {
-    const handle = input.dataset.handle;
-    const productUrl = input.dataset.url;
+  static createSibling(sibling, name, activeHandle, template) {
+    if (!(template instanceof HTMLTemplateElement)) return null;
 
-    if (!handle) return;
-    if (!productUrl) return;
+    const node = TemplateHandler.clone(template);
 
-    await card.changeSibling(handle, productUrl);
-  }
+    if (!(node instanceof HTMLElement) || !node.matches('.product-card-sibling')) return null;
 
-  /**
-   * @param {string} value
-   * @returns {string}
-   */
-  static escape(value) {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+    const input = node.querySelector('input[type="radio"]');
+
+    if (input instanceof HTMLInputElement) {
+      input.name = name;
+      input.value = sibling.handle;
+      input.dataset.handle = sibling.handle;
+      input.dataset.url = sibling.url;
+      input.checked = sibling.handle === activeHandle;
+    }
+
+    const label = node.querySelector('span[aria-label]');
+
+    label && label.setAttribute('aria-label', sibling.title);
+
+    const image = node.querySelector('img');
+
+    if (image instanceof HTMLImageElement) {
+      if (sibling.image) {
+        image.src = sibling.image;
+        image.alt = sibling.imageAlt;
+        image.hidden = false;
+      } else {
+        image.remove();
+      }
+    }
+
+    return node;
   }
 }
 
 /**
  * @typedef {Object} ProductCardRefs
+ * @property {HTMLElement} media
+ * @property {HTMLElement} details
+ * @property {HTMLAnchorElement} link
  */
 
 /**
+ * Product card with async partial updates when a color sibling is selected.
  * @extends {HTMLComponent<ProductCardRefs>}
  */
 class ProductCard extends HTMLComponent {
+  static PARTIAL_VIEW = 'card';
   static CACHE_PREFIX = 'product-card:';
-  static TEMPLATE_VIEW = 'card';
+  static PARTIAL_REFS = Object.freeze(['media', 'details', 'link']);
   static VIEW_TRANSITION_SELECTOR = '[data-view-transition]';
   static VIEW_TRANSITION_RESET_DELAY = 1200;
 
+  /** @type {((event: OnSiblingChangeEvent) => void) | null} */
+  onSiblingChangeBound = null;
+
+  /** @returns {string} Current product handle from data attribute. */
   get handle() {
     return this.dataset.handle || '';
   }
 
+  /** @returns {boolean} Whether the card is loading a sibling partial. */
   get isLoading() {
     return this.classList.contains('is-loading');
   }
@@ -140,6 +184,30 @@ class ProductCard extends HTMLComponent {
     this.classList.toggle('is-loading', value);
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.onSiblingChangeBound = (event) => this.onSiblingChange(event);
+    document.addEventListener(OnSiblingChangeEvent.TYPE, this.onSiblingChangeBound);
+  }
+
+  disconnectedCallback() {
+    this.onSiblingChangeBound && document.removeEventListener(OnSiblingChangeEvent.TYPE, this.onSiblingChangeBound);
+    this.onSiblingChangeBound = null;
+    super.disconnectedCallback();
+  }
+
+  /**
+   * @param {OnSiblingChangeEvent} event
+   */
+  onSiblingChange(event) {
+    if (event.cardId !== this.dataset.id) return;
+
+    this.changeSibling(event.handle, event.url);
+  }
+
+  /**
+   * Applies view-transition names before sibling partial swap.
+   */
   prepareViewTransition() {
     this.clearViewTransitionNames();
 
@@ -152,6 +220,7 @@ class ProductCard extends HTMLComponent {
     window.setTimeout(() => this.clearViewTransitionNames(), ProductCard.VIEW_TRANSITION_RESET_DELAY);
   }
 
+  /** Clears temporary view-transition names from card media elements. */
   clearViewTransitionNames() {
     for (const element of document.querySelectorAll(ProductCard.VIEW_TRANSITION_SELECTOR)) {
       if (!(element instanceof HTMLElement)) continue;
@@ -161,6 +230,7 @@ class ProductCard extends HTMLComponent {
   }
 
   /**
+   * Loads and renders a sibling product partial into the card.
    * @param {string} handle
    * @param {string} productUrl
    */
@@ -170,8 +240,12 @@ class ProductCard extends HTMLComponent {
 
     this.isLoading = true;
 
-    const html = await this.fetchCard(handle, productUrl);
-    const nextCard = html.querySelector('product-card');
+    const nextCard = await this.fetchCard(handle, productUrl);
+
+    if (!this.isConnected) {
+      this.isLoading = false;
+      return;
+    }
 
     if (!(nextCard instanceof HTMLElement)) {
       this.isLoading = false;
@@ -183,48 +257,46 @@ class ProductCard extends HTMLComponent {
   }
 
   /**
+   * Fetches a product card partial by handle, with sessionStorage caching.
    * @param {string} handle
    * @param {string} productUrl
-   * @returns {Promise<Document>}
+   * @returns {Promise<HTMLElement | null>}
    */
   async fetchCard(handle, productUrl) {
     const cacheKey = `${ProductCard.CACHE_PREFIX}${handle}`;
     const cached = sessionStorage.getItem(cacheKey);
 
-    if (cached) return new DOMParser().parseFromString(cached, 'text/html');
+    if (cached) {
+      const parsed = TemplateHandler.parseHtml(cached);
+      const card = parsed.querySelector('product-card');
 
-    const url = this.getCardUrl(productUrl);
-    const response = await fetch(url.toString());
-    const text = await response.text();
+      return card instanceof HTMLElement ? card : null;
+    }
+
+    const url = UrlUtils.withView(productUrl, ProductCard.PARTIAL_VIEW);
+    const text = await TemplateHandler.fetchText(url.toString());
+
+    if (!text) return null;
 
     sessionStorage.setItem(cacheKey, text);
 
-    return new DOMParser().parseFromString(text, 'text/html');
+    const parsed = TemplateHandler.parseHtml(text);
+    const card = parsed.querySelector('product-card');
+
+    return card instanceof HTMLElement ? card : null;
   }
 
   /**
-   * @param {string} productUrl
-   * @returns {URL}
-   */
-  getCardUrl(productUrl) {
-    const url = new URL(productUrl, window.location.origin);
-    url.searchParams.set('view', ProductCard.TEMPLATE_VIEW);
-    return url;
-  }
-
-  /**
+   * Replaces card refs from a fetched sibling partial.
    * @param {HTMLElement} nextCard
    */
   render(nextCard) {
-    const sections = [
-      'media',
-      'details',
-      'link',
-    ]
+    for (const name of ProductCard.PARTIAL_REFS) {
+      this.updateRef(name, nextCard);
+    }
 
-    for (const section of sections) 
-      this.updateRef(section, nextCard);
     this.dataset.handle = nextCard.dataset.handle || this.handle;
+    this.updateRefs();
   }
 }
 

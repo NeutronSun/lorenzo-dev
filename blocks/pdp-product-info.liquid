@@ -73,7 +73,7 @@
 
     {% render 'pdp-variant-picker', product: product %}
 
-    <product-form>
+    <product-form on:submit="onSubmit">
       {% form 'product', product %}
         <input type="hidden" name="id" value="{{ current_variant.id }}">
         <input type="hidden" name="quantity" value="1">
