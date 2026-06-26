@@ -105,7 +105,7 @@ File principali:
 - `assets/components.css`
 - `assets/critical.css`
 
-Header e dialog hanno gia' custom elements e classi globali. Prima di aggiungere drawer, overlay, menu o azioni sticky, cerca questi componenti e riusa pattern, eventi e classi esistenti.
+Header e dialog: `commandfor` deve essere identico all'`id` del `<dialog>` target (uguale al `name` del component). Solo `<button type="button">` per open/close. Nessun `on:click` sui bottoni open/close. Nessun `non-modal`. Open programmatico via `DialogComponent.showModal(name)`. `dialog-opener` solo per menu mobile senza `<dialog>`.
 
 ## Swiper carousel
 

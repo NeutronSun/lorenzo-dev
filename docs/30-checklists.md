@@ -39,12 +39,15 @@
 - Se serve un selettore univoco, usare anche attributi tipo `[data-title]`, `[data-state]`, `[data-tab]`.
 - Testo e controlli non si sovrappongono su mobile e desktop.
 - Link, bottoni e immagini restano accessibili.
+- Dialog: `commandfor` = `id` del `<dialog>` (stesso valore del `name` del component). Solo `<button type="button">`. Mai `on:click` sullo stesso bottone. Mai `non-modal`.
+- Dialog programmatici: `DialogComponent.showModal(name)` / `requestClose(name)` per add-to-cart, ⌘F search, submit filtri.
 
 ## Verifica
 
 - Esegui `npm run check`.
 - Se tocchi PDP, prova product page desktop e mobile.
 - Se tocchi siblings, prova PDP siblings e product card swatches.
-- Se tocchi cart, prova add to cart, remove, quantity, drawer e bundle fusion.
+- Se tocchi cart, prova add to cart, remove, quantity, drawer (bag button + post add-to-cart), bundle fusion e bag link su pagina cart.
+- Se tocchi dialog, prova search/localization/cart/filters open-close, mutual exclusion (`closeOthers`), header indicator desktop, ⌘F search.
 - Se tocchi collection/filter, prova cambio filtro, clear e navigazione URL.
 - Se non puoi verificare una parte, scrivilo chiaramente nel riepilogo.

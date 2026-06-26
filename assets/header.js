@@ -4,7 +4,7 @@
 
 import { HTMLComponent } from '@theme/HTMLComponent';
 import { DialogComponent } from '@theme/dialog';
-import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from '@theme/events';
+import { OnDialogClosedEvent, OnDialogOpenedEvent } from '@theme/events';
 import { CSSUtils } from '@theme/utilities';
 
 /**
@@ -25,11 +25,11 @@ class StickyHeader extends HTMLComponent {
   static DESKTOP_MEDIA_QUERY = '(min-width: 750px)';
   static DESKTOP_ACTIVE_TARGET_CLASS = 'header-desktop-active-target';
   static DESKTOP_MENU_SELECTOR = '.header-menu-item[open] > summary';
-  static DESKTOP_BAG_SELECTOR = '.header-desktop-bag';
+  static DESKTOP_BAG_SELECTOR = '.header-desktop-bag[commandfor="cart-drawer"]';
   static DESKTOP_DIALOG_TARGETS = Object.freeze({
     'cart-drawer': StickyHeader.DESKTOP_BAG_SELECTOR,
     localization: '.header-desktop-actions > .header-localization-trigger',
-    search: '.header-desktop-actions dialog-opener[name="search"] .header-desktop-action',
+    search: '.header-desktop-actions [commandfor="search"]',
   });
   static LOCAL_STATE_INPUT_SELECTOR = '.header-nav-toggle, .header-product-dock-mode';
   static CART_DRAWER_NAME = 'cart-drawer';
@@ -42,7 +42,7 @@ class StickyHeader extends HTMLComponent {
     this.resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => this.onResize()) : null;
     this.desktopStateFrame = 0;
     this.boundMobileBarClick = (event) => this.transitionMobileBarState(event);
-    this.boundDesktopDialogOpen = (event) => this.onDesktopDialogOpen(event);
+    this.boundDialogOpened = (event) => this.onDialogOpened(event);
     this.boundDesktopStateChange = () => this.scheduleDesktopStateUpdate();
     this.boundDesktopMenuToggle = (event) => this.onDesktopMenuToggle(event);
   }
@@ -54,8 +54,7 @@ class StickyHeader extends HTMLComponent {
     this.onScroll();
     this.addEventListener('click', this.boundMobileBarClick, { capture: true });
     this.addEventListener('toggle', this.boundDesktopMenuToggle, { capture: true });
-    document.addEventListener(OnDialogOpenEvent.TYPE, this.boundDesktopDialogOpen);
-    document.addEventListener(OnDialogOpenedEvent.TYPE, this.boundDesktopStateChange);
+    document.addEventListener(OnDialogOpenedEvent.TYPE, this.boundDialogOpened);
     document.addEventListener(OnDialogClosedEvent.TYPE, this.boundDesktopStateChange);
     this.scheduleDesktopStateUpdate();
   }
@@ -64,8 +63,7 @@ class StickyHeader extends HTMLComponent {
     this.resizeObserver?.disconnect();
     this.removeEventListener('click', this.boundMobileBarClick, { capture: true });
     this.removeEventListener('toggle', this.boundDesktopMenuToggle, { capture: true });
-    document.removeEventListener(OnDialogOpenEvent.TYPE, this.boundDesktopDialogOpen);
-    document.removeEventListener(OnDialogOpenedEvent.TYPE, this.boundDesktopStateChange);
+    document.removeEventListener(OnDialogOpenedEvent.TYPE, this.boundDialogOpened);
     document.removeEventListener(OnDialogClosedEvent.TYPE, this.boundDesktopStateChange);
     this.desktopStateFrame && cancelAnimationFrame(this.desktopStateFrame);
     this.desktopStateFrame = 0;
@@ -127,12 +125,13 @@ class StickyHeader extends HTMLComponent {
   /**
    * @param {Event} event
    */
-  onDesktopDialogOpen(event) {
-    if (!window.matchMedia(StickyHeader.DESKTOP_MEDIA_QUERY).matches) return;
-    if (!(event instanceof OnDialogOpenEvent)) return;
-    if (!StickyHeader.DESKTOP_DIALOG_TARGETS[event.name]) return;
+  onDialogOpened(event) {
+    if (!(event instanceof OnDialogOpenedEvent)) return;
 
-    this.closeMobileMenu();
+    StickyHeader.DESKTOP_DIALOG_TARGETS[event.name] && this.closeMobileMenu();
+
+    event.name === StickyHeader.LOCALIZATION_DRAWER_NAME && this.resetLocalizationSearch();
+
     this.scheduleDesktopStateUpdate();
   }
 
@@ -221,11 +220,8 @@ class StickyHeader extends HTMLComponent {
 
   /** Closes desktop dialogs when a menu item opens. */
   closeDesktopDialogs() {
-    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
-      if (!StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name') ?? '']) continue;
-      if (typeof dialog.close !== 'function') continue;
-
-      dialog.close();
+    for (const name of Object.keys(StickyHeader.DESKTOP_DIALOG_TARGETS)) {
+      DialogComponent.requestClose(name);
     }
   }
 
@@ -293,32 +289,7 @@ class StickyHeader extends HTMLComponent {
 
   /** Closes the cart drawer from mobile header interactions. */
   closeCartDrawer() {
-    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
-      if (dialog.getAttribute('name') !== StickyHeader.CART_DRAWER_NAME) continue;
-      if (!(dialog instanceof DialogComponent)) continue;
-
-      dialog.close();
-    }
-  }
-
-  /** Opens the localization drawer and resets its search field. */
-  openLocalization() {
-    const open = () => {
-      this.closeMobileMenu();
-      this.resetLocalizationSearch();
-      document.dispatchEvent(
-        new OnDialogOpenEvent({
-          name: StickyHeader.LOCALIZATION_DRAWER_NAME,
-        })
-      );
-    };
-
-    if (!('startViewTransition' in document) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      open();
-      return;
-    }
-
-    document.startViewTransition(open);
+    DialogComponent.requestClose(StickyHeader.CART_DRAWER_NAME);
   }
 
   /** Resets the localization form search when opening the drawer. */

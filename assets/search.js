@@ -68,6 +68,15 @@ class SearchDialog extends DialogComponent {
   connectedCallback() {
     super.connectedCallback();
 
+    this.onSearchDialogToggle = (event) => {
+      if (!(event instanceof ToggleEvent) || event.newState !== 'open') return;
+
+      this.reset();
+      window.requestAnimationFrame(() => this.refs.input?.focus());
+    };
+
+    this.refs.dialog?.addEventListener('toggle', this.onSearchDialogToggle);
+
     this.onSearchShortcut = (event) => {
       if (!(event.metaKey || event.ctrlKey)) return;
       if (event.altKey || event.key.toLowerCase() !== 'f') return;
@@ -79,7 +88,7 @@ class SearchDialog extends DialogComponent {
         return;
       }
 
-      this.open();
+      DialogComponent.showModal('search');
     };
 
     document.addEventListener('keydown', this.onSearchShortcut);
@@ -87,19 +96,11 @@ class SearchDialog extends DialogComponent {
 
   disconnectedCallback() {
     this.searchTimer && window.clearTimeout(this.searchTimer);
+    this.onSearchDialogToggle && this.refs.dialog?.removeEventListener('toggle', this.onSearchDialogToggle);
     this.onSearchShortcut && document.removeEventListener('keydown', this.onSearchShortcut);
+    this.onSearchDialogToggle = null;
     this.onSearchShortcut = null;
     super.disconnectedCallback();
-  }
-
-  /** Opens the dialog, resets state, and focuses the input. */
-  open() {
-    const wasOpen = this.refs.dialog?.open;
-
-    super.open();
-
-    if (!wasOpen) this.reset();
-    window.requestAnimationFrame(() => this.refs.input?.focus());
   }
 
   /** Clears search state, attributes, and result containers. */

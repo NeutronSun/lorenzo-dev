@@ -3,13 +3,11 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
+import { DialogComponent } from '@theme/dialog';
 import {
   OnCartErrorEvent,
   OnCartLoadingEvent,
   OnCartUpdateEvent,
-  OnDialogClosedEvent,
-  OnDialogOpenedEvent,
-  OnDialogOpenEvent,
 } from '@theme/events';
 import { HtmlUtils, TemplateHandler, UrlUtils } from '@theme/utilities';
 
@@ -253,7 +251,7 @@ class ProductForm extends HTMLComponent {
 
     if (cart) {
       CartDrawer.closeHeaderMenu();
-      document.dispatchEvent(new OnDialogOpenEvent({ name: CartDrawer.NAME }));
+      DialogComponent.showModal(CartDrawer.NAME);
     }
 
     this.toggleAttribute('pending', false);
@@ -294,7 +292,6 @@ if (!customElements.get('product-form')) {
  */
 class CartDrawer extends HTMLComponent {
   static NAME = 'cart-drawer';
-  static CART_LINK_SELECTOR = 'a[href]';
   static SECTION_BODY_SELECTOR = 'cart-drawer [ref="body"]';
 
   constructor() {
@@ -302,31 +299,21 @@ class CartDrawer extends HTMLComponent {
 
     this.cart = null;
     this.pendingKey = '';
-    this.drawerOpen = false;
-    this.onDocumentClick = this.onDocumentClick.bind(this);
     this.onCartEvent = this.onCartEvent.bind(this);
-    this.onDialogOpened = this.onDialogOpened.bind(this);
-    this.onDialogClosed = this.onDialogClosed.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('click', this.onDocumentClick);
     document.addEventListener(OnCartLoadingEvent.TYPE, this.onCartEvent);
     document.addEventListener(OnCartUpdateEvent.TYPE, this.onCartEvent);
     document.addEventListener(OnCartErrorEvent.TYPE, this.onCartEvent);
-    document.addEventListener(OnDialogOpenedEvent.TYPE, this.onDialogOpened);
-    document.addEventListener(OnDialogClosedEvent.TYPE, this.onDialogClosed);
     CartHandler.get();
   }
 
   disconnectedCallback() {
-    document.removeEventListener('click', this.onDocumentClick);
     document.removeEventListener(OnCartLoadingEvent.TYPE, this.onCartEvent);
     document.removeEventListener(OnCartUpdateEvent.TYPE, this.onCartEvent);
     document.removeEventListener(OnCartErrorEvent.TYPE, this.onCartEvent);
-    document.removeEventListener(OnDialogOpenedEvent.TYPE, this.onDialogOpened);
-    document.removeEventListener(OnDialogClosedEvent.TYPE, this.onDialogClosed);
     super.disconnectedCallback();
   }
 
@@ -358,54 +345,6 @@ class CartDrawer extends HTMLComponent {
 
         break;
     }
-  }
-
-  /**
-   * @param {OnDialogOpenedEvent} event
-   */
-  onDialogOpened(event) {
-    if (event.name !== CartDrawer.NAME) return;
-
-    this.drawerOpen = true;
-  }
-
-  /**
-   * @param {OnDialogClosedEvent} event
-   */
-  onDialogClosed(event) {
-    if (event.name !== CartDrawer.NAME) return;
-
-    this.drawerOpen = false;
-  }
-
-  /**
-   * @param {MouseEvent} event
-   */
-  onDocumentClick(event) {
-    if (event.defaultPrevented) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    if (event.button !== 0) return;
-
-    const target = event.target;
-
-    if (!(target instanceof Element)) return;
-
-    const link = target.closest(CartDrawer.CART_LINK_SELECTOR);
-
-    if (!(link instanceof HTMLAnchorElement)) return;
-    if (!CartDrawer.isCartUrl(link.href)) return;
-
-    event.preventDefault();
-
-    if (this.drawerOpen) {
-      CartDrawer.close();
-      return;
-    }
-
-    if (CartDrawer.isCartPage()) return;
-
-    CartDrawer.closeHeaderMenu();
-    document.dispatchEvent(new OnDialogOpenEvent({ name: CartDrawer.NAME }));
   }
 
   /** Re-renders drawer count, body, totals, and header badges. */
@@ -600,20 +539,14 @@ class CartDrawer extends HTMLComponent {
   }
 
   static close() {
-    const dialog = CartDrawer.getDialog();
-
-    dialog?.open && dialog.close();
+    DialogComponent.requestClose(CartDrawer.NAME);
   }
 
   /**
    * @returns {HTMLDialogElement | null}
    */
   static getDialog() {
-    const dialog = document.querySelector(`dialog-component[name="${CartDrawer.NAME}"] dialog`);
-
-    if (!(dialog instanceof HTMLDialogElement)) return null;
-
-    return dialog;
+    return DialogComponent.getDialogElement(CartDrawer.NAME);
   }
 
   static closeHeaderMenu() {
@@ -628,21 +561,6 @@ class CartDrawer extends HTMLComponent {
 
       details.open = false;
     }
-  }
-
-  static isCartPage() {
-    return window.Theme?.template?.name === 'cart' || CartDrawer.isCartUrl(window.location.href);
-  }
-
-  /**
-   * @param {string} href
-   * @returns {boolean}
-   */
-  static isCartUrl(href) {
-    const url = new URL(href, window.location.origin);
-    const cartUrl = new URL(window.Theme?.routes?.cart_url || '/cart', window.location.origin);
-
-    return url.origin === window.location.origin && url.pathname === cartUrl.pathname;
   }
 }
 
@@ -864,7 +782,7 @@ class PDPBundle extends HTMLComponent {
 
     if (cart) {
       CartDrawer.closeHeaderMenu();
-      document.dispatchEvent(new OnDialogOpenEvent({ name: CartDrawer.NAME }));
+      DialogComponent.showModal(CartDrawer.NAME);
     }
 
     this.isPending = false;

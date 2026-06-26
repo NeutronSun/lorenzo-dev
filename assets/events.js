@@ -12,7 +12,7 @@ class ThemeEvent extends Event {
   };
 }
 
-/** Dispatched before a named dialog opens. */
+/** @deprecated Use native Invoker Commands or DialogComponent.showModal() instead. */
 export class OnDialogOpenEvent extends ThemeEvent {
   static TYPE = 'dialog:open';
 

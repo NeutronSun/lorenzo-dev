@@ -10,14 +10,17 @@
   assign current_sort = source.sort_by | default: source.default_sort_by
 %}
 
-<dialog-opener name="{{ drawer_name }}">
-  <button class="filters-trigger" type="button" on:click="publish">
-    Filter and sort
-  </button>
-</dialog-opener>
+<button
+  class="filters-trigger"
+  type="button"
+  commandfor="{{ drawer_name }}"
+  command="show-modal"
+>
+  Filter and sort
+</button>
 
-<dialog-component name="{{ drawer_name }}" non-modal>
-  <dialog ref="dialog" class="drawer from-right filters-drawer">
+<dialog-component name="{{ drawer_name }}">
+  <dialog ref="dialog" id="{{ drawer_name }}" class="drawer from-right filters-drawer">
     <collection-filters>
       <form on:submit="handleSubmit" on:change="handleChange">
         {% if source.terms != blank %}
@@ -29,7 +32,13 @@
         <header>
           <p class="eyebrow font-mono">/Filter</p>
           <h2 class="title font-heading">Refine</h2>
-          <button class="close" type="button" on:click="close" aria-label="Close">
+          <button
+            class="close"
+            type="button"
+            commandfor="{{ drawer_name }}"
+            command="request-close"
+            aria-label="Close"
+          >
             {% render 'icon-close', icon_size: 18 %}
           </button>
         </header>

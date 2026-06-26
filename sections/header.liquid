@@ -69,7 +69,8 @@
         <button
           type="button"
           class="header-mobile-menu-footer-item header-localization-trigger"
-          on:click="openLocalization"
+          commandfor="localization"
+          command="show-modal"
           aria-label="Country and language"
         >
           <span class="font-mono font-12">{{ localization_language_code }} / {{ localization_currency_code }}</span>
@@ -105,31 +106,44 @@
         <button
           type="button"
           class="header-desktop-action header-localization-trigger font-mono font-12"
-          on:click="openLocalization"
+          commandfor="localization"
+          command="show-modal"
           aria-label="Country and language"
         >
           {{ localization_language_code }} / {{ localization_currency_code }}
         </button>
-        <dialog-opener name="search">
-          <button
-            type="button"
-            class="header-desktop-action header-desktop-search header-link font-mono"
-            on:click="publish"
-            aria-label="Search"
-            aria-keyshortcuts="Meta+F Control+F"
-          >
-            {% render 'icon-search', size: 14 %}
-            <span class="header-desktop-search-label">SEARCH</span>
-            <kbd class="header-desktop-search-shortcut" aria-hidden="true">⌘F</kbd>
-          </button>
-        </dialog-opener>
+        <button
+          type="button"
+          class="header-desktop-action header-desktop-search header-link font-mono"
+          commandfor="search"
+          command="show-modal"
+          aria-label="Search"
+          aria-keyshortcuts="Meta+F Control+F"
+        >
+          {% render 'icon-search', size: 14 %}
+          <span class="header-desktop-search-label">SEARCH</span>
+          <kbd class="header-desktop-search-shortcut" aria-hidden="true">⌘F</kbd>
+        </button>
         <a href="{{ routes.account_url }}" class="header-desktop-action header-link" aria-label="Account">
           {% render 'icon-account', size: 14 %}
         </a>
-        <a href="{{ routes.cart_url }}" class="header-desktop-action header-desktop-bag header-link font-mono font-12" aria-label="Bag">
-          {% render 'icon-bag', size: 14 %}
-          <span>BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
-        </a>
+        {% if cart_active %}
+          <a href="{{ routes.cart_url }}" class="header-desktop-action header-desktop-bag header-link font-mono font-12" aria-label="Bag">
+            {% render 'icon-bag', size: 14 %}
+            <span>BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
+          </a>
+        {% else %}
+          <button
+            type="button"
+            class="header-desktop-action header-desktop-bag header-link font-mono font-12"
+            commandfor="cart-drawer"
+            command="show-modal"
+            aria-label="Bag"
+          >
+            {% render 'icon-bag', size: 14 %}
+            <span>BAG · <span data-cart-count>{{ cart.item_count }}</span></span>
+          </button>
+        {% endif %}
       </nav>
       <nav class="header-mobile-bar mobile-only{% if product_active %} header-mobile-bar-product{% endif %}" ref="mobileBar" aria-label="Mobile navigation">
         <span class="header-mobile-bar-active" aria-hidden="true">
@@ -169,12 +183,27 @@
             {% render 'icon-account', size: 22 %}
           </span>
         </a>
-        <a href="{{ routes.cart_url }}" class="header-mobile-bar-item header-link header-mobile-bag{% if cart_active %} header-mobile-bar-item-active{% endif %}" aria-label="Bag">
-          <span class="header-mobile-bar-icon header-mobile-bar-icon-bag">
-            {% render 'icon-bag', size: 22 %}
-          </span>
-          <span class="header-mobile-bag-count font-mono" data-cart-count data-cart-bubble{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
-        </a>
+        {% if cart_active %}
+          <a href="{{ routes.cart_url }}" class="header-mobile-bar-item header-link header-mobile-bag header-mobile-bar-item-active" aria-label="Bag">
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-bag">
+              {% render 'icon-bag', size: 22 %}
+            </span>
+            <span class="header-mobile-bag-count font-mono" data-cart-count data-cart-bubble{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+          </a>
+        {% else %}
+          <button
+            type="button"
+            class="header-mobile-bar-item header-link header-mobile-bag"
+            commandfor="cart-drawer"
+            command="show-modal"
+            aria-label="Bag"
+          >
+            <span class="header-mobile-bar-icon header-mobile-bar-icon-bag">
+              {% render 'icon-bag', size: 22 %}
+            </span>
+            <span class="header-mobile-bag-count font-mono" data-cart-count data-cart-bubble{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+          </button>
+        {% endif %}
         <dialog-opener name="header-menu" class="header-mobile-bar-item header-nav-trigger{% if menu_active %} header-mobile-bar-item-active{% endif %}">
           <label for="header-nav-{{ section.id }}" on:click="publish" aria-label="Menu">
             <input
@@ -198,16 +227,16 @@
         ADD TO BAG
       </button>
       <div class="header-mobile-dock-actions mobile-only{% if collection_active or search_active %} header-mobile-dock-actions-collection{% endif %}{% if product_active %} header-mobile-dock-actions-product{% endif %}">
-        <dialog-opener
-          name="{{ filter_drawer_name }}"
+        <button
+          type="button"
           class="header-mobile-dock-action header-mobile-filter-button"
+          commandfor="{{ filter_drawer_name }}"
+          command="show-modal"
           aria-label="Filters"
           {% unless collection_active or search_active %}aria-hidden="true" tabindex="-1"{% endunless %}
         >
-          <button type="button" on:click="publish" aria-label="Filters">
-            {% render 'icon-filter', size: 22 %}
-          </button>
-        </dialog-opener>
+          {% render 'icon-filter', size: 22 %}
+        </button>
         <label
           {% if product_active %}for="header-product-dock-config-{{ section.id }}"{% endif %}
           class="header-mobile-dock-action header-mobile-product-button"
@@ -216,11 +245,15 @@
         >
           {% render 'icon-product', size: 22 %}
         </label>
-        <dialog-opener name="search" class="header-mobile-dock-action header-mobile-search-button" aria-label="Search">
-          <button type="button" on:click="publish" aria-label="Search">
-            {% render 'icon-search', size: 22 %}
-          </button>
-        </dialog-opener>
+        <button
+          type="button"
+          class="header-mobile-dock-action header-mobile-search-button"
+          commandfor="search"
+          command="show-modal"
+          aria-label="Search"
+        >
+          {% render 'icon-search', size: 22 %}
+        </button>
         <label
           {% if product_active %}for="header-product-dock-menu-{{ section.id }}"{% endif %}
           class="header-mobile-dock-action header-mobile-gear-button"
@@ -383,6 +416,7 @@
           z-index: 2;
         }
 
+        .header-desktop-actions > .header-desktop-search,
         .header-desktop-actions > dialog-opener {
           display: flex;
         }

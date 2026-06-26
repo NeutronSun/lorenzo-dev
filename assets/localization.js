@@ -2,7 +2,6 @@
  * Localization drawer form: country/language search, selection, and dialog close.
  */
 
-import { DialogComponent } from '@theme/dialog';
 import { HTMLComponent } from '@theme/HTMLComponent';
 import { HtmlUtils } from '@theme/utilities';
 
@@ -25,8 +24,38 @@ class LocalizationForm extends HTMLComponent {
 
   connectedCallback() {
     super.connectedCallback();
+    this.bindDialogToggle();
     this.updateSelection();
     this.restoreSelectedCountry();
+  }
+
+  disconnectedCallback() {
+    this.unbindDialogToggle();
+    super.disconnectedCallback();
+  }
+
+  /** Resets search state when the localization drawer opens natively. */
+  bindDialogToggle() {
+    this.dialog = this.closest('dialog');
+
+    if (!(this.dialog instanceof HTMLDialogElement)) return;
+
+    this.onDialogToggle = (event) => {
+      if (!(event instanceof ToggleEvent) || event.newState !== 'open') return;
+
+      this.resetSearch();
+      this.updateSelection();
+      this.restoreSelectedCountry();
+    };
+
+    this.dialog.addEventListener('toggle', this.onDialogToggle);
+  }
+
+  /** @private */
+  unbindDialogToggle() {
+    this.onDialogToggle && this.dialog instanceof HTMLDialogElement && this.dialog.removeEventListener('toggle', this.onDialogToggle);
+    this.onDialogToggle = null;
+    this.dialog = null;
   }
 
   /**
@@ -56,19 +85,6 @@ class LocalizationForm extends HTMLComponent {
     if (!(element instanceof HTMLInputElement)) return;
 
     this.filter(element.value);
-  }
-
-  /**
-   * Closes the parent localization dialog.
-   * @param {Event} event
-   * @param {Element} element
-   */
-  close(event, element) {
-    const dialog = this.closestTag('dialog-component');
-
-    if (!(dialog instanceof DialogComponent)) return;
-
-    dialog.close();
   }
 
   /**

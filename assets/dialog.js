@@ -3,7 +3,7 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from '@theme/events';
+import { OnDialogClosedEvent, OnDialogOpenedEvent } from '@theme/events';
 
 /**
  * @typedef {Object} DialogComponentRefs
@@ -11,14 +11,18 @@ import { OnDialogClosedEvent, OnDialogOpenEvent, OnDialogOpenedEvent } from '@th
  */
 
 /**
- * Modal and non-modal dialog host with global open/close coordination.
+ * Modal dialog host with theme event sync.
+ * Open/close via `commandfor` + `command` is native when supported; otherwise handled by click fallback.
  * @extends {HTMLComponent<DialogComponentRefs>}
  */
 export class DialogComponent extends HTMLComponent {
   static SELECTOR = 'dialog-component, search-dialog';
-  static HEADER_SELECTOR = '.uyn-header';
+  static INVOKER_SELECTOR = 'button[commandfor][command]';
+  static COMMAND_SHOW_MODAL = 'show-modal';
+  static COMMAND_REQUEST_CLOSE = 'request-close';
+  static COMMAND_CLOSE = 'close';
 
-  /** @returns {string} Dialog name used by open events. */
+  /** @returns {string} Dialog name used by theme events. */
   get name() {
     return this.getAttribute('name') || '';
   }
@@ -26,93 +30,152 @@ export class DialogComponent extends HTMLComponent {
   constructor() {
     super();
 
-    this.onDialogOpen = (event) => {
-      if (event.name === this.name) {
-        this.open();
+    this.onDialogToggle = (event) => {
+      if (!(event instanceof ToggleEvent)) return;
+
+      if (event.newState === 'open') {
+        this.closeOthers();
+        this.dispatchOpened();
         return;
       }
 
-      if (!this.hasAttribute('persistent')) {
-        this.close();
-      }
-    };
-
-    this.onDialogClose = () => this.dispatchClosed();
-
-    this.onDialogKeydown = (event) => {
-      if (event.key !== 'Escape') return;
-      if (!this.refs.dialog?.open) return;
-
-      event.preventDefault();
-      this.close();
-    };
-
-    this.onDocumentClick = (event) => {
-      if (!this.refs.dialog?.open) return;
-      if (this.hasAttribute('persistent')) return;
-
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest(DialogComponent.HEADER_SELECTOR)) return;
-
-      const matchingOpener = target.closest('dialog-opener');
-      if (matchingOpener?.getAttribute('name') === this.name) return;
-
-      const dialog = this.refs.dialog;
-      if (dialog.contains(target)) return;
-
-      this.close();
+      this.dispatchClosed();
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-    document.addEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
-    document.addEventListener('keydown', this.onDialogKeydown);
-    document.addEventListener('click', this.onDocumentClick, true);
-    this.refs.dialog?.addEventListener('close', this.onDialogClose);
+    this.bindDialogToggle();
   }
 
   disconnectedCallback() {
-    this.onDialogOpen && document.removeEventListener(OnDialogOpenEvent.TYPE, this.onDialogOpen);
-    this.onDialogKeydown && document.removeEventListener('keydown', this.onDialogKeydown);
-    this.onDocumentClick && document.removeEventListener('click', this.onDocumentClick, true);
-    this.onDialogClose && this.refs.dialog?.removeEventListener('close', this.onDialogClose);
-    this.onDialogOpen = null;
-    this.onDialogClose = null;
-    this.onDialogKeydown = null;
-    this.onDocumentClick = null;
+    this.unbindDialogToggle();
     super.disconnectedCallback();
   }
 
-  /** Opens the dialog, closing other non-persistent dialogs first. */
-  open() {
-    if (!this.refs.dialog) return;
-    if (this.refs.dialog.open) return;
-
-    this.closeOthers();
-
-    if (this.hasAttribute('non-modal')) {
-      this.refs.dialog.show();
-      this.dispatchOpened();
-      return;
-    }
-
-    this.refs.dialog.showModal();
-    this.dispatchOpened();
+  updateRefs() {
+    super.updateRefs();
+    this.bindDialogToggle();
   }
 
-  /** Closes the dialog when it is open. */
-  close() {
-    this.refs.dialog?.open && this.refs.dialog.close();
+  /** @returns {HTMLDialogElement | null} */
+  getDialogNode() {
+    if (this.refs.dialog instanceof HTMLDialogElement) return this.refs.dialog;
+
+    const name = this.name;
+
+    return name ? DialogComponent.getDialogElement(name) : null;
+  }
+
+  bindDialogToggle() {
+    this.unbindDialogToggle();
+
+    const dialog = this.getDialogNode();
+
+    if (!(dialog instanceof HTMLDialogElement)) return;
+
+    this.boundDialog = dialog;
+    dialog.addEventListener('toggle', this.onDialogToggle);
+  }
+
+  unbindDialogToggle() {
+    this.boundDialog instanceof HTMLDialogElement && this.boundDialog.removeEventListener('toggle', this.onDialogToggle);
+    this.boundDialog = null;
+  }
+
+  /**
+   * @param {string} name
+   * @returns {HTMLDialogElement | null}
+   */
+  static getDialogElement(name) {
+    const dialog = document.getElementById(name);
+
+    return dialog instanceof HTMLDialogElement ? dialog : null;
+  }
+
+  /**
+   * Opens a dialog by id for programmatic flows (add-to-cart, search shortcut).
+   * @param {string} name
+   */
+  static showModal(name) {
+    const dialog = DialogComponent.getDialogElement(name);
+
+    if (!dialog || dialog.open) return;
+
+    dialog.showModal();
+  }
+
+  /**
+   * Closes a dialog by id for programmatic flows.
+   * @param {string} name
+   */
+  static requestClose(name) {
+    const dialog = DialogComponent.getDialogElement(name);
+
+    dialog?.open && dialog.close();
+  }
+
+  /** Whether the browser supports Invoker Commands on buttons. */
+  static supportsInvokerCommands() {
+    return 'commandForElement' in HTMLButtonElement.prototype;
+  }
+
+  /**
+   * Fallback for browsers without Invoker Commands, or when native handling does not run.
+   * Runs in capture: if the dialog is still closed, open/close via the Dialog API.
+   * @param {MouseEvent} event
+   */
+  static handleInvokerClick(event) {
+    if (event.defaultPrevented || event.button !== 0) return;
+
+    const target = event.target;
+
+    if (!(target instanceof Element)) return;
+
+    const invoker = target.closest(DialogComponent.INVOKER_SELECTOR);
+
+    if (!(invoker instanceof HTMLButtonElement)) return;
+
+    const targetId = invoker.getAttribute('commandfor');
+    const command = invoker.getAttribute('command');
+
+    if (!targetId || !command) return;
+
+    const dialog = DialogComponent.getDialogElement(targetId);
+
+    if (!dialog) return;
+
+    switch (command) {
+      case DialogComponent.COMMAND_SHOW_MODAL:
+        if (dialog.open) return;
+
+        event.preventDefault();
+        dialog.showModal();
+        break;
+      case DialogComponent.COMMAND_REQUEST_CLOSE:
+      case DialogComponent.COMMAND_CLOSE:
+        if (!dialog.open) return;
+
+        event.preventDefault();
+        dialog.close();
+        break;
+    }
   }
 
   /** Closes other open dialogs before opening this one. */
   closeOthers() {
-    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
-      if (!(dialog instanceof DialogComponent)) continue;
-      if (dialog === this || dialog.hasAttribute('persistent')) continue;
+    const currentDialog = this.getDialogNode();
+
+    for (const host of document.querySelectorAll(DialogComponent.SELECTOR)) {
+      if (host === this || host.hasAttribute('persistent')) continue;
+
+      const dialog = host instanceof DialogComponent
+        ? host.getDialogNode()
+        : host.querySelector('dialog');
+
+      if (!(dialog instanceof HTMLDialogElement) || !dialog.open) continue;
+      if (dialog === currentDialog) continue;
 
       dialog.close();
     }
@@ -141,8 +204,10 @@ if (!customElements.get('dialog-component')) {
   customElements.define('dialog-component', DialogComponent);
 }
 
+document.addEventListener('click', DialogComponent.handleInvokerClick, true);
+
 /**
- * Declarative trigger that dispatches dialog:open by name.
+ * Declarative trigger for header menu (no native dialog target).
  * @extends {HTMLComponent<{}>}
  */
 class DialogOpener extends HTMLComponent {
@@ -151,16 +216,24 @@ class DialogOpener extends HTMLComponent {
     return this.getAttribute('name') || '';
   }
 
-  /** Dispatches dialog:open for this opener name. */
+  /** Toggles the associated checkbox/radio control. */
   publish() {
-    document.dispatchEvent(
-      new OnDialogOpenEvent({
-        name: this.name,
-      })
-    );
+    const label = this.querySelector('label[for]');
+
+    if (!(label instanceof HTMLLabelElement)) return;
+
+    const control = label.control;
+
+    if (!(control instanceof HTMLInputElement)) return;
+
+    control.type === 'checkbox' ? (control.checked = !control.checked) : (control.checked = true);
+    control.dispatchEvent(new Event('input', { bubbles: true }));
+    control.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
 if (!customElements.get('dialog-opener')) {
   customElements.define('dialog-opener', DialogOpener);
 }
+
+export { DialogOpener };

@@ -3,6 +3,7 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
+import { DialogComponent } from '@theme/dialog';
 import { OnFiltersApplyEvent } from '@theme/events';
 import { TemplateHandler, UrlUtils } from '@theme/utilities';
 
@@ -101,11 +102,13 @@ class Filters extends HTMLComponent {
 
   /** Closes the nearest dialog-component ancestor. */
   closeDialog() {
-    const dialog = this.closestTag('dialog-component');
+    const host = this.closestTag('dialog-component');
 
-    if (!dialog || typeof dialog.close !== 'function') return;
+    if (!(host instanceof HTMLElement)) return;
 
-    dialog.close();
+    const name = host.getAttribute('name');
+
+    name && DialogComponent.requestClose(name);
   }
 
   /**
