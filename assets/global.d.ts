@@ -38,6 +38,7 @@ declare global {
   interface Window {
     Shopify: Shopify;
     Theme: Theme;
+    metaobjects: MetaJSON;
   }
 
   declare const Shopify: Shopify;

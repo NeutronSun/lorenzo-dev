@@ -1,5 +1,5 @@
 <script>
-  window.meta = {
+  window.metaobjects = {
     rarity: {
       {% for meta in metaobjects['rarity'].values %}
         "{{ meta.system.handle }}": {{ meta | json }}{% unless forloop.last %},{% endunless %}
@@ -7,8 +7,11 @@
     },
     theme: {
       {% for meta in metaobjects['theme'].values %}
-        "{{ meta.system.handle }}": {{ meta | json }}{% unless forloop.last %},{% endunless %}
+        "{{ meta.system.handle }}": {
+          "name": {{ meta.name | json }},
+          "icon": {{ meta.icon.value | image_url: width: 720 | json }}
+        }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     }
-  }
-  </script>
+  };
+</script>
