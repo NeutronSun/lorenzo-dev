@@ -1,0 +1,318 @@
+{% capture fetch_url -%}
+  {{- routes.product_recommendations_url -}}
+  ?section_id={{ section.id -}}
+  &product_id={{ product.id -}}
+  &limit={{ section.settings.product_limit -}}
+  &intent={{ section.settings.intent -}}
+{%- endcapture %}
+
+{% unless recommendations.performed %}
+  {% render 'spacing', section: section %}
+{% endunless %}
+
+{% if product != blank %}
+  {% if recommendations.performed and recommendations.products_count > 0 %}
+    {% liquid
+      assign delimiter = '|||'
+      assign slide_buffer = ''
+    %}
+
+    <div data-deferred-content class="product-recommendations-carousel__inner page-width">
+      <header class="product-recommendations-carousel__header">
+        <div class="product-recommendations-carousel__copy">
+          {% if section.settings.eyebrow != blank %}
+            <p class="product-recommendations-carousel__eyebrow font-mono">{{ section.settings.eyebrow | escape }}</p>
+          {% endif %}
+
+          {% if section.settings.title != blank %}
+            <h2 class="product-recommendations-carousel__title font-heading">{{ section.settings.title | escape }}</h2>
+          {% endif %}
+        </div>
+
+        {% if section.settings.view_all_url != blank and section.settings.view_all_label != blank %}
+          <a class="product-recommendations-carousel__link font-mono" href="{{ section.settings.view_all_url }}">
+            {{ section.settings.view_all_label | escape }}
+            <span aria-hidden="true">→</span>
+          </a>
+        {% endif %}
+      </header>
+
+      {% for recommendation in recommendations.products limit: section.settings.product_limit %}
+        {% if recommendation.id == product.id %}
+          {% continue %}
+        {% endif %}
+
+        {% capture card %}
+          {% content_for 'block', type: 'product-card', id: 'product-card', product: recommendation %}
+        {% endcapture %}
+
+        {% if slide_buffer == blank %}
+          {% assign slide_buffer = card %}
+        {% else %}
+          {% assign slide_buffer = slide_buffer | append: delimiter | append: card %}
+        {% endif %}
+      {% endfor %}
+
+      {% if slide_buffer != blank %}
+        {% render 'swiper',
+          slides: slide_buffer,
+          delimiter: delimiter,
+          slides_count: section.settings.slides_count,
+          slides_count_mobile: section.settings.slides_count_mobile,
+          gap: section.settings.gap,
+          loop: section.settings.loop,
+          navigation: section.settings.navigation,
+          pagination: section.settings.pagination,
+          id: section.id
+        %}
+      {% endif %}
+    </div>
+  {% elsif recommendations.performed == false %}
+    <deferred-section
+      class="product-recommendations-carousel section-{{ section.id }}"
+      data-url="{{ fetch_url | strip }}"
+      data-section-id="{{ section.id }}"
+      {{ section.shopify_attributes }}
+    >
+      {% render 'deferred-section-skeleton',
+        variant: 'carousel',
+        slides_count: section.settings.slides_count,
+        slides_count_mobile: section.settings.slides_count_mobile
+      %}
+    </deferred-section>
+  {% endif %}
+{% endif %}
+
+{% stylesheet %}
+  .product-recommendations-carousel {
+    display: block;
+  }
+
+  .product-recommendations-carousel__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .product-recommendations-carousel__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+  }
+
+  .product-recommendations-carousel__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .product-recommendations-carousel__eyebrow {
+    color: var(--secondary-black);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-recommendations-carousel__title {
+    max-width: 16ch;
+    font-size: clamp(1.75rem, 5vw, 3rem);
+    line-height: 0.95;
+  }
+
+  .product-recommendations-carousel__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--black);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .product-recommendations-carousel__link:hover {
+    text-decoration: underline;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-recommendations-carousel__inner {
+      gap: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "class": "section page-width",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "/PAIR WITH"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "More from the drop"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "VIEW ALL"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View all link"
+    },
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "default": "related",
+      "options": [
+        { "value": "related", "label": "Related products" },
+        { "value": "complementary", "label": "Complementary products" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Product limit",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "slides_count",
+      "label": "Slides per view desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_count_mobile",
+      "label": "Slides per view mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Slide gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Pagination dots",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "default_spacing",
+      "label": "Default spacing",
+      "default": true
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Spacing top mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Spacing bottom mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Spacing top desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "visible_if": "{{ section.settings.default_spacing == false }}",
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Spacing bottom desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    { "type": "product-card" }
+  ],
+  "presets": [
+    {
+      "name": "Product recommendations",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

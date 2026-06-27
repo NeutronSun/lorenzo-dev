@@ -14,7 +14,7 @@ File principali:
 - `blocks/pdp-dossier-tech-row.liquid`
 - `blocks/pdp-gallery.liquid`
 - `blocks/pdp-product-info.liquid`
-- `snippets/pdp-variant-picker.liquid`
+- `blocks/pdp-sibling-tab.liquid`
 - `snippets/pdp-valerio-trait.liquid`
 - `assets/product.js`
 - `assets/pdp-siblings.js`
@@ -39,12 +39,12 @@ File principali:
 - `assets/color-sibling.js`
 - `assets/pdp-siblings.js`
 - `assets/product-card.js`
-- `snippets/pdp-variant-picker.liquid`
+- `blocks/pdp-sibling-tab.liquid`
 - `snippets/product-card-swatches.liquid`
 
 `ColorSibling` e' l'helper globale per Storefront API, query per tag, mapping base e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici se puoi usare `ColorSibling.fetchQuery`.
 
-`pdp-siblings` usa `ColorSibling` per tabs Tema/Fusion sul PDP. `product-card-swatches` usa lo stesso helper per swatches delle card. Se serve un nuovo sibling, parti da questi custom elements.
+`pdp-siblings` legge tab da blocchi `pdp-sibling-tab` (solo tag + label) e fa N query via `ColorSibling`. Template e chip restano in `pdp-product-info`.
 
 ## Product card
 
@@ -105,4 +105,16 @@ File principali:
 - `assets/components.css`
 - `assets/critical.css`
 
-Header e dialog hanno gia' custom elements e classi globali. Prima di aggiungere drawer, overlay, menu o azioni sticky, cerca questi componenti e riusa pattern, eventi e classi esistenti.
+Header e dialog: `commandfor` deve essere identico all'`id` del `<dialog>` target (uguale al `name` del component). Solo `<button type="button">` per open/close. Nessun `on:click` sui bottoni open/close. Nessun `non-modal`. Open programmatico via `DialogComponent.showModal(name)`. `dialog-opener` solo per menu mobile senza `<dialog>`.
+
+## Swiper carousel
+
+File principali:
+
+- `assets/deferred-section.js`
+- `assets/swiper-element-bundle.min.js`
+- `snippets/swiper.liquid`
+- `snippets/deferred-section-skeleton.liquid`
+- `sections/product-recommendations-carousel.liquid`
+
+`deferred-section` fetcha `routes.product_recommendations_url` con `section_id`, `product_id`, `limit` e `intent`. Le card usano `{% content_for 'block', type: 'product-card' %}` come collection/search.

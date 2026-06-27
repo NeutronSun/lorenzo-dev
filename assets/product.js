@@ -1,5 +1,12 @@
+/**
+ * PDP layout: computes sticky card height and clearance from header, breadcrumb, and dock.
+ */
+
 import { CSSUtils } from '@theme/utilities';
 
+/**
+ * @extends {HTMLElement}
+ */
 class ProductPage extends HTMLElement {
   static MOBILE_MEDIA = '(max-width: 749px)';
   static DEFAULT_SPACING = 20;
@@ -7,26 +14,32 @@ class ProductPage extends HTMLElement {
   static DEFAULT_MOBILE_MENU_GAP = 8;
   static DEFAULT_SAFE_AREA = 0;
 
+  /** @returns {Element | null} */
   get dossier() {
     return this.querySelector('[ref="dossier"]');
   }
 
+  /** @returns {Element | null} */
   get gallery() {
     return this.querySelector('[ref="gallery"]');
   }
 
+  /** @returns {Element | null} */
   get info() {
     return this.querySelector('[ref="info"]');
   }
 
+  /** @returns {Element | null} */
   get breadcrumb() {
     return document.querySelector('.breadcrumb-wrapper');
   }
 
+  /** @returns {Element | null} */
   get mobileDock() {
     return document.querySelector('.uyn-header');
   }
 
+  /** @returns {boolean} */
   get isMobile() {
     return window.matchMedia(ProductPage.MOBILE_MEDIA).matches;
   }
@@ -51,6 +64,7 @@ class ProductPage extends HTMLElement {
     window.visualViewport?.removeEventListener('resize', this.onResize);
   }
 
+  /** Starts observing layout-affecting elements for size changes. */
   observe() {
     this.resizeObserver?.observe(this);
 
@@ -61,10 +75,12 @@ class ProductPage extends HTMLElement {
     this.mobileDock instanceof HTMLElement && this.resizeObserver?.observe(this.mobileDock);
   }
 
+  /** Recomputes layout when the viewport or observed elements resize. */
   onResize() {
     this.updateLayout();
   }
 
+  /** Writes PDP layout custom properties from current viewport and element sizes. */
   updateLayout() {
     const gallery = this.gallery;
 
@@ -90,26 +106,49 @@ class ProductPage extends HTMLElement {
     CSSUtils.setValue('--sticky-top', top, this);
   }
 
+  /**
+   * Reads a numeric CSS custom property from the document root.
+   * @param {string} property
+   * @param {number} fallback
+   * @returns {number}
+   */
   getRootNumber(property, fallback) {
     return this.getNumber(property, fallback);
   }
 
+  /**
+   * Reads a numeric CSS custom property from an element.
+   * @param {string} property
+   * @param {number} fallback
+   * @param {HTMLElement} [element]
+   * @returns {number}
+   */
   getNumber(property, fallback, element = document.documentElement) {
     const value = Number(CSSUtils.getProperty(property, element));
 
     return Number.isFinite(value) && value > 0 ? value : fallback;
   }
 
+  /**
+   * @param {Element | null} element
+   * @returns {number}
+   */
   getElementHeight(element) {
     if (!(element instanceof HTMLElement)) return 0;
 
     return element.offsetHeight;
   }
 
+  /** @returns {number} */
   getViewportHeight() {
     return window.visualViewport?.height || window.innerHeight;
   }
 
+  /**
+   * Computes the sticky top offset for the gallery card.
+   * @param {number} spacing
+   * @returns {number}
+   */
   getStickyTop(spacing) {
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
 

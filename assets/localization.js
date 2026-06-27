@@ -1,4 +1,9 @@
+/**
+ * Localization drawer form: country/language search, selection, and dialog close.
+ */
+
 import { HTMLComponent } from '@theme/HTMLComponent';
+import { HtmlUtils } from '@theme/utilities';
 
 /**
  * @typedef {Object} LocalizationFormRefs
@@ -11,70 +16,58 @@ import { HTMLComponent } from '@theme/HTMLComponent';
  */
 
 /**
+ * Localization drawer form with country and language search.
  * @extends {HTMLComponent<LocalizationFormRefs>}
  */
 class LocalizationForm extends HTMLComponent {
-  static HTML_ENTITIES = Object.freeze({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  });
-  static LANGUAGE_SELECTOR = '[data-localization-language]';
-  static CLOSE_SELECTOR = '[data-localization-close]';
-
-  constructor() {
-    super();
-
-    this.onClick = (event) => this.handleClick(event);
-    this.onInput = (event) => this.handleInput(event);
-  }
+  static LANGUAGE_SELECTOR = '.localization-language';
 
   connectedCallback() {
     super.connectedCallback();
-
-    this.addEventListener('click', this.onClick);
-    this.addEventListener('input', this.onInput);
+    this.bindDialogToggle();
     this.updateSelection();
     this.restoreSelectedCountry();
   }
 
   disconnectedCallback() {
-    this.removeEventListener('click', this.onClick);
-    this.removeEventListener('input', this.onInput);
+    this.unbindDialogToggle();
     super.disconnectedCallback();
   }
 
-  handleClick(event) {
-    const target = event.target;
+  /** Resets search state when the localization drawer opens natively. */
+  bindDialogToggle() {
+    this.dialog = this.closest('dialog');
 
-    if (!(target instanceof Element)) return;
+    if (!(this.dialog instanceof HTMLDialogElement)) return;
 
-    const closeButton = target.closest(LocalizationForm.CLOSE_SELECTOR);
+    this.onDialogToggle = (event) => {
+      if (!(event instanceof ToggleEvent) || event.newState !== 'open') return;
 
-    if (closeButton && this.contains(closeButton)) {
-      this.close();
-      return;
-    }
+      this.resetSearch();
+      this.updateSelection();
+      this.restoreSelectedCountry();
+    };
 
-    const language = target.closest(LocalizationForm.LANGUAGE_SELECTOR);
-
-    if (!(language instanceof HTMLButtonElement)) return;
-    if (!this.contains(language)) return;
-
-    this.select(language);
+    this.dialog.addEventListener('toggle', this.onDialogToggle);
   }
 
-  handleInput(event) {
-    if (event.target !== this.refs.search) return;
-
-    this.filter(this.refs.search.value);
+  /** @private */
+  unbindDialogToggle() {
+    this.onDialogToggle && this.dialog instanceof HTMLDialogElement && this.dialog.removeEventListener('toggle', this.onDialogToggle);
+    this.onDialogToggle = null;
+    this.dialog = null;
   }
 
-  select(language) {
-    const countryCode = language.dataset.countryCode;
-    const languageCode = language.dataset.languageCode;
+  /**
+   * Stores the selected country and language in hidden inputs.
+   * @param {Event} event
+   * @param {Element} element
+   */
+  select(event, element) {
+    if (!(element instanceof HTMLButtonElement)) return;
+
+    const countryCode = element.dataset.countryCode;
+    const languageCode = element.dataset.languageCode;
 
     if (!countryCode || !languageCode) return;
 
@@ -83,8 +76,23 @@ class LocalizationForm extends HTMLComponent {
     this.updateSelection();
   }
 
+  /**
+   * Filters countries and languages while typing in the search field.
+   * @param {Event} event
+   * @param {Element} element
+   */
+  handleInput(event, element) {
+    if (!(element instanceof HTMLInputElement)) return;
+
+    this.filter(element.value);
+  }
+
+  /**
+   * Filters visible countries and languages by normalized query.
+   * @param {string} value
+   */
   filter(value) {
-    const query = LocalizationForm.normalize(value);
+    const query = HtmlUtils.normalize(value);
 
     this.clearSearchState();
 
@@ -97,7 +105,7 @@ class LocalizationForm extends HTMLComponent {
     const countryMatches = [];
 
     for (const country of this.refs.countries) {
-      const countryName = LocalizationForm.normalize(country.dataset.countryName ?? '');
+      const countryName = HtmlUtils.normalize(country.dataset.countryName ?? '');
 
       if (countryName.includes(query)) countryMatches.push(country);
     }
@@ -109,6 +117,7 @@ class LocalizationForm extends HTMLComponent {
         country.hidden = !matches;
         country.open = matches;
         country.toggleAttribute('data-search-match', matches);
+
         if (matches) {
           this.updateCountryLabel(country, query);
           this.updateLanguageMatches(country, query);
@@ -132,14 +141,20 @@ class LocalizationForm extends HTMLComponent {
     this.refs.empty.hidden = hasLanguageMatches;
   }
 
+  /**
+   * Toggles language match state inside a country block.
+   * @param {HTMLDetailsElement} country
+   * @param {string} query
+   * @returns {boolean}
+   */
   updateLanguageMatches(country, query) {
     let hasMatches = false;
 
     for (const language of country.querySelectorAll(LocalizationForm.LANGUAGE_SELECTOR)) {
       if (!(language instanceof HTMLButtonElement)) continue;
 
-      const languageName = LocalizationForm.normalize(language.dataset.languageName ?? '');
-      const languageEndonym = LocalizationForm.normalize(language.dataset.languageEndonym ?? '');
+      const languageName = HtmlUtils.normalize(language.dataset.languageName ?? '');
+      const languageEndonym = HtmlUtils.normalize(language.dataset.languageEndonym ?? '');
       const matches = languageName.includes(query) || languageEndonym.includes(query);
 
       language.toggleAttribute('data-search-match', matches);
@@ -150,6 +165,7 @@ class LocalizationForm extends HTMLComponent {
     return hasMatches;
   }
 
+  /** Resets search match state on all countries and languages. */
   clearSearchState() {
     for (const country of this.refs.countries) {
       country.hidden = false;
@@ -163,6 +179,10 @@ class LocalizationForm extends HTMLComponent {
     }
   }
 
+  /**
+   * @param {HTMLButtonElement} language
+   * @param {string} query
+   */
   updateLanguageLabel(language, query) {
     const label = language.querySelector('[data-language-label]');
     const endonym = language.dataset.languageEndonym ?? '';
@@ -170,6 +190,10 @@ class LocalizationForm extends HTMLComponent {
     this.updateLabel(label, endonym, query);
   }
 
+  /**
+   * @param {HTMLDetailsElement} country
+   * @param {string} query
+   */
   updateCountryLabel(country, query) {
     const label = country.querySelector('[data-country-label]');
     const countryName = country.dataset.countryName ?? '';
@@ -177,8 +201,13 @@ class LocalizationForm extends HTMLComponent {
     this.updateLabel(label, countryName, query);
   }
 
+  /**
+   * @param {Element | null} label
+   * @param {string} value
+   * @param {string} query
+   */
   updateLabel(label, value, query) {
-    const matchIndex = LocalizationForm.normalize(value).indexOf(query);
+    const matchIndex = HtmlUtils.normalize(value).indexOf(query);
 
     if (!(label instanceof HTMLElement)) return;
 
@@ -188,19 +217,21 @@ class LocalizationForm extends HTMLComponent {
     }
 
     const parts = [
-      LocalizationForm.escapeHtml(value.slice(0, matchIndex)),
-      `<mark>${LocalizationForm.escapeHtml(value.slice(matchIndex, matchIndex + query.length))}</mark>`,
-      LocalizationForm.escapeHtml(value.slice(matchIndex + query.length)),
+      HtmlUtils.escape(value.slice(0, matchIndex)),
+      `<mark>${HtmlUtils.escape(value.slice(matchIndex, matchIndex + query.length))}</mark>`,
+      HtmlUtils.escape(value.slice(matchIndex + query.length)),
     ];
 
     label.innerHTML = parts.join('');
   }
 
+  /** Clears the search field and restores the default country list. */
   resetSearch() {
     this.refs.search.value = '';
     this.filter('');
   }
 
+  /** Reopens the currently selected country details block. */
   restoreSelectedCountry() {
     const selectedCountryCode = this.refs.countryInput.value;
 
@@ -209,6 +240,7 @@ class LocalizationForm extends HTMLComponent {
     }
   }
 
+  /** Syncs selected country and language aria state in the form. */
   updateSelection() {
     const selectedCountryCode = this.refs.countryInput.value;
     const selectedLanguageCode = this.refs.languageInput.value;
@@ -223,26 +255,6 @@ class LocalizationForm extends HTMLComponent {
 
       language.setAttribute('aria-pressed', String(selected));
     }
-  }
-
-  close() {
-    const dialog = this.closestTag('dialog-component');
-
-    if (!dialog || typeof dialog.close !== 'function') return;
-
-    dialog.close();
-  }
-
-  static normalize(value) {
-    return value
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .toLocaleLowerCase();
-  }
-
-  static escapeHtml(value) {
-    return value.replace(/[&<>"']/g, (character) => LocalizationForm.HTML_ENTITIES[character]);
   }
 }
 

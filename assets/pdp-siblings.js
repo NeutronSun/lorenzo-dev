@@ -1,35 +1,56 @@
-import { HTMLComponent } from "@theme/HTMLComponent";
-import { ColorSibling } from "@theme/color-sibling";
+/**
+ * PDP variant picker: sibling tabs from theme blocks and Storefront API queries.
+ */
 
-class PDPsiblings extends HTMLComponent {
-  static CACHE_PREFIX = 'pdp-siblings:v5:';
+import { HTMLComponent } from '@theme/HTMLComponent';
+import { ColorSibling } from '@theme/color-sibling';
+import { TemplateHandler } from '@theme/utilities';
+
+/**
+ * @typedef {Object} PdpSiblingTabConfig
+ * @property {string} id
+ * @property {string} tag
+ * @property {string} label
+ * @property {boolean} includeCurrent
+ */
+
+/**
+ * @typedef {Object} PdpSiblingsRefs
+ * @property {HTMLScriptElement} currentProduct
+ * @property {HTMLTemplateElement} groupTemplate
+ * @property {HTMLTemplateElement} tabTemplate
+ * @property {HTMLTemplateElement} panelTemplate
+ * @property {HTMLTemplateElement} chipTemplate
+ * @property {HTMLElement} mount
+ * @property {HTMLElement[]} tabs
+ */
+
+/**
+ * PDP variant picker with block-configured sibling tabs.
+ * @extends {HTMLComponent<PdpSiblingsRefs>}
+ */
+class PdpSiblings extends HTMLComponent {
   static DEFAULT_LIMIT = 250;
-  static FUSION_TAG_PREFIX = 'Fusion_';
-  static TAB_FUSION = 'fusion';
-  static TAB_THEME = 'theme';
 
-  get themeTag() {
-    return this.dataset.themeTag || '';
-  }
+  renderId = 0;
+  currentProduct = null;
 
   get currentHandle() {
     return this.dataset.currentHandle || '';
   }
 
-  get fusionTag() {
-    return this.currentHandle ? `${PDPsiblings.FUSION_TAG_PREFIX}${this.currentHandle}` : '';
-  }
-
-  get currentProduct() {
-    if (!(this.refs.currentProduct instanceof HTMLScriptElement)) return null;
-
-    return JSON.parse(this.refs.currentProduct.textContent || 'null');
-  }
-
   get limit() {
-    const limit = Number(this.dataset.limit || PDPsiblings.DEFAULT_LIMIT);
+    const limit = Number(this.dataset.limit || PdpSiblings.DEFAULT_LIMIT);
 
-    return Number.isFinite(limit) && limit > 0 ? limit : PDPsiblings.DEFAULT_LIMIT;
+    return Number.isFinite(limit) && limit > 0 ? limit : PdpSiblings.DEFAULT_LIMIT;
+  }
+
+  get labelColor() {
+    return this.dataset.labelColor || 'Color';
+  }
+
+  get labelVariants() {
+    return this.dataset.labelVariants || 'Variants';
   }
 
   set isLoading(value) {
@@ -37,32 +58,86 @@ class PDPsiblings extends HTMLComponent {
     this.setAttribute('aria-busy', value ? 'true' : 'false');
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback();
-    await this.render();
+
+    if (this.refs.currentProduct instanceof HTMLScriptElement) {
+      this.currentProduct = JSON.parse(this.refs.currentProduct.textContent || 'null');
+    }
+
+    this.render();
   }
 
+  /** @returns {PdpSiblingTabConfig[]} */
+  getTabConfigs() {
+    const configs = [];
+
+    for (const node of this.refs.tabs || []) {
+      if (!(node instanceof HTMLElement)) continue;
+
+      const template = node.dataset.tag?.trim() || '';
+      const label = node.dataset.label?.trim() || template;
+      const id = node.dataset.id?.trim() || template;
+
+      if (!template) continue;
+
+      configs.push({
+        id,
+        tag: template,
+        label,
+        includeCurrent: this.includesCurrentProductTag(template),
+      });
+    }
+
+    return configs;
+  }
+
+  /**
+   * @param {string} tag
+   * @returns {boolean}
+   */
+  includesCurrentProductTag(tag) {
+    const tags = this.currentProduct?.tags;
+
+    return Array.isArray(tags) && tags.includes(tag);
+  }
+
+  /** Fetches sibling data and renders tabs into the mount node. */
   async render() {
-    if (!this.themeTag && !this.fusionTag) {
+    const renderId = ++this.renderId;
+    const tabConfigs = this.getTabConfigs();
+
+    if (!tabConfigs.length) {
       this.isLoading = false;
       this.hidden = true;
       return;
     }
 
-    const currentProduct = this.currentProduct;
-    const [themeProducts, fusionProducts] = await Promise.all([
-      this.themeTag ? this.fetchProducts(this.themeTag) : [],
-      this.fusionTag ? this.fetchProducts(this.fusionTag) : [],
-    ]);
+    this.isLoading = true;
+    this.hidden = false;
 
-    if (!this.isConnected) return;
+    const productGroups = await Promise.all(
+      tabConfigs.map((config) => ColorSibling.fetchPdp(config.tag, this.limit))
+    );
 
-    const tabs = this.getTabs(themeProducts, fusionProducts, currentProduct);
+    if (!this.isConnected || renderId !== this.renderId) return;
+
+    const tabs = [];
+
+    for (const [index, config] of tabConfigs.entries()) {
+      const tab = this.buildTab(config, productGroups[index]);
+
+      tab && tabs.push(tab);
+    }
 
     if (!tabs.length) {
       this.isLoading = false;
       this.hidden = true;
-      this.innerHTML = '';
+
+      if (this.refs.mount instanceof HTMLElement) {
+        this.refs.mount.innerHTML = '';
+      }
+
       return;
     }
 
@@ -71,186 +146,187 @@ class PDPsiblings extends HTMLComponent {
     this.renderTabs(tabs);
   }
 
-  renderTabs(tabs) {
-    const tabName = `pdp-siblings-${this.currentHandle}`;
-    const parts = [
-      '<div class="group">',
-      '<div class="head font-mono">',
-      '<span>Color</span>',
-      '<span>Variants</span>',
-      '</div>',
-      '<div class="tabs font-mono" role="tablist">',
-      tabs.map((tab, index) => PDPsiblings.buildTab(tab, tabName, index === 0)).join(''),
-      '</div>',
-      '<div class="panels">',
-      tabs.map((tab) => PDPsiblings.buildPanel(tab, this.currentHandle)).join(''),
-      '</div>',
-      '</div>',
-    ];
+  /**
+   * @param {PdpSiblingTabConfig} config
+   * @param {Array} products
+   * @returns {{ name: string, label: string, products: Array } | null}
+   */
+  buildTab(config, products) {
+    const siblings = products.filter((product) => product.handle !== this.currentHandle);
+    const includeCurrent = config.includeCurrent && this.currentProduct;
 
-    this.innerHTML = parts.join('');
-  }
+    if (!siblings.length && !includeCurrent) return null;
 
-  async fetchProducts(tag) {
-    return ColorSibling.fetchQuery(tag, this.limit, this.getQuery(tag), PDPsiblings.mapNode, PDPsiblings.CACHE_PREFIX, 'PDP siblings');
-  }
-
-  getTabs(themeProducts, fusionProducts, currentProduct) {
-    const themeSiblings = themeProducts.filter((product) => product.handle !== this.currentHandle);
-    const fusionSiblings = fusionProducts.filter((product) => product.handle !== this.currentHandle);
-    const tabs = [];
-
-    themeSiblings.length && tabs.push({
-      name: PDPsiblings.TAB_THEME,
-      label: 'Tema',
-      products: PDPsiblings.sortProducts([
-        ...(currentProduct ? [currentProduct] : []),
-        ...themeSiblings,
+    return {
+      name: config.id,
+      label: config.label,
+      products: PdpSiblings.sortProducts([
+        ...(includeCurrent ? [this.currentProduct] : []),
+        ...siblings,
       ]),
-    });
-
-    fusionSiblings.length && tabs.push({
-      name: PDPsiblings.TAB_FUSION,
-      label: 'Fusion',
-      products: PDPsiblings.sortProducts(fusionSiblings),
-    });
-
-    return tabs;
-  }
-
-  getQuery(tag) {
-    return {
-      query: `
-        query PDPSiblings($first: Int!, $query: String!) {
-          products(first: $first, query: $query) {
-            edges {
-              node {
-                id
-                handle
-                title
-                onlineStoreUrl
-                tags
-                microCategory: metafield(namespace: "valeverce", key: "micro_category") {
-                  value
-                }
-                elasticMicroCategory: metafield(namespace: "elastick", key: "filter_microcategory") {
-                  value
-                }
-                pm: metafield(namespace: "valeverce", key: "pm") {
-                  value
-                }
-                featuredImage {
-                  url(transform: { maxWidth: 96, maxHeight: 96, crop: CENTER })
-                  altText
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: {
-        first: this.limit,
-        query: ColorSibling.getSearchQuery(tag),
-      },
     };
   }
 
   /**
-   * @param {any} node
-   * @returns {{ id: string, handle: string, title: string, url: string, tags: string[], microCategory: string, pm: string, image: string, imageAlt: string }}
+   * Builds and mounts the tab group from Liquid templates.
+   * @param {Array<{ name: string, label: string, products: Array }>} tabs
    */
-  static mapNode(node) {
-    return {
-      id: node.id,
-      handle: node.handle,
-      title: node.title,
-      url: node.onlineStoreUrl || `/products/${node.handle}`,
-      tags: node.tags || [],
-      microCategory: node.microCategory?.value || node.elasticMicroCategory?.value || '',
-      pm: node.pm?.value || '',
-      image: node.featuredImage?.url || '',
-      imageAlt: node.featuredImage?.altText || node.title,
-    };
+  renderTabs(tabs) {
+    if (!(this.refs.groupTemplate instanceof HTMLTemplateElement)) return;
+    if (!(this.refs.mount instanceof HTMLElement)) return;
+
+    const tabName = `pdp-siblings-${this.currentHandle}`;
+    const group = TemplateHandler.clone(this.refs.groupTemplate);
+
+    if (!(group instanceof HTMLElement)) return;
+
+    const tablist = group.querySelector('.tabs');
+    const panels = group.querySelector('.panels');
+
+    TemplateHandler.fill(group, {
+      colorLabel: this.labelColor,
+      variantsLabel: this.labelVariants,
+    });
+
+    if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
+
+    for (const [index, tab] of tabs.entries()) {
+      const tabNode = this.buildTabNode(tab, tabName, index === 0);
+      const panelNode = this.buildPanel(tab, index === 0);
+
+      tabNode && tablist.appendChild(tabNode);
+      panelNode && panels.appendChild(panelNode);
+    }
+
+    this.refs.mount.replaceChildren(group);
+    this.bindPanelSync(group, tabs[0]?.name || '');
   }
 
   /**
-   * @param {Array<{ id: string | number }>} products
-   * @returns {Array}
+   * @param {HTMLElement} group
+   * @param {string} activeId
    */
-  static sortProducts(products) {
-    return [...products].sort((product, nextProduct) => (
-      Number(String(product.id).split('/').pop()) - Number(String(nextProduct.id).split('/').pop())
-    ));
+  bindPanelSync(group, activeId) {
+    const tablist = group.querySelector('.tabs');
+    const panels = group.querySelector('.panels');
+
+    if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
+
+    const syncPanels = (value) => {
+      for (const panel of panels.querySelectorAll('.panel')) {
+        if (!(panel instanceof HTMLElement)) continue;
+
+        panel.toggleAttribute('hidden', panel.dataset.tab !== value);
+      }
+    };
+
+    syncPanels(activeId);
+
+    tablist.addEventListener('change', (event) => {
+      const input = event.target;
+
+      if (!(input instanceof HTMLInputElement) || input.type !== 'radio') return;
+
+      syncPanels(input.value);
+    });
   }
 
   /**
    * @param {{ name: string, label: string }} tab
    * @param {string} tabName
    * @param {boolean} checked
-   * @returns {string}
+   * @returns {HTMLElement | null}
    */
-  static buildTab(tab, tabName, checked) {
-    return `
-      <label class="tab" role="tab" aria-label="${PDPsiblings.escape(tab.label)}">
-        <input
-          type="radio"
-          name="${PDPsiblings.escape(tabName)}"
-          value="${PDPsiblings.escape(tab.name)}"
-          ${checked ? 'checked' : ''}
-        >
-        <span>${PDPsiblings.escape(tab.label)}</span>
-      </label>
-    `;
+  buildTabNode(tab, tabName, checked) {
+    if (!(this.refs.tabTemplate instanceof HTMLTemplateElement)) return null;
+
+    const label = TemplateHandler.clone(this.refs.tabTemplate);
+
+    if (!(label instanceof HTMLLabelElement)) return null;
+
+    const input = label.querySelector('input[type="radio"]');
+    const text = label.querySelector('[data-ref="label"]');
+
+    if (!(input instanceof HTMLInputElement)) return null;
+
+    input.name = tabName;
+    input.value = tab.name;
+    input.checked = checked;
+    label.setAttribute('aria-label', tab.label);
+
+    text instanceof HTMLElement && (text.textContent = tab.label);
+
+    return label;
   }
 
   /**
    * @param {{ name: string, products: Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }> }} tab
-   * @param {string} currentHandle
-   * @returns {string}
+   * @param {boolean} visible
+   * @returns {HTMLElement | null}
    */
-  static buildPanel(tab, currentHandle) {
-    return `
-      <div class="panel" data-tab="${PDPsiblings.escape(tab.name)}">
-        <div class="values">
-          ${tab.products.map((product) => PDPsiblings.buildProduct(product, currentHandle)).join('')}
-        </div>
-      </div>
-    `;
+  buildPanel(tab, visible) {
+    if (!(this.refs.panelTemplate instanceof HTMLTemplateElement)) return null;
+    if (!(this.refs.chipTemplate instanceof HTMLTemplateElement)) return null;
+
+    const panel = TemplateHandler.clone(this.refs.panelTemplate);
+    const values = panel?.querySelector('.values');
+
+    if (!(panel instanceof HTMLElement)) return null;
+    if (!(values instanceof HTMLElement)) return null;
+
+    panel.dataset.tab = tab.name;
+    panel.toggleAttribute('hidden', !visible);
+
+    for (const product of tab.products) {
+      const chip = this.buildChip(product);
+
+      chip && values.appendChild(chip);
+    }
+
+    return panel;
   }
 
   /**
    * @param {{ handle: string, title: string, url: string, image: string, imageAlt: string }} product
-   * @param {string} currentHandle
-   * @returns {string}
+   * @returns {HTMLElement | null}
    */
-  static buildProduct(product, currentHandle) {
-    const isActive = product.handle === currentHandle;
-    const image = product.image
-      ? `<img src="${PDPsiblings.escape(product.image)}" alt="${PDPsiblings.escape(product.imageAlt)}" loading="lazy" width="18" height="18">`
-      : '';
+  buildChip(product) {
+    if (!(this.refs.chipTemplate instanceof HTMLTemplateElement)) return null;
 
-    return `
-      <a class="chip${isActive ? ' is-active' : ''}" href="${PDPsiblings.escape(product.url)}" aria-label="${PDPsiblings.escape(product.title)}"${isActive ? ' aria-current="page"' : ''}>
-        <span class="swatch">${image}</span>
-        <span class="chip-label">${PDPsiblings.escape(product.title)}</span>
-      </a>
-    `;
+    const chip = TemplateHandler.clone(this.refs.chipTemplate);
+    const image = chip?.querySelector('img');
+    const title = chip?.querySelector('[data-ref="title"]');
+    const isActive = product.handle === this.currentHandle;
+
+    if (!(chip instanceof HTMLAnchorElement)) return null;
+
+    chip.href = product.url;
+    chip.setAttribute('aria-label', product.title);
+    chip.classList.toggle('is-active', isActive);
+    isActive && chip.setAttribute('aria-current', 'page');
+
+    if (image instanceof HTMLImageElement && product.image) {
+      image.src = product.image;
+      image.alt = product.imageAlt;
+      image.hidden = false;
+    }
+
+    title instanceof HTMLElement && (title.textContent = product.title);
+
+    return chip;
   }
 
   /**
-   * @param {string} value
-   * @returns {string}
+   * @param {Array<{ id: string | number }>} products
+   * @returns {Array<{ id: string | number }>}
    */
-  static escape(value) {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+  static sortProducts(products) {
+    return [...products].sort((product, nextProduct) => (
+      Number(String(product.id).split('/').pop()) - Number(String(nextProduct.id).split('/').pop())
+    ));
   }
 }
 
 if (!customElements.get('pdp-siblings')) {
-  customElements.define('pdp-siblings', PDPsiblings);
+  customElements.define('pdp-siblings', PdpSiblings);
 }

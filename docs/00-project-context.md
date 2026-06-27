@@ -31,7 +31,7 @@ PDP:
 
 - `sections/product.liquid` monta tre blocchi: dossier, gallery e info.
 - `blocks/pdp-product-info.liquid` contiene prezzo, form, variant picker e bundle fusion.
-- `snippets/pdp-variant-picker.liquid` monta `pdp-siblings`.
+- `blocks/pdp-product-info.liquid` monta `pdp-siblings` con tab configurabili via `pdp-sibling-tab`.
 - `assets/product.js` calcola variabili CSS dinamiche per altezze sticky/mobile.
 - `assets/pdp-siblings.js` costruisce tab e chips usando `ColorSibling`.
 

@@ -8,14 +8,19 @@
 {% comment %} Drawers — height auto {% endcomment %}
 {% for direction in drawer_directions %}
   <dialog-component name="style-guide-{{ direction }}-auto-{{ drawer_id }}">
-    <dialog ref="dialog" class="drawer from-{{ direction }}">
+    <dialog ref="dialog" id="style-guide-{{ direction }}-auto-{{ drawer_id }}" class="drawer from-{{ direction }}">
       <div class="style-guide__drawer">
         <h2 class="font-heading">From {{ direction }}</h2>
         <p class="font-body"><code>drawer from-{{ direction }}</code></p>
         <p class="font-body style-guide__drawer-note">Height auto.{% if direction == 'top' or direction == 'bottom' %} Full width.{% else %} Side spacing on left/right.{% endif %}</p>
-        <form method="dialog">
-          <button class="button button-secondary" type="submit">Close</button>
-        </form>
+        <button
+          type="button"
+          class="button button-secondary"
+          commandfor="style-guide-{{ direction }}-auto-{{ drawer_id }}"
+          command="request-close"
+        >
+          Close
+        </button>
       </div>
     </dialog>
   </dialog-component>
@@ -24,14 +29,19 @@
 {% comment %} Drawers — full height {% endcomment %}
 {% for direction in drawer_directions %}
   <dialog-component name="style-guide-{{ direction }}-full-{{ drawer_id }}">
-    <dialog ref="dialog" class="drawer from-{{ direction }} full-height">
+    <dialog ref="dialog" id="style-guide-{{ direction }}-full-{{ drawer_id }}" class="drawer from-{{ direction }} full-height">
       <div class="style-guide__drawer style-guide__drawer--full-height">
         <h2 class="font-heading">From {{ direction }}</h2>
         <p class="font-body"><code>drawer from-{{ direction }} full-height</code></p>
         <p class="font-body style-guide__drawer-note">Full viewport height.{% if direction == 'top' or direction == 'bottom' %} Full width.{% else %} Side spacing on left/right.{% endif %}</p>
-        <form method="dialog">
-          <button class="button button-secondary" type="submit">Close</button>
-        </form>
+        <button
+          type="button"
+          class="button button-secondary"
+          commandfor="style-guide-{{ direction }}-full-{{ drawer_id }}"
+          command="request-close"
+        >
+          Close
+        </button>
       </div>
     </dialog>
   </dialog-component>
@@ -231,9 +241,14 @@
           <ul class="style-guide__drawer-grid">
             {% for direction in drawer_directions %}
               <li>
-                <dialog-opener name="style-guide-{{ direction }}-auto-{{ drawer_id }}">
-                  <button class="button button-primary" type="button" on:click="publish">.from-{{ direction }}</button>
-                </dialog-opener>
+                <button
+                  class="button button-primary"
+                  type="button"
+                  commandfor="style-guide-{{ direction }}-auto-{{ drawer_id }}"
+                  command="show-modal"
+                >
+                  .from-{{ direction }}
+                </button>
               </li>
             {% endfor %}
           </ul>
@@ -244,9 +259,14 @@
           <ul class="style-guide__drawer-grid">
             {% for direction in drawer_directions %}
               <li>
-                <dialog-opener name="style-guide-{{ direction }}-full-{{ drawer_id }}">
-                  <button class="button button-secondary" type="button" on:click="publish">.from-{{ direction }}.full-height</button>
-                </dialog-opener>
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  commandfor="style-guide-{{ direction }}-full-{{ drawer_id }}"
+                  command="show-modal"
+                >
+                  .from-{{ direction }}.full-height
+                </button>
               </li>
             {% endfor %}
           </ul>

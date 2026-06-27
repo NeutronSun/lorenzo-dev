@@ -82,11 +82,14 @@ export class HTMLComponent extends HTMLElement {
    * Cleans up event listeners and observers.
    */
   disconnectedCallback() {
-    this.unbindEvents();
     this.unbindGlobalEvents();
+    this.unbindEvents();
     this.observer.disconnect();
   }
 
+  /**
+   * Binds window scroll when `onScroll` is overridden.
+   */
   bindGlobalEvents() {
     if (this.onScroll !== HTMLComponent.prototype.onScroll) {
 
@@ -109,9 +112,18 @@ export class HTMLComponent extends HTMLElement {
     }
   }
 
+  /**
+   * Removes window scroll and resize listeners bound by `bindGlobalEvents`.
+   */
   unbindGlobalEvents() {
-    window.removeEventListener('scroll', this.boundEvents.get('window:scroll') ?? (() => {}));
-    window.removeEventListener('resize', this.boundEvents.get('window:resize') ?? (() => {}));
+    const scrollHandler = this.boundEvents.get('window:scroll');
+    const resizeHandler = this.boundEvents.get('window:resize');
+
+    scrollHandler && window.removeEventListener('scroll', scrollHandler);
+    resizeHandler && window.removeEventListener('resize', resizeHandler);
+
+    scrollHandler && this.boundEvents.delete('window:scroll');
+    resizeHandler && this.boundEvents.delete('window:resize');
   }
 
   /**
@@ -203,9 +215,15 @@ export class HTMLComponent extends HTMLElement {
     method.call(this, event, element);
   }
 
+  /**
+   * Scroll hook for subclasses. Override to react to page scroll.
+   */
   onScroll() {
   }
 
+  /**
+   * Resize hook for subclasses. Override to react to viewport changes.
+   */
   onResize() {
   }
 
@@ -244,7 +262,7 @@ export class HTMLComponent extends HTMLElement {
    * Finds the nearest ancestor by tag name.
    *
    * @param {string} tagName
-   * @returns {Element | null}
+   * @returns {HTMLElement | null}
    */
   closestTag(tagName) {
     let element = this.parentElement;

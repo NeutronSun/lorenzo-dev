@@ -16,7 +16,7 @@
   </div>
 {% else %}
   <search-dialog name="search" section-id="{{ section.id }}">
-    <dialog ref="dialog" class="search-dialog" aria-label="Search">
+    <dialog ref="dialog" id="search" class="search-dialog" aria-label="Search">
       <form
         action="{{ routes.search_url }}"
         method="get"
@@ -42,7 +42,14 @@
             aria-autocomplete="list"
             on:input="handleInput"
           >
-          <button type="button" class="search-dialog-escape font-mono" on:click="close">ESC</button>
+          <button
+            type="button"
+            class="search-dialog-escape font-mono"
+            commandfor="search"
+            command="request-close"
+          >
+            ESC
+          </button>
         </header>
 
         <div id="search-dialog-results-{{ section.id }}" class="search-dialog-body" role="listbox">
@@ -87,6 +94,7 @@
   .search-dialog {
     position: fixed;
     inset: 0;
+    z-index: var(--z-index-drawer);
     width: calc(100dvw - var(--spacing) * 2);
     height: fit-content;
     max-width: 672px;

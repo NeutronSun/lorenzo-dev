@@ -1,9 +1,21 @@
+/**
+ * Predictive search dialog and query normalization for collection/search forms.
+ */
+
 import { DialogComponent } from '@theme/dialog';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
+/**
+ * Normalizes search queries for Shopify prefix matching.
+ */
 class SearchQuery {
   static TERM_SEPARATOR = /\s+/;
 
+  /**
+   * Converts each search term to Shopify prefix syntax.
+   * @param {string} query
+   * @returns {string}
+   */
   static toPrefix(query) {
     const parts = [];
 
@@ -20,14 +32,17 @@ class SearchQuery {
 }
 
 /**
- * @typedef {Object} SearchDialogRefs
- * @property {HTMLDialogElement} dialog
- * @property {HTMLInputElement} input
- * @property {HTMLElement} suggestions
- * @property {HTMLElement} products
+ * @typedef {import('@theme/dialog').DialogComponentRefs & {
+ *   input: HTMLInputElement,
+ *   suggestions: HTMLElement,
+ *   products: HTMLElement
+ * }} SearchDialogRefs
  */
 
-/** @extends {DialogComponent} */
+/**
+ * Predictive search dialog with debounced product and suggestion fetch.
+ * @extends {DialogComponent}
+ */
 class SearchDialog extends DialogComponent {
   static DEBOUNCE_DELAY = 250;
   static RESULT_LIMIT = 5;
@@ -35,19 +50,32 @@ class SearchDialog extends DialogComponent {
   static PRODUCTS_SELECTOR = '[data-search-products]';
   static SUGGESTIONS_SELECTOR = '[data-search-suggestions]';
 
+  /** @type {number} */
+  searchTimer = 0;
+  /** @type {number} */
+  requestId = 0;
+  /** @type {number} */
+  activeIndex = -1;
+  /** @type {((event: KeyboardEvent) => void) | null} */
+  onSearchShortcut = null;
+
   get options() {
     return Array.from(this.querySelectorAll(SearchDialog.OPTION_SELECTOR)).filter((option) => {
       return option instanceof HTMLElement && option.offsetParent !== null;
     });
   }
 
-  searchTimer = 0;
-  requestId = 0;
-  activeIndex = -1;
-  onSearchShortcut = null;
-
   connectedCallback() {
     super.connectedCallback();
+
+    this.onSearchDialogToggle = (event) => {
+      if (!(event instanceof ToggleEvent) || event.newState !== 'open') return;
+
+      this.reset();
+      window.requestAnimationFrame(() => this.refs.input?.focus());
+    };
+
+    this.refs.dialog?.addEventListener('toggle', this.onSearchDialogToggle);
 
     this.onSearchShortcut = (event) => {
       if (!(event.metaKey || event.ctrlKey)) return;
@@ -60,7 +88,7 @@ class SearchDialog extends DialogComponent {
         return;
       }
 
-      this.open();
+      DialogComponent.showModal('search');
     };
 
     document.addEventListener('keydown', this.onSearchShortcut);
@@ -68,20 +96,14 @@ class SearchDialog extends DialogComponent {
 
   disconnectedCallback() {
     this.searchTimer && window.clearTimeout(this.searchTimer);
+    this.onSearchDialogToggle && this.refs.dialog?.removeEventListener('toggle', this.onSearchDialogToggle);
     this.onSearchShortcut && document.removeEventListener('keydown', this.onSearchShortcut);
+    this.onSearchDialogToggle = null;
     this.onSearchShortcut = null;
     super.disconnectedCallback();
   }
 
-  open() {
-    const wasOpen = this.refs.dialog?.open;
-
-    super.open();
-
-    if (!wasOpen) this.reset();
-    window.requestAnimationFrame(() => this.refs.input?.focus());
-  }
-
+  /** Clears search state, attributes, and result containers. */
   reset() {
     this.searchTimer && window.clearTimeout(this.searchTimer);
     this.searchTimer = 0;
@@ -103,6 +125,10 @@ class SearchDialog extends DialogComponent {
     if (this.refs.products) this.refs.products.innerHTML = '';
   }
 
+  /**
+   * Debounces predictive search requests while typing.
+   * @param {Event} event
+   */
   handleInput(event) {
     const input = event.target;
 
@@ -128,14 +154,21 @@ class SearchDialog extends DialogComponent {
     this.searchTimer = window.setTimeout(() => this.search(query), SearchDialog.DEBOUNCE_DELAY);
   }
 
-  handleSubmit() {
+  /**
+   * Normalizes the query to Shopify prefix search before submit.
+   * @param {SubmitEvent} event
+   */
+  handleSubmit(event) {
     if (!this.refs.input) return;
 
     this.refs.input.value = SearchQuery.toPrefix(this.refs.input.value);
   }
 
+  /**
+   * Moves keyboard focus between visible search options.
+   * @param {KeyboardEvent} event
+   */
   handleKeydown(event) {
-    if (!(event instanceof KeyboardEvent)) return;
     if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
 
     const options = this.options;
@@ -162,6 +195,10 @@ class SearchDialog extends DialogComponent {
     this.refs.input?.setAttribute('aria-activedescendant', option.id);
   }
 
+  /**
+   * Fetches predictive products and suggestions for a query.
+   * @param {string} query
+   */
   async search(query) {
     const requestId = ++this.requestId;
     const productsUrl = this.getProductsUrl(query);
@@ -191,6 +228,11 @@ class SearchDialog extends DialogComponent {
     this.refs.input?.removeAttribute('aria-activedescendant');
   }
 
+  /**
+   * Builds the predictive product search URL.
+   * @param {string} query
+   * @returns {URL}
+   */
   getProductsUrl(query) {
     const url = new URL(window.Theme.routes.search_url, window.location.origin);
 
@@ -202,6 +244,11 @@ class SearchDialog extends DialogComponent {
     return url;
   }
 
+  /**
+   * Builds the predictive suggestions section URL.
+   * @param {string} query
+   * @returns {URL}
+   */
   getSuggestionsUrl(query) {
     const url = new URL(window.Theme.routes.predictive_search_url, window.location.origin);
 
@@ -213,6 +260,12 @@ class SearchDialog extends DialogComponent {
     return url;
   }
 
+  /**
+   * Extracts result markup and count from a settled fetch response.
+   * @param {PromiseSettledResult<Response>} responseResult
+   * @param {string} selector
+   * @returns {Promise<{ html: string, count: number }>}
+   */
   static async getMarkup(responseResult, selector) {
     if (responseResult.status !== 'fulfilled') return { html: '', count: 0 };
     if (!responseResult.value.ok) return { html: '', count: 0 };
@@ -221,8 +274,8 @@ class SearchDialog extends DialogComponent {
 
     if (bodyResult[0].status !== 'fulfilled') return { html: '', count: 0 };
 
-    const document = new DOMParser().parseFromString(bodyResult[0].value, 'text/html');
-    const content = document.querySelector(selector);
+    const parsed = new DOMParser().parseFromString(bodyResult[0].value, 'text/html');
+    const content = parsed.querySelector(selector);
 
     if (!(content instanceof HTMLElement)) return { html: '', count: 0 };
 
@@ -242,9 +295,16 @@ if (!customElements.get('search-dialog')) {
  * @property {HTMLInputElement} query
  */
 
-/** @extends {HTMLComponent<SearchFormRefs>} */
+/**
+ * Collection/search form that normalizes queries to prefix search.
+ * @extends {HTMLComponent<SearchFormRefs>}
+ */
 class SearchForm extends HTMLComponent {
-  handleSubmit() {
+  /**
+   * Normalizes the query input before native form submit.
+   * @param {SubmitEvent} event
+   */
+  handleSubmit(event) {
     if (!this.refs.query) return;
 
     this.refs.query.value = SearchQuery.toPrefix(this.refs.query.value);

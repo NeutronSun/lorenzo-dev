@@ -1,17 +1,71 @@
+/**
+ * Storefront API helper for product color siblings on cards and PDP variant picker.
+ */
+
+import { CacheHandler } from '@theme/utilities';
+
 class ColorSibling {
   static CACHE_PREFIX = 'product-card-siblings:';
+  static PDP_CACHE_PREFIX = 'pdp-siblings:v7:';
   static hasWarnedMissingConfig = false;
 
+  static PDP_FRAGMENT = `
+    id
+    handle
+    title
+    onlineStoreUrl
+    tags
+    microCategory: metafield(namespace: "valeverce", key: "micro_category") {
+      value
+    }
+    elasticMicroCategory: metafield(namespace: "elastick", key: "filter_microcategory") {
+      value
+    }
+    pm: metafield(namespace: "valeverce", key: "pm") {
+      value
+    }
+    featuredImage {
+      url(transform: { maxWidth: 96, maxHeight: 96, crop: CENTER })
+      altText
+    }
+  `;
+
   /**
+   * Fetches sibling products for product card swatches.
    * @param {string} tag
    * @param {number} limit
    * @returns {Promise<Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }>>}
    */
   static async fetch(tag, limit) {
-    return ColorSibling.fetchQuery(tag, limit, ColorSibling.getQuery(tag, limit), ColorSibling.mapNode, ColorSibling.CACHE_PREFIX, 'product card siblings');
+    return ColorSibling.fetchQuery(
+      tag,
+      limit,
+      ColorSibling.getCardQuery(tag, limit),
+      ColorSibling.mapNode,
+      ColorSibling.CACHE_PREFIX,
+      'product card siblings',
+    );
   }
 
   /**
+   * Fetches sibling products with PDP metafields for the variant picker.
+   * @param {string} tag
+   * @param {number} limit
+   * @returns {Promise<Array<{ id: string, handle: string, title: string, url: string, tags: string[], microCategory: string, pm: string, image: string, imageAlt: string }>>}
+   */
+  static async fetchPdp(tag, limit) {
+    return ColorSibling.fetchQuery(
+      tag,
+      limit,
+      ColorSibling.getPdpQuery(tag, limit),
+      ColorSibling.mapPdpNode,
+      ColorSibling.PDP_CACHE_PREFIX,
+      'PDP siblings',
+    );
+  }
+
+  /**
+   * Shared Storefront API fetch with sessionStorage caching.
    * @template T
    * @param {string} tag
    * @param {number} limit
@@ -34,9 +88,9 @@ class ColorSibling {
     }
 
     const cacheKey = `${cachePrefix}${tag}:${limit}`;
-    const cached = sessionStorage.getItem(cacheKey);
+    const cached = CacheHandler.get(cacheKey);
 
-    if (cached) return JSON.parse(cached);
+    if (Array.isArray(cached)) return cached;
 
     const response = await fetch(storefront.apiUrl, {
       method: 'POST',
@@ -55,17 +109,18 @@ class ColorSibling {
 
     const products = (result.data?.products?.edges || []).map(({ node }) => mapNode(node));
 
-    sessionStorage.setItem(cacheKey, JSON.stringify(products));
+    products.length && CacheHandler.set(cacheKey, products);
 
     return products;
   }
 
   /**
+   * Builds the GraphQL query payload for product card siblings.
    * @param {string} tag
    * @param {number} limit
    * @returns {{ query: string, variables: { first: number, query: string } }}
    */
-  static getQuery(tag, limit) {
+  static getCardQuery(tag, limit) {
     return {
       query: `
         query ProductCardSiblings($first: Int!, $query: String!) {
@@ -92,6 +147,33 @@ class ColorSibling {
   }
 
   /**
+   * Builds the GraphQL query payload for PDP siblings.
+   * @param {string} tag
+   * @param {number} limit
+   * @returns {{ query: string, variables: { first: number, query: string } }}
+   */
+  static getPdpQuery(tag, limit) {
+    return {
+      query: `
+        query PDPSiblings($first: Int!, $query: String!) {
+          products(first: $first, query: $query) {
+            edges {
+              node {
+                ${ColorSibling.PDP_FRAGMENT}
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        first: limit,
+        query: ColorSibling.getSearchQuery(tag),
+      },
+    };
+  }
+
+  /**
+   * Maps a Storefront API product node to card swatch data.
    * @param {any} node
    * @returns {{ handle: string, title: string, url: string, image: string, imageAlt: string }}
    */
@@ -106,6 +188,26 @@ class ColorSibling {
   }
 
   /**
+   * Maps a Storefront API product node to PDP sibling data.
+   * @param {any} node
+   * @returns {{ id: string, handle: string, title: string, url: string, tags: string[], microCategory: string, pm: string, image: string, imageAlt: string }}
+   */
+  static mapPdpNode(node) {
+    return {
+      id: node.id,
+      handle: node.handle,
+      title: node.title,
+      url: node.onlineStoreUrl || `/products/${node.handle}`,
+      tags: node.tags || [],
+      microCategory: node.microCategory?.value || node.elasticMicroCategory?.value || '',
+      pm: node.pm?.value || '',
+      image: node.featuredImage?.url || '',
+      imageAlt: node.featuredImage?.altText || node.title,
+    };
+  }
+
+  /**
+   * Escapes a product tag for the Storefront API search query syntax.
    * @param {string} tag
    * @returns {string}
    */

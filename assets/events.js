@@ -1,3 +1,10 @@
+/**
+ * Theme-wide custom events for dialogs, cart, filters, and product siblings.
+ */
+
+/**
+ * Base theme event with bubbling and composed dispatch defaults.
+ */
 class ThemeEvent extends Event {
   static OPTIONS = {
     bubbles: true,
@@ -5,6 +12,7 @@ class ThemeEvent extends Event {
   };
 }
 
+/** @deprecated Use native Invoker Commands or DialogComponent.showModal() instead. */
 export class OnDialogOpenEvent extends ThemeEvent {
   static TYPE = 'dialog:open';
 
@@ -18,6 +26,7 @@ export class OnDialogOpenEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched after a named dialog has opened. */
 export class OnDialogOpenedEvent extends ThemeEvent {
   static TYPE = 'dialog:opened';
 
@@ -31,6 +40,7 @@ export class OnDialogOpenedEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched after a named dialog has closed. */
 export class OnDialogClosedEvent extends ThemeEvent {
   static TYPE = 'dialog:closed';
 
@@ -44,13 +54,16 @@ export class OnDialogClosedEvent extends ThemeEvent {
   }
 }
 
+/** @import {ShopifyCart} from '@theme/cart' */
+
+/** Dispatched while a cart Ajax request is in flight. */
 export class OnCartLoadingEvent extends ThemeEvent {
   static TYPE = 'cart:loading';
 
   /**
    * @param {{
    *   action: 'get' | 'add' | 'change' | 'update' | 'clear',
-   *   cart: Object | null,
+   *   cart: ShopifyCart | null,
    *   key?: string,
    *   quantity?: number,
    *   updates?: Record<string, number>
@@ -67,13 +80,14 @@ export class OnCartLoadingEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched after a successful cart Ajax mutation. */
 export class OnCartUpdateEvent extends ThemeEvent {
   static TYPE = 'cart:update';
 
   /**
    * @param {{
    *   action: 'get' | 'add' | 'change' | 'update' | 'clear',
-   *   cart: Object,
+   *   cart: ShopifyCart,
    *   key?: string,
    *   quantity?: number,
    *   updates?: Record<string, number>
@@ -90,6 +104,7 @@ export class OnCartUpdateEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched when a cart Ajax request fails. */
 export class OnCartErrorEvent extends ThemeEvent {
   static TYPE = 'cart:error';
 
@@ -97,7 +112,7 @@ export class OnCartErrorEvent extends ThemeEvent {
    * @param {{
    *   action: 'get' | 'add' | 'change' | 'update' | 'clear',
    *   error: unknown,
-   *   cart: Object | null,
+   *   cart: ShopifyCart | null,
    *   key?: string,
    *   quantity?: number,
    *   updates?: Record<string, number>
@@ -115,6 +130,7 @@ export class OnCartErrorEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched when collection filters are applied or cleared. */
 export class OnFiltersApplyEvent extends ThemeEvent {
   static TYPE = 'filters:apply';
 
@@ -125,5 +141,21 @@ export class OnFiltersApplyEvent extends ThemeEvent {
     super(OnFiltersApplyEvent.TYPE, ThemeEvent.OPTIONS);
 
     this.params = detail.params;
+  }
+}
+
+/** Dispatched when a product card color sibling is selected. */
+export class OnSiblingChangeEvent extends ThemeEvent {
+  static TYPE = 'sibling:change';
+
+  /**
+   * @param {{ cardId: string, handle: string, url: string }} detail
+   */
+  constructor(detail) {
+    super(OnSiblingChangeEvent.TYPE, ThemeEvent.OPTIONS);
+
+    this.cardId = detail.cardId;
+    this.handle = detail.handle;
+    this.url = detail.url;
   }
 }

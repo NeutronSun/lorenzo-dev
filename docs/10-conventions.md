@@ -69,3 +69,15 @@
 - Immagini con `alt`, `width`, `height`, `loading` quando applicabile.
 - Evita overlay che intercettano click senza motivo.
 - Non trasformare `div` in controlli interattivi.
+
+## Dialog
+
+- Host: `dialog-component` o `search-dialog` con `<dialog ref="dialog" id="{name}">` — `id` uguale al `name` del component.
+- Apri: `<button type="button" commandfor="{name}" command="show-modal">` — `commandfor` = `id` del `<dialog>`. Solo `<button>`, mai `<a>` o `<label>`.
+- Chiudi: `<button type="button" commandfor="{name}" command="request-close">`.
+- Tutti i drawer sono modal nativi (`show-modal`); niente attributo `non-modal`, niente `dialog.show()`.
+- Apertura programmatica (add-to-cart, shortcut search ⌘F): `DialogComponent.showModal(name)`.
+- Chiusura programmatica: `DialogComponent.requestClose(name)`.
+- `DialogComponent` sincronizza solo eventi tema (`dialog:opened` / `dialog:closed`) e `closeOthers` sul `toggle` del `<dialog>`.
+- Invoker Commands nativi quando il browser li supporta; fallback click in `dialog.js` (`handleInvokerClick`) se il dialog resta chiuso.
+- `dialog-opener` solo per target senza `<dialog>` nativo, es. menu mobile header (`header-menu`).

@@ -1,0 +1,68 @@
+{% doc %}
+  PDP sibling tab config: resolves a product tag by prefix and exposes it to pdp-siblings.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+  assign prefix = block.settings.tag | strip
+  assign resolved_tag = blank
+
+  for product_tag in picker_product.tags
+    if product_tag contains prefix
+      assign resolved_tag = product_tag
+      break
+    endif
+  endfor
+
+  if block.settings.use_tag_value_as_label
+    assign tab_label = resolved_tag | remove_first: prefix | strip
+  else
+    assign tab_label = block.settings.label | default: resolved_tag
+  endif
+%}
+
+{% if prefix != blank and resolved_tag != blank %}
+  <div
+    ref="tabs[]"
+    data-id="{{ block.id }}"
+    data-tag="{{ resolved_tag | escape }}"
+    data-label="{{ tab_label | escape }}"
+    hidden
+    {{ block.shopify_attributes }}
+  ></div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Sibling tab",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag prefix",
+      "info": "Example: Universe_ resolves to the product tag Universe_League of legends."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_tag_value_as_label",
+      "label": "Use tag value as label",
+      "info": "Uses the tag text after the prefix as the tab label (Universe_Anime shows Anime).",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Tab label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sibling tab",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

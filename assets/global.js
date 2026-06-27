@@ -1,3 +1,7 @@
+/**
+ * Theme entrypoint: loads shared utilities and registers feature modules.
+ */
+
 import { CSSUtils } from "@theme/utilities";
 import "@theme/header";
 import "@theme/dialog";
@@ -9,6 +13,7 @@ import "@theme/product";
 import "@theme/color-sibling";
 import "@theme/pdp-siblings";
 import "@theme/product-card";
+import "@theme/deferred-section";
 
 console.log(`
                       __
