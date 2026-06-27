@@ -58,6 +58,70 @@ static showModal(name) { ... }
 - Evita append multipli: crea `parts[]` e assegna una sola volta `innerHTML`.
 - Rimuovi listener, observer e timer in `disconnectedCallback`.
 
+- Come mi aspetto una classe ipotetica:
+
+```js
+
+/*
+ * wellmade JSDoc
+ */
+class TemplateClass extends HTMLComponent {
+  
+  get attribute() {
+    return // getter for this.dataset, this.ref.x.dataset...
+    return CacheHandler[key] = value; // since i use key only there, no needs of static attribute
+  } 
+
+  set attribute(value) {
+    this.dataset = value;
+    CacheHandler.x = value
+  }
+
+  constructor() {
+    super();
+    //usually empty, just call super();
+
+    // maybe i can just prepare some observer, listeners
+    this.onChange = (event) => {
+
+    };
+  }
+
+  connectedCallback() {
+    //everything must be done on element rendering
+    this.setListeners();
+    this.fetch() || this.render();
+  }
+
+  setListener() {
+    //first, for click, submit remember that <form on:submit> so its the HTMLElement to handle the events
+    //here i just want to listen to specific event
+  }
+
+  onScroll() {
+    //here i can override the generic onScroll event declared on HTMLComponent abstract Class
+    //yes, its js so its not abstract but you got it
+  }
+
+  async fetch() {
+    //all the logic about fetching that
+    const sibling = SiblingHandler.get(tag);
+    const response = await fetch('my-section-id0');
+
+    return html || json;
+  }
+
+  async render(html) {
+    //from the html we can declare the section to be update then override it
+    //from the context we can use the TemplateHandler or the 
+    //super.update() method
+  }
+} 
+```
+- questa è la struttura base, ovviamente in base alla complessità della classe
+- ci possono essere variazioni, ma di base se una di queste core feature viene fatta
+- in un modo differente da come descritto la PR sarà rifiutata automaticamente.
+
 ## CSS
 
 - Mobile-first: base per mobile, media query per viewport piu' grandi.
@@ -71,6 +135,50 @@ static showModal(name) { ... }
 - Evita selettori globali generici.
 - Evita animazioni e transizioni se non servono.
 - Controlla sempre che testo, bottoni e contenitori non si sovrappongano su mobile e desktop.
+
+- ora un esempio di come mi aspetto siano fatte le cose
+
+```html
+<custom-elements>
+  <div data-header-wrapper>
+    <h2 class="font-mono">Title</h2>
+  </div>
+  <div data-content>
+    <div data-element>1</div>
+    <div data-element>2</div>
+  </div>
+</custom-elements>
+```
+```css
+
+  custom-elements {
+    [data-header-wrapper] {
+      text-trasfrom: capitalize;
+
+      @media screen (min-width: 750px) {
+        color: red;
+      }
+    }
+
+    [data-content] {
+      display: flex;
+      flex-direction: column;
+
+      @media screen (min-width: 750px) {
+        --gap: 5px;
+        flex-direction: row;
+        gap: var(--gap);
+
+        [data-element] {
+          flex: 0 0 calc((100% / 2) - var(--gap));
+        }
+      }
+
+    }
+  }
+
+```
+- come per il JS, qualcosa di diverso sarà canellato.
 
 ## Riuso
 

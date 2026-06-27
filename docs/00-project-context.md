@@ -2,7 +2,28 @@
 
 ## Profilo
 
-`lorenzo-dev` e' un tema Shopify custom. La direzione tecnica e' conservativa: Liquid quando il dato e' disponibile server-side, CSS per stato/layout/varianti, JavaScript vanilla solo per interazioni runtime e dati async.
+`lorenzo-dev` e' un tema Shopify custom. La direzione tecnica e' conservativa, paragonabile ad una DITTATURA: Liquid quando il dato e' disponibile server-side, CSS per stato/layout/varianti, JavaScript vanilla solo per interazioni runtime e dati async.
+JS deve essere usato il meno possibile, solo per gestire layout, prendere heigths, fetch, robe secondarie.
+L'obiettivo è avere tutte le feature possibile di un tema premium di Shopify ma fatte a regola d'arte, dando priorità all'esperienza utente ma anche allo sviluppatore.
+
+Ricorda, siamo andati sulla luna con meno di 4kb di ram... se il JS di una dialog è lungo quanto
+l'assembly dell'apollo 11 c'è qualcosa di molto sbagliato.
+
+Il codice deve essere sempre pulito, elegante e performante.
+
+Se l'utente clicca su una product card non si deve nemmeno accorgere del cambio pagina per quanto il sito è reattivo, tutto ciò che l'utente vede deve essere già lì e generato server side.
+Siblings, voci interne al menu (numero prodotti collection), section deferred al di fuori della viewport in questo caso sono tutte cose secondarie che:
+- 1: non generano layout shifting
+- 2: non sono vitali
+- 3: sono in display none, nasconde da un details...
+
+è importante evitare che i primi 1/2 secondi di caricamento del sito siano tutti pezzi che arrivano uno dopo l'altro (nabla, antonioli...)
+
+ovviamente, in caso di PLP custom (vedi algolia), ci possiamo fare poco. In quel caso, allora, prevedere SEMPRE uno skeleton loader, se nelle viewport vedo 3 righe, skeleton di 3 righe, e così via...
+
+JS non è il male assoluto, ma i JS dev si.
+
+CSS non è una merda, anche se lo sembra, quindi usalo.
 
 Stack reale del repo:
 
