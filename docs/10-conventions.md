@@ -5,7 +5,11 @@
 - Dai priorita' a correttezza e stabilita'; ottimizza solo dopo che il comportamento e' verificato.
 - Mantieni i fix circoscritti ed evita refactor collaterali.
 - Preferisci strumenti nativi e pattern gia' presenti a librerie o astrazioni nuove.
-- Aggiungi commenti solo per decisioni o vincoli non evidenti, mai per descrivere cosa fa una riga leggibile.
+- Implementa il minimo che soddisfa la richiesta: niente opzioni, configurabilita' o feature speculative non chieste.
+- Calibra il livello di astrazione: meglio una cosa concreta e leggibile che generica e gonfia; astrai solo quando il riuso e' reale.
+- Preferisci primitive ed eventi nativi a logica custom; un solo percorso di codice, niente fallback per browser non supportati salvo richiesta.
+- API simmetriche e reattive: coppie come open/close usano lo stesso meccanismo; i componenti reagiscono a eventi invece di ciclare i fratelli.
+- Aggiungi commenti solo per decisioni o vincoli non evidenti, mai per descrivere cosa fa una riga leggibile o per ripetere il nome di un metodo. Tieni le annotazioni di tipo (`@param`/`@returns`) solo dove servono al tooling.
 
 ## Liquid
 
@@ -23,10 +27,24 @@
 - Usa JavaScript vanilla e Custom Elements.
 - Per nuovi componenti estendi `HTMLComponent` quando servono `ref`, eventi delegati o update parziali.
 - Usa `ref` nel markup e accedi via `this.refs.nome`; per array usa `ref="items[]"` e `this.refs.items`.
-- Usa getter per dati o DOM ref che possono cambiare.
+- Usa getter solo per dati o DOM ref che possono cambiare o sono condizionali; per riferimenti stabili leggi `this.refs.nome` direttamente, senza getter o metodi fallback difensivi.
+- Preferisci eventi e API native (Invoker Commands `command`, `toggle`, `closedby`) a listener globali, capture o fallback fatti a mano.
 - Ordine membri nelle classi: static constants, getter/setter, static factory, constructor, lifecycle, altri metodi.
 - Non usare `#private fields`.
-- Sposta magic number, stringhe di stato e valori ripetuti in costanti `static` con nomi espliciti.
+- Sposta magic number, stringhe di stato e valori di dominio ripetuti in costanti `static` con nomi espliciti. Eccezione: token standard DOM/piattaforma usati una volta sola (`'toggle'`, `'command'`, `'Escape'`) restano inline.
+- Niente JSDoc/commenti che ripetono il nome del metodo: il nome deve bastare. Metti `@param`/`@returns` solo se il tipo serve al linter, o una nota se l'intent non e' ovvio.
+
+```js
+// no: la prosa ripete il nome
+/** Opens the dialog. */
+open() { ... }
+
+// si: il nome basta; il tipo solo dove serve al tooling
+open() { ... }
+
+/** @param {string} name */
+static showModal(name) { ... }
+```
 - Per helper senza stato usa classi non istanziate con soli metodi `static`.
 - Usa factory statiche quando la creazione richiede validazione, normalizzazione o scelta dell'implementazione.
 - Rappresenta insiemi chiusi di stati con enum-like immutabili, ad esempio una costante `static` basata su `Object.freeze()`.
@@ -75,9 +93,31 @@
 - Host: `dialog-component` o `search-dialog` con `<dialog ref="dialog" id="{name}">` — `id` uguale al `name` del component.
 - Apri: `<button type="button" commandfor="{name}" command="show-modal">` — `commandfor` = `id` del `<dialog>`. Solo `<button>`, mai `<a>` o `<label>`.
 - Chiudi: `<button type="button" commandfor="{name}" command="request-close">`.
-- Tutti i drawer sono modal nativi (`show-modal`); niente attributo `non-modal`, niente `dialog.show()`.
-- Apertura programmatica (add-to-cart, shortcut search ⌘F): `DialogComponent.showModal(name)`.
-- Chiusura programmatica: `DialogComponent.requestClose(name)`.
-- `DialogComponent` sincronizza solo eventi tema (`dialog:opened` / `dialog:closed`) e `closeOthers` sul `toggle` del `<dialog>`.
-- Invoker Commands nativi quando il browser li supporta; fallback click in `dialog.js` (`handleInvokerClick`) se il dialog resta chiuso.
+- Default modal (`showModal`); i drawer che devono lasciare la pagina interattiva hanno l'attributo `non-modal` sull'host (apre con `dialog.show()`). La scelta vive nel getter `isModal`.
+- Apertura/chiusura programmatica simmetriche: `DialogComponent.showModal(name)` dispatcha `dialog:open`, `DialogComponent.requestClose(name)` dispatcha `dialog:close`. I listener (`onDialogOpenEvent`/`onDialogCloseEvent`) filtrano sul `name` e chiamano `open()`/`close()`.
+- Apertura anche via evento `command` nativo dell'invoker (sul `<dialog>`) → `open()`.
+- Mutua esclusione senza loop: ogni dialog ascolta `dialog:opened` e si chiude da solo quando se ne apre un altro (`persistent` esclude). Niente `closeOthers`/`SELECTOR`.
+- In non-modale Esc chiude via listener (`onEscape`); il modale usa Esc nativo. `dialog:opened`/`dialog:closed` restano per la sync dell'header.
+- Richiede Invoker Commands nativi (`command` event); niente fallback click.
 - `dialog-opener` solo per target senza `<dialog>` nativo, es. menu mobile header (`header-menu`).
+
+Esempio del pattern (simmetria + reattivita' + evento nativo), da `assets/dialog.js`:
+
+```js
+// Apertura/chiusura programmatiche: stesso meccanismo, trigger event con check sul name
+static showModal(name)   { document.dispatchEvent(new OnDialogOpenEvent({ name })); }
+static requestClose(name){ document.dispatchEvent(new OnDialogCloseEvent({ name })); }
+
+this.onDialogOpenEvent  = (e) => e.name === this.name && this.open();
+this.onDialogCloseEvent = (e) => e.name === this.name && this.close();
+
+// Mutua esclusione reattiva: nessun loop sui fratelli, ognuno si chiude da solo
+this.onSiblingOpened = (e) => e.name !== this.name && !this.hasAttribute('persistent') && this.close();
+
+// Invoker nativo: l'evento command arriva gia' sul <dialog> giusto, niente check di id
+this.onInvokerEvent = (e) => { if (e.command !== 'show-modal') return; e.preventDefault(); this.open(); };
+
+// Una sola scelta modal/non-modal, nel getter
+get isModal() { return !this.hasAttribute('non-modal'); }
+open() { this.isModal ? this.refs.dialog.showModal() : this.refs.dialog.show(); }
+```

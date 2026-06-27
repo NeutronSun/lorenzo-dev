@@ -2,7 +2,7 @@
   assign form_id = 'LocalizationForm-' | append: section.id
 -%}
 
-<dialog-component name="localization">
+<dialog-component name="localization" non-modal>
   <dialog ref="dialog" id="localization" class="drawer from-right localization-drawer">
     <localization-form on:input="handleInput">
       {% form 'localization', id: form_id %}

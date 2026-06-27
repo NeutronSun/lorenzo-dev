@@ -19,7 +19,7 @@
   Filter and sort
 </button>
 
-<dialog-component name="{{ drawer_name }}">
+<dialog-component name="{{ drawer_name }}" non-modal>
   <dialog ref="dialog" id="{{ drawer_name }}" class="drawer from-right filters-drawer">
     <collection-filters>
       <form on:submit="handleSubmit" on:change="handleChange">

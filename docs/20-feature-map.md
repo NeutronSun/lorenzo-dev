@@ -105,7 +105,9 @@ File principali:
 - `assets/components.css`
 - `assets/critical.css`
 
-Header e dialog: `commandfor` deve essere identico all'`id` del `<dialog>` target (uguale al `name` del component). Solo `<button type="button">` per open/close. Nessun `on:click` sui bottoni open/close. Nessun `non-modal`. Open programmatico via `DialogComponent.showModal(name)`. `dialog-opener` solo per menu mobile senza `<dialog>`.
+Header e dialog: `commandfor` deve essere identico all'`id` del `<dialog>` target (uguale al `name` del component). Solo `<button type="button">` per open/close. Nessun `on:click` sui bottoni open/close. Open programmatico via `DialogComponent.showModal(name)`. `dialog-opener` solo per menu mobile senza `<dialog>`.
+
+Modalita' non-modale: l'attributo `non-modal` sull'host (`<dialog-component name="..." non-modal>`) apre il dialog con `dialog.show()` invece di `showModal()`, lasciando la pagina (e l'header) interattivi. Usato dai drawer (cart, localization, filtri), non dal search-dialog. In non-modale non c'e' `::backdrop` nativa: il dim resta `body:has(...[open])::after`. Chiusura: bottone `command="request-close"` ed Esc (`onEscape` in `DialogComponent`). Non c'e' chiusura al click sull'overlay.
 
 ## Swiper carousel
 

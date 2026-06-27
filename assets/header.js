@@ -197,10 +197,8 @@ class StickyHeader extends HTMLComponent {
    * @returns {{ target: HTMLElement, open: boolean } | null}
    */
   getDesktopState() {
-    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
-      const selector = StickyHeader.DESKTOP_DIALOG_TARGETS[dialog.getAttribute('name') ?? ''];
-
-      if (!selector || !dialog.querySelector('dialog[open]')) continue;
+    for (const [name, selector] of Object.entries(StickyHeader.DESKTOP_DIALOG_TARGETS)) {
+      if (!DialogComponent.getDialogElement(name)?.open) continue;
 
       const target = this.querySelector(selector);
 
@@ -337,13 +335,7 @@ class StickyHeader extends HTMLComponent {
   hasDialogComponent(dialogOpener) {
     const name = dialogOpener.getAttribute('name');
 
-    if (!name) return false;
-
-    for (const dialog of document.querySelectorAll(DialogComponent.SELECTOR)) {
-      if (dialog.getAttribute('name') === name) return true;
-    }
-
-    return false;
+    return !!name && !!DialogComponent.getDialogElement(name);
   }
 }
 

@@ -12,7 +12,7 @@ class ThemeEvent extends Event {
   };
 }
 
-/** @deprecated Use native Invoker Commands or DialogComponent.showModal() instead. */
+/** Trigger event that requests opening a named dialog. */
 export class OnDialogOpenEvent extends ThemeEvent {
   static TYPE = 'dialog:open';
 
@@ -21,6 +21,20 @@ export class OnDialogOpenEvent extends ThemeEvent {
    */
   constructor(detail) {
     super(OnDialogOpenEvent.TYPE, ThemeEvent.OPTIONS);
+
+    this.name = detail.name;
+  }
+}
+
+/** Trigger event that requests closing a named dialog. */
+export class OnDialogCloseEvent extends ThemeEvent {
+  static TYPE = 'dialog:close';
+
+  /**
+   * @param {{ name: string }} detail
+   */
+  constructor(detail) {
+    super(OnDialogCloseEvent.TYPE, ThemeEvent.OPTIONS);
 
     this.name = detail.name;
   }
