@@ -96,6 +96,7 @@
               "type": "pdp-sibling-tab",
               "settings": {
                 "tag": "Tema_",
+                "use_tag_value_as_label": false,
                 "label": "Tema"
               },
               "blocks": {}
@@ -104,6 +105,7 @@
               "type": "pdp-sibling-tab",
               "settings": {
                 "tag": "Fusion_",
+                "use_tag_value_as_label": false,
                 "label": "Fusion"
               },
               "blocks": {}
@@ -112,6 +114,7 @@
               "type": "pdp-sibling-tab",
               "settings": {
                 "tag": "Universe_",
+                "use_tag_value_as_label": true,
                 "label": "Universe"
               },
               "blocks": {}
