@@ -15,7 +15,6 @@
     --layout-gap: 20px;
     --gallery-gap: 20px;
     --safe-area-top: env(safe-area-inset-top, 0px);
-    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     --sticky-top: calc(var(--header-height, 0px) + var(--breadcrumb-height, 0px) + var(--spacing));
     --pdp-card-height: max(0px, calc(100dvh - var(--sticky-top) - var(--spacing)));
     --thumb-size: clamp(92px, 10vw, 142px);
@@ -83,18 +82,10 @@
   @media screen and (max-width: 749px) {
     product-page {
       --thumb-size: clamp(72px, 21vw, 92px);
-      --dock-clearance-fallback: calc(var(--header-mobile-bar-height, 58px) + var(--header-mobile-menu-gap, 8px) + var(--spacing) + var(--safe-area-bottom));
       --sticky-top: calc(var(--breadcrumb-height, 0px) + var(--spacing));
-      --pdp-card-height: max(0px, calc(100dvh - var(--sticky-top) - var(--dock-clearance, var(--dock-clearance-fallback))));
-
-      padding-block: var(--spacing) calc(var(--dock-clearance, var(--dock-clearance-fallback)) + var(--spacing));
 
       .layout {
         gap: 16px;
-      }
-
-      .pdp-product-info {
-        margin-block-start: max(0px, calc(var(--dock-clearance, var(--dock-clearance-fallback)) - 16px));
       }
 
       .pdp-gallery {

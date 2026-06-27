@@ -1,5 +1,5 @@
 /**
- * PDP layout: computes sticky card height and clearance from header, breadcrumb, and dock.
+ * PDP layout: computes sticky card height from header, breadcrumb, and viewport.
  */
 
 import { CSSUtils } from '@theme/utilities';
@@ -10,9 +10,6 @@ import { CSSUtils } from '@theme/utilities';
 class ProductPage extends HTMLElement {
   static MOBILE_MEDIA = '(max-width: 749px)';
   static DEFAULT_SPACING = 20;
-  static DEFAULT_MOBILE_BAR_HEIGHT = 58;
-  static DEFAULT_MOBILE_MENU_GAP = 8;
-  static DEFAULT_SAFE_AREA = 0;
 
   /** @returns {Element | null} */
   get dossier() {
@@ -32,11 +29,6 @@ class ProductPage extends HTMLElement {
   /** @returns {Element | null} */
   get breadcrumb() {
     return document.querySelector('.breadcrumb-wrapper');
-  }
-
-  /** @returns {Element | null} */
-  get mobileDock() {
-    return document.querySelector('.uyn-header');
   }
 
   /** @returns {boolean} */
@@ -72,7 +64,6 @@ class ProductPage extends HTMLElement {
     this.gallery instanceof HTMLElement && this.resizeObserver?.observe(this.gallery);
     this.info instanceof HTMLElement && this.resizeObserver?.observe(this.info);
     this.breadcrumb instanceof HTMLElement && this.resizeObserver?.observe(this.breadcrumb);
-    this.mobileDock instanceof HTMLElement && this.resizeObserver?.observe(this.mobileDock);
   }
 
   /** Recomputes layout when the viewport or observed elements resize. */
@@ -87,21 +78,12 @@ class ProductPage extends HTMLElement {
     if (!(gallery instanceof HTMLElement)) return;
 
     const spacing = this.getRootNumber('--spacing', ProductPage.DEFAULT_SPACING);
-    const mobileBarHeight = this.getRootNumber('--header-mobile-bar-height', ProductPage.DEFAULT_MOBILE_BAR_HEIGHT);
-    const mobileMenuGap = this.getRootNumber('--header-mobile-menu-gap', ProductPage.DEFAULT_MOBILE_MENU_GAP);
-    const safeAreaBottom = this.getNumber('--safe-area-bottom', ProductPage.DEFAULT_SAFE_AREA, this);
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-    const breadcrumbArea = this.isMobile ? breadcrumbHeight + spacing : spacing + breadcrumbHeight + spacing;
-    const mobileDockHeight = this.getElementHeight(this.mobileDock);
-    const dockHeight = mobileDockHeight || mobileBarHeight + mobileMenuGap;
-    const dockArea = this.isMobile ? dockHeight + spacing + safeAreaBottom : mobileBarHeight + mobileMenuGap + spacing;
-    const top = this.isMobile ? breadcrumbArea : this.getStickyTop(spacing);
-    const reservedBottom = this.isMobile ? dockArea : spacing;
-    const availableHeight = this.getViewportHeight() - top - reservedBottom;
+    const top = this.isMobile ? breadcrumbHeight + spacing : this.getStickyTop(spacing);
+    const availableHeight = this.getViewportHeight() - top - spacing;
     const height = Math.max(0, availableHeight);
 
     CSSUtils.setValue('--breadcrumb-height', breadcrumbHeight, this);
-    CSSUtils.setValue('--dock-clearance', dockArea, this);
     CSSUtils.setValue('--pdp-card-height', height, this);
     CSSUtils.setValue('--sticky-top', top, this);
   }

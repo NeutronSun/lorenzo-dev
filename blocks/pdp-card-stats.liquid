@@ -16,11 +16,10 @@
   assign rigore = product.metafields.valeverce.rigore.value
   assign istinto = product.metafields.valeverce.istinto.value
   assign oppurtunismo = product.metafields.valeverce.oppurtunismo.value | default: product.metafields.valeverce.opportunismo.value
+  assign mobile_order = block.settings.mobile_order | default: 1
 %}
 
-<section class="pdp-dossier-panel pdp-card-stats" {{ block.shopify_attributes }}>
-  <h2 class="pdp-dossier-title font-mono">/Stats</h2>
-
+{% capture panel_body %}
   <div class="pdp-dossier-body">
     <dl class="combat">
       <dt class="font-mono">Attack</dt>
@@ -82,7 +81,16 @@
       </div>
     </div>
   </div>
-</section>
+{% endcapture %}
+
+{% render 'pdp-dossier-panel',
+  title: '/Stats',
+  panel_class: 'pdp-card-stats',
+  mobile_order: mobile_order,
+  open_by_default: block.settings.open_by_default,
+  body: panel_body,
+  attributes: block.shopify_attributes
+%}
 
 {% stylesheet %}
   @property --meter-count {
@@ -466,7 +474,20 @@
 {
   "name": "PDP Card Stats",
   "tag": null,
-  "settings": [],
+  "settings": [
+    {
+      "type": "number",
+      "id": "mobile_order",
+      "label": "Mobile order",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
   "presets": [
     {
       "name": "PDP Card Stats",

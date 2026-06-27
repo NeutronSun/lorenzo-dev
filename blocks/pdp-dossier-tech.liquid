@@ -2,13 +2,22 @@
   Renders PDP dossier technical rows.
 {% enddoc %}
 
-<section class="pdp-dossier-panel pdp-dossier-tech" {{ block.shopify_attributes }}>
-  <h2 class="pdp-dossier-title font-mono">/Technical</h2>
+{% liquid
+  assign mobile_order = block.settings.mobile_order | default: 3
+%}
+
+<details
+  class="pdp-dossier-panel pdp-dossier-tech"
+  style="--mobile-order: {{ mobile_order }}"
+  {{ block.shopify_attributes }}
+  {% if block.settings.open_by_default %}open{% endif %}
+>
+  <summary class="pdp-dossier-title font-mono">/Technical</summary>
 
   <dl class="rows">
     {% content_for 'blocks' %}
   </dl>
-</section>
+</details>
 
 {% schema %}
 {
@@ -17,7 +26,20 @@
   "blocks": [
     { "type": "pdp-dossier-tech-row" }
   ],
-  "settings": [],
+  "settings": [
+    {
+      "type": "number",
+      "id": "mobile_order",
+      "label": "Mobile order",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
   "presets": [
     {
       "name": "PDP Dossier Technical",

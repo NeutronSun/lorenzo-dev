@@ -6,11 +6,10 @@
   assign season = block.settings.season | default: 'SS/26 - DROP 04'
   assign number = block.settings.number | default: '04/24'
   assign series = block.settings.series | default: 'A'
+  assign mobile_order = block.settings.mobile_order | default: 0
 %}
 
-<section class="pdp-dossier-panel pdp-dossier-edition" {{ block.shopify_attributes }}>
-  <h2 class="pdp-dossier-title font-mono">/Edition</h2>
-
+{% capture panel_body %}
   <div class="pdp-dossier-body">
     <p class="season font-mono">{{ season }}</p>
 
@@ -21,7 +20,16 @@
       <dd>{{ series }}</dd>
     </dl>
   </div>
-</section>
+{% endcapture %}
+
+{% render 'pdp-dossier-panel',
+  title: '/Edition',
+  panel_class: 'pdp-dossier-edition',
+  mobile_order: mobile_order,
+  open_by_default: block.settings.open_by_default,
+  body: panel_body,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
@@ -45,6 +53,18 @@
       "id": "series",
       "label": "Series",
       "default": "A"
+    },
+    {
+      "type": "number",
+      "id": "mobile_order",
+      "label": "Mobile order",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
     }
   ],
   "presets": [

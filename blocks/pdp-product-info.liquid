@@ -513,9 +513,16 @@
 
     pdp-siblings {
       display: grid;
+      min-width: 0;
 
       &[hidden] {
         display: none;
+      }
+
+      .group,
+      .panels,
+      .panel {
+        min-width: 0;
       }
 
       .group {
@@ -702,11 +709,40 @@
   @media screen and (max-width: 749px) {
     .pdp-product-info {
       pdp-siblings {
+        .group {
+          overflow-x: clip;
+        }
+
+        .tabs,
         .values {
-          flex-wrap: nowrap;
-          max-height: none;
+          min-width: 0;
+          max-width: 100%;
           overflow-x: auto;
           overflow-y: hidden;
+          overscroll-behavior-x: contain;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar,
+        .values::-webkit-scrollbar {
+          display: none;
+        }
+
+        .tabs {
+          display: flex;
+          flex-wrap: nowrap;
+          width: fit-content;
+        }
+
+        .tab {
+          flex: 0 0 auto;
+        }
+
+        .values {
+          width: 100%;
+          flex-wrap: nowrap;
+          max-height: none;
           padding-right: 0;
           padding-bottom: 4px;
         }

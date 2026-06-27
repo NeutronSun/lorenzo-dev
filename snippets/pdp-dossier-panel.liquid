@@ -1,0 +1,20 @@
+{% doc %}
+  Renders a collapsible PDP dossier panel.
+
+  @param {string} title - Panel title
+  @param {string} panel_class - Modifier class (e.g. pdp-dossier-edition)
+  @param {number} mobile_order - Flex order on mobile
+  @param {boolean} open_by_default - Whether the panel starts expanded
+  @param {string} body - Panel inner HTML
+  @param {string} [attributes] - Extra attributes (e.g. block.shopify_attributes)
+{% enddoc %}
+
+<details
+  class="pdp-dossier-panel {{ panel_class }}"
+  style="--mobile-order: {{ mobile_order }}"
+  {{ attributes }}
+  {% if open_by_default %}open{% endif %}
+>
+  <summary class="pdp-dossier-title font-mono">{{ title }}</summary>
+  {{ body }}
+</details>
