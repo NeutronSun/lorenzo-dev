@@ -17,9 +17,1856 @@
         "menu": "main-menu",
         "customer_account_menu": "customer-account-main-menu"
       }
+    },
+    "schema_org_R3tYgn": {
+      "type": "schema-org",
+      "blocks": {
+        "schema_store_HBA8q7": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_Y8679y": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_fEg7Lb": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_qEBRDQ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_3rTkGy": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_yGYqHN": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_Yj8nrV": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_YMCGP8": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_Y8679y",
+            "schema_opening_hours_fEg7Lb",
+            "schema_opening_hours_qEBRDQ",
+            "schema_opening_hours_3rTkGy",
+            "schema_opening_hours_yGYqHN",
+            "schema_opening_hours_Yj8nrV",
+            "schema_opening_hours_YMCGP8"
+          ]
+        },
+        "schema_store_L3aQfH": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_7zCbgq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_fiBPfK": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_bQ7Lm7": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_kttJWh": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_BWRAEm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_b8zUcK": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_bxGkAC": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_7zCbgq",
+            "schema_opening_hours_fiBPfK",
+            "schema_opening_hours_bQ7Lm7",
+            "schema_opening_hours_kttJWh",
+            "schema_opening_hours_BWRAEm",
+            "schema_opening_hours_b8zUcK",
+            "schema_opening_hours_bxGkAC"
+          ]
+        },
+        "schema_store_bAettY": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_MPeXEY": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_Kg8Jtm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_tmncEJ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_xUX7D8": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_Mcwtzb": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_GQUxp4": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_fPW9eN": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_MPeXEY",
+            "schema_opening_hours_Kg8Jtm",
+            "schema_opening_hours_tmncEJ",
+            "schema_opening_hours_xUX7D8",
+            "schema_opening_hours_Mcwtzb",
+            "schema_opening_hours_GQUxp4",
+            "schema_opening_hours_fPW9eN"
+          ]
+        },
+        "schema_store_T7HfVw": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_kirMVh": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_BYypmq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_WVj6g3": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_zbTXAw": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_8deFMM": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_tJmi9q": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_hge6VQ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_kirMVh",
+            "schema_opening_hours_BYypmq",
+            "schema_opening_hours_WVj6g3",
+            "schema_opening_hours_zbTXAw",
+            "schema_opening_hours_8deFMM",
+            "schema_opening_hours_tJmi9q",
+            "schema_opening_hours_hge6VQ"
+          ]
+        },
+        "schema_store_qLFE4t": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_iUQWjM": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_jeN8mx": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_wYniBw": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_gfBwFN": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_6PwLk8": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_d4pwKW": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_HAjzHK": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_iUQWjM",
+            "schema_opening_hours_jeN8mx",
+            "schema_opening_hours_wYniBw",
+            "schema_opening_hours_gfBwFN",
+            "schema_opening_hours_6PwLk8",
+            "schema_opening_hours_d4pwKW",
+            "schema_opening_hours_HAjzHK"
+          ]
+        },
+        "schema_store_gwhb6c": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_p8ALpe": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_WB67kP": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_eiHpp7": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_dgJiNf": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_9i7tAx": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_jP9LNV": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_JMHenq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_p8ALpe",
+            "schema_opening_hours_WB67kP",
+            "schema_opening_hours_eiHpp7",
+            "schema_opening_hours_dgJiNf",
+            "schema_opening_hours_9i7tAx",
+            "schema_opening_hours_jP9LNV",
+            "schema_opening_hours_JMHenq"
+          ]
+        },
+        "schema_store_yjYNNt": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_xCiAYh": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_Leteha": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_WfTwFy": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_DULCby": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_RYhi3D": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_TcJm6C": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_hPYmnQ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_xCiAYh",
+            "schema_opening_hours_Leteha",
+            "schema_opening_hours_WfTwFy",
+            "schema_opening_hours_DULCby",
+            "schema_opening_hours_RYhi3D",
+            "schema_opening_hours_TcJm6C",
+            "schema_opening_hours_hPYmnQ"
+          ]
+        },
+        "schema_store_XjNie9": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_fwK7wY": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_VtYCAP": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_tqfzh7": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_AfgB7e": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_RMfaVb": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_bVmKYC": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_cef6Tm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_fwK7wY",
+            "schema_opening_hours_VtYCAP",
+            "schema_opening_hours_tqfzh7",
+            "schema_opening_hours_AfgB7e",
+            "schema_opening_hours_RMfaVb",
+            "schema_opening_hours_bVmKYC",
+            "schema_opening_hours_cef6Tm"
+          ]
+        },
+        "schema_store_4aGExq": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_c9ePRH": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_gTY7Dk": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_UtaVdC": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_BrhLpm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_EUnzkp": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_cbWDH7": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_bwMyGp": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_c9ePRH",
+            "schema_opening_hours_gTY7Dk",
+            "schema_opening_hours_UtaVdC",
+            "schema_opening_hours_BrhLpm",
+            "schema_opening_hours_EUnzkp",
+            "schema_opening_hours_cbWDH7",
+            "schema_opening_hours_bwMyGp"
+          ]
+        },
+        "schema_store_cLTCVC": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_c9aMXd": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_BCNyEV": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_PMiDjC": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_qzAnPh": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_iyGELT": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_yCXa9r": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_hcEe63": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_c9aMXd",
+            "schema_opening_hours_BCNyEV",
+            "schema_opening_hours_PMiDjC",
+            "schema_opening_hours_qzAnPh",
+            "schema_opening_hours_iyGELT",
+            "schema_opening_hours_yCXa9r",
+            "schema_opening_hours_hcEe63"
+          ]
+        },
+        "schema_store_rmjM4f": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_C9zUir": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_UQFGyj": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_N96iTE": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_NJzFKH": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_DKrVFm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_cEtbeU": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_NzX7Ep": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_C9zUir",
+            "schema_opening_hours_UQFGyj",
+            "schema_opening_hours_N96iTE",
+            "schema_opening_hours_NJzFKH",
+            "schema_opening_hours_DKrVFm",
+            "schema_opening_hours_cEtbeU",
+            "schema_opening_hours_NzX7Ep"
+          ]
+        },
+        "schema_store_aQJjye": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_t7d6EJ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_nbFx8K": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_xeCnP9": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_qqhh3C": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_6JVcUm": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_NtCRHJ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_9J8MBc": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_t7d6EJ",
+            "schema_opening_hours_nbFx8K",
+            "schema_opening_hours_xeCnP9",
+            "schema_opening_hours_qqhh3C",
+            "schema_opening_hours_6JVcUm",
+            "schema_opening_hours_NtCRHJ",
+            "schema_opening_hours_9J8MBc"
+          ]
+        },
+        "schema_store_ydwAW4": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_rLxVQr": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_XeKJqE": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_Rwp8dV": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_rhjxFr": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_WaUJWV": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_dehm7A": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_aiVJea": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_rLxVQr",
+            "schema_opening_hours_XeKJqE",
+            "schema_opening_hours_Rwp8dV",
+            "schema_opening_hours_rhjxFr",
+            "schema_opening_hours_WaUJWV",
+            "schema_opening_hours_dehm7A",
+            "schema_opening_hours_aiVJea"
+          ]
+        },
+        "schema_store_AiHGBw": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_7kKiEN": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_wMmxjF": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_rzFWVF": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_J8CQFj": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_eNTnbT": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_JUpUpG": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_TYQaAq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_7kKiEN",
+            "schema_opening_hours_wMmxjF",
+            "schema_opening_hours_rzFWVF",
+            "schema_opening_hours_J8CQFj",
+            "schema_opening_hours_eNTnbT",
+            "schema_opening_hours_JUpUpG",
+            "schema_opening_hours_TYQaAq"
+          ]
+        },
+        "schema_store_zJEM4y": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_8attPq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_pCrmKF": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_WF6xQj": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_J8tQUg": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_ELbGHy": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_nbKTpc": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_NGGkqB": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_8attPq",
+            "schema_opening_hours_pCrmKF",
+            "schema_opening_hours_WF6xQj",
+            "schema_opening_hours_J8tQUg",
+            "schema_opening_hours_ELbGHy",
+            "schema_opening_hours_nbKTpc",
+            "schema_opening_hours_NGGkqB"
+          ]
+        },
+        "schema_store_66ENfR": {
+          "type": "schema-store",
+          "name": "Store",
+          "settings": {
+            "name": "porto san giorgio",
+            "address": "123",
+            "city": "porto san giorgio",
+            "zip": "63822",
+            "country": "it",
+            "phone": "3298236955",
+            "lat": "44.4",
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
+          },
+          "blocks": {
+            "schema_opening_hours_6eGzCq": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Sunday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_eX8Nyx": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Saturday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_FAcDKA": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Friday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_CzAB3B": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Thursday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_M6fdRM": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Wednesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_QwQGMb": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Tuesday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            },
+            "schema_opening_hours_k3zagQ": {
+              "type": "schema-opening-hours",
+              "name": "Opening Hours",
+              "settings": {
+                "day": "Monday",
+                "opens": "09:00",
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "schema_opening_hours_6eGzCq",
+            "schema_opening_hours_eX8Nyx",
+            "schema_opening_hours_FAcDKA",
+            "schema_opening_hours_CzAB3B",
+            "schema_opening_hours_M6fdRM",
+            "schema_opening_hours_QwQGMb",
+            "schema_opening_hours_k3zagQ"
+          ]
+        }
+      },
+      "block_order": [
+        "schema_store_HBA8q7",
+        "schema_store_L3aQfH",
+        "schema_store_bAettY",
+        "schema_store_T7HfVw",
+        "schema_store_qLFE4t",
+        "schema_store_gwhb6c",
+        "schema_store_yjYNNt",
+        "schema_store_XjNie9",
+        "schema_store_4aGExq",
+        "schema_store_cLTCVC",
+        "schema_store_rmjM4f",
+        "schema_store_aQJjye",
+        "schema_store_ydwAW4",
+        "schema_store_AiHGBw",
+        "schema_store_zJEM4y",
+        "schema_store_66ENfR"
+      ],
+      "name": "Organization Schema",
+      "settings": {
+        "debug": false,
+        "org_name": "lorenzo dev store",
+        "org_logo": "shopify://shop_images/ChatGPT_Image_3_giu_2026_11_42_03.png",
+        "org_email": "lorenzo.sanseverino@cooder.it",
+        "org_phone": "3298236955",
+        "org_description": "the best shopify theme",
+        "instagram": "shopify://collections/common",
+        "facebook": "shopify://blogs/news",
+        "tiktok": "shopify://blogs/news",
+        "youtube": "shopify://collections/characters",
+        "x": "",
+        "linkedin": ""
+      }
     }
   },
   "order": [
-    "header"
+    "header",
+    "schema_org_R3tYgn"
   ]
 }
