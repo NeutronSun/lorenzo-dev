@@ -16,10 +16,10 @@
       "settings": {
         "suggested_queries": "veo\nmatrix\ndageth",
         "collections": [
-          "all-movies-dragon-ball",
-          "all-movies-matrix",
-          "all-movies-attack-on-titan",
-          "all-movies-the-boys"
+          "attack-on-titan",
+          "dragon-ball",
+          "matrix",
+          "legendary"
         ],
         "featured_products": [
           "agent-smithone",
@@ -27,7 +27,7 @@
           "dageth",
           "davide-the-king"
         ],
-        "empty_collection": "all-historical"
+        "empty_collection": "characters"
       }
     },
     "localization": {
