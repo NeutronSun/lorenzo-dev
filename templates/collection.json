@@ -9,6 +9,13 @@
  */
 {
   "sections": {
+    "product_breadcrumb_w9jXgW": {
+      "type": "product-breadcrumb",
+      "name": "Breadcrumbs",
+      "settings": {
+        "separator": "/"
+      }
+    },
     "main": {
       "type": "collection",
       "blocks": {
@@ -69,14 +76,7 @@
         }
       },
       "settings": {
-        "products_per_page": 18
-      }
-    },
-    "product_breadcrumb_w9jXgW": {
-      "type": "product-breadcrumb",
-      "name": "Breadcrumbs",
-      "settings": {
-        "separator": "/"
+        "products_per_page": 50
       }
     }
   },
