@@ -1,5 +1,8 @@
 {% doc %}
-  Reusable Swiper Element wrapper with theme navigation and pagination styles.
+  Reusable Swiper Element wrapper with theme navigation, pagination and scrollbar in light DOM.
+
+  Controls (nav/pagination/scrollbar) are rendered in the light DOM and passed to Swiper via
+  scoped `*-el` selectors, so they are fully styleable with theme CSS (no shadow `::part()`).
 
   @param {string} slides - Concatenated slide HTML separated by delimiter
   @param {string} [delimiter] - Slide separator string
@@ -9,7 +12,8 @@
   @param {boolean} [loop] - Enable infinite loop
   @param {boolean} [navigation] - Show prev/next controls
   @param {boolean} [pagination] - Show pagination dots
-  @param {string} [id] - Section or block id for scoped CSS
+  @param {boolean} [scrollbar] - Show draggable scrollbar
+  @param {string} [id] - Unique scope id per instance (controls selectors are scoped by it)
   @param {string} [class] - Extra host class names
 {% enddoc %}
 
@@ -21,8 +25,10 @@
   assign loop = loop | default: false
   assign navigation = navigation | default: true
   assign pagination = pagination | default: true
+  assign scrollbar = scrollbar | default: true
   assign host_class = class | default: ''
   assign scope_id = id | default: 'swiper'
+  assign slide_parts = slides | split: delimiter
 %}
 
 {% if slides != blank %}
@@ -30,23 +36,53 @@
     class="swiper-host swiper-host--{{ scope_id }} {{ host_class }}"
     style="--swiper-slides: {{ slides_count }}; --swiper-slides-mobile: {{ slides_count_mobile }}; --swiper-gap: {{ gap }}px;"
   >
-    <swiper-container
-      slides-per-view="auto"
-      space-between="{{ gap }}"
-      {% if loop %}loop="true"{% endif %}
-      {% if navigation %}navigation="true"{% endif %}
-      {% if pagination %}
-        pagination="true"
-        pagination-clickable="true"
+    <div class="swiper-host__viewport">
+      {% if navigation %}
+        <button type="button" class="swiper-nav swiper-nav-prev" aria-label="Previous slide">
+          {% render 'icon-chevron' %}
+        </button>
+        <button type="button" class="swiper-nav swiper-nav-next" aria-label="Next slide">
+          {% render 'icon-chevron' %}
+        </button>
       {% endif %}
-    >
-      {% assign slide_parts = slides | split: delimiter %}
-      {% for slide_html in slide_parts %}
-        {% if slide_html != blank %}
-          <swiper-slide class="swiper-host__slide">{{ slide_html }}</swiper-slide>
+
+      <swiper-container
+        slides-per-view="auto"
+        space-between="{{ gap }}"
+        {% if loop %}loop="true"{% endif %}
+        {% if navigation %}
+          navigation-prev-el=".swiper-host--{{ scope_id }} .swiper-nav-prev"
+          navigation-next-el=".swiper-host--{{ scope_id }} .swiper-nav-next"
         {% endif %}
-      {% endfor %}
-    </swiper-container>
+        {% if pagination %}
+          pagination="true"
+          pagination-clickable="true"
+          pagination-el=".swiper-host--{{ scope_id }} .swiper-pagination"
+        {% endif %}
+        {% if scrollbar %}
+          scrollbar="true"
+          scrollbar-draggable="true"
+          scrollbar-el=".swiper-host--{{ scope_id }} .swiper-scrollbar"
+        {% endif %}
+        mousewheel="true"
+        mousewheel-force-to-axis="true"
+        mousewheel-release-on-edges="true"
+        free-mode="true"
+      >
+        {% for slide_html in slide_parts %}
+          {% if slide_html != blank %}
+            <swiper-slide class="swiper-host__slide">{{ slide_html }}</swiper-slide>
+          {% endif %}
+        {% endfor %}
+      </swiper-container>
+    </div>
+
+    {% if scrollbar %}
+      <div class="swiper-scrollbar"></div>
+    {% endif %}
+    {% if pagination %}
+      <div class="swiper-pagination"></div>
+    {% endif %}
   </div>
 
   <script src="{{ 'swiper-element-bundle.min.js' | asset_url }}" defer></script>
@@ -54,15 +90,21 @@
 
 {% stylesheet %}
   .swiper-host {
-    --swiper-navigation-size: 40px;
-    --swiper-navigation-color: var(--black);
-    --swiper-pagination-color: var(--black);
-    --swiper-pagination-bullet-size: 6px;
-    --swiper-pagination-bullet-horizontal-gap: 6px;
-    --swiper-pagination-bottom: 0px;
+    --swiper-footer-gap: 10px;
+    --swiper-nav-size: 36px;
+    --swiper-bullet-size: 8px;
+    --swiper-scrollbar-size: 3px;
 
+    display: flex;
+    flex-direction: column;
+    gap: var(--swiper-footer-gap);
     position: relative;
-    padding-bottom: calc(var(--swiper-pagination-bullet-size) + 20px);
+    min-width: 0;
+  }
+
+  .swiper-host__viewport {
+    position: relative;
+    min-width: 0;
   }
 
   .swiper-host swiper-container {
@@ -81,68 +123,101 @@
     height: 100%;
   }
 
-  .swiper-host swiper-container::part(button-prev),
-  .swiper-host swiper-container::part(button-next),
-  .swiper-host .swiper-button-prev,
-  .swiper-host .swiper-button-next {
+  .swiper-nav {
+    position: absolute;
     top: 50%;
-    width: var(--swiper-navigation-size);
-    height: var(--swiper-navigation-size);
-    margin-top: calc(var(--swiper-navigation-size) / -2);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--swiper-nav-size);
+    height: var(--swiper-nav-size);
+    padding: 0;
+    transform: translateY(-50%);
     border: 1px solid var(--border-color);
-    border-radius: 0;
     background: var(--white);
+    color: var(--black);
+    cursor: pointer;
     opacity: 0;
-    transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
   }
 
-  .swiper-host:hover swiper-container::part(button-prev),
-  .swiper-host:hover swiper-container::part(button-next),
-  .swiper-host:hover .swiper-button-prev,
-  .swiper-host:hover .swiper-button-next {
-    opacity: 1;
+  .swiper-nav .svg-icon {
+    width: 18px;
+    height: 18px;
   }
 
-  .swiper-host swiper-container::part(button-prev):hover,
-  .swiper-host swiper-container::part(button-next):hover,
-  .swiper-host .swiper-button-prev:hover,
-  .swiper-host .swiper-button-next:hover {
+  .swiper-nav-prev {
+    left: 8px;
+  }
+
+  .swiper-nav-prev .svg-icon {
+    transform: rotate(90deg);
+  }
+
+  .swiper-nav-next {
+    right: 8px;
+  }
+
+  .swiper-nav-next .svg-icon {
+    transform: rotate(-90deg);
+  }
+
+  .swiper-nav:hover {
     border-color: var(--black);
-    background: var(--white);
+    background: var(--background-darken);
   }
 
-  .swiper-host swiper-container::part(button-prev).swiper-button-disabled,
-  .swiper-host swiper-container::part(button-next).swiper-button-disabled,
-  .swiper-host .swiper-button-prev.swiper-button-disabled,
-  .swiper-host .swiper-button-next.swiper-button-disabled {
+  .swiper-nav.swiper-button-disabled {
     opacity: 0;
     pointer-events: none;
   }
 
-  .swiper-host swiper-container::part(pagination),
-  .swiper-host .swiper-pagination {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    gap: var(--swiper-pagination-bullet-horizontal-gap);
-  }
-
-  .swiper-host swiper-container::part(bullet),
-  .swiper-host swiper-container::part(bullet-active),
-  .swiper-host .swiper-pagination-bullet {
-    width: var(--swiper-pagination-bullet-size);
-    height: var(--swiper-pagination-bullet-size);
-    margin: 0;
-    border-radius: 0;
-    background: oklch(from var(--black) l c h / 0.2);
+  .swiper-host__viewport:hover .swiper-nav:not(.swiper-button-disabled),
+  .swiper-host__viewport:focus-within .swiper-nav:not(.swiper-button-disabled) {
     opacity: 1;
   }
 
-  .swiper-host swiper-container::part(bullet-active),
-  .swiper-host .swiper-pagination-bullet-active {
+  .swiper-scrollbar {
+    position: relative;
+    width: 100%;
+    height: var(--swiper-scrollbar-size);
+    background: oklch(from var(--black) l c h / 0.06);
+  }
+
+  .swiper-scrollbar-drag {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 0;
+  }
+
+  .swiper-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .swiper-pagination-bullet {
+    width: var(--swiper-bullet-size);
+    height: var(--swiper-bullet-size);
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
     background: var(--black);
+    opacity: 0.18;
+    cursor: pointer;
+    transition:
+      opacity 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: var(--accent);
+    opacity: 1;
   }
 
   @media screen and (min-width: 750px) {

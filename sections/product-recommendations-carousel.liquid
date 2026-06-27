@@ -91,7 +91,7 @@
   .product-recommendations-carousel__inner {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 20px;
   }
 
   .product-recommendations-carousel__header {
@@ -99,27 +99,26 @@
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 1rem 1.5rem;
+    gap: 16px 20px;
   }
 
   .product-recommendations-carousel__copy {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
     min-width: 0;
   }
 
   .product-recommendations-carousel__eyebrow {
     color: var(--secondary-black);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
+    font-size: 10px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
   .product-recommendations-carousel__title {
-    max-width: 16ch;
-    font-size: clamp(1.75rem, 5vw, 3rem);
-    line-height: 0.95;
+    font-size: 24px;
+    line-height: 1;
   }
 
   .product-recommendations-carousel__link {
@@ -127,8 +126,8 @@
     align-items: center;
     gap: 0.35rem;
     color: var(--black);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
+    font-size: 10px;
+    letter-spacing: 0.18em;
     text-decoration: none;
     text-transform: uppercase;
     white-space: nowrap;
@@ -140,7 +139,7 @@
 
   @media screen and (min-width: 750px) {
     .product-recommendations-carousel__inner {
-      gap: 2rem;
+      gap: 24px;
     }
   }
 {% endstylesheet %}
