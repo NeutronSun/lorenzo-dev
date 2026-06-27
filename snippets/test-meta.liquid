@@ -1,0 +1,9 @@
+{% assign metas = metaobjects['rarity'].values %}
+{% for meta in metas %}
+  {{ meta | json }}
+{% endfor %}
+
+{% assign metas = metaobjects['theme'].values %}
+{% for meta in metas %}
+  {{ meta | json }}
+{% endfor %}
