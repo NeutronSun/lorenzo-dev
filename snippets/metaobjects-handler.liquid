@@ -9,7 +9,7 @@
       {% for meta in metaobjects['theme'].values %}
         "{{ meta.system.handle }}": {
           "name": {{ meta.name | json }},
-          "icon": {{ meta.icon.value | image_url: width: 720 | json }}
+          "icon": {{ meta.icon.value | image_url | json }}
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     }
