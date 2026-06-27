@@ -3,8 +3,20 @@
 
 {% content_for 'block', type: 'filters', id: 'filters-and-sorting', source: collection %}
 
-<product-grid>
-  {% paginate collection.products by 18 %}
+{% liquid
+  assign products_per_page = section.settings.products_per_page | default: 18
+
+  if products_per_page > 50
+    assign products_per_page = 50
+  endif
+
+  if products_per_page < 1
+    assign products_per_page = 1
+  endif
+%}
+
+<product-grid data-section-id="{{ section.id }}">
+  {% paginate collection.products by products_per_page %}
     {% for product in collection.products %}
       {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
     {% endfor %}
@@ -18,8 +30,15 @@
   "name": "t:general.collection",
   "class": "section page-width",
   "settings": [
-
-
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 18
+    }
   ]
 }
 {% endschema %}

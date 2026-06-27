@@ -11,7 +11,6 @@ import { TemplateHandler, UrlUtils } from '@theme/utilities';
 class CollectionPartial {
   static VIEW = Object.freeze({
     FILTERS: 'filters',
-    GRID: 'grid',
   });
 
   static SELECTOR = Object.freeze({
@@ -20,7 +19,7 @@ class CollectionPartial {
   });
 
   /**
-   * Builds a collection partial URL with search params and view name.
+   * Builds a collection filter partial URL with search params and view name.
    * @param {URLSearchParams} params
    * @param {string} view
    * @returns {URL}
@@ -29,6 +28,18 @@ class CollectionPartial {
     const url = UrlUtils.withSearchParams(window.location.href, params);
 
     return UrlUtils.withView(url, view);
+  }
+
+  /**
+   * Builds a collection grid partial URL via section rendering.
+   * @param {URLSearchParams} params
+   * @param {string} sectionId
+   * @returns {URL}
+   */
+  static buildGridUrl(params, sectionId) {
+    const url = UrlUtils.withSearchParams(window.location.href, params);
+
+    return UrlUtils.withSectionId(url, sectionId);
   }
 }
 
@@ -233,7 +244,11 @@ class ProductGrid extends HTMLComponent {
    */
   async render(params) {
     const requestId = ++this.requestId;
-    const url = CollectionPartial.buildUrl(params, CollectionPartial.VIEW.GRID);
+    const sectionId = this.dataset.sectionId;
+
+    if (!sectionId) return;
+
+    const url = CollectionPartial.buildGridUrl(params, sectionId);
     const nextGrid = await TemplateHandler.fetchPartial(url, CollectionPartial.SELECTOR.GRID, {
       headers: { Accept: 'text/html' },
     });

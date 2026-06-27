@@ -1,7 +1,11 @@
 {% layout none %}
 
+{% liquid
+  assign products_per_page = 18
+%}
+
 <product-grid>
-  {% paginate collection.products by 18 %}
+  {% paginate collection.products by products_per_page %}
     {% for product in collection.products %}
       {% content_for 'block', type: 'product-card', id: 'product-card', product: product %}
     {% endfor %}
