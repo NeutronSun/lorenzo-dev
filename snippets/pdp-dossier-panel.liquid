@@ -3,18 +3,30 @@
 
   @param {string} title - Panel title
   @param {string} panel_class - Modifier class (e.g. pdp-dossier-edition)
+  @param {string} panel_id - Unique panel id for the toggle control
   @param {number} mobile_order - Flex order on mobile
   @param {boolean} open_by_default - Whether the panel starts expanded
   @param {string} body - Panel inner HTML
   @param {string} [attributes] - Extra attributes (e.g. block.shopify_attributes)
 {% enddoc %}
 
-<details
+{% liquid
+  assign toggle_id = 'pdp-dossier-' | append: panel_id
+%}
+
+<div
   class="pdp-dossier-panel {{ panel_class }}"
   style="--mobile-order: {{ mobile_order }}"
   {{ attributes }}
-  {% if open_by_default %}open{% endif %}
 >
-  <summary class="pdp-dossier-title font-mono">{{ title }}</summary>
-  {{ body }}
-</details>
+  <input
+    type="checkbox"
+    class="pdp-dossier-toggle"
+    id="{{ toggle_id }}"
+    {% if open_by_default %}checked{% endif %}
+  >
+  <label class="pdp-dossier-title font-mono" for="{{ toggle_id }}">{{ title }}</label>
+  <div class="pdp-dossier-content">
+    {{ body }}
+  </div>
+</div>

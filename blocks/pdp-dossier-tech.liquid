@@ -6,18 +6,21 @@
   assign mobile_order = block.settings.mobile_order | default: 3
 %}
 
-<details
-  class="pdp-dossier-panel pdp-dossier-tech"
-  style="--mobile-order: {{ mobile_order }}"
-  {{ block.shopify_attributes }}
-  {% if block.settings.open_by_default %}open{% endif %}
->
-  <summary class="pdp-dossier-title font-mono">/Technical</summary>
-
+{% capture panel_body %}
   <dl class="rows">
     {% content_for 'blocks' %}
   </dl>
-</details>
+{% endcapture %}
+
+{% render 'pdp-dossier-panel',
+  title: '/Technical',
+  panel_class: 'pdp-dossier-tech',
+  panel_id: block.id,
+  mobile_order: mobile_order,
+  open_by_default: block.settings.open_by_default,
+  body: panel_body,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {

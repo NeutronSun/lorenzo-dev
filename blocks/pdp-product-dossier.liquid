@@ -21,20 +21,29 @@
       background: var(--white);
       box-shadow: 0 10px 28px rgb(0 0 0 / 0.04);
 
-      summary {
-        list-style: none;
-
-        &::-webkit-details-marker {
-          display: none;
-        }
+      .pdp-dossier-toggle {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
-      &:not([open]) .pdp-dossier-title {
+      .pdp-dossier-toggle:not(:checked) + .pdp-dossier-title {
         border-bottom: 0;
+      }
+
+      .pdp-dossier-toggle:not(:checked) + .pdp-dossier-title + .pdp-dossier-content {
+        display: none;
       }
     }
 
     .pdp-dossier-title {
+      display: block;
       margin: 0;
       padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
@@ -141,6 +150,23 @@
   @media screen and (max-width: 989px) {
     .pdp-product-dossier .pdp-dossier-panel {
       order: var(--mobile-order, 0);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .pdp-product-dossier .pdp-dossier-panel {
+      .pdp-dossier-toggle:not(:checked) + .pdp-dossier-title {
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .pdp-dossier-toggle:not(:checked) + .pdp-dossier-title + .pdp-dossier-content {
+        display: block;
+      }
+
+      .pdp-dossier-title {
+        pointer-events: none;
+        cursor: default;
+      }
     }
   }
 {% endstylesheet %}
