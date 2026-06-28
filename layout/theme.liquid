@@ -19,6 +19,8 @@
       <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
     {% endif %}
 
+    {% render 'lcp-preload' %}
+
     {% render 'theme-css' %}
     {% render 'theme-js' %}
 
