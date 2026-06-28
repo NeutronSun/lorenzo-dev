@@ -6,6 +6,7 @@
 
 /**
  * @typedef {Object} Rarity
+ * @property {string} [label]
  * @property {string} name
  * @property {Color} color
  * @property {Handle} handle
@@ -32,7 +33,6 @@ export class MetaobjectsHandler {
   static json = window.metaobjects || null;
 
   /**
-   * Get rarity by handle
    * @param {Handle} handle
    * @returns {Rarity | undefined}
    */

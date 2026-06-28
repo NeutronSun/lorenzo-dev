@@ -1,3 +1,11 @@
+<style>
+  :root {
+    {% for meta in metaobjects['rarity'].values %}
+      --rarity-{{ meta.system.handle }}: {{ meta.color.value | default: meta.color }};
+    {% endfor %}
+  }
+</style>
+
 <script>
   window.metaobjects = {
     rarity: {

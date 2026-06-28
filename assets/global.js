@@ -15,7 +15,6 @@ import "@theme/pdp-siblings";
 import "@theme/product-card";
 import "@theme/deferred-section";
 import "@theme/metaobjects-handler";
-import { MetaobjectsHandler } from "@theme/metaobjects-handler";
 
 console.log(`
                       __
@@ -32,5 +31,3 @@ console.log(`
   ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝
 `);
 
-
-console.log(MetaobjectsHandler.getRarity('rare'));

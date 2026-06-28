@@ -1,34 +1,12 @@
 {% render 'product-card-labels',
   product: product,
-  show_new_in: block.settings.show_new_in,
-  show_sold_out: block.settings.show_sold_out,
-  show_rarity: block.settings.show_rarity,
   attributes: block.shopify_attributes
 %}
 
 {% schema %}
 {
   "name": "Labels",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_new_in",
-      "label": "Show New in",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_sold_out",
-      "label": "Show Sold out",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rarity",
-      "label": "Show rarity",
-      "default": true
-    }
-  ],
+  "settings": [],
   "presets": [
     {
       "name": "Labels",

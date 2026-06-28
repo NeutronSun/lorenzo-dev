@@ -2,9 +2,6 @@
   Renders a static product card.
 
   @param {product} product - Product object
-  @param {boolean} show_new_in - Show new in label
-  @param {boolean} show_sold_out - Show sold out label
-  @param {boolean} show_rarity - Show rarity label
   @param {string} match_prefix - Product sibling match tag prefix
   @param {number} siblings_limit - Product siblings limit
   @param {string} media - Product card media HTML
@@ -20,14 +17,7 @@
   {% if media != blank %}
     {{ media }}
   {% else %}
-    {% render 'product-card-media',
-      product: product,
-      show_new_in: show_new_in,
-      show_sold_out: show_sold_out,
-      show_rarity: show_rarity,
-      labels: '',
-      attributes: ''
-    %}
+    {% render 'product-card-media', product: product, labels: '', attributes: '' %}
   {% endif %}
 
   {% if info != blank %}

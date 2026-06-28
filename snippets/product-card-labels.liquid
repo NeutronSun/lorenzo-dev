@@ -2,15 +2,10 @@
   Renders product card labels.
 
   @param {product} product - Product object
-  @param {boolean} show_new_in - Show new in label
-  @param {boolean} show_sold_out - Show sold out label
-  @param {boolean} show_rarity - Show rarity label
   @param {string} attributes - Optional attributes for the product-card-labels element
 {% enddoc %}
 
 {% liquid
-  assign rarity = product.metafields.valeverce.rarity.value
-  assign rarity_color = rarity.color.value | default: rarity.color
   assign now = 'now' | date: '%s' | times: 1
   assign created_at = product.created_at | date: '%s' | times: 1
   assign new_in_threshold = 30 | times: 24 | times: 60 | times: 60
@@ -20,43 +15,44 @@
   if product_age <= new_in_threshold
     assign is_new_in = true
   endif
+
+  assign rarity_handle = product.metafields.valeverce.rarity.value.system.handle | default: ''
+  assign theme_handle = product.metafields.valeverce.theme.value | handleize | downcase
+  assign is_sold_out = false
+
+  unless product.available
+    assign is_sold_out = true
+  endunless
 %}
 
-{% if show_new_in and is_new_in or show_sold_out and product.available == false or show_rarity and rarity != blank %}
-  <product-card-labels {{ attributes }}>
-    {% if show_new_in and is_new_in %}
-      <span class="label">New in</span>
-    {% endif %}
-
-    {% if show_sold_out and product.available == false %}
-      <span class="label sold-out">
-        <span class="swatch"></span>
-        Sold out
-      </span>
-    {% endif %}
-
-    {% if show_rarity and rarity != blank %}
-      <span class="label rarity" style="--rarity-color: {{ rarity_color | default: 'var(--black)' }};">
-        <span class="swatch"></span>
-        {{ rarity.label | default: rarity.name | default: 'Rarity' }}
-      </span>
-    {% endif %}
-  </product-card-labels>
+{% if is_new_in or is_sold_out or rarity_handle != blank or theme_handle != blank %}
+  <product-card-labels
+    {{ attributes }}
+    {% if is_new_in %}data-new-in{% endif %}
+    {% if is_sold_out %}data-sold-out{% endif %}
+    data-rarity-handle="{{ rarity_handle }}"
+    data-theme-handle="{{ theme_handle }}"
+  ></product-card-labels>
 {% endif %}
 
 {% stylesheet %}
   product-card-labels {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    max-width: calc(100% - 20px);
+    --theme-logo-size: 48px;
 
-    .label {
+    position: absolute;
+    inset: 10px;
+    z-index: 3;
+    pointer-events: none;
+
+    [data-labels-stack] {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      max-width: calc(100% - var(--theme-logo-size) - 10px);
+    }
+
+    [data-label] {
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -73,7 +69,7 @@
       text-transform: uppercase;
     }
 
-    .swatch {
+    [data-swatch] {
       width: 8px;
       height: 8px;
       border: 1px solid var(--border-color);
@@ -81,8 +77,18 @@
       background: var(--rarity-color, var(--black));
     }
 
-    .sold-out {
+    [data-label][data-sold-out] {
       --rarity-color: var(--red);
+    }
+
+    [data-theme-logo] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block;
+      width: var(--theme-logo-size);
+      height: var(--theme-logo-size);
+      object-fit: contain;
     }
   }
 {% endstylesheet %}

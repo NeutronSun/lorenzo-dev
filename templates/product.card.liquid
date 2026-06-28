@@ -1,21 +1,12 @@
 {% layout none %}
 
 {% capture labels %}
-  {% render 'product-card-labels',
-    product: product,
-    show_new_in: true,
-    show_sold_out: true,
-    show_rarity: true,
-    attributes: ''
-  %}
+  {% render 'product-card-labels', product: product, attributes: '' %}
 {% endcapture %}
 
 {% capture media %}
   {% render 'product-card-media',
     product: product,
-    show_new_in: true,
-    show_sold_out: true,
-    show_rarity: true,
     labels: labels,
     attributes: ''
   %}
@@ -50,9 +41,6 @@
 
 {% render 'product-card',
   product: product,
-  show_new_in: true,
-  show_sold_out: true,
-  show_rarity: true,
   match_prefix: 'Model_',
   siblings_limit: 10,
   media: media,
