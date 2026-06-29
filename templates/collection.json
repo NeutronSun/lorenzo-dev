@@ -183,7 +183,7 @@
           "static": true,
           "settings": {
             "alternative_layout_mobile": 1,
-            "alternative_layout_desktop": 3
+            "alternative_layout_desktop": 10
           },
           "blocks": {}
         },
@@ -235,8 +235,8 @@
       },
       "settings": {
         "columns_mobile": 2,
-        "columns_desktop": 5,
-        "products_per_page": 50
+        "columns_desktop": 6,
+        "products_per_page": 48
       }
     }
   },
