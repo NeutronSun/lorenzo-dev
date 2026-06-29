@@ -22,28 +22,38 @@
               "settings": {
                 "season": "{{ closest.product.metafields.valeverce.edition.value }}",
                 "number": "{{ closest.product.metafields.valeverce.number.value }}",
-                "series": "{{ closest.product.metafields.valeverce.micro_category.value }}"
+                "series": "{{ closest.product.metafields.valeverce.micro_category.value }}",
+                "mobile_order": 2,
+                "open_by_default": false
               },
-              "blocks": {}
-            },
-            "pdp_card_stats_kkDj3i": {
-              "type": "pdp-card-stats",
-              "name": "PDP Card Stats",
-              "settings": {},
               "blocks": {}
             },
             "pdp_dossier_description_ByQMxb": {
               "type": "pdp-dossier-description",
               "name": "PDP Dossier Description",
               "settings": {
-                "text": "{{ closest.product.description }}"
+                "text": "{{ closest.product.description }}",
+                "mobile_order": 1,
+                "open_by_default": true
+              },
+              "blocks": {}
+            },
+            "pdp_card_stats_kkDj3i": {
+              "type": "pdp-card-stats",
+              "name": "PDP Card Stats",
+              "settings": {
+                "mobile_order": 3,
+                "open_by_default": false
               },
               "blocks": {}
             },
             "pdp_dossier_tech_BkgHXF": {
               "type": "pdp-dossier-tech",
               "name": "PDP Dossier Technical",
-              "settings": {},
+              "settings": {
+                "mobile_order": 4,
+                "open_by_default": false
+              },
               "blocks": {
                 "pdp_dossier_tech_row_RyPxG8": {
                   "type": "pdp-dossier-tech-row",
@@ -72,8 +82,8 @@
           },
           "block_order": [
             "pdp_dossier_edition_m6WELq",
-            "pdp_card_stats_kkDj3i",
             "pdp_dossier_description_ByQMxb",
+            "pdp_card_stats_kkDj3i",
             "pdp_dossier_tech_BkgHXF"
           ]
         },
@@ -145,11 +155,7 @@
                 "labels": {
                   "type": "product-card-labels",
                   "static": true,
-                  "settings": {
-                    "show_new_in": true,
-                    "show_sold_out": true,
-                    "show_rarity": true
-                  },
+                  "settings": {},
                   "blocks": {}
                 }
               },
