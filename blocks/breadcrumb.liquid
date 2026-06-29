@@ -1,0 +1,47 @@
+{% doc %}
+  Renders breadcrumb navigation as a text block.
+
+  @example
+  {% content_for 'block', type: 'breadcrumb', id: 'breadcrumb' %}
+{% enddoc %}
+
+{% capture breadcrumb_content %}
+  <nav class="breadcrumb-nav" aria-label="Breadcrumb">{%- render 'breadcrumb-nav', separator: block.settings.separator -%}</nav>
+{% endcapture %}
+
+{% content_for 'block', type: 'text', id: 'text', body: breadcrumb_content %}
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "/"
+    }
+  ],
+  "blocks": [{ "type": "text" }],
+  "presets": [
+    {
+      "name": "Breadcrumbs",
+      "category": "Navigation",
+      "blocks": [
+        {
+          "type": "text",
+          "id": "text",
+          "static": true,
+          "settings": {
+            "font": "mono",
+            "color": "secondary",
+            "font_size": 10,
+            "text_transform": "uppercase",
+            "alignment": "left"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

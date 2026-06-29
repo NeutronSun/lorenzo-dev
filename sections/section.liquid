@@ -1,5 +1,14 @@
 {% render 'spacing', section: section %}
 
+{% if section.settings.has_inner_dialog %}
+  {% style %}
+    #shopify-section-{{ section.id }}:has(dialog[open]) {
+      position: relative;
+      z-index: var(--z-index-drawer);
+    }
+  {% endstyle %}
+{% endif %}
+
 <div class="default-section section-{{ section.id }}">
   {% content_for 'blocks' %}
 </div>
@@ -7,7 +16,7 @@
 {% stylesheet %}
   .default-section {
     background-color: var(--white);
-    border: 1px solid var(--red);
+    border: 1px solid var(--border-color);
   }
 
 {% endstylesheet %}
@@ -71,6 +80,17 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Dialog"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_inner_dialog",
+      "label": "Has inner dialog",
+      "info": "Raises this section above page content while a nested dialog is open.",
+      "default": false
     }
   ],
   "presets": [

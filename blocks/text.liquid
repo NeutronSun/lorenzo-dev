@@ -5,26 +5,18 @@
   {% content_for 'block', type: 'text', id: 'text' %}
 {% enddoc %}
 
-<div
-  class="text {{ block.settings.text_style }}"
-  style="--text-align: {{ block.settings.alignment }}"
-  {{ block.shopify_attributes }}
->
-  {{ block.settings.text }}
-</div>
-
-{% stylesheet %}
-  .text {
-    text-align: var(--text-align);
-  }
-  .text--title {
-    font-size: 2rem;
-    font-weight: 700;
-  }
-  .text--subtitle {
-    font-size: 1.5rem;
-  }
-{% endstylesheet %}
+{% render 'text',
+  text: block.settings.text,
+  body: body,
+  heading: block.settings.heading,
+  heading_tag: block.settings.heading_tag,
+  font: block.settings.font,
+  color: block.settings.color,
+  font_size: block.settings.font_size,
+  text_transform: block.settings.text_transform,
+  alignment: block.settings.alignment,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
@@ -37,15 +29,71 @@
       "default": "Text"
     },
     {
+      "type": "checkbox",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": false
+    },
+    {
       "type": "select",
-      "id": "text_style",
-      "label": "t:labels.text_style",
+      "id": "heading_tag",
+      "label": "t:labels.heading_tag",
+      "visible_if": "{{ block.settings.heading }}",
       "options": [
-        { "value": "text--title", "label": "t:options.text_style.title" },
-        { "value": "text--subtitle", "label": "t:options.text_style.subtitle" },
-        { "value": "text--normal", "label": "t:options.text_style.normal" }
+        { "value": "h1", "label": "t:options.heading_tag.h1" },
+        { "value": "h2", "label": "t:options.heading_tag.h2" },
+        { "value": "h3", "label": "t:options.heading_tag.h3" },
+        { "value": "h4", "label": "t:options.heading_tag.h4" },
+        { "value": "h5", "label": "t:options.heading_tag.h5" },
+        { "value": "h6", "label": "t:options.heading_tag.h6" }
       ],
-      "default": "text--title"
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:labels.font",
+      "options": [
+        { "value": "body", "label": "t:options.font.body" },
+        { "value": "mono", "label": "t:options.font.mono" },
+        { "value": "heading", "label": "t:options.font.heading" }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "t:labels.color",
+      "options": [
+        { "value": "default", "label": "t:options.color.default" },
+        { "value": "black", "label": "t:options.color.black" },
+        { "value": "accent", "label": "t:options.color.accent" },
+        { "value": "red", "label": "t:options.color.red" },
+        { "value": "secondary", "label": "t:options.color.secondary" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "t:labels.font_size",
+      "min": 0,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "t:labels.text_transform",
+      "options": [
+        { "value": "none", "label": "t:options.text_transform.none" },
+        { "value": "uppercase", "label": "t:options.text_transform.uppercase" },
+        { "value": "lowercase", "label": "t:options.text_transform.lowercase" },
+        { "value": "capitalize", "label": "t:options.text_transform.capitalize" }
+      ],
+      "default": "none"
     },
     {
       "type": "text_alignment",

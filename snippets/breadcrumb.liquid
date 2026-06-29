@@ -1,0 +1,66 @@
+{% doc %}
+  Renders breadcrumb navigation from product, collection, or page context.
+
+  @param {string} [separator] - Segment separator
+  @param {boolean} [section_layout] - Section grid layout with view transition
+  @param {string} [attributes] - Optional HTML attributes for the root element
+{% enddoc %}
+
+<pdp-breadcrumb
+  {% if section_layout %}
+    class="section"
+    data-pdp-breadcrumb
+    style="view-transition-name: product-breadcrumb;"
+  {% endif %}
+  {{ attributes }}
+>
+  <nav class="bar breadcrumb-nav{% if section_layout %} page-width{% endif %}" aria-label="Breadcrumb">
+    {%- render 'breadcrumb-nav', separator: separator -%}
+  </nav>
+</pdp-breadcrumb>
+
+{% stylesheet %}
+  pdp-breadcrumb {
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      padding: 0 16px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    a,
+    span {
+      min-width: 0;
+      overflow: hidden;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    span {
+      color: inherit;
+    }
+
+    .separator {
+      flex: 0 0 auto;
+    }
+  }
+
+  pdp-breadcrumb.section {
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    background: var(--background);
+
+    .bar {
+      grid-column: 2;
+    }
+  }
+{% endstylesheet %}

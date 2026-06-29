@@ -36,9 +36,14 @@
   "labels": {
     "alignment": "Alignment",
     "background": "Background",
+    "color": "Color",
+    "font": "Font",
+    "font_size": "Font size",
     "foreground": "Foreground",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
+    "heading": "Heading",
+    "heading_tag": "Heading level",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
     "menu": "Menu",
@@ -47,8 +52,8 @@
     "page_margin": "Page margin",
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
-    "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "text_transform": "Text transform"
   },
   "options": {
     "alignment": {
@@ -56,9 +61,29 @@
       "center": "Center",
       "right": "Right"
     },
+    "color": {
+      "default": "Default",
+      "black": "Black",
+      "accent": "Accent",
+      "red": "Red",
+      "secondary": "Secondary"
+    },
     "direction": {
       "horizontal": "Horizontal",
       "vertical": "Vertical"
+    },
+    "font": {
+      "body": "Body",
+      "mono": "Mono",
+      "heading": "Heading"
+    },
+    "heading_tag": {
+      "h1": "H1",
+      "h2": "H2",
+      "h3": "H3",
+      "h4": "H4",
+      "h5": "H5",
+      "h6": "H6"
     },
     "page_width": {
       "narrow": "Narrow",
@@ -68,10 +93,11 @@
       "large": "Large",
       "small": "Small"
     },
-    "text_style": {
-      "title": "Title",
-      "subtitle": "Subtitle",
-      "normal": "Normal text"
-    },
+    "text_transform": {
+      "none": "None",
+      "uppercase": "Uppercase",
+      "lowercase": "Lowercase",
+      "capitalize": "Capitalize"
+    }
   }
 }

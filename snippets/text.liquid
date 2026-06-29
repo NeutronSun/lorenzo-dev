@@ -1,0 +1,92 @@
+{% doc %}
+  Renders a text block.
+
+  @param {string} [text] - Plain text content
+  @param {string} [body] - HTML content
+  @param {boolean} [heading] - Wrap plain text in a heading element
+  @param {string} [heading_tag] - Heading element tag (h1-h6)
+  @param {string} [font] - Font token (body, mono, heading)
+  @param {string} [color] - Color token (default, black, accent, red, secondary)
+  @param {number} [font_size] - Font size in pixels (0 inherits)
+  @param {string} [text_transform] - Text transform (none, uppercase, lowercase, capitalize)
+  @param {string} [alignment] - Text alignment
+  @param {string} [attributes] - Optional HTML attributes for the root element
+{% enddoc %}
+
+{% liquid
+  assign font_class = 'font-body'
+  if font != blank
+    assign font_class = 'font-' | append: font
+  endif
+
+  assign heading_tag = heading_tag | default: 'h2'
+  assign alignment = alignment | default: 'left'
+  assign text_transform = text_transform | default: 'none'
+  assign color = color | default: 'default'
+
+  assign color_class = ''
+  if color == 'accent'
+    assign color_class = 'color-accent'
+  elsif color == 'secondary'
+    assign color_class = 'color-secondary'
+  elsif color != 'default'
+    assign color_class = 'color-' | append: color
+  endif
+
+  assign style = '--text-align: ' | append: alignment | append: ';'
+  if font_size > 0
+    assign style = style | append: ' --text-font-size: ' | append: font_size | append: 'px;'
+  endif
+  if text_transform != 'none'
+    assign style = style | append: ' --text-transform: ' | append: text_transform | append: ';'
+  endif
+%}
+
+<div
+  class="text{% if color_class != blank %} {{ color_class }}{% endif %}{% if body != blank %} {{ font_class }}{% endif %}"
+  style="{{ style | strip }}"
+  {{ attributes }}
+>
+  {% if body != blank %}
+    {{ body }}
+  {% elsif heading %}
+    <{{ heading_tag }} class="{{ font_class }}">{{ text }}</{{ heading_tag }}>
+  {% else %}
+    <p class="{{ font_class }}">{{ text }}</p>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .text {
+    text-align: var(--text-align);
+    color: var(--color, inherit);
+    font-size: var(--text-font-size, inherit);
+    text-transform: var(--text-transform, none);
+
+    &.color-accent {
+      --color: var(--accent);
+    }
+
+    &.color-secondary {
+      --color: var(--secondary-black);
+    }
+
+    :is(h1, h2, h3, h4, h5, h6, p) {
+      margin: 0;
+      color: inherit;
+      font-size: inherit;
+      text-transform: inherit;
+    }
+
+    a:any-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:any-link:hover {
+      color: var(--black);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+{% endstylesheet %}
