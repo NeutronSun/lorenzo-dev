@@ -6,36 +6,9 @@
   @param {string} attributes - Optional attributes for the product-card-media element
 {% enddoc %}
 
-{% liquid
-  assign image_loading = 'lazy'
-  assign image_fetchpriority = blank
-
-  if request.page_type == 'collection' and collection.products.first.id == product.id
-    assign image_loading = 'eager'
-    assign image_fetchpriority = 'high'
-  endif
-
-  if request.page_type == 'search' and search.performed
-    for result in search.results limit: 1
-      if result.object_type == 'product' and result.id == product.id
-        assign image_loading = 'eager'
-        assign image_fetchpriority = 'high'
-      endif
-    endfor
-  endif
-%}
-
 <product-card-media ref="media" {{ attributes }}>
   <div class="main-image" data-view-transition="product-image">
-    {% if image_fetchpriority != blank %}
-      {{
-        product.featured_image
-        | image_url: width: 720
-        | image_tag: loading: image_loading, fetchpriority: image_fetchpriority
-      }}
-    {% else %}
-      {{ product.featured_image | image_url: width: 720 | image_tag: loading: image_loading }}
-    {% endif %}
+    {{ product.featured_image | image_url: width: 720 | image_tag }}
   </div>
   {% if labels != blank %}
     {{ labels }}
