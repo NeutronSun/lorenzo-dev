@@ -1,0 +1,120 @@
+{% doc %}
+  Product grid density switcher for collection toolbar.
+
+  @example
+  {% content_for 'block', type: 'grid-switcher', id: 'grid-switcher' %}
+{% enddoc %}
+
+<div
+  class="grid-switcher grid-switcher--{{ block.id }}"
+  role="radiogroup"
+  aria-label="Grid layout"
+  {{ block.shopify_attributes }}
+>
+  <label class="grid-switcher__option" aria-label="Default grid">
+    <input type="radio" name="grid-density" value="default" checked>
+    <span class="grid-switcher__icon" aria-hidden="true">
+      {% render 'icon-grid', variant: 'default', size: 18 %}
+    </span>
+  </label>
+  <label class="grid-switcher__option" aria-label="Alternative grid">
+    <input type="radio" name="grid-density" value="alternative">
+    <span class="grid-switcher__icon" aria-hidden="true">
+      {% render 'icon-grid', variant: 'alternative', size: 18 %}
+    </span>
+  </label>
+</div>
+
+{% style %}
+  @layer components {
+    #shopify-section-{{ section.id }}:has(.grid-switcher--{{ block.id }} [value='alternative']:checked) product-grid {
+      --product-grid-columns-mobile: {{ block.settings.alternative_layout_mobile }};
+    }
+
+    @media screen and (min-width: 750px) {
+      #shopify-section-{{ section.id }}:has(.grid-switcher--{{ block.id }} [value='alternative']:checked) product-grid {
+        --product-grid-columns-desktop: {{ block.settings.alternative_layout_desktop }};
+      }
+    }
+  }
+{% endstyle %}
+
+{% stylesheet %}
+  .grid-switcher {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .grid-switcher__option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 100%;
+    color: var(--secondary-black);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .grid-switcher__option input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  .grid-switcher__option:hover {
+    color: var(--black);
+  }
+
+  .grid-switcher__option:has(input:checked) {
+    border: 1px solid var(--border-color);
+    background: var(--background-darken);
+    color: var(--black);
+  }
+
+  .grid-switcher__icon {
+    display: inline-flex;
+    pointer-events: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Grid switcher",
+  "settings": [
+    {
+      "type": "range",
+      "id": "alternative_layout_mobile",
+      "label": "Alternative layout mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alternative_layout_desktop",
+      "label": "Alternative layout desktop",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid switcher",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}

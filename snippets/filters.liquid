@@ -21,7 +21,7 @@
 
 <dialog-component name="{{ drawer_name }}" non-modal>
   <dialog ref="dialog" id="{{ drawer_name }}" class="drawer from-right filters-drawer">
-    <collection-filters>
+    <collection-filters data-variant="drawer">
       <form on:submit="handleSubmit" on:change="handleChange">
         {% if source.terms != blank %}
           <input type="hidden" ref="persistent[]" name="q" value="{{ source.terms | escape }}">
@@ -112,26 +112,43 @@
 
             {% if is_rarity_filter %}
               {% if filter.values.size > 1 %}
+                {% liquid
+                  assign all_checked = true
+                  for value in filter.values
+                    if value.active
+                      assign all_checked = false
+                      break
+                    endif
+                  endfor
+                %}
                 <fieldset>
                   <legend class="font-mono">{{ filter.label }}</legend>
                   <div class="rarity-values">
+                    {% render 'filter-rarity',
+                      group: filter.param_name,
+                      value: '',
+                      label: 'All',
+                      checked: all_checked,
+                      class: 'value'
+                    %}
+
                     {% for value in filter.values %}
                       {% if value.active or value.count > 0 %}
                         {% liquid
-                          assign rarity_color = value.swatch.color
+                          assign is_disabled = false
+                          if value.count == 0 and value.active == false
+                            assign is_disabled = true
+                          endif
                         %}
-
-                        <label class="value rarity-value{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
-                          <input
-                            type="checkbox"
-                            name="{{ value.param_name }}"
-                            value="{{ value.value }}"
-                            {% if value.active %}checked{% endif %}
-                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                          >
-                          <span class="rarity-swatch" style="--rarity-color: {{ rarity_color | default: 'var(--background-darken)' }};"></span>
-                          <span>{{ value.label }}</span>
-                        </label>
+                        {% render 'filter-rarity',
+                          group: filter.param_name,
+                          value: value.value,
+                          label: value.label,
+                          color: value.swatch.color,
+                          checked: value.active,
+                          disabled: is_disabled,
+                          class: 'value'
+                        %}
                       {% endif %}
                     {% endfor %}
                   </div>

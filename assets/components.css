@@ -156,12 +156,15 @@
   }
 
   product-grid {
+    --product-grid-columns-mobile: 2;
+    --product-grid-columns-desktop: 5;
+
     display: grid;
-    grid-template-columns: repeat(2, minmax(50px, 1fr));
+    grid-template-columns: repeat(var(--product-grid-columns-mobile), minmax(0, 1fr));
     gap: 4px;
 
     @media screen and (min-width: 750px) {
-      grid-template-columns: repeat(5, minmax(200px, 1fr));
+      grid-template-columns: repeat(var(--product-grid-columns-desktop), minmax(0, 1fr));
     }
   }
 }

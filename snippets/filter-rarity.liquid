@@ -1,0 +1,46 @@
+{% doc %}
+  Renders a single rarity filter option as a radio label.
+
+  @param {string} group - Radio group name (filter param_name)
+  @param {string} value - Option value (blank for "All")
+  @param {string} label - Display label
+  @param {string} [color] - Swatch color
+  @param {boolean} [checked] - Whether the option is selected
+  @param {boolean} [disabled] - Whether the option is disabled
+  @param {string} [class] - Extra label classes
+{% enddoc %}
+
+<label class="rarity-value {{ class }}{% if disabled %} is-disabled{% endif %}">
+  <input
+    type="radio"
+    name="{{ group }}"
+    value="{{ value }}"
+    {% if checked %}checked{% endif %}
+    {% if disabled %}disabled{% endif %}
+  >
+  {% if value != blank %}
+    <span class="rarity-swatch" style="--rarity-color: {{ color | default: 'var(--background-darken)' }};"></span>
+  {% endif %}
+  <span>{{ label }}</span>
+</label>
+
+{% stylesheet %}
+  .rarity-value {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .rarity-value input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  .rarity-value.is-disabled {
+    cursor: not-allowed;
+  }
+{% endstylesheet %}

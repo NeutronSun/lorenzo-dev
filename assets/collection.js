@@ -55,6 +55,42 @@ class CollectionPartial {
 class Filters extends HTMLComponent {
   requestId = 0;
 
+  constructor() {
+    super();
+
+    this.onFiltersApply = this.onFiltersApply.bind(this);
+    this.onPopState = this.onPopState.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener(OnFiltersApplyEvent.TYPE, this.onFiltersApply);
+    window.addEventListener('popstate', this.onPopState);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(OnFiltersApplyEvent.TYPE, this.onFiltersApply);
+    window.removeEventListener('popstate', this.onPopState);
+    super.disconnectedCallback();
+  }
+
+  /**
+   * @param {OnFiltersApplyEvent} event
+   */
+  onFiltersApply(event) {
+    if (!event.params) return;
+
+    this.dataset.variant === 'drawer' && this.render(event.params);
+    this.dataset.variant === 'toolbar' && this.syncChecked(event.params);
+  }
+
+  onPopState() {
+    const params = new URLSearchParams(window.location.search);
+
+    this.dataset.variant === 'drawer' && this.render(params);
+    this.dataset.variant === 'toolbar' && this.syncChecked(params);
+  }
+
   /**
    * Applies filters on form submit and closes the filter dialog.
    * @param {SubmitEvent} event
@@ -69,17 +105,14 @@ class Filters extends HTMLComponent {
   }
 
   /**
-   * Applies filters on input change and refreshes the filter partial.
+   * Applies filters on input change.
    * @param {Event} event
    * @param {Element} element
    */
-  async handleChange(event, element) {
+  handleChange(event, element) {
     if (!(element instanceof HTMLFormElement)) return;
 
-    const params = this.getSearchParams(element);
-
-    this.publish(params);
-    await this.render(params);
+    this.publish(this.getSearchParams(element));
   }
 
   /**
@@ -87,18 +120,14 @@ class Filters extends HTMLComponent {
    * @param {Event} event
    * @param {Element} element
    */
-  async clear(event, element) {
+  clear(event, element) {
     const form = element.closest('form');
 
     if (!(form instanceof HTMLFormElement)) return;
 
     event.preventDefault();
     form.reset();
-
-    const params = this.getPersistentSearchParams(form);
-
-    this.publish(params);
-    await this.render(params);
+    this.publish(this.getPersistentSearchParams(form));
   }
 
   /**
@@ -111,7 +140,6 @@ class Filters extends HTMLComponent {
     this.closeDialog();
   }
 
-  /** Closes the nearest dialog-component ancestor. */
   closeDialog() {
     const host = this.closestTag('dialog-component');
 
@@ -123,12 +151,21 @@ class Filters extends HTMLComponent {
   }
 
   /**
-   * Serializes a filter form into URL search params.
    * @param {HTMLFormElement} form
    * @returns {URLSearchParams}
    */
   getSearchParams(form) {
-    const params = new URLSearchParams();
+    const params =
+      this.dataset.variant === 'toolbar'
+        ? new URLSearchParams(window.location.search)
+        : new URLSearchParams();
+
+    for (const element of form.elements) {
+      if (!(element instanceof HTMLInputElement) && !(element instanceof HTMLSelectElement)) continue;
+
+      element.name && params.delete(element.name);
+    }
+
     const formData = new FormData(form);
 
     for (const [key, value] of formData.entries()) {
@@ -141,7 +178,6 @@ class Filters extends HTMLComponent {
   }
 
   /**
-   * Reads persistent hidden inputs that survive filter clears.
    * @param {HTMLFormElement} form
    * @returns {URLSearchParams}
    */
@@ -159,7 +195,6 @@ class Filters extends HTMLComponent {
   }
 
   /**
-   * Dispatches a filters:apply event with the current params.
    * @param {URLSearchParams} params
    */
   publish(params) {
@@ -171,7 +206,23 @@ class Filters extends HTMLComponent {
   }
 
   /**
-   * Refreshes the filter form markup from a Liquid partial.
+   * @param {URLSearchParams} params
+   */
+  syncChecked(params) {
+    const form = this.querySelector('form');
+
+    if (!(form instanceof HTMLFormElement)) return;
+
+    for (const input of form.querySelectorAll('input[type="radio"]')) {
+      if (!(input instanceof HTMLInputElement) || !input.name) continue;
+
+      const values = params.getAll(input.name);
+
+      input.checked = values.includes(input.value) || (!input.value && !values.length);
+    }
+  }
+
+  /**
    * @param {URLSearchParams} params
    */
   async render(params) {
@@ -194,7 +245,7 @@ class Filters extends HTMLComponent {
 }
 
 /**
- * @typedef {Object} ProductGridRefs
+ * @typedef {Record<string, Element | Element[]>} ProductGridRefs
  */
 
 /**
@@ -224,7 +275,6 @@ class ProductGrid extends HTMLComponent {
   }
 
   /**
-   * Re-renders the grid when filters are applied.
    * @param {OnFiltersApplyEvent} event
    */
   async onFilter(event) {
@@ -233,13 +283,11 @@ class ProductGrid extends HTMLComponent {
     await this.render(event.params);
   }
 
-  /** Re-renders the grid when browser history changes. */
   onPopState() {
     this.render(new URLSearchParams(window.location.search));
   }
 
   /**
-   * Refreshes grid markup from a Liquid partial and updates the URL.
    * @param {URLSearchParams} params
    */
   async render(params) {
@@ -261,7 +309,6 @@ class ProductGrid extends HTMLComponent {
   }
 
   /**
-   * Pushes filter params into browser history without reloading.
    * @param {URLSearchParams} params
    */
   updateUrl(params) {

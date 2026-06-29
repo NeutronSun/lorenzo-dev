@@ -188,6 +188,16 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "quick-filters": {
+          "type": "quick-filters",
+          "static": true,
+          "settings": {}
+        },
+        "grid-switcher": {
+          "type": "grid-switcher",
+          "static": true,
+          "settings": {}
+        },
         "filters-and-sorting": {
           "type": "filters",
           "disabled": true,
@@ -241,7 +251,15 @@
           "block_order": []
         }
       },
+      "block_order": [
+        "quick-filters",
+        "grid-switcher",
+        "filters-and-sorting",
+        "product-card"
+      ],
       "settings": {
+        "columns_mobile": 2,
+        "columns_desktop": 5,
         "products_per_page": 50
       }
     }

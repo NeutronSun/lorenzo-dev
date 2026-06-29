@@ -1,8 +1,3 @@
-<h1>{{ collection.title }}</h1>
-
-
-{% content_for 'block', type: 'filters', id: 'filters-and-sorting', source: collection %}
-
 {% liquid
   assign products_per_page = section.settings.products_per_page | default: 18
 
@@ -15,6 +10,15 @@
   endif
 %}
 
+<div class="collection-toolbar">
+  <div class="collection-toolbar__track">
+    {% content_for 'block', type: 'quick-filters', id: 'quick-filters' %}
+  </div>
+  <div class="collection-toolbar__switcher">
+    {% content_for 'block', type: 'grid-switcher', id: 'grid-switcher' %}
+  </div>
+</div>
+
 <product-grid data-section-id="{{ section.id }}">
   {% paginate collection.products by products_per_page %}
     {% for product in collection.products %}
@@ -25,11 +29,78 @@
   {% endpaginate %}
 </product-grid>
 
+{% style %}
+  @layer components {
+    #shopify-section-{{ section.id }} product-grid {
+      --product-grid-columns-mobile: {{ section.settings.columns_mobile }};
+      --product-grid-columns-desktop: {{ section.settings.columns_desktop }};
+    }
+  }
+{% endstyle %}
+
+{% stylesheet %}
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing);
+
+    @media screen and (min-width: 750px) {
+      top: calc(var(--header-height) + var(--spacing) - 1px);
+    }
+  }
+
+  .collection-toolbar__track {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .collection-toolbar__switcher {
+    flex: 0 0 fit-content;
+    background: var(--white);
+    padding-inline: 12px 16px;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:general.collection",
   "class": "section page-width",
+  "blocks": [
+    { "type": "quick-filters" },
+    { "type": "grid-switcher" }
+  ],
   "settings": [
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Products per row mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Products per row desktop",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Pagination"
+    },
     {
       "type": "range",
       "id": "products_per_page",

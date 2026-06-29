@@ -1,0 +1,149 @@
+{% doc %}
+  Toolbar rarity filters carousel via collection-filters.
+
+  @example
+  {% content_for 'block', type: 'quick-filters', id: 'quick-filters' %}
+{% enddoc %}
+
+{% liquid
+  assign filter_source = collection
+
+  if request.page_type == 'search'
+    assign filter_source = search
+  endif
+
+  assign rarity_filter = nil
+
+  for filter in filter_source.filters
+    assign filter_label = filter.label | downcase
+    assign filter_param_name = filter.param_name | default: ''
+
+    if filter_label contains 'rarity' or filter_param_name contains 'valeverce.rarity'
+      assign rarity_filter = filter
+      break
+    endif
+  endfor
+%}
+
+{% if rarity_filter and rarity_filter.values.size > 0 %}
+  {% liquid
+    assign all_checked = true
+    for value in rarity_filter.values
+      if value.active
+        assign all_checked = false
+        break
+      endif
+    endfor
+  %}
+
+  <collection-filters data-variant="toolbar" {{ block.shopify_attributes }}>
+    <form on:change="handleChange">
+      <div class="quick-filters">
+        <swiper-container
+          class="quick-filters__swiper"
+          slides-per-view="auto"
+          space-between="0"
+          free-mode="true"
+          mousewheel="true"
+          mousewheel-force-to-axis="true"
+          mousewheel-release-on-edges="true"
+        >
+          <swiper-slide>
+            {% render 'filter-rarity', group: rarity_filter.param_name, value: '', label: 'All', checked: all_checked %}
+          </swiper-slide>
+
+          {% for value in rarity_filter.values %}
+            {% if value.active or value.count > 0 %}
+              {% liquid
+                assign is_disabled = false
+                if value.count == 0 and value.active == false
+                  assign is_disabled = true
+                endif
+              %}
+              <swiper-slide>
+                {% render 'filter-rarity',
+                  group: rarity_filter.param_name,
+                  value: value.value,
+                  label: value.label,
+                  color: value.swatch.color,
+                  checked: value.active,
+                  disabled: is_disabled
+                %}
+              </swiper-slide>
+            {% endif %}
+          {% endfor %}
+        </swiper-container>
+      </div>
+    </form>
+  </collection-filters>
+
+  <script src="{{ 'swiper-element-bundle.min.js' | asset_url }}" defer></script>
+{% endif %}
+
+{% stylesheet %}
+  .quick-filters {
+    min-width: 0;
+  }
+
+  .quick-filters__swiper {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .quick-filters swiper-slide {
+    width: auto;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .quick-filters .rarity-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    color: var(--secondary-black);
+    font-family: var(--font-mono--family);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .quick-filters .rarity-value:hover:not(:has(input:disabled)) {
+    color: var(--black);
+  }
+
+  .quick-filters .rarity-value:has(input:checked) {
+    background: var(--accent);
+    color: var(--black);
+  }
+
+  .quick-filters .rarity-value.is-disabled {
+    opacity: 0.45;
+  }
+
+  .quick-filters .rarity-swatch {
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    background: var(--rarity-color, var(--background-darken));
+    pointer-events: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Quick filters",
+  "presets": [
+    {
+      "name": "Quick filters",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
