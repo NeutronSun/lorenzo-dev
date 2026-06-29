@@ -8,7 +8,7 @@
 
 <product-card-media ref="media" {{ attributes }}>
   <div class="main-image" data-view-transition="product-image">
-    {{ product.featured_image | image_url: width: 720 | image_tag }}
+    {{ product.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', fetchpriority: 'high' }}
   </div>
   {% if labels != blank %}
     {{ labels }}
