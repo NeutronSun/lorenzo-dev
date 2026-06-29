@@ -42,7 +42,7 @@ File principali:
 - `blocks/pdp-sibling-tab.liquid`
 - `snippets/product-card-swatches.liquid`
 
-`ColorSibling` e' l'helper globale per Storefront API, query per tag, mapping base e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici se puoi usare `ColorSibling.fetchQuery`.
+`GraphQL` in `assets/graphql.js` centralizza config Storefront, headers e fetch. `ColorSibling` e' l'helper per siblings: query per tag, mapping e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici: usa `ColorSibling.get(tag, limit)` o `GraphQL.request(payload, label)` per altre query.
 
 `pdp-siblings` legge tab da blocchi `pdp-sibling-tab` (solo tag + label) e fa N query via `ColorSibling`. Template e chip restano in `pdp-product-info`.
 

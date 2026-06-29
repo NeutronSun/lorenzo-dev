@@ -117,7 +117,7 @@ class PdpSiblings extends HTMLComponent {
     this.hidden = false;
 
     const productGroups = await Promise.all(
-      tabConfigs.map((config) => ColorSibling.fetchPdp(config.tag, this.limit))
+      tabConfigs.map((config) => ColorSibling.get(config.tag, this.limit))
     );
 
     if (!this.isConnected || renderId !== this.renderId) return;

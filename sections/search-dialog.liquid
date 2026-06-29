@@ -343,11 +343,15 @@
       display: none;
     }
 
-    &[searching]:not([loading]) [data-search-initial-content] {
-      display: none;
+    &[data-state="loading"],
+    &[data-state="filled"],
+    &[data-state="empty"] {
+      [data-search-initial-content] {
+        display: none;
+      }
     }
 
-    &[loading] .search-dialog-loading {
+    &[data-state="loading"] .search-dialog-loading {
       display: grid;
       position: absolute;
       inset: 0;
@@ -362,12 +366,12 @@
       cursor: wait;
     }
 
-    &[has-results]:not([loading]) .search-dialog-results {
+    &[data-state="filled"] .search-dialog-results {
       display: grid;
       gap: 18px;
     }
 
-    &[empty]:not([loading]) .search-dialog-empty {
+    &[data-state="empty"] .search-dialog-empty {
       display: grid;
       place-items: center;
       align-content: center;

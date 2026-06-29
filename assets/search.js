@@ -5,17 +5,10 @@
 import { DialogComponent } from '@theme/dialog';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
-/**
- * Normalizes search queries for Shopify prefix matching.
- */
 class SearchQuery {
   static TERM_SEPARATOR = /\s+/;
 
-  /**
-   * Converts each search term to Shopify prefix syntax.
-   * @param {string} query
-   * @returns {string}
-   */
+  /** @param {string} query */
   static toPrefix(query) {
     const parts = [];
 
@@ -40,7 +33,19 @@ class SearchQuery {
  */
 
 /**
- * Predictive search dialog with debounced product and suggestion fetch.
+ * @typedef {Object} SearchPartial
+ * @property {string} html
+ * @property {number} count
+ */
+
+/**
+ * @typedef {Object} SearchData
+ * @property {SearchPartial} products
+ * @property {SearchPartial} suggestions
+ * @property {number} count
+ */
+
+/**
  * @extends {DialogComponent}
  */
 class SearchDialog extends DialogComponent {
@@ -50,19 +55,40 @@ class SearchDialog extends DialogComponent {
   static PRODUCTS_SELECTOR = '[data-search-products]';
   static SUGGESTIONS_SELECTOR = '[data-search-suggestions]';
 
-  /** @type {number} */
-  searchTimer = 0;
-  /** @type {number} */
-  requestId = 0;
-  /** @type {number} */
-  activeIndex = -1;
-  /** @type {((event: KeyboardEvent) => void) | null} */
-  onSearchShortcut = null;
+  static STATE = Object.freeze({
+    IDLE: 'idle',
+    LOADING: 'loading',
+    FILLED: 'filled',
+    EMPTY: 'empty',
+  });
+
+  get isIdle() {
+    return this.dataset.state === SearchDialog.STATE.IDLE;
+  }
+
+  get isLoading() {
+    return this.dataset.state === SearchDialog.STATE.LOADING;
+  }
+
+  get isFilled() {
+    return this.dataset.state === SearchDialog.STATE.FILLED;
+  }
+
+  get isEmpty() {
+    return this.dataset.state === SearchDialog.STATE.EMPTY;
+  }
 
   get options() {
     return Array.from(this.querySelectorAll(SearchDialog.OPTION_SELECTOR)).filter((option) => {
       return option instanceof HTMLElement && option.offsetParent !== null;
     });
+  }
+
+  constructor() {
+    super();
+    this.searchTimer = 0;
+    this.activeIndex = -1;
+    this.onSearchShortcut = null;
   }
 
   connectedCallback() {
@@ -71,7 +97,7 @@ class SearchDialog extends DialogComponent {
     this.onSearchDialogToggle = (event) => {
       if (!(event instanceof ToggleEvent) || event.newState !== 'open') return;
 
-      this.reset();
+      this.onDialogOpen();
       window.requestAnimationFrame(() => this.refs.input?.focus());
     };
 
@@ -95,7 +121,7 @@ class SearchDialog extends DialogComponent {
   }
 
   disconnectedCallback() {
-    this.searchTimer && window.clearTimeout(this.searchTimer);
+    this.clearTimer();
     this.onSearchDialogToggle && this.refs.dialog?.removeEventListener('toggle', this.onSearchDialogToggle);
     this.onSearchShortcut && document.removeEventListener('keydown', this.onSearchShortcut);
     this.onSearchDialogToggle = null;
@@ -103,74 +129,98 @@ class SearchDialog extends DialogComponent {
     super.disconnectedCallback();
   }
 
-  /** Clears search state, attributes, and result containers. */
-  reset() {
+  /** @param {string} state */
+  setState(state) {
+    this.dataset.state = state;
+
+    const input = this.refs.input;
+
+    if (!input) return;
+
+    input.toggleAttribute('aria-busy', this.isLoading);
+    input.setAttribute('aria-expanded', this.isFilled ? 'true' : 'false');
+    !this.isFilled && input.removeAttribute('aria-activedescendant');
+  }
+
+  clearTimer() {
     this.searchTimer && window.clearTimeout(this.searchTimer);
     this.searchTimer = 0;
-    this.requestId += 1;
-    this.activeIndex = -1;
-    this.removeAttribute('searching');
-    this.removeAttribute('loading');
-    this.removeAttribute('has-results');
-    this.removeAttribute('empty');
+  }
 
-    if (this.refs.input) {
-      this.refs.input.value = '';
-      this.refs.input.setAttribute('aria-expanded', 'false');
-      this.refs.input.setAttribute('aria-busy', 'false');
-      this.refs.input.removeAttribute('aria-activedescendant');
-    }
+  clearInput() {
+    const input = this.refs.input;
 
+    if (!input) return;
+
+    input.value = '';
+    input.setAttribute('aria-expanded', 'false');
+    input.setAttribute('aria-busy', 'false');
+    input.removeAttribute('aria-activedescendant');
+  }
+
+  clearResults() {
     if (this.refs.suggestions) this.refs.suggestions.innerHTML = '';
     if (this.refs.products) this.refs.products.innerHTML = '';
   }
 
-  /**
-   * Debounces predictive search requests while typing.
-   * @param {Event} event
-   */
+  /** @param {string} query */
+  isCurrentQuery(query) {
+    return this.isConnected && this.refs.input?.value.trim() === query;
+  }
+
+  onDialogOpen() {
+    this.clearTimer();
+    this.setState(SearchDialog.STATE.IDLE);
+    this.clearInput();
+    this.clearResults();
+    this.activeIndex = -1;
+  }
+
+  onInputEmpty() {
+    this.clearTimer();
+    this.setState(SearchDialog.STATE.IDLE);
+    this.clearResults();
+    this.activeIndex = -1;
+  }
+
+  /** @param {Event} event */
   handleInput(event) {
     const input = event.target;
 
     if (!(input instanceof HTMLInputElement)) return;
 
-    this.searchTimer && window.clearTimeout(this.searchTimer);
-    this.searchTimer = 0;
+    this.clearTimer();
 
     const query = input.value.trim();
 
     if (!query) {
-      this.reset();
-      input.focus();
+      this.onInputEmpty();
       return;
     }
 
-    this.setAttribute('searching', '');
-    this.setAttribute('loading', '');
-    this.removeAttribute('has-results');
-    this.removeAttribute('empty');
-    input.setAttribute('aria-busy', 'true');
-
+    this.setState(SearchDialog.STATE.LOADING);
     this.searchTimer = window.setTimeout(() => this.search(query), SearchDialog.DEBOUNCE_DELAY);
   }
 
-  /**
-   * Normalizes the query to Shopify prefix search before submit.
-   * @param {SubmitEvent} event
-   */
+  /** @param {SubmitEvent} event */
   handleSubmit(event) {
     if (!this.refs.input) return;
 
     this.refs.input.value = SearchQuery.toPrefix(this.refs.input.value);
   }
 
-  /**
-   * Moves keyboard focus between visible search options.
-   * @param {KeyboardEvent} event
-   */
+  /** @param {KeyboardEvent} event */
   handleKeydown(event) {
-    if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+        this.moveActiveOption(event);
+        break;
+    }
+  }
 
+  /** @param {KeyboardEvent} event */
+  moveActiveOption(event) {
     const options = this.options;
 
     if (!options.length) return;
@@ -191,48 +241,71 @@ class SearchDialog extends DialogComponent {
     if (!(option instanceof HTMLElement)) return;
 
     option.focus();
-    option.id ||= `search-option-${this.requestId}-${this.activeIndex}`;
+    option.id ||= `search-option-${this.activeIndex}`;
     this.refs.input?.setAttribute('aria-activedescendant', option.id);
   }
 
-  /**
-   * Fetches predictive products and suggestions for a query.
-   * @param {string} query
-   */
+  /** @param {string} query */
   async search(query) {
-    const requestId = ++this.requestId;
-    const productsUrl = this.getProductsUrl(query);
-    const suggestionsUrl = this.getSuggestionsUrl(query);
-    const responses = await Promise.allSettled([fetch(productsUrl), fetch(suggestionsUrl)]);
-    const markup = await Promise.all([
-      SearchDialog.getMarkup(responses[0], SearchDialog.PRODUCTS_SELECTOR),
-      SearchDialog.getMarkup(responses[1], SearchDialog.SUGGESTIONS_SELECTOR),
-    ]);
+    const data = await SearchDialog.fetch(query, this);
 
-    if (!this.isConnected || requestId !== this.requestId) return;
-    if (this.refs.input?.value.trim() !== query) return;
+    if (!this.isCurrentQuery(query)) return;
 
-    const [products, suggestions] = markup;
-
-    if (this.refs.products) this.refs.products.innerHTML = products.html;
-    if (this.refs.suggestions) this.refs.suggestions.innerHTML = suggestions.html;
-
-    const hasResults = products.count + suggestions.count > 0;
-
-    this.toggleAttribute('has-results', hasResults);
-    this.toggleAttribute('empty', !hasResults);
-    this.removeAttribute('loading');
-    this.activeIndex = -1;
-    this.refs.input?.setAttribute('aria-expanded', hasResults ? 'true' : 'false');
-    this.refs.input?.setAttribute('aria-busy', 'false');
-    this.refs.input?.removeAttribute('aria-activedescendant');
+    this.render(data);
+    this.setState(data.count > 0 ? SearchDialog.STATE.FILLED : SearchDialog.STATE.EMPTY);
   }
 
   /**
-   * Builds the predictive product search URL.
    * @param {string} query
-   * @returns {URL}
+   * @param {SearchDialog} dialog
+   * @returns {Promise<SearchData>}
    */
+  static async fetch(query, dialog) {
+    const [productsResponse, suggestionsResponse] = await Promise.all([
+      fetch(dialog.getProductsUrl(query)),
+      fetch(dialog.getSuggestionsUrl(query)),
+    ]);
+
+    const [products, suggestions] = await Promise.all([
+      SearchDialog.parsePartial(productsResponse, SearchDialog.PRODUCTS_SELECTOR),
+      SearchDialog.parsePartial(suggestionsResponse, SearchDialog.SUGGESTIONS_SELECTOR),
+    ]);
+
+    return {
+      products,
+      suggestions,
+      count: products.count + suggestions.count,
+    };
+  }
+
+  /**
+   * @param {Response} response
+   * @param {string} selector
+   * @returns {Promise<SearchPartial>}
+   */
+  static async parsePartial(response, selector) {
+    if (!response.ok) return { html: '', count: 0 };
+
+    const html = await response.text();
+    const parsed = new DOMParser().parseFromString(html, 'text/html');
+    const content = parsed.querySelector(selector);
+
+    if (!(content instanceof HTMLElement)) return { html: '', count: 0 };
+
+    return {
+      html: content.innerHTML,
+      count: Number(content.dataset.count) || 0,
+    };
+  }
+
+  /** @param {SearchData} data */
+  render(data) {
+    if (this.refs.products) this.refs.products.innerHTML = data.products.html;
+    if (this.refs.suggestions) this.refs.suggestions.innerHTML = data.suggestions.html;
+    this.activeIndex = -1;
+  }
+
+  /** @param {string} query */
   getProductsUrl(query) {
     const url = new URL(window.Theme.routes.search_url, window.location.origin);
 
@@ -244,11 +317,7 @@ class SearchDialog extends DialogComponent {
     return url;
   }
 
-  /**
-   * Builds the predictive suggestions section URL.
-   * @param {string} query
-   * @returns {URL}
-   */
+  /** @param {string} query */
   getSuggestionsUrl(query) {
     const url = new URL(window.Theme.routes.predictive_search_url, window.location.origin);
 
@@ -258,31 +327,6 @@ class SearchDialog extends DialogComponent {
     url.searchParams.set('section_id', this.getAttribute('section-id') ?? '');
 
     return url;
-  }
-
-  /**
-   * Extracts result markup and count from a settled fetch response.
-   * @param {PromiseSettledResult<Response>} responseResult
-   * @param {string} selector
-   * @returns {Promise<{ html: string, count: number }>}
-   */
-  static async getMarkup(responseResult, selector) {
-    if (responseResult.status !== 'fulfilled') return { html: '', count: 0 };
-    if (!responseResult.value.ok) return { html: '', count: 0 };
-
-    const bodyResult = await Promise.allSettled([responseResult.value.text()]);
-
-    if (bodyResult[0].status !== 'fulfilled') return { html: '', count: 0 };
-
-    const parsed = new DOMParser().parseFromString(bodyResult[0].value, 'text/html');
-    const content = parsed.querySelector(selector);
-
-    if (!(content instanceof HTMLElement)) return { html: '', count: 0 };
-
-    return {
-      html: content.innerHTML,
-      count: Number(content.dataset.count) || 0,
-    };
   }
 }
 
@@ -295,15 +339,9 @@ if (!customElements.get('search-dialog')) {
  * @property {HTMLInputElement} query
  */
 
-/**
- * Collection/search form that normalizes queries to prefix search.
- * @extends {HTMLComponent<SearchFormRefs>}
- */
+/** @extends {HTMLComponent<SearchFormRefs>} */
 class SearchForm extends HTMLComponent {
-  /**
-   * Normalizes the query input before native form submit.
-   * @param {SubmitEvent} event
-   */
+  /** @param {SubmitEvent} event */
   handleSubmit(event) {
     if (!this.refs.query) return;
 

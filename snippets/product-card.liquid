@@ -63,7 +63,7 @@
     pointer-events: none;
   }
 
-  product-card.is-loading::after {
+  product-card[data-state="loading"]::after {
     opacity: 0.55;
     animation: product-card-skeleton 900ms var(--ease-in-out) infinite;
   }

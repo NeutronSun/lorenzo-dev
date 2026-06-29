@@ -25,6 +25,7 @@
 
 {% if match_tag != blank %}
   <product-card-swatches
+    data-card-id="{{ product.id }}"
     data-match-tag="{{ match_tag | escape }}"
     data-limit="{{ siblings_limit }}"
     {{ attributes }}
