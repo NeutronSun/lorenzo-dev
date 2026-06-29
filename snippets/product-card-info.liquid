@@ -30,7 +30,7 @@
 
 {% stylesheet %}
   product-card-info {
-    display: grid;
+    display: var(--product-card-info-display, grid);
     grid-template-rows: auto 18px;
     gap: 8px;
     min-height: 76px;

@@ -27,13 +27,15 @@
 
 {% style %}
   @layer components {
-    #shopify-section-{{ section.id }}:has(.grid-switcher--{{ block.id }} [value='alternative']:checked) product-grid {
+    #shopify-section-{{ section.id }}:has([name='grid-density'][value='alternative']:checked) product-grid {
       --product-grid-columns-mobile: {{ block.settings.alternative_layout_mobile }};
     }
 
     @media screen and (min-width: 750px) {
-      #shopify-section-{{ section.id }}:has(.grid-switcher--{{ block.id }} [value='alternative']:checked) product-grid {
+      #shopify-section-{{ section.id }}:has([name='grid-density'][value='alternative']:checked) product-grid {
         --product-grid-columns-desktop: {{ block.settings.alternative_layout_desktop }};
+        --product-card-info-display: none;
+        --product-card-labels-display: none;
       }
     }
   }
