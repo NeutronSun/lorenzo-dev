@@ -106,7 +106,7 @@
               "type": "pdp-sibling-tab",
               "settings": {
                 "tag": "Tema_",
-                "use_tag_value_as_label": false,
+                "use_tag_value_as_label": true,
                 "label": "Tema"
               },
               "blocks": {}
