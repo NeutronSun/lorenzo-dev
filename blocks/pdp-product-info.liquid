@@ -74,6 +74,9 @@
   <section class="panel config">
     <h2 class="font-mono">/Configure</h2>
 
+
+    {% render 'variant-picker', product: product %}
+
     <pdp-siblings
       data-current-handle="{{ product.handle | escape }}"
       data-limit="{{ siblings_limit }}"

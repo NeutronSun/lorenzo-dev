@@ -1,0 +1,139 @@
+<variant-picker>
+
+  <!-- =========================
+      OPTION 1
+  ========================== -->
+  <fieldset class="opt opt-1">
+    {% for v in product.options_with_values[0].values %}
+      <label>
+        <input type="radio" name="option-1" value="{{ v.name }}"
+          {% if product.selected_or_first_available_variant.option1 == v.name %}checked{% endif %}>
+        {{ v.name }}
+      </label>
+    {% endfor %}
+  </fieldset>
+
+  {% if product.options.size > 1 %}
+
+  <!-- =========================
+      OPTION 2 (ALL VALUES)
+  ========================== -->
+  <fieldset class="opt opt-2">
+
+    {% assign seen2 = '' %}
+
+    {% for variant in product.variants %}
+      {% unless seen2 contains variant.option2 %}
+        {% assign seen2 = seen2 | append: variant.option2 | append: ',' %}
+
+        <label data-option1="{{ variant.option1 }}">
+          <input type="radio"
+            name="option-2"
+            value="{{ variant.option2 }}">
+          {{ variant.option2 }}
+        </label>
+
+      {% endunless %}
+    {% endfor %}
+
+  </fieldset>
+
+  {% endif %}
+
+  {% if product.options.size > 2 %}
+
+  <!-- =========================
+      OPTION 3 (ALL VALUES)
+  ========================== -->
+  <fieldset class="opt opt-3">
+
+    {% assign seen3 = '' %}
+
+    {% for variant in product.variants %}
+      {% capture key %}{{ variant.option1 }}|{{ variant.option2 }}|{{ variant.option3 }}{% endcapture %}
+
+      {% unless seen3 contains key %}
+        {% assign seen3 = seen3 | append: key | append: ',' %}
+
+        <label
+          data-option1="{{ variant.option1 }}"
+          data-option2="{{ variant.option2 }}"
+        >
+          <input type="radio"
+            name="option-3"
+            value="{{ variant.option3 }}">
+          {{ variant.option3 }}
+        </label>
+
+      {% endunless %}
+
+    {% endfor %}
+
+  </fieldset>
+
+  {% endif %}
+
+</variant-picker>
+<style>
+
+/* =========================
+   BASE
+========================= */
+
+variant-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+label {
+  display: inline-flex;
+  gap: 6px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* =========================
+   OPTION 2 FILTER
+   (depends on option 1)
+========================= */
+
+.opt-2 label {
+  display: none;
+}
+
+{% for v in product.options_with_values[0].values %}
+
+variant-picker:has(input[name="option-1"][value="{{ v.name }}"]:checked)
+.opt-2 label[data-option1="{{ v.name }}"] {
+  display: inline-flex;
+}
+
+{% endfor %}
+
+/* =========================
+   OPTION 3 FILTER
+   (depends on option 1 + option 2)
+========================= */
+
+.opt-3 label {
+  display: none;
+}
+
+{% for variant in product.variants %}
+
+variant-picker:has(input[name="option-1"][value="{{ variant.option1 }}"]:checked)
+:has(input[name="option-2"][value="{{ variant.option2 }}"]:checked)
+.opt-3 label[data-option1="{{ variant.option1 }}"][data-option2="{{ variant.option2 }}"] {
+  display: inline-flex;
+}
+
+{% endfor %}
+
+</style>
