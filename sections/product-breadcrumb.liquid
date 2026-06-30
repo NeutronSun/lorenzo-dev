@@ -1,7 +1,3 @@
-{% doc %}
-  Product page breadcrumb section with bar container and sticky layout.
-{% enddoc %}
-
 {% capture breadcrumb_content %}
   {%- render 'breadcrumb-nav',
     linklist: section.settings.linklist,
@@ -39,28 +35,16 @@
         grid-column: 2;
       }
     }
-
-    @media screen and (min-width: 990px) {
-      .breadcrumb-nav.breadcrumb-bar {
-        padding-inline: 40px;
-      }
-    }
   }
 
   @media screen and (min-width: 750px) {
     .breadcrumb-wrapper {
-      position: sticky;
-      top: calc(var(--header-height, 0px) + var(--spacing));
-      z-index: 30;
       padding-block: var(--spacing);
     }
   }
 
   @media screen and (max-width: 749px) {
     .breadcrumb-wrapper {
-      position: sticky;
-      top: 0;
-      z-index: 30;
       padding-block: calc(var(--spacing) + env(safe-area-inset-top, 0px));
     }
   }

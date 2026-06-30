@@ -79,7 +79,7 @@ class ProductPage extends HTMLElement {
 
     const spacing = this.getRootNumber('--spacing', ProductPage.DEFAULT_SPACING);
     const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-    const top = this.isMobile ? breadcrumbHeight + spacing : this.getStickyTop(spacing);
+    const top = this.isMobile ? spacing : this.getStickyTop(spacing);
     const availableHeight = this.getViewportHeight() - top - spacing;
     const height = Math.max(0, availableHeight);
 
@@ -136,7 +136,7 @@ class ProductPage extends HTMLElement {
 
     if (this.isMobile) return breadcrumbHeight + spacing;
 
-    return this.getRootNumber('--header-height', 0) + spacing + breadcrumbHeight + spacing;
+    return this.getRootNumber('--header-height', 0) + spacing  + spacing;
   }
 }
 

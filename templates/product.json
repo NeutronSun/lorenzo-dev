@@ -9,6 +9,33 @@
  */
 {
   "sections": {
+    "product_breadcrumb_Nf69nK": {
+      "type": "product-breadcrumb",
+      "blocks": {
+        "text": {
+          "type": "text",
+          "static": true,
+          "settings": {
+            "text": "Text",
+            "heading": false,
+            "heading_tag": "h2",
+            "font": "mono",
+            "color": "secondary",
+            "font_size": 10,
+            "text_transform": "uppercase",
+            "alignment": "left"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "Breadcrumbs",
+      "settings": {
+        "linklist": "breadcrumbs",
+        "separator": "/",
+        "home": "Home",
+        "show_leaf": true
+      }
+    },
     "main": {
       "type": "product",
       "blocks": {
@@ -211,6 +238,7 @@
     }
   },
   "order": [
+    "product_breadcrumb_Nf69nK",
     "main",
     "product_recommendations_carousel_zgrpCX"
   ]
