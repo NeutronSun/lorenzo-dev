@@ -4,25 +4,38 @@
   @param {string} [target] - Object handle to match in the menu tree
   @param {boolean} [searching] - Skips product collection recursion when true
   @param {boolean} [section_layout] - Applies page-width layout class
+  @param {string} [linklist] - Link list handle for the breadcrumb menu
   @param {string} [separator] - Separator between breadcrumb items
+  @param {string} [home] - Home label; omitted when blank
+  @param {boolean} [show_leaf] - Appends the current product as the last crumb
   @param {string} [align] - Flex justify-content value for the bar
   @param {boolean} [style_typography] - Applies theme typography inline styles when true
 {% enddoc %}
 
 {%- liquid
-  assign menu = linklists[settings.breadcrumbs_linklist] | default: linklists.breadcrumbs
+  assign menu_handle = linklist | default: settings.breadcrumbs_linklist | default: 'breadcrumbs'
+  assign menu = linklists[menu_handle] | default: linklists.breadcrumbs
 
   assign breadcrumbs = '' | split: ','
   assign target = target | default: blank
   assign searching = searching | default: false
   assign separator = separator | default: settings.breadcrumbs_separator | default: '/'
+  if home == nil
+    assign home_label = settings.breadcrumbs_home
+  else
+    assign home_label = home
+  endif
+  assign show_leaf_setting = settings.breadcrumbs_show_leaf
+  unless show_leaf == nil
+    assign show_leaf_setting = show_leaf
+  endunless
   assign style_typography = style_typography | default: true, allow_false: true
   assign align = align | default: settings.breadcrumbs_align | default: 'flex-start'
 
   if product and searching == false
     for collection in product.collections
       capture result
-        render 'breadcrumb-nav', target: collection.handle, searching: true, separator: separator, align: align, style_typography: style_typography
+        render 'breadcrumb-nav', target: collection.handle, searching: true,  linklist: linklist,  separator: separator, home: home,show_leaf: show_leaf, align: align, style_typography: style_typography
       endcapture
       if result != ''
         break
@@ -83,11 +96,11 @@
     endfor
 
     if breadcrumbs.size > 0
-      if settings.breadcrumbs_home != blank
-        assign object_home = blank | default: title: settings.breadcrumbs_home, url: routes.root_url | sort
+      if home_label != blank
+        assign object_home = blank | default: title: home_label, url: routes.root_url | sort
         assign breadcrumbs = object_home | concat: breadcrumbs
       endif
-      if product and settings.breadcrumbs_show_leaf
+      if product and show_leaf_setting
         assign object_product = blank | default: title: product.title, url: product.url | sort
         assign breadcrumbs = breadcrumbs | concat: object_product
       endif

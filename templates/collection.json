@@ -70,14 +70,26 @@
                   "type": "breadcrumb",
                   "name": "Breadcrumbs",
                   "settings": {
+                    "linklist": "breadcrumbs",
                     "separator": "/",
-                    "font": "mono",
-                    "color": "secondary",
-                    "font_size": 10,
-                    "text_transform": "uppercase",
-                    "alignment": "left"
+                    "home": "Home",
+                    "show_leaf": true
                   },
-                  "blocks": {}
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "static": true,
+                      "settings": {
+                        "font": "mono",
+                        "color": "secondary",
+                        "font_size": 10,
+                        "text_transform": "uppercase",
+                        "alignment": "left"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": []
                 },
                 "text_mEeBCx": {
                   "type": "text",
