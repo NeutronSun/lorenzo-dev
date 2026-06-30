@@ -72,7 +72,7 @@
                   "settings": {
                     "separator": "/",
                     "font": "mono",
-                    "color": "secondary",
+                    "color": "default",
                     "font_size": 10,
                     "text_transform": "uppercase",
                     "alignment": "left"
