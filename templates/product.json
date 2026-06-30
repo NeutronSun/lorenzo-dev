@@ -9,6 +9,11 @@
  */
 {
   "sections": {
+    "product_breadcrumb_Nf69nK": {
+      "type": "product-breadcrumb",
+      "name": "Breadcrumbs",
+      "settings": {}
+    },
     "main": {
       "type": "product",
       "blocks": {
@@ -211,6 +216,7 @@
     }
   },
   "order": [
+    "product_breadcrumb_Nf69nK",
     "main",
     "product_recommendations_carousel_zgrpCX"
   ]
