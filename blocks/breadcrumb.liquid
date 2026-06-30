@@ -5,34 +5,115 @@
   {% content_for 'block', type: 'breadcrumb', id: 'breadcrumb' %}
 {% enddoc %}
 
+{% liquid
+  assign breadcrumb_align = 'flex-start'
+  if block.settings.alignment == 'center'
+    assign breadcrumb_align = 'center'
+  elsif block.settings.alignment == 'right'
+    assign breadcrumb_align = 'flex-end'
+  endif
+%}
+
 {% capture breadcrumb_content %}
-  {%- render 'breadcrumb-nav' -%}
+  {%- render 'breadcrumb-nav',
+    separator: block.settings.separator,
+    align: breadcrumb_align,
+    style_typography: false
+  -%}
 {% endcapture %}
 
-{% content_for 'block', type: 'text', id: 'text', body: breadcrumb_content %}
+{% render 'text',
+  body: breadcrumb_content,
+  font: block.settings.font,
+  color: block.settings.color,
+  font_size: block.settings.font_size,
+  text_transform: block.settings.text_transform,
+  alignment: block.settings.alignment,
+  attributes: block.shopify_attributes
+%}
 
 {% schema %}
 {
-  "name": "Breadcrumbs",
-  "blocks": [{ "type": "text" }],
+  "name": "t:general.breadcrumbs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "t:labels.breadcrumbs_separator",
+      "default": "/"
+    },
+    {
+      "type": "header",
+      "content": "t:general.typography"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:labels.font",
+      "options": [
+        { "value": "body", "label": "t:options.font.body" },
+        { "value": "mono", "label": "t:options.font.mono" },
+        { "value": "heading", "label": "t:options.font.heading" }
+      ],
+      "default": "mono"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "t:labels.color",
+      "options": [
+        { "value": "default", "label": "t:options.color.default" },
+        { "value": "black", "label": "t:options.color.black" },
+        { "value": "accent", "label": "t:options.color.accent" },
+        { "value": "red", "label": "t:options.color.red" },
+        { "value": "secondary", "label": "t:options.color.secondary" }
+      ],
+      "default": "secondary"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "t:labels.font_size",
+      "min": 0,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "t:labels.text_transform",
+      "options": [
+        { "value": "none", "label": "t:options.text_transform.none" },
+        { "value": "uppercase", "label": "t:options.text_transform.uppercase" },
+        { "value": "lowercase", "label": "t:options.text_transform.lowercase" },
+        { "value": "capitalize", "label": "t:options.text_transform.capitalize" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:labels.alignment",
+      "default": "left"
+    }
+  ],
   "presets": [
     {
-      "name": "Breadcrumbs",
+      "name": "t:general.breadcrumbs",
       "category": "Navigation",
-      "blocks": [
-        {
-          "type": "text",
-          "id": "text",
-          "static": true,
-          "settings": {
-            "font": "mono",
-            "color": "secondary",
-            "font_size": 10,
-            "text_transform": "uppercase",
-            "alignment": "left"
-          }
-        }
-      ]
+      "settings": {
+        "font": "mono",
+        "color": "secondary",
+        "font_size": 10,
+        "text_transform": "uppercase",
+        "alignment": "left"
+      }
     }
   ]
 }

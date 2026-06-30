@@ -17,44 +17,6 @@
 </pdp-breadcrumb>
 
 {% stylesheet %}
-  pdp-breadcrumb {
-    .bar {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-height: 36px;
-      padding-inline: 16px;
-      border: 1px solid var(--border-color);
-      background: var(--white);
-      color: var(--breadcrumb-color, var(--secondary-black));
-      font-size: var(--breadcrumb-font-size, 10px);
-      text-transform: var(--breadcrumb-text-transform, uppercase);
-      justify-content: var(--breadcrumb-align, flex-start);
-      overflow: hidden;
-    }
-
-    a,
-    span,
-    h1 {
-      min-width: 0;
-      margin: 0;
-      overflow: hidden;
-      font: inherit;
-      color: inherit;
-      text-decoration: none;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .breadcrumb-leaf {
-      font: inherit;
-    }
-
-    .separator {
-      flex: 0 0 auto;
-    }
-  }
-
   pdp-breadcrumb.section {
     display: grid;
     grid-template-columns: var(--content-grid);
@@ -62,12 +24,6 @@
 
     .bar {
       grid-column: 2;
-    }
-  }
-
-  @media screen and (min-width: 990px) {
-    pdp-breadcrumb .bar {
-      padding-inline: 40px;
     }
   }
 {% endstylesheet %}
