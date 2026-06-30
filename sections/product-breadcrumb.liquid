@@ -1,8 +1,52 @@
-{% render 'breadcrumb',
-  section_layout: true
-%}
+{% doc %}
+  Product page breadcrumb section with bar container and sticky layout.
+{% enddoc %}
+
+{% capture breadcrumb_content %}
+  {%- render 'breadcrumb-nav',
+    linklist: section.settings.linklist,
+    separator: section.settings.separator,
+    home: section.settings.home,
+    show_leaf: section.settings.show_leaf,
+    section_layout: true,
+    bar: true
+  -%}
+{% endcapture %}
+
+<pdp-breadcrumb
+  class="section"
+  data-pdp-breadcrumb
+  style="view-transition-name: product-breadcrumb;"
+>
+  {% content_for 'block', type: 'text', id: 'text', body: breadcrumb_content %}
+</pdp-breadcrumb>
 
 {% stylesheet %}
+  pdp-breadcrumb {
+    .breadcrumb-nav.breadcrumb-bar {
+      min-height: 36px;
+      padding-inline: 16px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    &.section {
+      display: grid;
+      grid-template-columns: var(--content-grid);
+      background: var(--background);
+
+      .text {
+        grid-column: 2;
+      }
+    }
+
+    @media screen and (min-width: 990px) {
+      .breadcrumb-nav.breadcrumb-bar {
+        padding-inline: 40px;
+      }
+    }
+  }
+
   @media screen and (min-width: 750px) {
     .breadcrumb-wrapper {
       position: sticky;
@@ -24,11 +68,51 @@
 
 {% schema %}
 {
-  "name": "Breadcrumbs",
+  "name": "t:general.breadcrumbs",
   "class": "breadcrumb-wrapper",
+  "blocks": [{ "type": "text" }],
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "linklist",
+      "label": "t:labels.breadcrumbs_linklist"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "t:labels.breadcrumbs_separator",
+      "default": "/"
+    },
+    {
+      "type": "text",
+      "id": "home",
+      "label": "t:labels.breadcrumbs_home",
+      "default": "Home"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_leaf",
+      "label": "t:labels.breadcrumbs_show_leaf",
+      "default": true
+    }
+  ],
   "presets": [
     {
-      "name": "Breadcrumbs"
+      "name": "t:general.breadcrumbs",
+      "blocks": [
+        {
+          "type": "text",
+          "id": "text",
+          "static": true,
+          "settings": {
+            "font": "mono",
+            "color": "secondary",
+            "font_size": 10,
+            "text_transform": "uppercase",
+            "alignment": "left"
+          }
+        }
+      ]
     }
   ]
 }

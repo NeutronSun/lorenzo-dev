@@ -12,36 +12,37 @@
 {% enddoc %}
 
 {%- liquid
-  assign menu_handle = linklist | default: settings.breadcrumbs_linklist | default: 'breadcrumbs'
+  assign menu_handle = linklist | default: 'breadcrumbs'
   assign menu = linklists[menu_handle] | default: linklists.breadcrumbs
 
   assign breadcrumbs = '' | split: ','
   assign target = target | default: blank
   assign searching = searching | default: false
-  assign separator = separator | default: settings.breadcrumbs_separator | default: '/'
+  assign separator = separator | default: '/'
   assign show_bar = bar | default: false
-  
   if home == nil
-    assign home_label = settings.breadcrumbs_home
+    assign home_label = 'Home'
   else
     assign home_label = home
   endif
-  assign show_leaf_setting = settings.breadcrumbs_show_leaf
+  assign show_leaf_setting = true
   unless show_leaf == nil
     assign show_leaf_setting = show_leaf
   endunless
+-%}
 
-  if product and searching == false
-   for collection in product.collections
-     capture result
-       render 'breadcrumb-nav', target: collection.handle, searching: true, linklist: linklist, separator: separator, home: home, show_leaf: show_leaf, bar: show_bar
-     endcapture
-     if result != blank
-      echo result
-       break
-     endif
-   endfor
-  else
+{%- if product and searching == false -%}
+  {%- for collection in product.collections -%}
+    {%- capture result -%}
+      {%- render 'breadcrumb-nav', target: collection.handle, searching: true, linklist: linklist, separator: separator, home: home, show_leaf: show_leaf, bar: show_bar -%}
+    {%- endcapture -%}
+    {%- if result != blank -%}
+      {{- result -}}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- else -%}
+  {%- liquid
     if target == blank
       if collection
         assign target = collection.handle
@@ -104,8 +105,7 @@
         assign breadcrumbs = breadcrumbs | concat: object_product
       endif
     endif
-  endif
-%}
+  -%}
 
   {%- if breadcrumbs.size > 0 -%}
     <nav
@@ -145,6 +145,7 @@
       }
     </script>
   {%- endif -%}
+{%- endif -%}
 
 {% stylesheet %}
   .breadcrumb-nav {

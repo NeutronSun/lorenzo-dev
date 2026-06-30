@@ -126,34 +126,5 @@
         "default": "2026-04"
       }
     ]
-  },
-  {
-    "name": "t:general.breadcrumbs",
-    "settings": [
-      {
-        "type": "link_list",
-        "id": "breadcrumbs_linklist",
-        "label": "t:labels.breadcrumbs_linklist",
-        "default": "breadcrumbs"
-      },
-      {
-        "type": "text",
-        "id": "breadcrumbs_home",
-        "label": "t:labels.breadcrumbs_home",
-        "default": "Home"
-      },
-      {
-        "type": "checkbox",
-        "id": "breadcrumbs_show_leaf",
-        "label": "t:labels.breadcrumbs_show_leaf",
-        "default": true
-      },
-      {
-        "type": "text",
-        "id": "breadcrumbs_separator",
-        "label": "t:labels.breadcrumbs_separator",
-        "default": "/"
-      }
-    ]
   }
 ]
