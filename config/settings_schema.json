@@ -153,66 +153,6 @@
         "id": "breadcrumbs_separator",
         "label": "t:labels.breadcrumbs_separator",
         "default": "/"
-      },
-      {
-        "type": "range",
-        "id": "breadcrumbs_text_size",
-        "label": "t:labels.font_size",
-        "min": 8,
-        "max": 24,
-        "step": 1,
-        "unit": "px",
-        "default": 10
-      },
-      {
-        "type": "select",
-        "id": "breadcrumbs_text_transform",
-        "label": "t:labels.text_transform",
-        "default": "uppercase",
-        "options": [
-          {
-            "value": "",
-            "label": "t:options.text_transform.none"
-          },
-          {
-            "value": "uppercase",
-            "label": "t:options.text_transform.uppercase"
-          },
-          {
-            "value": "lowercase",
-            "label": "t:options.text_transform.lowercase"
-          },
-          {
-            "value": "capitalize",
-            "label": "t:options.text_transform.capitalize"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "breadcrumbs_align",
-        "label": "t:labels.alignment",
-        "default": "flex-start",
-        "options": [
-          {
-            "value": "flex-start",
-            "label": "t:options.alignment.left"
-          },
-          {
-            "value": "center",
-            "label": "t:options.alignment.center"
-          },
-          {
-            "value": "flex-end",
-            "label": "t:options.alignment.right"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "breadcrumbs_text_color",
-        "label": "t:labels.breadcrumbs_text_color",
-        "default": "#333333"
       }
     ]
   }

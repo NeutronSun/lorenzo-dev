@@ -5,6 +5,10 @@
   @param {string} [attributes] - Optional HTML attributes for the root element
 {% enddoc %}
 
+{% capture breadcrumb_content %}
+  {%- render 'breadcrumb-nav', section_layout: section_layout, bar: true -%}
+{% endcapture %}
+
 <pdp-breadcrumb
   {% if section_layout %}
     class="section"
@@ -13,17 +17,39 @@
   {% endif %}
   {{ attributes }}
 >
-  {%- render 'breadcrumb-nav', section_layout: section_layout, bar: true -%}
+  {%- render 'text',
+    body: breadcrumb_content,
+    font: 'mono',
+    color: 'secondary',
+    font_size: 10,
+    text_transform: 'uppercase',
+    alignment: 'left'
+  -%}
 </pdp-breadcrumb>
 
 {% stylesheet %}
-  pdp-breadcrumb.section {
-    display: grid;
-    grid-template-columns: var(--content-grid);
-    background: var(--background);
+  pdp-breadcrumb {
+    .breadcrumb-nav.breadcrumb-bar {
+      min-height: 36px;
+      padding-inline: 16px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+    }
 
-    .bar {
-      grid-column: 2;
+    &.section {
+      display: grid;
+      grid-template-columns: var(--content-grid);
+      background: var(--background);
+
+      .text {
+        grid-column: 2;
+      }
+    }
+
+    @media screen and (min-width: 990px) {
+      .breadcrumb-nav.breadcrumb-bar {
+        padding-inline: 40px;
+      }
     }
   }
 {% endstylesheet %}

@@ -8,9 +8,7 @@
   @param {string} [separator] - Separator between breadcrumb items
   @param {string} [home] - Home label; omitted when blank
   @param {boolean} [show_leaf] - Appends the current product as the last crumb
-  @param {boolean} [bar] - Applies bordered container styling when true
-  @param {string} [align] - Flex justify-content value for the bar
-  @param {boolean} [style_typography] - Applies theme typography inline styles when true
+  @param {boolean} [bar] - Adds breadcrumb-bar class for section container styling
 {% enddoc %}
 
 {%- liquid
@@ -21,7 +19,8 @@
   assign target = target | default: blank
   assign searching = searching | default: false
   assign separator = separator | default: settings.breadcrumbs_separator | default: '/'
-  assign show_bar = bar | default: false, allow_false: true
+  assign show_bar = bar | default: false
+  
   if home == nil
     assign home_label = settings.breadcrumbs_home
   else
@@ -31,28 +30,17 @@
   unless show_leaf == nil
     assign show_leaf_setting = show_leaf
   endunless
-  assign style_typography = style_typography | default: true, allow_false: true
-  assign align = align | default: settings.breadcrumbs_align | default: 'flex-start'
 
   if product and searching == false
-    for collection in product.collections
-      capture result
-        render 'breadcrumb-nav',
-          target: collection.handle,
-          searching: true,
-          linklist: linklist,
-          separator: separator,
-          home: home,
-          show_leaf: show_leaf,
-          bar: show_bar,
-          align: align,
-          style_typography: style_typography
-      endcapture
-      if result != ''
-        break
-      endif
-    endfor
-    echo result
+   for collection in product.collections
+     capture result
+       render 'breadcrumb-nav', target: collection.handle, searching: true, linklist: linklist, separator: separator, home: home, show_leaf: show_leaf, bar: show_bar
+     endcapture
+     if result != blank
+      echo result
+       break
+     endif
+   endfor
   else
     if target == blank
       if collection
@@ -117,109 +105,78 @@
       endif
     endif
   endif
--%}
+%}
 
-{%- if breadcrumbs.size > 0 -%}
-  {%- liquid
-    assign nav_style = ''
-
-    if show_bar or style_typography
-      assign nav_style = '--breadcrumb-align: ' | append: align | append: ';'
-
-      if style_typography
-        assign nav_style = nav_style | append: ' --breadcrumb-font-size: ' | append: settings.breadcrumbs_text_size | append: 'px;'
-        assign nav_style = nav_style | append: ' --breadcrumb-color: ' | append: settings.breadcrumbs_text_color | append: ';'
-        if settings.breadcrumbs_text_transform != blank
-          assign nav_style = nav_style | append: ' --breadcrumb-text-transform: ' | append: settings.breadcrumbs_text_transform | append: ';'
-        endif
-      endif
-    endif
-  -%}
-  <nav
-    class="breadcrumb-nav{% if show_bar %} bar{% endif %}{% if section_layout %} page-width{% endif %}"
-    aria-label="Breadcrumb"
-    {% if nav_style != blank %}style="{{ nav_style | strip }}"{% endif %}
-  >
-    {%- for breadcrumb in breadcrumbs -%}
-      {%- capture breadcrumb_html -%}
-        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
-      {%- endcapture -%}
-      {%- if forloop.last -%}
-        <h1 class="breadcrumb-leaf">{{ breadcrumb_html }}</h1>
-      {%- else -%}
-        {{ breadcrumb_html }}
-      {%- endif -%}
-      {%- unless forloop.last -%}
-        <span class="separator" aria-hidden="true">{{ separator }}</span>
-      {%- endunless -%}
-    {%- endfor -%}
-  </nav>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {%- for breadcrumb in breadcrumbs -%}
-          {
-            "@type": "ListItem",
-            "position": {{ forloop.index }},
-            "item": {
-              "@id": "{{ shop.url }}{%- unless breadcrumb.url contains routes.root_url -%}{{ routes.root_url }}{%- endunless -%}{{ breadcrumb.url }}",
-              "name": {{ breadcrumb.title | json }}
-            }
-          }{%- unless forloop.last -%},{%- endunless -%}
-        {%- endfor -%}
-      ]
-    }
-  </script>
-{%- endif -%}
+  {%- if breadcrumbs.size > 0 -%}
+    <nav
+      class="breadcrumb-nav{% if show_bar %} breadcrumb-bar{% endif %}{% if section_layout %} page-width{% endif %}"
+      aria-label="Breadcrumb"
+    >
+      {%- for breadcrumb in breadcrumbs -%}
+        {%- capture breadcrumb_html -%}
+          <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+        {%- endcapture -%}
+        {%- if forloop.last -%}
+          <h1 class="breadcrumb-leaf">{{ breadcrumb_html }}</h1>
+        {%- else -%}
+          {{ breadcrumb_html }}
+        {%- endif -%}
+        {%- unless forloop.last -%}
+          <span class="separator" aria-hidden="true">{{ separator }}</span>
+        {%- endunless -%}
+      {%- endfor -%}
+    </nav>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {%- for breadcrumb in breadcrumbs -%}
+            {
+              "@type": "ListItem",
+              "position": {{ forloop.index }},
+              "item": {
+                "@id": "{{ shop.url }}{%- unless breadcrumb.url contains routes.root_url -%}{{ routes.root_url }}{%- endunless -%}{{ breadcrumb.url }}",
+                "name": {{ breadcrumb.title | json }}
+              }
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
 
 {% stylesheet %}
   .breadcrumb-nav {
     display: flex;
     align-items: center;
     gap: 5px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: inherit;
     font-size: inherit;
     text-transform: inherit;
     overflow: hidden;
-  }
 
-  .breadcrumb-nav a,
-  .breadcrumb-nav span,
-  .breadcrumb-nav h1 {
-    min-width: 0;
-    margin: 0;
-    overflow: hidden;
-    font: inherit;
-    color: inherit;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    :is(a, span, h1) {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      font: inherit;
+      color: inherit;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-  .breadcrumb-nav .breadcrumb-leaf {
-    font: inherit;
-  }
+    .breadcrumb-leaf {
+      font: inherit;
+    }
 
-  .breadcrumb-nav .separator {
-    flex: 0 0 auto;
-  }
-
-  .breadcrumb-nav.bar {
-    min-height: 36px;
-    padding-inline: 16px;
-    border: 1px solid var(--border-color);
-    background: var(--white);
-    color: var(--breadcrumb-color, inherit);
-    font-size: var(--breadcrumb-font-size, inherit);
-    text-transform: var(--breadcrumb-text-transform, inherit);
-    justify-content: var(--breadcrumb-align, flex-start);
-  }
-
-  @media screen and (min-width: 990px) {
-    .breadcrumb-nav.bar {
-      padding-inline: 40px;
+    .separator {
+      flex: 0 0 auto;
     }
   }
 {% endstylesheet %}
