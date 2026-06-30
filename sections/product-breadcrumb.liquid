@@ -1,6 +1,7 @@
 {% render 'breadcrumb',
   separator: section.settings.separator,
-  section_layout: true
+  section_layout: true,
+  menu: section.settings.menu
 %}
 
 {% stylesheet %}
@@ -33,6 +34,11 @@
       "id": "separator",
       "label": "Separator",
       "default": "/"
+    },
+    {
+      "type": "menu",
+      "id": "menu",
+      "label": "Menu for breadcrumbs"
     }
   ],
   "presets": [

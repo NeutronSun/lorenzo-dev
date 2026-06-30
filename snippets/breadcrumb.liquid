@@ -4,6 +4,7 @@
   @param {string} [separator] - Segment separator
   @param {boolean} [section_layout] - Section grid layout with view transition
   @param {string} [attributes] - Optional HTML attributes for the root element
+  @param {menu} [menu] - Menu object to base breadcrumbs on
 {% enddoc %}
 
 <pdp-breadcrumb
@@ -15,7 +16,7 @@
   {{ attributes }}
 >
   <nav class="bar breadcrumb-nav{% if section_layout %} page-width{% endif %}" aria-label="Breadcrumb">
-    {%- render 'breadcrumb-nav', separator: separator -%}
+    {%- render 'breadcrumb-nav', separator: separator, menu: menu -%}
   </nav>
 </pdp-breadcrumb>
 

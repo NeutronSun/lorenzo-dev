@@ -2,95 +2,203 @@
   Renders breadcrumb navigation markup without layout wrapper.
 
   @param {string} [separator] - Segment separator
+  @param {menu} [menu] - Menu object to base breadcrumbs on
 {% enddoc %}
 
 {%- liquid
   assign separator = separator | default: '/'
   assign template_name = template | split: '.' | first
-
-  assign leaf_label = ''
-  assign pm_label = ''
-  assign pm_url = ''
-  assign department_label = ''
-  assign department_url = ''
-  assign macro_label = ''
-  assign macro_url = ''
-  assign micro_label = ''
-  assign micro_url = ''
-
-  if template_name == 'product' and product
-    assign leaf_label = product.title
-
-    assign pm_value = product.metafields.valeverce.pm.value | default: product.metafields.valeverce.pm
-    assign department_value = product.metafields.elastick.department.value | default: product.metafields.elastick.department | default: product.metafields.valeverce.department.value | default: product.metafields.valeverce.department
-    assign macro_value = product.metafields.elastick.filter_meta_macro.value | default: product.metafields.elastick.filter_meta_macro
-    assign macro_value = macro_value | split: '_' | last | default: product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
-    assign micro_value = product.metafields.elastick.filter_microcategory.value | default: product.metafields.elastick.filter_microcategory | default: product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
-
-    assign pm_handle = pm_value | handleize | downcase
-    assign department_handle = department_value | handleize | downcase
-    assign macro_handle = macro_value | handleize | downcase
-    assign micro_handle = micro_value | handleize | downcase
-
-    if pm_handle != blank
-      assign pm_label = pm_value
-      assign pm_url = '/collections/' | append: pm_handle
-
-      if department_handle != blank
-        assign department_label = department_value
-        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+  
+  # Get current URL for matching
+  assign current_url = request.path | downcase | remove: '/' | remove: ' '
+  
+  # Also get current collection/product URL for matching
+  assign current_collection_url = ''
+  assign current_product_url = ''
+  
+  if template_name == 'collection' and collection
+    assign current_collection_url = collection.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+  elsif template_name == 'product' and product
+    assign current_product_url = product.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+  endif
+  
+  # Breadcrumbs from menu structure
+  assign breadcrumb_items = array.new
+  assign find_menu_path = false
+  
+  # If menu is provided, use it to build breadcrumbs
+  if menu != blank
+    # Recursive function to find path in menu
+    assign menu_path = array.new
+    
+    # First level links
+    for link in menu.links
+      assign link_url = link.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+      
+      # Check if this link matches current URL
+      if link_url == current_url or link_url == current_collection_url or link_url == current_product_url
+        assign menu_path = menu_path | push: link
+        assign breadcrumb_items = menu_path
+        assign find_menu_path = true
+        break
       endif
-
-      if macro_handle != blank
-        assign macro_label = macro_value
-        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
+      
+      # Check children recursively
+      if link.links != blank
+        assign found_in_children = false
+        assign child_path = menu_path | push: link
+        
+        for child in link.links
+          assign child_url = child.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+          
+          if child_url == current_url or child_url == current_collection_url or child_url == current_product_url
+            assign child_path = child_path | push: child
+            assign breadcrumb_items = child_path
+            assign find_menu_path = true
+            break
+          endif
+          
+          # Check grandchildren
+          if child.links != blank
+            for grandchild in child.links
+              assign grandchild_url = grandchild.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+              
+              if grandchild_url == current_url or grandchild_url == current_collection_url or grandchild_url == current_product_url
+                assign child_path = child_path | push: child
+                assign child_path = child_path | push: grandchild
+                assign breadcrumb_items = child_path
+                assign find_menu_path = true
+                break
+              endif
+              
+              # Check great-grandchildren (for deep menu structures)
+              if grandchild.links != blank
+                for great_grandchild in grandchild.links
+                  assign great_grandchild_url = great_grandchild.url | downcase | remove: '/' | remove: ' ' | split: '?' | first
+                  
+                  if great_grandchild_url == current_url or great_grandchild_url == current_collection_url or great_grandchild_url == current_product_url
+                    assign child_path = child_path | push: child
+                    assign child_path = child_path | push: grandchild
+                    assign child_path = child_path | push: great_grandchild
+                    assign breadcrumb_items = child_path
+                    assign find_menu_path = true
+                    break
+                  endif
+                endfor
+                
+                if find_menu_path
+                  break
+                endif
+              endif
+            endfor
+            
+            if find_menu_path
+              break
+            endif
+          endif
+        endfor
+        
+        if find_menu_path
+          break
+        endif
       endif
+    endfor
+  endif
+  
+  # Fallback to metafields-based breadcrumbs if menu-based not found
+  if breadcrumb_items == blank or breadcrumb_items.size == 0
+    assign leaf_label = ''
+    assign pm_label = ''
+    assign pm_url = ''
+    assign department_label = ''
+    assign department_url = ''
+    assign macro_label = ''
+    assign macro_url = ''
+    assign micro_label = ''
+    assign micro_url = ''
 
-      if micro_handle != blank
-        assign micro_label = micro_value
-        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
+    if template_name == 'product' and product
+      assign leaf_label = product.title
+
+      assign pm_value = product.metafields.valeverce.pm.value | default: product.metafields.valeverce.pm
+      assign department_value = product.metafields.elastick.department.value | default: product.metafields.elastick.department | default: product.metafields.valeverce.department.value | default: product.metafields.valeverce.department
+      assign macro_value = product.metafields.elastick.filter_meta_macro.value | default: product.metafields.elastick.filter_meta_macro
+      assign macro_value = macro_value | split: '_' | last | default: product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
+      assign micro_value = product.metafields.elastick.filter_microcategory.value | default: product.metafields.elastick.filter_microcategory | default: product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
+
+      assign pm_handle = pm_value | handleize | downcase
+      assign department_handle = department_value | handleize | downcase
+      assign macro_handle = macro_value | handleize | downcase
+      assign micro_handle = micro_value | handleize | downcase
+
+      if pm_handle != blank
+        assign pm_label = pm_value
+        assign pm_url = '/collections/' | append: pm_handle
+
+        if department_handle != blank
+          assign department_label = department_value
+          assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+        endif
+
+        if macro_handle != blank
+          assign macro_label = macro_value
+          assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
+        endif
+
+        if micro_handle != blank
+          assign micro_label = micro_value
+          assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
+        endif
       endif
+    elsif template_name == 'collection' and collection
+      assign leaf_label = collection.title
+
+      assign handle_parts = collection.handle | split: '-'
+      assign pm_value = collection.metafields.valeverce.pm.value | default: collection.metafields.valeverce.pm | default: handle_parts.first
+      assign department_value = collection.metafields.valeverce.department.value | default: collection.metafields.valeverce.department
+      assign macro_value = collection.metafields.valeverce.macro_category.value | default: collection.metafields.valeverce.macro_category
+      assign micro_value = collection.metafields.valeverce.micro_category.value | default: collection.metafields.valeverce.micro_category
+
+      assign pm_handle = pm_value | handleize | downcase
+      assign department_handle = department_value | handleize | downcase
+      assign macro_handle = macro_value | handleize | downcase
+      assign micro_handle = micro_value | handleize | downcase
+
+      if pm_handle != blank and collection.handle != pm_handle
+        assign pm_label = pm_value
+        assign pm_url = '/collections/' | append: pm_handle
+
+        if department_handle != blank
+          assign department_label = department_value
+          assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+        endif
+
+        if macro_handle != blank
+          assign macro_label = macro_value
+          assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
+        endif
+
+        if micro_handle != blank
+          assign micro_label = micro_value
+          assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
+        endif
+      endif
+    else
+      assign leaf_label = page.title | default: search.terms | default: blog.title | default: article.title
     endif
-  elsif template_name == 'collection' and collection
-    assign leaf_label = collection.title
-
-    assign handle_parts = collection.handle | split: '-'
-    assign pm_value = collection.metafields.valeverce.pm.value | default: collection.metafields.valeverce.pm | default: handle_parts.first
-    assign department_value = collection.metafields.valeverce.department.value | default: collection.metafields.valeverce.department
-    assign macro_value = collection.metafields.valeverce.macro_category.value | default: collection.metafields.valeverce.macro_category
-    assign micro_value = collection.metafields.valeverce.micro_category.value | default: collection.metafields.valeverce.micro_category
-
-    assign pm_handle = pm_value | handleize | downcase
-    assign department_handle = department_value | handleize | downcase
-    assign macro_handle = macro_value | handleize | downcase
-    assign micro_handle = micro_value | handleize | downcase
-
-    if pm_handle != blank and collection.handle != pm_handle
-      assign pm_label = pm_value
-      assign pm_url = '/collections/' | append: pm_handle
-
-      if department_handle != blank
-        assign department_label = department_value
-        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
-      endif
-
-      if macro_handle != blank
-        assign macro_label = macro_value
-        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
-      endif
-
-      if micro_handle != blank
-        assign micro_label = micro_value
-        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
-      endif
-    endif
-  else
-    assign leaf_label = page.title | default: search.terms | default: blog.title | default: article.title
   endif
 -%}
 
 <a href="{{ routes.root_url }}">Home</a>
 
+{% if breadcrumb_items != blank and breadcrumb_items.size > 0 %}
+  {% for item in breadcrumb_items offset: 1 %}
+    <span class="separator" aria-hidden="true">{{ separator }}</span>
+    <a href="{{ item.url }}">{{ item.title }}</a>
+  {% endfor %}
+  <span class="separator" aria-hidden="true">{{ separator }}</span>
+  <span aria-current="page">{{ breadcrumb_items.last.title }}</span>
+{% else %}
   {% if pm_label != blank %}
     <span class="separator" aria-hidden="true">{{ separator }}</span>
     {% if pm_url != blank %}
@@ -131,6 +239,7 @@
     <span class="separator" aria-hidden="true">{{ separator }}</span>
     <span aria-current="page">{{ leaf_label }}</span>
   {% endif %}
+{% endif %}
 
 {% stylesheet %}
   .breadcrumb-nav {

@@ -5,8 +5,17 @@
   {% content_for 'block', type: 'breadcrumb', id: 'breadcrumb' %}
 {% enddoc %}
 
+{%- liquid
+  # Try to get menu from section settings first, then fallback to global menu
+  assign breadcrumb_menu = block.settings.menu
+  
+  if breadcrumb_menu == blank and menus != blank
+    assign breadcrumb_menu = menus.main-menu
+  endif
+-%}
+
 {% capture breadcrumb_content %}
-  <nav class="breadcrumb-nav" aria-label="Breadcrumb">{%- render 'breadcrumb-nav', separator: block.settings.separator -%}</nav>
+  <nav class="breadcrumb-nav" aria-label="Breadcrumb">{%- render 'breadcrumb-nav', separator: block.settings.separator, menu: breadcrumb_menu -%}</nav>
 {% endcapture %}
 
 {% content_for 'block', type: 'text', id: 'text', body: breadcrumb_content %}
@@ -20,6 +29,11 @@
       "id": "separator",
       "label": "Separator",
       "default": "/"
+    },
+    {
+      "type": "menu",
+      "id": "menu",
+      "label": "Menu for breadcrumbs"
     }
   ],
   "blocks": [{ "type": "text" }],
