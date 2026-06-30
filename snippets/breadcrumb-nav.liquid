@@ -8,6 +8,7 @@
   @param {string} [separator] - Separator between breadcrumb items
   @param {string} [home] - Home label; omitted when blank
   @param {boolean} [show_leaf] - Appends the current product as the last crumb
+  @param {boolean} [bar] - Applies bordered container styling when true
   @param {string} [align] - Flex justify-content value for the bar
   @param {boolean} [style_typography] - Applies theme typography inline styles when true
 {% enddoc %}
@@ -20,6 +21,7 @@
   assign target = target | default: blank
   assign searching = searching | default: false
   assign separator = separator | default: settings.breadcrumbs_separator | default: '/'
+  assign show_bar = bar | default: false, allow_false: true
   if home == nil
     assign home_label = settings.breadcrumbs_home
   else
@@ -35,7 +37,16 @@
   if product and searching == false
     for collection in product.collections
       capture result
-        render 'breadcrumb-nav', target: collection.handle, searching: true,  linklist: linklist,  separator: separator, home: home,show_leaf: show_leaf, align: align, style_typography: style_typography
+        render 'breadcrumb-nav',
+          target: collection.handle,
+          searching: true,
+          linklist: linklist,
+          separator: separator,
+          home: home,
+          show_leaf: show_leaf,
+          bar: show_bar,
+          align: align,
+          style_typography: style_typography
       endcapture
       if result != ''
         break
@@ -110,20 +121,24 @@
 
 {%- if breadcrumbs.size > 0 -%}
   {%- liquid
-    assign nav_style = '--breadcrumb-align: ' | append: align | append: ';'
+    assign nav_style = ''
 
-    if style_typography
-      assign nav_style = nav_style | append: ' --breadcrumb-font-size: ' | append: settings.breadcrumbs_text_size | append: 'px;'
-      assign nav_style = nav_style | append: ' --breadcrumb-color: ' | append: settings.breadcrumbs_text_color | append: ';'
-      if settings.breadcrumbs_text_transform != blank
-        assign nav_style = nav_style | append: ' --breadcrumb-text-transform: ' | append: settings.breadcrumbs_text_transform | append: ';'
+    if show_bar or style_typography
+      assign nav_style = '--breadcrumb-align: ' | append: align | append: ';'
+
+      if style_typography
+        assign nav_style = nav_style | append: ' --breadcrumb-font-size: ' | append: settings.breadcrumbs_text_size | append: 'px;'
+        assign nav_style = nav_style | append: ' --breadcrumb-color: ' | append: settings.breadcrumbs_text_color | append: ';'
+        if settings.breadcrumbs_text_transform != blank
+          assign nav_style = nav_style | append: ' --breadcrumb-text-transform: ' | append: settings.breadcrumbs_text_transform | append: ';'
+        endif
       endif
     endif
   -%}
   <nav
-    class="breadcrumb-nav bar{% if section_layout %} page-width{% endif %}"
+    class="breadcrumb-nav{% if show_bar %} bar{% endif %}{% if section_layout %} page-width{% endif %}"
     aria-label="Breadcrumb"
-    style="{{ nav_style | strip }}"
+    {% if nav_style != blank %}style="{{ nav_style | strip }}"{% endif %}
   >
     {%- for breadcrumb in breadcrumbs -%}
       {%- capture breadcrumb_html -%}
@@ -160,24 +175,19 @@
 {%- endif -%}
 
 {% stylesheet %}
-  .breadcrumb-nav.bar {
+  .breadcrumb-nav {
     display: flex;
     align-items: center;
     gap: 5px;
-    min-height: 36px;
-    padding-inline: 16px;
-    border: 1px solid var(--border-color);
-    background: var(--white);
-    color: var(--breadcrumb-color, inherit);
-    font-size: var(--breadcrumb-font-size, inherit);
-    text-transform: var(--breadcrumb-text-transform, inherit);
-    justify-content: var(--breadcrumb-align, flex-start);
+    color: inherit;
+    font-size: inherit;
+    text-transform: inherit;
     overflow: hidden;
   }
 
-  .breadcrumb-nav.bar a,
-  .breadcrumb-nav.bar span,
-  .breadcrumb-nav.bar h1 {
+  .breadcrumb-nav a,
+  .breadcrumb-nav span,
+  .breadcrumb-nav h1 {
     min-width: 0;
     margin: 0;
     overflow: hidden;
@@ -188,12 +198,23 @@
     white-space: nowrap;
   }
 
-  .breadcrumb-nav.bar .breadcrumb-leaf {
+  .breadcrumb-nav .breadcrumb-leaf {
     font: inherit;
   }
 
-  .breadcrumb-nav.bar .separator {
+  .breadcrumb-nav .separator {
     flex: 0 0 auto;
+  }
+
+  .breadcrumb-nav.bar {
+    min-height: 36px;
+    padding-inline: 16px;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--breadcrumb-color, inherit);
+    font-size: var(--breadcrumb-font-size, inherit);
+    text-transform: var(--breadcrumb-text-transform, inherit);
+    justify-content: var(--breadcrumb-align, flex-start);
   }
 
   @media screen and (min-width: 990px) {
