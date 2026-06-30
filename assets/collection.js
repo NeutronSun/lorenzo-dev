@@ -53,8 +53,6 @@ class CollectionPartial {
  * @extends {HTMLComponent<FiltersRefs>}
  */
 class Filters extends HTMLComponent {
-  requestId = 0;
-
   constructor() {
     super();
 
@@ -226,14 +224,10 @@ class Filters extends HTMLComponent {
    * @param {URLSearchParams} params
    */
   async render(params) {
-    const requestId = ++this.requestId;
     const url = CollectionPartial.buildUrl(params, CollectionPartial.VIEW.FILTERS);
-    const nextFilters = await TemplateHandler.fetchPartial(url, CollectionPartial.SELECTOR.FILTERS, {
-      headers: { Accept: 'text/html' },
-    });
+    const nextFilters = await TemplateHandler.fetch(url, CollectionPartial.SELECTOR.FILTERS);
 
-    if (!this.isConnected || requestId !== this.requestId) return;
-    if (!nextFilters) return;
+    if (!(nextFilters instanceof HTMLElement)) return;
 
     const form = this.querySelector('form');
 
@@ -253,8 +247,6 @@ class Filters extends HTMLComponent {
  * @extends {HTMLComponent<ProductGridRefs>}
  */
 class ProductGrid extends HTMLComponent {
-  requestId = 0;
-
   constructor() {
     super();
 
@@ -280,7 +272,9 @@ class ProductGrid extends HTMLComponent {
   async onFilter(event) {
     if (!event.params) return;
 
-    await this.render(event.params);
+    const rendered = await this.render(event.params);
+
+    rendered && this.updateUrl(event.params);
   }
 
   onPopState() {
@@ -289,23 +283,21 @@ class ProductGrid extends HTMLComponent {
 
   /**
    * @param {URLSearchParams} params
+   * @returns {Promise<boolean>}
    */
   async render(params) {
-    const requestId = ++this.requestId;
     const sectionId = this.dataset.sectionId;
 
-    if (!sectionId) return;
+    if (!sectionId) return false;
 
     const url = CollectionPartial.buildGridUrl(params, sectionId);
-    const nextGrid = await TemplateHandler.fetchPartial(url, CollectionPartial.SELECTOR.GRID, {
-      headers: { Accept: 'text/html' },
-    });
+    const nextGrid = await TemplateHandler.fetch(url, CollectionPartial.SELECTOR.GRID);
 
-    if (!this.isConnected || requestId !== this.requestId) return;
-    if (!nextGrid) return;
+    if (!(nextGrid instanceof HTMLElement)) return false;
 
     this.innerHTML = nextGrid.innerHTML;
-    this.updateUrl(params);
+
+    return true;
   }
 
   /**

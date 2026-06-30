@@ -6,7 +6,7 @@
 {% enddoc %}
 
 {% capture breadcrumb_content %}
-  <nav class="breadcrumb-nav" aria-label="Breadcrumb">{%- render 'breadcrumb-nav', separator: block.settings.separator -%}</nav>
+  {%- render 'breadcrumb-nav' -%}
 {% endcapture %}
 
 {% content_for 'block', type: 'text', id: 'text', body: breadcrumb_content %}
@@ -14,14 +14,6 @@
 {% schema %}
 {
   "name": "Breadcrumbs",
-  "settings": [
-    {
-      "type": "text",
-      "id": "separator",
-      "label": "Separator",
-      "default": "/"
-    }
-  ],
   "blocks": [{ "type": "text" }],
   "presets": [
     {

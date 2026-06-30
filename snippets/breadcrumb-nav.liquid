@@ -1,148 +1,137 @@
 {% doc %}
-  Renders breadcrumb navigation markup without layout wrapper.
+  Renders breadcrumb navigation from a link list menu and optional target handle.
 
-  @param {string} [separator] - Segment separator
+  @param {string} [target] - Object handle to match in the menu tree
+  @param {boolean} [searching] - Skips product collection recursion when true
+  @param {boolean} [section_layout] - Applies page-width layout class
 {% enddoc %}
 
 {%- liquid
-  assign separator = separator | default: '/'
-  assign template_name = template | split: '.' | first
+  assign menu = linklists[settings.breadcrumbs_linklist] | default: linklists.breadcrumbs
 
-  assign leaf_label = ''
-  assign pm_label = ''
-  assign pm_url = ''
-  assign department_label = ''
-  assign department_url = ''
-  assign macro_label = ''
-  assign macro_url = ''
-  assign micro_label = ''
-  assign micro_url = ''
+  assign breadcrumbs = '' | split: ','
+  assign target = target | default: blank
+  assign searching = searching | default: false
 
-  if template_name == 'product' and product
-    assign leaf_label = product.title
-
-    assign pm_value = product.metafields.valeverce.pm.value | default: product.metafields.valeverce.pm
-    assign department_value = product.metafields.elastick.department.value | default: product.metafields.elastick.department | default: product.metafields.valeverce.department.value | default: product.metafields.valeverce.department
-    assign macro_value = product.metafields.elastick.filter_meta_macro.value | default: product.metafields.elastick.filter_meta_macro
-    assign macro_value = macro_value | split: '_' | last | default: product.metafields.valeverce.macro_category.value | default: product.metafields.valeverce.macro_category
-    assign micro_value = product.metafields.elastick.filter_microcategory.value | default: product.metafields.elastick.filter_microcategory | default: product.metafields.valeverce.micro_category.value | default: product.metafields.valeverce.micro_category
-
-    assign pm_handle = pm_value | handleize | downcase
-    assign department_handle = department_value | handleize | downcase
-    assign macro_handle = macro_value | handleize | downcase
-    assign micro_handle = micro_value | handleize | downcase
-
-    if pm_handle != blank
-      assign pm_label = pm_value
-      assign pm_url = '/collections/' | append: pm_handle
-
-      if department_handle != blank
-        assign department_label = department_value
-        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
+  if product and searching == false
+    for collection in product.collections
+      capture result
+        render 'breadcrumb-nav', target: collection.handle, searching: true
+      endcapture
+      if result != ''
+        break
       endif
-
-      if macro_handle != blank
-        assign macro_label = macro_value
-        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
-      endif
-
-      if micro_handle != blank
-        assign micro_label = micro_value
-        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
-      endif
-    endif
-  elsif template_name == 'collection' and collection
-    assign leaf_label = collection.title
-
-    assign handle_parts = collection.handle | split: '-'
-    assign pm_value = collection.metafields.valeverce.pm.value | default: collection.metafields.valeverce.pm | default: handle_parts.first
-    assign department_value = collection.metafields.valeverce.department.value | default: collection.metafields.valeverce.department
-    assign macro_value = collection.metafields.valeverce.macro_category.value | default: collection.metafields.valeverce.macro_category
-    assign micro_value = collection.metafields.valeverce.micro_category.value | default: collection.metafields.valeverce.micro_category
-
-    assign pm_handle = pm_value | handleize | downcase
-    assign department_handle = department_value | handleize | downcase
-    assign macro_handle = macro_value | handleize | downcase
-    assign micro_handle = micro_value | handleize | downcase
-
-    if pm_handle != blank and collection.handle != pm_handle
-      assign pm_label = pm_value
-      assign pm_url = '/collections/' | append: pm_handle
-
-      if department_handle != blank
-        assign department_label = department_value
-        assign department_url = '/collections/' | append: pm_handle | append: '-' | append: department_handle
-      endif
-
-      if macro_handle != blank
-        assign macro_label = macro_value
-        assign macro_url = '/collections/' | append: pm_handle | append: '-' | append: macro_handle
-      endif
-
-      if micro_handle != blank
-        assign micro_label = micro_value
-        assign micro_url = '/collections/' | append: pm_handle | append: '-' | append: micro_handle
-      endif
-    endif
+    endfor
+    echo result
   else
-    assign leaf_label = page.title | default: search.terms | default: blog.title | default: article.title
+    if target == blank
+      if collection
+        assign target = collection.handle
+      elsif article
+        assign target = article.handle
+      elsif page
+        assign target = page.handle
+      endif
+    endif
+
+    for link in menu.links
+      assign object_1 = blank | default: title: link.title, url: link.url | sort
+      assign h1 = link.object.handle
+
+      if h1 == target
+        assign breadcrumbs = breadcrumbs | concat: object_1
+        break
+      endif
+
+      if link.links and link.links.size > 0
+        for l2 in link.links
+          assign object_2 = blank | default: title: l2.title, url: l2.url | sort
+          assign h2 = l2.object.handle | split: '/' | last
+
+          if h2 == target
+            assign breadcrumbs = breadcrumbs | concat: object_1 | concat: object_2
+            break
+          endif
+
+          if l2.links and l2.links.size > 0
+            for l3 in l2.links
+              assign object_3 = blank | default: title: l3.title, url: l3.url | sort
+              assign h3 = l3.object.handle
+
+              if h3 == target
+                assign breadcrumbs = breadcrumbs | concat: object_1 | concat: object_2 | concat: object_3
+                break
+              endif
+            endfor
+          endif
+
+          if breadcrumbs.size > 0
+            break
+          endif
+        endfor
+      endif
+
+      if breadcrumbs.size > 0
+        break
+      endif
+    endfor
+
+    if breadcrumbs.size > 0
+      if settings.breadcrumbs_home != blank
+        assign object_home = blank | default: title: settings.breadcrumbs_home, url: routes.root_url | sort
+        assign breadcrumbs = object_home | concat: breadcrumbs
+      endif
+      if product and settings.breadcrumbs_show_leaf
+        assign object_product = blank | default: title: product.title, url: product.url | sort
+        assign breadcrumbs = breadcrumbs | concat: object_product
+      endif
+    endif
   endif
 -%}
 
-<a href="{{ routes.root_url }}">Home</a>
-
-  {% if pm_label != blank %}
-    <span class="separator" aria-hidden="true">{{ separator }}</span>
-    {% if pm_url != blank %}
-      <a href="{{ pm_url }}">{{ pm_label }}</a>
-    {% else %}
-      <span>{{ pm_label }}</span>
-    {% endif %}
-  {% endif %}
-
-  {% if department_label != blank %}
-    <span class="separator" aria-hidden="true">{{ separator }}</span>
-    {% if department_url != blank %}
-      <a href="{{ department_url }}">{{ department_label }}</a>
-    {% else %}
-      <span>{{ department_label }}</span>
-    {% endif %}
-  {% endif %}
-
-  {% if macro_label != blank %}
-    <span class="separator" aria-hidden="true">{{ separator }}</span>
-    {% if macro_url != blank %}
-      <a href="{{ macro_url }}">{{ macro_label }}</a>
-    {% else %}
-      <span>{{ macro_label }}</span>
-    {% endif %}
-  {% endif %}
-
-  {% if micro_label != blank %}
-    <span class="separator" aria-hidden="true">{{ separator }}</span>
-    {% if micro_url != blank %}
-      <a href="{{ micro_url }}">{{ micro_label }}</a>
-    {% else %}
-      <span>{{ micro_label }}</span>
-    {% endif %}
-  {% endif %}
-
-  {% if leaf_label != blank %}
-    <span class="separator" aria-hidden="true">{{ separator }}</span>
-    <span aria-current="page">{{ leaf_label }}</span>
-  {% endif %}
-
-{% stylesheet %}
-  .breadcrumb-nav {
-    a:any-link {
-      color: inherit;
-      text-decoration: none;
+{%- if breadcrumbs.size > 0 -%}
+  <nav
+    class="breadcrumb-nav bar{% if section_layout %} page-width{% endif %}"
+    aria-label="Breadcrumb"
+    style="
+      --breadcrumb-font-size: {{ settings.breadcrumbs_text_size }}px;
+      --breadcrumb-color: {{ settings.breadcrumbs_text_color }};
+      {%- if settings.breadcrumbs_text_transform != blank -%}
+        --breadcrumb-text-transform: {{ settings.breadcrumbs_text_transform }};
+      {%- endif -%}
+      --breadcrumb-align: {{ settings.breadcrumbs_align }};
+    "
+  >
+    {%- for breadcrumb in breadcrumbs -%}
+      {%- capture breadcrumb_html -%}
+        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+      {%- endcapture -%}
+      {%- if forloop.last -%}
+        <h1 class="breadcrumb-leaf">{{ breadcrumb_html }}</h1>
+      {%- else -%}
+        {{ breadcrumb_html }}
+      {%- endif -%}
+      {%- unless forloop.last -%}
+        <span class="separator" aria-hidden="true">{{ settings.breadcrumbs_separator }}</span>
+      {%- endunless -%}
+    {%- endfor -%}
+  </nav>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {%- for breadcrumb in breadcrumbs -%}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index }},
+            "item": {
+              "@id": "{{ shop.url }}{%- unless breadcrumb.url contains routes.root_url -%}{{ routes.root_url }}{%- endunless -%}{{ breadcrumb.url }}",
+              "name": {{ breadcrumb.title | json }}
+            }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
     }
-
-    a:any-link:hover {
-      color: var(--black);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
-{% endstylesheet %}
+  </script>
+{%- endif -%}

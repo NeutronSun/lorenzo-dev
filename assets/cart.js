@@ -43,6 +43,8 @@ export class CartHandler {
   static UPDATE_URL = '/cart/update.js';
   static CLEAR_URL = '/cart/clear.js';
   static JSON_HEADERS = { Accept: 'application/json' };
+
+  /** @type {ShopifyCart | null} */
   static cart = null;
 
   static get routes() {
@@ -54,70 +56,32 @@ export class CartHandler {
    * @returns {Promise<ShopifyCart | null>}
    */
   static async get() {
-    document.dispatchEvent(new OnCartLoadingEvent({
-      action: 'get',
-      cart: CartHandler.cart,
-    }));
+    const request = async () => {
+      return await CartHandler.fetchCart(CartHandler.CART_URL);
+    };
 
-    const cart = await CartHandler.fetchCart(CartHandler.CART_URL);
-
-    if (!cart) {
-      document.dispatchEvent(new OnCartErrorEvent({
-        action: 'get',
-        error: new Error('Cart request failed'),
-        cart: CartHandler.cart,
-      }));
-
-      return null;
-    }
-
-    CartHandler.cart = cart;
-    document.dispatchEvent(new OnCartUpdateEvent({ cart, action: 'get' }));
-
-    return cart;
+    return await CartHandler.mutate('get', request());
   }
 
   /**
-   * Adds a product to the cart from form data.
+   * Adds line items to the cart from form data.
    * @param {FormData} formData
    * @returns {Promise<ShopifyCart | null>}
    */
   static async add(formData) {
-    return await CartHandler.mutate('add', async () => {
+    const request = async () => {
       const response = await fetch(CartHandler.routes.cart_add_url || CartHandler.ADD_URL, {
         method: 'POST',
         headers: CartHandler.JSON_HEADERS,
         body: formData,
       });
-      const result = await response.json();
 
       if (!response.ok) return null;
 
       return await CartHandler.fetchCart(CartHandler.CART_URL);
-    });
-  }
+    };
 
-  /**
-   * Adds multiple line items to the cart.
-   * @param {Array<{ id: number, quantity: number, properties?: Record<string, string> }>} items
-   * @returns {Promise<ShopifyCart | null>}
-   */
-  static async addItems(items) {
-    return await CartHandler.mutate('add', async () => {
-      const response = await fetch(CartHandler.routes.cart_add_url || CartHandler.ADD_URL, {
-        method: 'POST',
-        headers: {
-          ...CartHandler.JSON_HEADERS,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ items }),
-      });
-      const result = await response.json();
-
-      if (!response.ok) return null;
-
-      return await CartHandler.fetchCart(CartHandler.CART_URL);
-    });
+    return await CartHandler.mutate('add', request());
   }
 
   /**
@@ -127,7 +91,8 @@ export class CartHandler {
    * @returns {Promise<ShopifyCart | null>}
    */
   static async change(key, quantity) {
-    return await CartHandler.mutate('change', async () => {
+    const detail = { key, quantity };
+    const request = async () => {
       return await CartHandler.fetchCart(CartHandler.routes.cart_change_url || CartHandler.CHANGE_URL, {
         method: 'POST',
         headers: {
@@ -136,7 +101,9 @@ export class CartHandler {
         },
         body: JSON.stringify({ id: key, quantity }),
       });
-    }, { key, quantity });
+    };
+
+    return await CartHandler.mutate('change', request(), detail);
   }
 
   /**
@@ -145,7 +112,8 @@ export class CartHandler {
    * @returns {Promise<ShopifyCart | null>}
    */
   static async update(updates) {
-    return await CartHandler.mutate('update', async () => {
+    const detail = { updates };
+    const request = async () => {
       return await CartHandler.fetchCart(CartHandler.routes.cart_update_url || CartHandler.UPDATE_URL, {
         method: 'POST',
         headers: {
@@ -154,7 +122,9 @@ export class CartHandler {
         },
         body: JSON.stringify({ updates }),
       });
-    }, { updates });
+    };
+
+    return await CartHandler.mutate('update', request(), detail);
   }
 
   /**
@@ -162,18 +132,20 @@ export class CartHandler {
    * @returns {Promise<ShopifyCart | null>}
    */
   static async clear() {
-    return await CartHandler.mutate('clear', async () => {
+    const request = async () => {
       return await CartHandler.fetchCart(CartHandler.CLEAR_URL, {
         method: 'POST',
         headers: CartHandler.JSON_HEADERS,
       });
-    });
+    };
+
+    return await CartHandler.mutate('clear', request());
   }
 
   /**
    * Runs a cart mutation with loading, update, and error events.
    * @param {'get' | 'add' | 'change' | 'update' | 'clear'} action
-   * @param {() => Promise<ShopifyCart | null>} request
+   * @param {Promise<ShopifyCart | null>} request
    * @param {Record<string, unknown>} [detail]
    * @returns {Promise<ShopifyCart | null>}
    */
@@ -184,7 +156,7 @@ export class CartHandler {
       ...detail,
     }));
 
-    const cart = await request();
+    const cart = await request;
 
     if (!cart) {
       document.dispatchEvent(new OnCartErrorEvent({
@@ -412,11 +384,9 @@ class CartDrawer extends HTMLComponent {
     if (!sectionId) return;
 
     const url = UrlUtils.withSectionId(window.location.href, sectionId);
-    const body = await TemplateHandler.fetchPartial(url, CartDrawer.SECTION_BODY_SELECTOR, {
-      headers: { Accept: 'text/html' },
-    });
+    const body = await TemplateHandler.fetch(url, CartDrawer.SECTION_BODY_SELECTOR);
 
-    if (body) {
+    if (body instanceof HTMLElement) {
       this.refs.body.innerHTML = body.innerHTML;
       return;
     }
@@ -678,13 +648,11 @@ class CartPage extends HTMLComponent {
     if (!sectionId) return false;
 
     const url = UrlUtils.withSectionId(window.Theme?.routes?.cart_url || '/cart', sectionId);
-    const section = await TemplateHandler.fetchPartial(url, CartPage.SECTION_SELECTOR, {
-      headers: { Accept: 'text/html' },
-    });
+    const section = await TemplateHandler.fetch(url, CartPage.SECTION_SELECTOR);
 
     if (!this.isConnected) return false;
     if (requestId !== this.requestId) return false;
-    if (!section) return false;
+    if (!(section instanceof HTMLElement)) return false;
 
     TemplateHandler.replaceRefs(this, section, CartPage.REF_NAMES);
     this.updateRefs();
@@ -778,7 +746,7 @@ class PDPBundle extends HTMLComponent {
 
     this.isPending = true;
 
-    const cart = await CartHandler.addItems(this.getCartItems(PDPBundle.createBundleInstanceId(this.bundleId)));
+    const cart = await CartHandler.add(this.getFormData(PDPBundle.createBundleInstanceId(this.bundleId)));
 
     if (cart) {
       CartDrawer.closeHeaderMenu();
@@ -790,16 +758,18 @@ class PDPBundle extends HTMLComponent {
 
   /**
    * @param {string} bundleId
-   * @returns {Array<{ id: number, quantity: number, properties: Record<string, string> }>}
+   * @returns {FormData}
    */
-  getCartItems(bundleId) {
-    return this.availableItems.map((item) => ({
-      id: Number(item.id),
-      quantity: 1,
-      properties: {
-        [PDPBundle.BUNDLE_PROPERTY]: bundleId,
-      },
-    }));
+  getFormData(bundleId) {
+    const formData = new FormData();
+
+    for (const [index, item] of this.availableItems.entries()) {
+      formData.append(`items[${index}][id]`, String(item.id));
+      formData.append(`items[${index}][quantity]`, '1');
+      formData.append(`items[${index}][properties][${PDPBundle.BUNDLE_PROPERTY}]`, bundleId);
+    }
+
+    return formData;
   }
 
   updateButton() {

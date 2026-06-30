@@ -1,5 +1,5 @@
 /**
- * Shared theme utilities: CSS helpers, HTML safety, partial fetch, template cloning.
+ * Shared theme utilities: CSS helpers, HTML safety, fetch, template cloning.
  */
 
 import { HTMLComponent } from './HTMLComponent.js';
@@ -86,17 +86,8 @@ export class HtmlUtils {
   }
 }
 
-/** HTML fetch, parse, clone, and data-binding helpers for Liquid partials. */
+/** HTML template cloning, data-binding, and partial DOM replacement. */
 export class TemplateHandler {
-  /**
-   * Parses an HTML string into a document.
-   * @param {string} text
-   * @returns {Document}
-   */
-  static parseHtml(text) {
-    return new DOMParser().parseFromString(text, 'text/html');
-  }
-
   /**
    * Fetches a URL and returns its response text, or an empty string on failure.
    * @param {string | URL} url
@@ -112,23 +103,29 @@ export class TemplateHandler {
   }
 
   /**
-   * Fetches an HTML partial and returns the first matching element.
+   * Fetches a URL and returns the first matching element from the response HTML.
    * @param {string | URL} url
    * @param {string} selector
    * @param {RequestInit} [init]
    * @returns {Promise<HTMLElement | null>}
    */
-  static async fetchPartial(url, selector, init) {
+  static async fetch(url, selector, init = { headers: { Accept: 'text/html' } }) {
     const text = await TemplateHandler.fetchText(url, init);
 
     if (!text) return null;
 
-    const parsed = TemplateHandler.parseHtml(text);
-    const node = parsed.querySelector(selector);
+    const node = TemplateHandler.parseHtml(text).querySelector(selector);
 
-    if (!(node instanceof HTMLElement)) return null;
+    return node instanceof HTMLElement ? node : null;
+  }
 
-    return node;
+  /**
+   * Parses an HTML string into a document.
+   * @param {string} text
+   * @returns {Document}
+   */
+  static parseHtml(text) {
+    return new DOMParser().parseFromString(text, 'text/html');
   }
 
   /**
