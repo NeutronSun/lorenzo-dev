@@ -3,14 +3,12 @@
   @param {variant} selected
 {% enddoc %}
 
-{% liquid
-  assign seen = ''
-%}
+<fieldset class="group" data-option="3" ref="options[]">
+  <legend class="font-mono">{{ product.options[2] }}</legend>
 
-<div class="option-group" data-option="3">
-  <div class="option-legend font-mono">{{ product.options[2] }}</div>
+  <div class="tabs font-mono">
+    {% assign seen = '' %}
 
-  <fieldset class="option-tabs font-mono" data-option="3" ref="options[]">
     {% for v in product.variants %}
       {% capture key %}|{{ v.option3 }}|{% endcapture %}
 
@@ -21,7 +19,7 @@
           {% render 'variant-picker-option3-attrs', product: product, value: v.option3 %}
         {% endcapture %}
 
-        <label class="option-tab">
+        <label class="tab">
           <input
             type="radio"
             name="option-3"
@@ -33,5 +31,5 @@
         </label>
       {% endunless %}
     {% endfor %}
-  </fieldset>
-</div>
+  </div>
+</fieldset>

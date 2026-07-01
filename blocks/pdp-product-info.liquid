@@ -100,14 +100,14 @@
       </script>
 
       <template ref="groupTemplate">
-        <div class="group">
+        <fieldset class="group siblings">
           <div class="head font-mono">
             <span data-ref="colorLabel"></span>
             <span data-ref="variantsLabel"></span>
           </div>
           <div class="tabs font-mono" role="tablist" ref="tablist"></div>
           <div class="panels" ref="panels"></div>
-        </div>
+        </fieldset>
       </template>
 
       <template ref="tabTemplate">
@@ -515,92 +515,13 @@
     }
 
     pdp-siblings {
-      display: grid;
-      min-width: 0;
-
       &[hidden] {
         display: none;
       }
 
-      .group,
       .panels,
       .panel {
         min-width: 0;
-      }
-
-      .group {
-        display: grid;
-        gap: 16px;
-        padding: 20px;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        color: var(--secondary-black);
-        font-size: 10px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .head span {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .tabs {
-        display: inline-flex;
-        width: fit-content;
-        max-width: 100%;
-        border: 1px solid var(--border-color);
-        background: var(--white);
-      }
-
-      .tab {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 72px;
-        min-height: 30px;
-        padding: 0 14px;
-        border-right: 1px solid var(--border-color);
-        background: transparent;
-        color: var(--secondary-black);
-        font: inherit;
-        font-size: 10px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        cursor: pointer;
-      }
-
-      .tab:last-child {
-        border-right: 0;
-      }
-
-      .tab input {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        opacity: 0;
-        cursor: inherit;
-      }
-
-      .tab span {
-        position: relative;
-        z-index: 1;
-      }
-
-      .tab:has(input:checked) {
-        background: var(--background-darken);
-        color: var(--black);
       }
 
       .panel[hidden] {
@@ -712,11 +633,6 @@
   @media screen and (max-width: 749px) {
     .pdp-product-info {
       pdp-siblings {
-        .group {
-          overflow-x: clip;
-        }
-
-        .tabs,
         .values {
           min-width: 0;
           max-width: 100%;
@@ -725,29 +641,15 @@
           overscroll-behavior-x: contain;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
-        }
-
-        .tabs::-webkit-scrollbar,
-        .values::-webkit-scrollbar {
-          display: none;
-        }
-
-        .tabs {
-          display: flex;
-          flex-wrap: nowrap;
-          width: fit-content;
-        }
-
-        .tab {
-          flex: 0 0 auto;
-        }
-
-        .values {
           width: 100%;
           flex-wrap: nowrap;
           max-height: none;
           padding-right: 0;
           padding-bottom: 4px;
+        }
+
+        .values::-webkit-scrollbar {
+          display: none;
         }
 
         .chip {

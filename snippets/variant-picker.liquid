@@ -2,7 +2,7 @@
   assign selected = product.selected_or_first_available_variant
 %}
 
-<variant-picker class="option-stack">
+<variant-picker>
   {% render 'variant-picker-option1', product: product, selected: selected %}
 
   {% if product.options.size > 1 %}

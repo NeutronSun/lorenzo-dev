@@ -168,106 +168,135 @@
     }
   }
 
-  .option-stack {
-    display: grid;
+  variant-picker,
+  pdp-siblings {
+    display: flex;
+    flex-direction: column;
     min-width: 0;
   }
 
-  .option-group {
-    display: grid;
+  fieldset:is(.group) {
+    display: flex;
+    flex-direction: column;
     gap: 16px;
+    margin: 0;
     padding: 20px;
+    border: 0;
     border-bottom: 1px solid var(--border-color);
     min-width: 0;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    legend,
+    .head {
+      color: var(--secondary-black);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0;
+      width: 100%;
+
+      span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .tabs {
+      display: flex;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+    }
+
+    .tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      min-height: 30px;
+      padding: 0 14px;
+      border-right: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--secondary-black);
+      font: inherit;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &:last-child {
+        border-right: 0;
+      }
+
+      input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: inherit;
+      }
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+
+      &:has(input:checked) {
+        background: var(--background-darken);
+        color: var(--black);
+      }
+    }
   }
 
-  .option-group:last-child {
-    border-bottom: 0;
-  }
-
-  .option-legend {
-    color: var(--secondary-black);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-
-  .option-tabs {
-    display: inline-flex;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    border: 1px solid var(--border-color);
-    background: var(--white);
-  }
-
-  .option-tab {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 72px;
-    min-height: 30px;
-    padding: 0 14px;
-    border-right: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--secondary-black);
-    font: inherit;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  .option-tab:last-child {
-    border-right: 0;
-  }
-
-  .option-tab input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: inherit;
-  }
-
-  .option-tab span {
-    position: relative;
-    z-index: 1;
-  }
-
-  .option-tab:has(input:checked) {
-    background: var(--background-darken);
-    color: var(--black);
+  fieldset:is(.group.siblings) {
+    .panels {
+      width: 100%;
+      min-width: 0;
+    }
   }
 
   @media screen and (max-width: 749px) {
-    .option-group {
+    fieldset:is(.group) {
       overflow-x: clip;
-    }
 
-    .option-tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      width: fit-content;
-      min-width: 0;
-      max-width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      overscroll-behavior-x: contain;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
+      .tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        width: fit-content;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
 
-    .option-tabs::-webkit-scrollbar {
-      display: none;
-    }
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
 
-    .option-tab {
-      flex: 0 0 auto;
+      .tab {
+        flex: 0 0 auto;
+      }
     }
   }
 }
