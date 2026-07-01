@@ -1,0 +1,43 @@
+{% doc %}
+  @param {product} product
+  @param {variant} selected
+{% enddoc %}
+
+<div class="option-group" data-option="1">
+  <div class="option-legend font-mono">{{ product.options[0] }}</div>
+
+  <fieldset class="option-tabs font-mono" data-option="1" ref="options[]">
+    {% assign seen = '' %}
+
+    {% for v in product.variants %}
+      {% capture key %}|{{ v.option1 }}|{% endcapture %}
+
+      {% unless seen contains key %}
+        {% assign seen = seen | append: key %}
+
+        {% assign in_stock = false %}
+        {% for r in product.variants %}
+          {% if r.option1 == v.option1 and r.available %}
+            {% assign in_stock = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% capture attrs %}
+          {% render 'variant-picker-option1-attrs', product: product, value: v.option1 %}
+        {% endcapture %}
+
+        <label class="option-tab">
+          <input
+            type="radio"
+            name="option-1"
+            value="{{ v.option1 }}"
+            {{ attrs | strip }}
+            {% unless in_stock %}data-sold-out{% endunless %}
+            {% if v.option1 == selected.option1 %}checked{% endif %}>
+
+          <span>{{ v.option1 }}</span>
+        </label>
+      {% endunless %}
+    {% endfor %}
+  </fieldset>
+</div>

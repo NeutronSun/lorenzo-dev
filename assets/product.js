@@ -168,21 +168,7 @@ export class VariantPicker extends HTMLComponent {
     super.connectedCallback();
   }
 
-  onChange() {
-    const [ option1, option2, option3 ] =  this.selectedVariants;
-
-    const option1Fallback = this.variants.find(variant => variant.option1 === option1?.value);
-    const option2Fallback = this.variants.find(variant => variant.option1 === option1?.value && variant.option2 === option2?.value);
-    const option3Fallback = this.variants.find(variant => variant.option1 === option1?.value && variant.option2 === option2?.value && variant.option3 === option3?.value);
-
-    if (option3Fallback) 
-      console.log('3', option3Fallback.id);
-    else if (option2Fallback)
-      console.log('2', option2Fallback.id);
-    else if (option1Fallback)
-      console.log('1', option1Fallback.id);
-
-  }
+  onChange() {}
 
 }
 

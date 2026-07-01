@@ -1,0 +1,33 @@
+{% doc %}
+  @param {product} product
+  @param {string} value - option3 value
+{% enddoc %}
+
+{% liquid
+  assign seen = ''
+  assign tokens = ''
+  assign sold_out = ''
+  assign sold_out_seen = ''
+%}
+
+{% for r in product.variants %}
+  {% if r.option3 == value %}
+    {% assign token = r.option1 | handleize | append: '_' | append: r.option2 | handleize %}
+    {% capture key %}|{{ token }}|{% endcapture %}
+
+    {% unless seen contains key %}
+      {% assign seen = seen | append: key %}
+      {% assign tokens = tokens | append: token | append: ' ' %}
+    {% endunless %}
+
+    {% unless r.available %}
+      {% unless sold_out_seen contains key %}
+        {% assign sold_out_seen = sold_out_seen | append: key %}
+        {% assign sold_out = sold_out | append: token | append: ' ' %}
+      {% endunless %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+
+data-available-combinations="{{ tokens | strip }}"
+data-sold-out-combinations="{{ sold_out | strip }}"

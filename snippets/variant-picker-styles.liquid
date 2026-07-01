@@ -1,0 +1,116 @@
+{% doc %}
+  @param {product} product
+{% enddoc %}
+
+{% style %}
+  {% if product.options.size > 1 %}
+
+  {% assign seen = '' %}
+
+  {% for v in product.variants %}
+    {% capture key %}|{{ v.option1 }}|{% endcapture %}
+
+    {% unless seen contains key %}
+      {% assign seen = seen | append: key %}
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked)
+  fieldset[data-option="2"] label:has(
+    input[data-available-option1~="{{ v.option1 | handleize }}"]
+  ) {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked)
+  fieldset[data-option="2"] label:has(
+    input[data-sold-out-option1~="{{ v.option1 | handleize }}"]
+  ) {
+    text-decoration: line-through;
+    opacity: var(--option-sold-out-opacity);
+  }
+
+    {% endunless %}
+  {% endfor %}
+
+  {% endif %}
+
+  {% if product.options.size > 2 %}
+
+  {% assign seen = '' %}
+
+  {% for v in product.variants %}
+    {% capture key %}|{{ v.option1 }}|{{ v.option2 }}|{% endcapture %}
+
+    {% unless seen contains key %}
+      {% assign seen = seen | append: key %}
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked):has(input[name="option-2"][value="{{ v.option2 | escape }}"]:checked)
+  fieldset[data-option="3"] label:has(
+    input[data-available-combinations~="{{ v.option1 | handleize }}_{{ v.option2 | handleize }}"]
+  ) {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked):has(input[name="option-2"][value="{{ v.option2 | escape }}"]:checked)
+  fieldset[data-option="3"] label:has(
+    input[data-sold-out-combinations~="{{ v.option1 | handleize }}_{{ v.option2 | handleize }}"]
+  ) {
+    text-decoration: line-through;
+    opacity: var(--option-sold-out-opacity);
+  }
+
+    {% endunless %}
+  {% endfor %}
+
+  {% assign seen = '' %}
+
+  {% for v in product.variants %}
+    {% capture key %}|{{ v.option1 }}|{{ v.option3 }}|{% endcapture %}
+
+    {% unless seen contains key %}
+      {% assign seen = seen | append: key %}
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked):has(input[name="option-3"][value="{{ v.option3 | escape }}"]:checked)
+  fieldset[data-option="2"] label:has(
+    input[data-available-option3~="{{ v.option1 | handleize }}_{{ v.option3 | handleize }}"]
+  ) {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  variant-picker:has(input[name="option-1"][value="{{ v.option1 | escape }}"]:checked):has(input[name="option-3"][value="{{ v.option3 | escape }}"]:checked)
+  fieldset[data-option="2"] label:has(
+    input[data-sold-out-option3~="{{ v.option1 | handleize }}_{{ v.option3 | handleize }}"]
+  ) {
+    text-decoration: line-through;
+    opacity: var(--option-sold-out-opacity);
+  }
+
+    {% endunless %}
+  {% endfor %}
+
+  {% assign seen = '' %}
+
+  {% for v in product.variants %}
+    {% capture key %}|{{ v.option2 }}|{{ v.option3 }}|{% endcapture %}
+
+    {% unless seen contains key %}
+      {% assign seen = seen | append: key %}
+
+  variant-picker:has(input[name="option-2"][value="{{ v.option2 | escape }}"]:checked):has(input[name="option-3"][value="{{ v.option3 | escape }}"]:checked)
+  fieldset[data-option="1"] label:has(
+    input[data-sold-out-option23~="{{ v.option2 | handleize }}_{{ v.option3 | handleize }}"]
+  ) {
+    text-decoration: line-through;
+    opacity: var(--option-sold-out-opacity);
+  }
+
+    {% endunless %}
+  {% endfor %}
+
+  {% endif %}
+{% endstyle %}
