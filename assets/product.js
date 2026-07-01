@@ -3,6 +3,7 @@
  */
 
 import { CSSUtils } from '@theme/utilities';
+import { HTMLComponent } from '@theme/HTMLComponent';
 
 /**
  * @extends {HTMLElement}
@@ -142,4 +143,49 @@ class ProductPage extends HTMLElement {
 
 if (!customElements.get('product-page')) {
   customElements.define('product-page', ProductPage);
+}
+
+
+
+// @ts-ignore
+export class VariantPicker extends HTMLComponent {
+
+  get variants() {
+    if (!(this.refs.variants instanceof HTMLScriptElement)) return [];
+
+    return JSON.parse(this.refs.variants.textContent || '[]');
+  }
+
+  get selectedVariants() {
+    return this.refs.options.map(fieldset => fieldset.querySelector('input:checked')).filter(Boolean);
+  }
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  onChange() {
+    const [ option1, option2, option3 ] =  this.selectedVariants;
+
+    const option1Fallback = this.variants.find(variant => variant.option1 === option1?.value);
+    const option2Fallback = this.variants.find(variant => variant.option1 === option1?.value && variant.option2 === option2?.value);
+    const option3Fallback = this.variants.find(variant => variant.option1 === option1?.value && variant.option2 === option2?.value && variant.option3 === option3?.value);
+
+    if (option3Fallback) 
+      console.log('3', option3Fallback.id);
+    else if (option2Fallback)
+      console.log('2', option2Fallback.id);
+    else if (option1Fallback)
+      console.log('1', option1Fallback.id);
+
+  }
+
+}
+
+if (!customElements.get('variant-picker')) {
+  customElements.define('variant-picker', VariantPicker);
 }

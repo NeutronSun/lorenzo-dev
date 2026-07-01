@@ -1,84 +1,79 @@
 <variant-picker>
 
-  <!-- =========================
-      OPTION 1
-  ========================== -->
-  <fieldset class="opt opt-1">
-    {% for v in product.options_with_values[0].values %}
-      <label>
-        <input type="radio" name="option-1" value="{{ v.name }}"
-          {% if product.selected_or_first_available_variant.option1 == v.name %}checked{% endif %}>
-        {{ v.name }}
-      </label>
+  <fieldset class="opt opt-1" ref="options[]">
+    {% assign seen1 = '' %}
+    {% for variant in product.variants %}
+      {% unless seen1 contains variant.option1 %}
+        {% assign seen1 = seen1 | append: variant.option1 | append: ',' %}
+        <label>
+          <input type="radio" name="option-1" value="{{ variant.option1 }}"
+            {% if forloop.first %}checked{% endif %}>
+          {{ variant.option1 }}
+        </label>
+      {% endunless %}
     {% endfor %}
   </fieldset>
 
   {% if product.options.size > 1 %}
-
-  <!-- =========================
-      OPTION 2 (ALL VALUES)
-  ========================== -->
-  <fieldset class="opt opt-2">
-
+  <fieldset class="opt opt-2" ref="options[]">
     {% assign seen2 = '' %}
-
     {% for variant in product.variants %}
       {% unless seen2 contains variant.option2 %}
         {% assign seen2 = seen2 | append: variant.option2 | append: ',' %}
 
-        <label data-option1="{{ variant.option1 }}">
-          <input type="radio"
-            name="option-2"
-            value="{{ variant.option2 }}">
+        {% assign opt1list = '' %}
+        {% for v in product.variants %}
+          {% if v.option2 == variant.option2 %}
+            {% assign tok = v.option1 | handleize %}
+            {% unless opt1list contains tok %}
+              {% assign opt1list = opt1list | append: tok | append: ' ' %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+
+        <label>
+          <input type="radio" name="option-2" value="{{ variant.option2 }}"
+            data-option1="{{ opt1list | strip }}">
           {{ variant.option2 }}
         </label>
-
       {% endunless %}
     {% endfor %}
-
   </fieldset>
-
   {% endif %}
 
   {% if product.options.size > 2 %}
-
-  <!-- =========================
-      OPTION 3 (ALL VALUES)
-  ========================== -->
-  <fieldset class="opt opt-3">
-
+  <fieldset class="opt opt-3" ref="options[]">
     {% assign seen3 = '' %}
-
     {% for variant in product.variants %}
-      {% capture key %}{{ variant.option1 }}|{{ variant.option2 }}|{{ variant.option3 }}{% endcapture %}
+      {% unless seen3 contains variant.option3 %}
+        {% assign seen3 = seen3 | append: variant.option3 | append: ',' %}
 
-      {% unless seen3 contains key %}
-        {% assign seen3 = seen3 | append: key | append: ',' %}
+        {% assign pairlist = '' %}
+        {% for v in product.variants %}
+          {% if v.option3 == variant.option3 %}
+            {% assign pairtok = v.option1 | handleize | append: '_' | append: v.option2 | handleize %}
+            {% unless pairlist contains pairtok %}
+              {% assign pairlist = pairlist | append: pairtok | append: ' ' %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
 
-        <label
-          data-option1="{{ variant.option1 }}"
-          data-option2="{{ variant.option2 }}"
-        >
-          <input type="radio"
-            name="option-3"
-            value="{{ variant.option3 }}">
+        <label>
+          <input type="radio" name="option-3" value="{{ variant.option3 }}"
+            data-pairs="{{ pairlist | strip }}">
           {{ variant.option3 }}
         </label>
-
       {% endunless %}
-
     {% endfor %}
-
   </fieldset>
-
   {% endif %}
+
+  <script type="application/json" ref="variants">
+    {{ product.variants | json }}
+  </script>
 
 </variant-picker>
 <style>
-
-/* =========================
-   BASE
-========================= */
 
 variant-picker {
   display: flex;
@@ -99,41 +94,112 @@ label {
   cursor: pointer;
 }
 
-/* =========================
-   OPTION 2 FILTER
-   (depends on option 1)
-========================= */
-
-.opt-2 label {
-  display: none;
-}
-
-{% for v in product.options_with_values[0].values %}
-
-variant-picker:has(input[name="option-1"][value="{{ v.name }}"]:checked)
-.opt-2 label[data-option1="{{ v.name }}"] {
-  display: inline-flex;
-}
-
-{% endfor %}
-
-/* =========================
-   OPTION 3 FILTER
-   (depends on option 1 + option 2)
-========================= */
-
+.opt-2 label,
 .opt-3 label {
-  display: none;
+  opacity: .4;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
+{% assign css1 = '' %}
 {% for variant in product.variants %}
+  {% unless css1 contains variant.option1 %}
+    {% assign css1 = css1 | append: variant.option1 | append: ',' %}
 
 variant-picker:has(input[name="option-1"][value="{{ variant.option1 }}"]:checked)
-:has(input[name="option-2"][value="{{ variant.option2 }}"]:checked)
-.opt-3 label[data-option1="{{ variant.option1 }}"][data-option2="{{ variant.option2 }}"] {
-  display: inline-flex;
+  .opt-2 label:has(input[data-option1~="{{ variant.option1 | handleize }}"]) {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
+  {% endunless %}
 {% endfor %}
+
+{% assign css2 = '' %}
+{% for variant in product.variants %}
+  {% assign key2 = variant.option1 | append: '|' | append: variant.option2 %}
+  {% unless css2 contains key2 %}
+    {% assign css2 = css2 | append: key2 | append: ',' %}
+
+variant-picker:has(input[name="option-1"][value="{{ variant.option1 }}"]:checked):has(input[name="option-2"][value="{{ variant.option2 }}"]:checked)
+  .opt-3 label:has(input[data-pairs~="{{ variant.option1 | handleize }}_{{ variant.option2 | handleize }}"]) {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+  {% endunless %}
+{% endfor %}
+
+variant-picker label:has(input[data-sold-out]) {
+  text-decoration: line-through;
+  opacity: .5;
+}
+
+{% assign soldOut1 = '' %}
+{% for variant in product.variants %}
+  {% unless soldOut1 contains variant.option1 %}
+    {% assign soldOut1 = soldOut1 | append: variant.option1 | append: ',' %}
+
+    {% assign available1 = false %}
+    {% for v in product.variants %}
+      {% if v.option1 == variant.option1 and v.available %}
+        {% assign available1 = true %}
+      {% endif %}
+    {% endfor %}
+
+    {% unless available1 %}
+.opt-1 label:has(input[value="{{ variant.option1 }}"]) {
+  text-decoration: line-through;
+  opacity: .5;
+}
+    {% endunless %}
+
+  {% endunless %}
+{% endfor %}
+
+{% assign soldOut2 = '' %}
+{% for variant in product.variants %}
+  {% assign key2b = variant.option1 | append: '|' | append: variant.option2 %}
+  {% unless soldOut2 contains key2b %}
+    {% assign soldOut2 = soldOut2 | append: key2b | append: ',' %}
+
+    {% assign available2 = false %}
+    {% for v in product.variants %}
+      {% if v.option1 == variant.option1 and v.option2 == variant.option2 and v.available %}
+        {% assign available2 = true %}
+      {% endif %}
+    {% endfor %}
+
+    {% unless available2 %}
+variant-picker:has(input[name="option-1"][value="{{ variant.option1 }}"]:checked)
+  .opt-2 label:has(input[value="{{ variant.option2 }}"]) {
+  text-decoration: line-through;
+  opacity: .5;
+}
+    {% endunless %}
+
+  {% endunless %}
+{% endfor %}
+
+{% if product.options.size > 2 %}
+{% assign soldOut3 = '' %}
+{% for variant in product.variants %}
+  {% assign key3b = variant.option1 | append: '|' | append: variant.option2 | append: '|' | append: variant.option3 %}
+  {% unless soldOut3 contains key3b %}
+    {% assign soldOut3 = soldOut3 | append: key3b | append: ',' %}
+
+    {% unless variant.available %}
+variant-picker:has(input[name="option-1"][value="{{ variant.option1 }}"]:checked):has(input[name="option-2"][value="{{ variant.option2 }}"]:checked)
+  .opt-3 label:has(input[value="{{ variant.option3 }}"]) {
+  text-decoration: line-through;
+  opacity: .5;
+}
+    {% endunless %}
+
+  {% endunless %}
+{% endfor %}
+{% endif %}
 
 </style>
