@@ -25,7 +25,6 @@ import { TemplateHandler } from '@theme/utilities';
  * @property {HTMLElement} tablist
  * @property {HTMLElement} panels
  * @property {HTMLElement} blocksSource
- * @property {HTMLElement} skeleton
  */
 
 /**
@@ -37,6 +36,8 @@ class PdpSiblings extends HTMLComponent {
 
   renderId = 0;
   currentProduct = null;
+  loadingTab = null;
+  loadingPanel = null;
 
   get currentHandle() {
     return this.dataset.currentHandle || '';
@@ -49,7 +50,6 @@ class PdpSiblings extends HTMLComponent {
   }
 
   set isLoading(value) {
-    this.classList.toggle('is-loading', value);
     this.setAttribute('aria-busy', value ? 'true' : 'false');
   }
 
@@ -61,6 +61,7 @@ class PdpSiblings extends HTMLComponent {
     }
 
     this.hydrateBlocks();
+    this.setFirstTabLoading(true);
     this.render();
   }
 
@@ -84,6 +85,40 @@ class PdpSiblings extends HTMLComponent {
     }
 
     source.remove();
+  }
+
+  setFirstTabLoading(active) {
+    const tablist = this.refs.tablist;
+    const panels = this.refs.panels;
+
+    if (!(tablist instanceof HTMLElement)) return;
+    if (!(panels instanceof HTMLElement)) return;
+
+    if (active) {
+      const panel = panels.querySelector('.panel[data-tag]');
+
+      if (!(panel instanceof HTMLElement)) return;
+
+      const id = panel.dataset.tab || '';
+      const tab = tablist.querySelector(`input[value="${id}"]`)?.closest('label.tab');
+      const input = tab?.querySelector('input[type="radio"]');
+
+      this.loadingPanel = panel;
+      this.loadingTab = tab instanceof HTMLLabelElement ? tab : null;
+
+      panel.removeAttribute('hidden');
+      panel.classList.add('loading');
+      this.loadingTab?.classList.add('loading');
+
+      input instanceof HTMLInputElement && (input.checked = true);
+
+      return;
+    }
+
+    this.loadingPanel?.classList.remove('loading');
+    this.loadingTab?.classList.remove('loading');
+    this.loadingPanel = null;
+    this.loadingTab = null;
   }
 
   /** @returns {PdpSiblingTabConfig[]} */
@@ -164,6 +199,8 @@ class PdpSiblings extends HTMLComponent {
       activeTabs.push(config);
     }
 
+    this.setFirstTabLoading(false);
+
     if (!activeTabs.length) {
       this.isLoading = false;
       this.hidden = true;
@@ -174,11 +211,12 @@ class PdpSiblings extends HTMLComponent {
 
     firstInput instanceof HTMLInputElement && (firstInput.checked = true);
 
+    for (const [index, config] of activeTabs.entries()) {
+      config.panel.toggleAttribute('hidden', index !== 0);
+    }
+
     this.isLoading = false;
     this.hidden = false;
-
-    this.refs.skeleton instanceof HTMLElement && (this.refs.skeleton.hidden = true);
-    this.refs.group instanceof HTMLElement && (this.refs.group.hidden = false);
 
     this.bindPanelSync(activeTabs[0].id);
   }
