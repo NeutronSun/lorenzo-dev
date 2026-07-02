@@ -136,30 +136,70 @@
               "name": "Product configurator",
               "settings": {},
               "blocks": {
-                "variant-picker": {
+                "pdp_variant_picker_hhXYL8": {
                   "type": "pdp-variant-picker",
-                  "static": true,
+                  "name": "Variant picker",
                   "settings": {},
                   "blocks": {}
                 },
-                "siblings": {
+                "pdp_siblings_qjqWC8": {
                   "type": "pdp-siblings",
-                  "static": true,
+                  "name": "Siblings",
                   "settings": {
                     "siblings_limit": 250,
                     "label_color": "Color",
                     "label_variants": "Variants"
                   },
-                  "blocks": {}
+                  "blocks": {
+                    "pdp_sibling_tab_a4hhqk": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Sibling tab",
+                      "settings": {
+                        "tag": "Tema_",
+                        "use_tag_value_as_label": true,
+                        "label": ""
+                      },
+                      "blocks": {}
+                    },
+                    "pdp_sibling_tab_DmN4kM": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Sibling tab",
+                      "settings": {
+                        "tag": "Universe_",
+                        "use_tag_value_as_label": true,
+                        "label": ""
+                      },
+                      "blocks": {}
+                    },
+                    "pdp_sibling_tab_Y3yRhb": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Sibling tab",
+                      "settings": {
+                        "tag": "Fusion_",
+                        "use_tag_value_as_label": false,
+                        "label": "Fusion"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "pdp_sibling_tab_a4hhqk",
+                    "pdp_sibling_tab_DmN4kM",
+                    "pdp_sibling_tab_Y3yRhb"
+                  ]
                 },
-                "buy-button": {
+                "pdp_buy_button_fLHDXY": {
                   "type": "pdp-buy-button",
-                  "static": true,
+                  "name": "Buy button",
                   "settings": {},
                   "blocks": {}
                 }
               },
-              "block_order": []
+              "block_order": [
+                "pdp_variant_picker_hhXYL8",
+                "pdp_siblings_qjqWC8",
+                "pdp_buy_button_fLHDXY"
+              ]
             },
             "pdp_bundle_qicFRh": {
               "type": "pdp-bundle",
