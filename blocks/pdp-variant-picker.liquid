@@ -1,0 +1,27 @@
+{% doc %}
+  Renders PDP variant picker.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+%}
+
+<div class="pdp-variant-picker" {{ block.shopify_attributes }}>
+  {% render 'variant-picker', product: picker_product %}
+</div>
+
+{% schema %}
+{
+  "name": "Variant picker",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Variant picker",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

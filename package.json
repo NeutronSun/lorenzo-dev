@@ -7,7 +7,7 @@
   "scripts": {
     "check": "shopify theme check",
     "store:dev-only": "shopify theme dev -e store",
-    "store:dev": "npm-run-all -p store:dev-only",
+    "store:dev": "npm-run-all -p store:dev-only --theme-editor-sync",
     "store:share": "shopify theme share -e store",
     "prod:pull": "shopify theme pull -e prod",
     "prod:push": "npm-run-all prod:push-only",

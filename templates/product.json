@@ -123,44 +123,92 @@
         "info": {
           "type": "pdp-product-info",
           "static": true,
-          "settings": {
-            "siblings_limit": 250,
-            "label_color": "Color",
-            "label_variants": "Variants"
-          },
+          "settings": {},
           "blocks": {
-            "sibling-tab-tema": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Tema_",
-                "use_tag_value_as_label": true,
-                "label": "Tema"
-              },
+            "heading": {
+              "type": "pdp-heading",
+              "static": true,
+              "settings": {},
               "blocks": {}
             },
-            "sibling-tab-fusion": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Fusion_",
-                "use_tag_value_as_label": false,
-                "label": "Fusion"
+            "configurator": {
+              "type": "pdp-product-configurator",
+              "static": true,
+              "settings": {},
+              "blocks": {
+                "variant-picker": {
+                  "type": "pdp-variant-picker",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
+                "siblings": {
+                  "type": "pdp-siblings",
+                  "static": true,
+                  "settings": {
+                    "siblings_limit": 250,
+                    "label_color": "Color",
+                    "label_variants": "Variants"
+                  },
+                  "blocks": {
+                    "sibling-tab-tema": {
+                      "type": "pdp-sibling-tab",
+                      "settings": {
+                        "tag": "Tema_",
+                        "use_tag_value_as_label": true,
+                        "label": "Tema"
+                      },
+                      "blocks": {}
+                    },
+                    "sibling-tab-fusion": {
+                      "type": "pdp-sibling-tab",
+                      "settings": {
+                        "tag": "Fusion_",
+                        "use_tag_value_as_label": false,
+                        "label": "Fusion"
+                      },
+                      "blocks": {}
+                    },
+                    "sibling-tab-universe": {
+                      "type": "pdp-sibling-tab",
+                      "settings": {
+                        "tag": "Universe_",
+                        "use_tag_value_as_label": true,
+                        "label": "Universe"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "sibling-tab-tema",
+                    "sibling-tab-fusion",
+                    "sibling-tab-universe"
+                  ]
+                },
+                "buy-button": {
+                  "type": "pdp-buy-button",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                }
               },
-              "blocks": {}
+              "block_order": [
+                "variant-picker",
+                "siblings",
+                "buy-button"
+              ]
             },
-            "sibling-tab-universe": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Universe_",
-                "use_tag_value_as_label": true,
-                "label": "Universe"
-              },
+            "bundle": {
+              "type": "pdp-bundle",
+              "static": true,
+              "settings": {},
               "blocks": {}
             }
           },
           "block_order": [
-            "sibling-tab-tema",
-            "sibling-tab-fusion",
-            "sibling-tab-universe"
+            "heading",
+            "configurator",
+            "bundle"
           ]
         }
       },

@@ -1,0 +1,274 @@
+{% doc %}
+  Renders PDP siblings picker with block-configured tabs.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+  assign pm_value = picker_product.metafields.valeverce.pm.value | default: picker_product.metafields.valeverce.pm
+  assign micro_value = picker_product.metafields.elastick.filter_microcategory.value | default: picker_product.metafields.elastick.filter_microcategory | default: picker_product.metafields.valeverce.micro_category.value | default: picker_product.metafields.valeverce.micro_category
+  assign siblings_limit = block.settings.siblings_limit | default: 250
+%}
+
+<pdp-siblings
+  class="pdp-siblings is-loading"
+  data-current-handle="{{ picker_product.handle | escape }}"
+  data-limit="{{ siblings_limit }}"
+  data-label-color="{{ block.settings.label_color | escape }}"
+  data-label-variants="{{ block.settings.label_variants | escape }}"
+  aria-busy="true"
+  {{ block.shopify_attributes }}
+>
+  <script type="application/json" ref="currentProduct">
+    {
+      "id": {{ picker_product.id | json }},
+      "handle": {{ picker_product.handle | json }},
+      "title": {{ picker_product.title | json }},
+      "url": {{ picker_product.url | json }},
+      "tags": {{ picker_product.tags | json }},
+      "microCategory": {{ micro_value | json }},
+      "pm": {{ pm_value | json }},
+      "image": {% if picker_product.featured_image %}{{ picker_product.featured_image | image_url: width: 96 | json }}{% else %}""{% endif %},
+      "imageAlt": {{ picker_product.featured_image.alt | default: picker_product.title | json }}
+    }
+  </script>
+
+  <template ref="groupTemplate">
+    <fieldset class="group siblings">
+      <div class="head font-mono">
+        <span data-ref="colorLabel"></span>
+        <span data-ref="variantsLabel"></span>
+      </div>
+      <div class="tabs font-mono" role="tablist" ref="tablist"></div>
+      <div class="panels" ref="panels"></div>
+    </fieldset>
+  </template>
+
+  <template ref="tabTemplate">
+    <label class="tab" role="tab">
+      <input type="radio" value="" data-bind="value" data-attribute="value">
+      <span data-ref="label"></span>
+    </label>
+  </template>
+
+  <template ref="panelTemplate">
+    <div class="panel" data-ref="tabName" data-bind="attribute" data-attribute="data-tab" hidden>
+      <div class="values" ref="values"></div>
+    </div>
+  </template>
+
+  <template ref="chipTemplate">
+    <a class="chip" href="#" data-ref="url" data-bind="href" aria-label="">
+      <span class="swatch">
+        <img data-ref="image" data-bind="src" alt="" loading="lazy" width="18" height="18" hidden>
+      </span>
+      <span class="chip-label" data-ref="title"></span>
+    </a>
+  </template>
+
+  {% content_for 'blocks' %}
+
+  <div ref="mount">
+    <div class="group skeleton" aria-hidden="true">
+      <div class="head font-mono">
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="tabs font-mono">
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="values">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+</pdp-siblings>
+
+{% stylesheet %}
+  pdp-siblings.pdp-siblings {
+    &[hidden] {
+      display: none;
+    }
+
+    .panels,
+    .panel {
+      min-width: 0;
+    }
+
+    .panel[hidden] {
+      display: none;
+    }
+
+    .panel:not([hidden]) {
+      display: block;
+    }
+
+    .values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-height: calc(32px * 2 + 8px);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      min-height: 32px;
+      padding: 0 9px;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-mono--family);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .chip.is-active {
+      border-color: var(--black);
+      background: var(--white);
+      color: var(--black);
+      box-shadow: none;
+    }
+
+    .chip-label {
+      white-space: nowrap;
+    }
+
+    .swatch {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      border: 1px solid transparent;
+      background: var(--background-darken);
+      overflow: hidden;
+    }
+
+    .swatch img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .chip.is-active .swatch {
+      border-color: var(--black);
+    }
+
+    .skeleton .head span,
+    .skeleton .tabs span,
+    .skeleton .values span {
+      display: block;
+      background: linear-gradient(90deg, var(--background-darken), var(--border-color), var(--background-darken));
+      background-size: 220% 100%;
+      animation: pdp-siblings-skeleton 1100ms var(--ease-in-out) infinite;
+    }
+
+    .skeleton .head span {
+      width: 72px;
+      height: 10px;
+    }
+
+    .skeleton .head span:last-child {
+      width: 44px;
+    }
+
+    .skeleton .tabs span {
+      width: 72px;
+      height: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    .skeleton .values span {
+      width: 72px;
+      height: 32px;
+    }
+  }
+
+  @keyframes pdp-siblings-skeleton {
+    from {
+      background-position: 120% 0;
+    }
+
+    to {
+      background-position: -120% 0;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    pdp-siblings.pdp-siblings {
+      .values {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 100%;
+        flex-wrap: nowrap;
+        max-height: none;
+        padding-right: 0;
+        padding-bottom: 4px;
+      }
+
+      .values::-webkit-scrollbar {
+        display: none;
+      }
+
+      .chip {
+        flex: 0 0 auto;
+      }
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Siblings",
+  "tag": null,
+  "blocks": [
+    { "type": "pdp-sibling-tab" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "siblings_limit",
+      "label": "Siblings limit",
+      "min": 50,
+      "max": 250,
+      "step": 50,
+      "default": 250
+    },
+    {
+      "type": "text",
+      "id": "label_color",
+      "label": "Color label",
+      "default": "Color"
+    },
+    {
+      "type": "text",
+      "id": "label_variants",
+      "label": "Variants label",
+      "default": "Variants"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Siblings",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

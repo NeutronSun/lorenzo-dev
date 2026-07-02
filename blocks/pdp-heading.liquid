@@ -1,0 +1,103 @@
+{% doc %}
+  Renders PDP product heading: meta, title, and price.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+  assign current_variant = picker_product.selected_or_first_available_variant
+  assign macro_category = picker_product.metafields.valeverce.macro_category.value | default: picker_product.metafields.valeverce.macro_category
+%}
+
+<section class="pdp-heading panel heading" {{ block.shopify_attributes }}>
+  <div class="meta font-mono">
+    <span>{{ macro_category | default: picker_product.type }}</span>
+    <span>{{ current_variant.sku | default: picker_product.handle }}</span>
+  </div>
+
+  <h1>{{ picker_product.title }}</h1>
+
+  <div class="price-row">
+    <span class="price">{{ current_variant.price | money }}</span>
+    <span class="rate font-mono">or 3x {{ current_variant.price | divided_by: 3 | money }}</span>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pdp-heading.panel.heading {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .pdp-heading .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--secondary-black);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .pdp-heading .meta span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pdp-heading h1 {
+    margin: 0;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--black);
+    font-family: var(--font-body--family);
+    font-size: clamp(26px, 2.6vw, 34px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+
+  .pdp-heading .price-row {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .pdp-heading .price {
+    color: var(--black);
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .pdp-heading .rate {
+    color: var(--secondary-black);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pdp-heading h1 {
+      font-size: 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Heading",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP Heading",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
