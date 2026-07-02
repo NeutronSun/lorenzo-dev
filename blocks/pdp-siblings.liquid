@@ -34,30 +34,6 @@
     }
   </script>
 
-  <template ref="groupTemplate">
-    <fieldset class="group siblings">
-      <div class="head font-mono">
-        <span data-ref="colorLabel"></span>
-        <span data-ref="variantsLabel"></span>
-      </div>
-      <div class="tabs font-mono" role="tablist" ref="tablist"></div>
-      <div class="panels" ref="panels"></div>
-    </fieldset>
-  </template>
-
-  <template ref="tabTemplate">
-    <label class="tab" role="tab">
-      <input type="radio" value="" data-bind="value" data-attribute="value">
-      <span data-ref="label"></span>
-    </label>
-  </template>
-
-  <template ref="panelTemplate">
-    <div class="panel" data-ref="tabName" data-bind="attribute" data-attribute="data-tab" hidden>
-      <div class="values" ref="values"></div>
-    </div>
-  </template>
-
   <template ref="chipTemplate">
     <a class="chip" href="#" data-ref="url" data-bind="href" aria-label="">
       <span class="swatch">
@@ -67,10 +43,20 @@
     </a>
   </template>
 
-  {% content_for 'blocks' %}
-
   <div ref="mount">
-    <div class="group skeleton" aria-hidden="true">
+    <fieldset class="group siblings" ref="group" hidden>
+      <div class="head font-mono">
+        <span>{{ block.settings.label_color }}</span>
+        <span>{{ block.settings.label_variants }}</span>
+      </div>
+      <div class="tabs font-mono" role="tablist" ref="tablist"></div>
+      <div class="panels" ref="panels"></div>
+      <div ref="blocksSource" hidden>
+        {% content_for 'blocks' %}
+      </div>
+    </fieldset>
+
+    <div class="group skeleton" aria-hidden="true" ref="skeleton">
       <div class="head font-mono">
         <span></span>
         <span></span>

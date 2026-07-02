@@ -12,17 +12,20 @@ import { TemplateHandler } from '@theme/utilities';
  * @property {string} tag
  * @property {string} label
  * @property {boolean} includeCurrent
+ * @property {HTMLElement} panel
+ * @property {HTMLLabelElement} tab
  */
 
 /**
  * @typedef {Object} PdpSiblingsRefs
  * @property {HTMLScriptElement} currentProduct
- * @property {HTMLTemplateElement} groupTemplate
- * @property {HTMLTemplateElement} tabTemplate
- * @property {HTMLTemplateElement} panelTemplate
  * @property {HTMLTemplateElement} chipTemplate
  * @property {HTMLElement} mount
- * @property {HTMLElement[]} tabs
+ * @property {HTMLFieldSetElement} group
+ * @property {HTMLElement} tablist
+ * @property {HTMLElement} panels
+ * @property {HTMLElement} blocksSource
+ * @property {HTMLElement} skeleton
  */
 
 /**
@@ -45,14 +48,6 @@ class PdpSiblings extends HTMLComponent {
     return Number.isFinite(limit) && limit > 0 ? limit : PdpSiblings.DEFAULT_LIMIT;
   }
 
-  get labelColor() {
-    return this.dataset.labelColor || 'Color';
-  }
-
-  get labelVariants() {
-    return this.dataset.labelVariants || 'Variants';
-  }
-
   set isLoading(value) {
     this.classList.toggle('is-loading', value);
     this.setAttribute('aria-busy', value ? 'true' : 'false');
@@ -65,27 +60,57 @@ class PdpSiblings extends HTMLComponent {
       this.currentProduct = JSON.parse(this.refs.currentProduct.textContent || 'null');
     }
 
+    this.hydrateBlocks();
     this.render();
+  }
+
+  hydrateBlocks() {
+    const source = this.refs.blocksSource;
+    const tablist = this.refs.tablist;
+    const panels = this.refs.panels;
+
+    if (!(source instanceof HTMLElement)) return;
+    if (!(tablist instanceof HTMLElement)) return;
+    if (!(panels instanceof HTMLElement)) return;
+
+    for (const block of [...source.children]) {
+      if (!(block instanceof HTMLElement)) continue;
+
+      const tab = block.querySelector('label.tab');
+      const panel = block.querySelector('.panel');
+
+      tab instanceof HTMLLabelElement && tablist.appendChild(tab);
+      panel instanceof HTMLElement && panels.appendChild(panel);
+    }
+
+    source.remove();
   }
 
   /** @returns {PdpSiblingTabConfig[]} */
   getTabConfigs() {
     const configs = [];
+    const panels = this.refs.panels;
 
-    for (const node of this.refs.tabs || []) {
-      if (!(node instanceof HTMLElement)) continue;
+    if (!(panels instanceof HTMLElement)) return configs;
 
-      const template = node.dataset.tag?.trim() || '';
-      const label = node.dataset.label?.trim() || template;
-      const id = node.dataset.id?.trim() || template;
+    for (const panel of panels.querySelectorAll('.panel')) {
+      if (!(panel instanceof HTMLElement)) continue;
 
-      if (!template) continue;
+      const tag = panel.dataset.tag?.trim() || '';
+      const id = panel.dataset.tab?.trim() || '';
+      const tab = this.refs.tablist?.querySelector(`input[value="${id}"]`)?.closest('label.tab');
+
+      if (!tag || !(tab instanceof HTMLLabelElement)) continue;
+
+      const label = tab.querySelector('span')?.textContent?.trim() || tag;
 
       configs.push({
         id,
-        tag: template,
+        tag,
         label,
-        includeCurrent: this.includesCurrentProductTag(template),
+        includeCurrent: this.includesCurrentProductTag(tag),
+        panel,
+        tab,
       });
     }
 
@@ -102,7 +127,7 @@ class PdpSiblings extends HTMLComponent {
     return Array.isArray(tags) && tags.includes(tag);
   }
 
-  /** Fetches sibling data and renders tabs into the mount node. */
+  /** Fetches sibling data and fills Liquid-rendered panels. */
   async render() {
     const renderId = ++this.renderId;
     const tabConfigs = this.getTabConfigs();
@@ -117,33 +142,45 @@ class PdpSiblings extends HTMLComponent {
     this.hidden = false;
 
     const productGroups = await Promise.all(
-      tabConfigs.map((config) => ColorSibling.get(config.tag, this.limit))
+      tabConfigs.map((config) => ColorSibling.get(config.tag, this.limit)),
     );
 
     if (!this.isConnected || renderId !== this.renderId) return;
 
-    const tabs = [];
+    const activeTabs = [];
 
     for (const [index, config] of tabConfigs.entries()) {
       const tab = this.buildTab(config, productGroups[index]);
 
-      tab && tabs.push(tab);
-    }
-
-    if (!tabs.length) {
-      this.isLoading = false;
-      this.hidden = true;
-
-      if (this.refs.mount instanceof HTMLElement) {
-        this.refs.mount.innerHTML = '';
+      if (!tab) {
+        config.tab.hidden = true;
+        config.panel.hidden = true;
+        continue;
       }
 
+      this.fillPanel(config.panel, tab.products);
+      config.tab.hidden = false;
+      config.panel.hidden = false;
+      activeTabs.push(config);
+    }
+
+    if (!activeTabs.length) {
+      this.isLoading = false;
+      this.hidden = true;
       return;
     }
 
+    const firstInput = activeTabs[0].tab.querySelector('input[type="radio"]');
+
+    firstInput instanceof HTMLInputElement && (firstInput.checked = true);
+
     this.isLoading = false;
     this.hidden = false;
-    this.renderTabs(tabs);
+
+    this.refs.skeleton instanceof HTMLElement && (this.refs.skeleton.hidden = true);
+    this.refs.group instanceof HTMLElement && (this.refs.group.hidden = false);
+
+    this.bindPanelSync(activeTabs[0].id);
   }
 
   /**
@@ -168,53 +205,36 @@ class PdpSiblings extends HTMLComponent {
   }
 
   /**
-   * Builds and mounts the tab group from Liquid templates.
-   * @param {Array<{ name: string, label: string, products: Array }>} tabs
+   * @param {HTMLElement} panel
+   * @param {Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }>} products
    */
-  renderTabs(tabs) {
-    if (!(this.refs.groupTemplate instanceof HTMLTemplateElement)) return;
-    if (!(this.refs.mount instanceof HTMLElement)) return;
+  fillPanel(panel, products) {
+    const values = panel.querySelector('.values');
 
-    const tabName = `pdp-siblings-${this.currentHandle}`;
-    const group = TemplateHandler.clone(this.refs.groupTemplate);
+    if (!(values instanceof HTMLElement)) return;
 
-    if (!(group instanceof HTMLElement)) return;
+    values.replaceChildren();
 
-    const tablist = group.querySelector('.tabs');
-    const panels = group.querySelector('.panels');
+    for (const product of products) {
+      const chip = this.buildChip(product);
 
-    TemplateHandler.fill(group, {
-      colorLabel: this.labelColor,
-      variantsLabel: this.labelVariants,
-    });
-
-    if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
-
-    for (const [index, tab] of tabs.entries()) {
-      const tabNode = this.buildTabNode(tab, tabName, index === 0);
-      const panelNode = this.buildPanel(tab, index === 0);
-
-      tabNode && tablist.appendChild(tabNode);
-      panelNode && panels.appendChild(panelNode);
+      chip && values.appendChild(chip);
     }
-
-    this.refs.mount.replaceChildren(group);
-    this.bindPanelSync(group, tabs[0]?.name || '');
   }
 
   /**
-   * @param {HTMLElement} group
    * @param {string} activeId
    */
-  bindPanelSync(group, activeId) {
-    const tablist = group.querySelector('.tabs');
-    const panels = group.querySelector('.panels');
+  bindPanelSync(activeId) {
+    const tablist = this.refs.tablist;
+    const panels = this.refs.panels;
 
-    if (!(tablist instanceof HTMLElement) || !(panels instanceof HTMLElement)) return;
+    if (!(tablist instanceof HTMLElement)) return;
+    if (!(panels instanceof HTMLElement)) return;
 
     const syncPanels = (value) => {
       for (const panel of panels.querySelectorAll('.panel')) {
-        if (!(panel instanceof HTMLElement)) continue;
+        if (!(panel instanceof HTMLElement) || panel.hidden) continue;
 
         panel.toggleAttribute('hidden', panel.dataset.tab !== value);
       }
@@ -229,61 +249,6 @@ class PdpSiblings extends HTMLComponent {
 
       syncPanels(input.value);
     });
-  }
-
-  /**
-   * @param {{ name: string, label: string }} tab
-   * @param {string} tabName
-   * @param {boolean} checked
-   * @returns {HTMLElement | null}
-   */
-  buildTabNode(tab, tabName, checked) {
-    if (!(this.refs.tabTemplate instanceof HTMLTemplateElement)) return null;
-
-    const label = TemplateHandler.clone(this.refs.tabTemplate);
-
-    if (!(label instanceof HTMLLabelElement)) return null;
-
-    const input = label.querySelector('input[type="radio"]');
-    const text = label.querySelector('[data-ref="label"]');
-
-    if (!(input instanceof HTMLInputElement)) return null;
-
-    input.name = tabName;
-    input.value = tab.name;
-    input.checked = checked;
-    label.setAttribute('aria-label', tab.label);
-
-    text instanceof HTMLElement && (text.textContent = tab.label);
-
-    return label;
-  }
-
-  /**
-   * @param {{ name: string, products: Array<{ handle: string, title: string, url: string, image: string, imageAlt: string }> }} tab
-   * @param {boolean} visible
-   * @returns {HTMLElement | null}
-   */
-  buildPanel(tab, visible) {
-    if (!(this.refs.panelTemplate instanceof HTMLTemplateElement)) return null;
-    if (!(this.refs.chipTemplate instanceof HTMLTemplateElement)) return null;
-
-    const panel = TemplateHandler.clone(this.refs.panelTemplate);
-    const values = panel?.querySelector('.values');
-
-    if (!(panel instanceof HTMLElement)) return null;
-    if (!(values instanceof HTMLElement)) return null;
-
-    panel.dataset.tab = tab.name;
-    panel.toggleAttribute('hidden', !visible);
-
-    for (const product of tab.products) {
-      const chip = this.buildChip(product);
-
-      chip && values.appendChild(chip);
-    }
-
-    return panel;
   }
 
   /**

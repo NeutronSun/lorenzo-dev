@@ -1,5 +1,5 @@
 {% doc %}
-  PDP sibling tab config: resolves a product tag by prefix and exposes it to pdp-siblings.
+  PDP sibling tab: label + panel shell rendered in Liquid; chips filled by pdp-siblings JS.
 
   @param {product} product - Product object
 {% enddoc %}
@@ -23,16 +23,25 @@
   endif
 %}
 
-{% if prefix != blank and resolved_tag != blank %}
-  <div
-    ref="tabs[]"
-    data-id="{{ block.id }}"
-    data-tag="{{ resolved_tag | escape }}"
-    data-label="{{ tab_label | escape }}"
-    hidden
-    {{ block.shopify_attributes }}
-  ></div>
-{% endif %}
+<div
+  class="sibling-tab"
+  data-id="{{ block.id }}"
+  data-tag="{{ resolved_tag | escape }}"
+  data-label="{{ tab_label | escape }}"
+  {% if prefix == blank or resolved_tag == blank %}hidden{% endif %}
+>
+  <label class="tab" role="tab" {{ block.shopify_attributes }}>
+    <input
+      type="radio"
+      name="pdp-siblings-{{ picker_product.handle }}"
+      value="{{ block.id }}">
+    <span>{{ tab_label }}</span>
+  </label>
+
+  <div class="panel" data-tab="{{ block.id }}" data-tag="{{ resolved_tag | escape }}" hidden>
+    <div class="values"></div>
+  </div>
+</div>
 
 {% schema %}
 {
