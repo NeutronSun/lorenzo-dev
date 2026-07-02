@@ -192,11 +192,7 @@
                   "blocks": {}
                 }
               },
-              "block_order": [
-                "variant-picker",
-                "siblings",
-                "buy-button"
-              ]
+              "block_order": []
             },
             "bundle": {
               "type": "pdp-bundle",
@@ -205,11 +201,7 @@
               "blocks": {}
             }
           },
-          "block_order": [
-            "heading",
-            "configurator",
-            "bundle"
-          ]
+          "block_order": []
         }
       },
       "settings": {}
@@ -289,5 +281,6 @@
     "product_breadcrumb_Nf69nK",
     "main",
     "product_recommendations_carousel_zgrpCX"
+    
   ]
 }
