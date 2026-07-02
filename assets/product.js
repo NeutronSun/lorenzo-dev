@@ -6,6 +6,44 @@ import { CSSUtils } from '@theme/utilities';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
 /**
+ * @typedef {Object} ProductVariantQuantityRule
+ * @property {number} min
+ * @property {number | null} max
+ * @property {number} increment
+ */
+
+/**
+ * @typedef {Object} ProductVariant
+ * @property {number} id
+ * @property {string} title
+ * @property {string} option1
+ * @property {string | null} option2
+ * @property {string | null} option3
+ * @property {string | null} sku
+ * @property {boolean} requires_shipping
+ * @property {boolean} taxable
+ * @property {Object | null} featured_image
+ * @property {boolean} available
+ * @property {string} name
+ * @property {string} public_title
+ * @property {string[]} options
+ * @property {number} price
+ * @property {number} weight
+ * @property {number | null} compare_at_price
+ * @property {string | null} inventory_management
+ * @property {string | null} barcode
+ * @property {boolean} requires_selling_plan
+ * @property {unknown[]} selling_plan_allocations
+ * @property {ProductVariantQuantityRule} quantity_rule
+ */
+
+/**
+ * @typedef {Object} VariantSelectedDetail
+ * @property {ProductVariant} variant
+ * @property {string} source
+ */
+
+/**
  * @extends {HTMLElement}
  */
 class ProductPage extends HTMLElement {
@@ -48,6 +86,7 @@ class ProductPage extends HTMLElement {
     this.observe();
     this.updateLayout();
     window.addEventListener('resize', this.onResize);
+    document.addEventListener('variant-selected', this.onVariantSelected);
     window.visualViewport?.addEventListener('resize', this.onResize);
   }
 
@@ -70,6 +109,15 @@ class ProductPage extends HTMLElement {
   /** Recomputes layout when the viewport or observed elements resize. */
   onResize() {
     this.updateLayout();
+  }
+
+  /** @param {CustomEvent<VariantSelectedDetail>} event */
+  onVariantSelected(event) {
+    const { variant, source } = event.detail;
+    
+    const url = new URL(window.location.href);
+    url.searchParams.set('variant', String(variant.id));
+    window.history.pushState({}, '', url.toString());
   }
 
   /** Writes PDP layout custom properties from current viewport and element sizes. */
@@ -149,27 +197,100 @@ if (!customElements.get('product-page')) {
 
 // @ts-ignore
 export class VariantPicker extends HTMLComponent {
+  /** @type {('option1' | 'option2' | 'option3')[]} */
+  static OPTION_KEYS = ["option1", "option2", "option3"];
 
-  get variants() {
-    if (!(this.refs.variants instanceof HTMLScriptElement)) return [];
-
-    return JSON.parse(this.refs.variants.textContent || '[]');
-  }
-
-  get selectedVariants() {
-    return this.refs.options.map(fieldset => fieldset.querySelector('input:checked')).filter(Boolean);
+  get selectedValues() {
+    return this.refs.options
+      .map((fieldset) => fieldset.querySelector("input:checked")?.value || null)
+      .filter(Boolean);
   }
 
   constructor() {
     super();
+    /** @type {ProductVariant[]} */
+    this.variants = [];
   }
 
   connectedCallback() {
     super.connectedCallback();
+
+    if (this.refs.variants instanceof HTMLScriptElement) {
+      this.variants = JSON.parse(this.refs.variants.textContent || '[]');
+    }
+
+    this.updateOptionStates();
   }
 
-  onChange() {}
+  onChange() {
+    this.updateOptionStates();
 
+    const variant = this.getSelectedVariant();
+    if (!variant) return;
+
+    document.dispatchEvent(
+      new CustomEvent("variant-selected", {
+        detail: {
+          variant: variant,
+          source: "variant-picker",
+        },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
+  updateOptionStates() {
+    const fieldsets = this.refs.options;
+    const selected = this.selectedValues;
+
+    for (const fieldset of fieldsets) {
+      const optionIndex = Number(fieldset.dataset.option) - 1;
+
+      for (const label of fieldset.querySelectorAll("label.tab")) {
+        const input = label.querySelector('input[type="radio"]');
+
+        const combo = selected.slice();
+        combo[optionIndex] = input.value;
+
+        label.dataset.optionState = this.getOptionState(combo);
+      }
+    }
+  }
+
+  /** @returns {ProductVariant | undefined} */
+  getSelectedVariant() {
+    const [option1, option2, option3] = this.selectedValues;
+
+    const option3Fallback = this.variants.find((variant) => variant.option1 === option1 && variant.option2 === option2 && variant.option3 === option3);
+    if (option3Fallback) 
+      return option3Fallback;
+
+    const option2Fallback = this.variants.find((variant) => variant.option1 === option1 && variant.option2 === option2);
+    if (option2Fallback) 
+      return option2Fallback;
+
+    const option1Fallback = this.variants.find((variant) => variant.option1 === option1);
+    if (option1Fallback) 
+      return option1Fallback;
+  }
+
+  /**
+   * @param {(string | null)[]} combo
+   * @returns {string}
+   */
+  getOptionState(combo) {
+    const matches = this.variants.filter((variant) =>
+      VariantPicker.OPTION_KEYS.every(
+        (key, i) => !combo[i] || variant[key] === combo[i],
+      ),
+    );
+
+    if (!matches.length) return "unavailable";
+    return matches.some((variant) => variant.available)
+      ? "available"
+      : "sold-out";
+  }
 }
 
 if (!customElements.get('variant-picker')) {

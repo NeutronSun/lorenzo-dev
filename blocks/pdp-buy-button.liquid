@@ -17,8 +17,7 @@
 
       <button type="submit" class="add font-mono" {% unless current_variant.available %}disabled{% endunless %}>
         {% render 'icon-bag', size: 16 %}
-        <span>{% if current_variant.available %}Add to bag{% else %}Sold out{% endif %}</span>
-        <span>{{ current_variant.price | money }} -></span>
+        <span>{% if  product.available %}Add to bag{% else %}Sold out{% endif %}</span>
       </button>
     {% endform %}
   </product-form>

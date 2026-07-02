@@ -1,0 +1,60 @@
+{% doc %}
+  @param {product} product
+  @param {variant} [selected]
+  @param {number} option_index - 1, 2, or 3
+  @param {boolean} [preselect_variant] - default false
+{% enddoc %}
+
+{% liquid
+  assign preselect_variant = preselect_variant | default: false, allow_false: true
+  assign option_position = option_index | minus: 1
+  assign option_name = product.options[option_position]
+
+  if preselect_variant and selected
+    case option_index
+      when 1
+        assign selected_value = selected.option1
+      when 2
+        assign selected_value = selected.option2
+      else
+        assign selected_value = selected.option3
+    endcase
+  endif
+%}
+
+<fieldset class="group" data-option="{{ option_index }}" ref="options[]" aria-label="{{ option_name | escape }}" on:change="onChange">
+  <div class="head font-mono">
+    <span>{{ option_name }}</span>
+  </div>
+
+  <div class="tabs font-mono">
+    {% assign seen = '' %}
+
+    {% for v in product.variants %}
+      {% case option_index %}
+        {% when 1 %}
+          {% assign option_value = v.option1 %}
+        {% when 2 %}
+          {% assign option_value = v.option2 %}
+        {% else %}
+          {% assign option_value = v.option3 %}
+      {% endcase %}
+
+      {% capture key %}|{{ option_value }}|{% endcapture %}
+
+      {% unless seen contains key %}
+        {% assign seen = seen | append: key %}
+
+        <label class="tab" data-option-state="{%- render 'variant-picker-tab-state', product: product, selected: selected, option_index: option_index, value: option_value -%}">
+          <input
+            type="radio"
+            name="option-{{ option_index }}"
+            value="{{ option_value }}"
+            {% if preselect_variant and option_value == selected_value %}checked{% endif %}>
+
+          <span>{{ option_value }}</span>
+        </label>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</fieldset>

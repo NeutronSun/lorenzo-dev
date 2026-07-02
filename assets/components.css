@@ -224,6 +224,13 @@
     }
 
     .tab {
+      --color: var(--secondary-black);
+      --background: transparent;
+      --opacity: 1;
+      --decoration: none;
+      --pointer-events: auto;
+      --cursor: pointer;
+
       position: relative;
       display: inline-flex;
       align-items: center;
@@ -232,13 +239,15 @@
       min-height: 30px;
       padding: 0 14px;
       border-right: 1px solid var(--border-color);
-      background: transparent;
-      color: var(--secondary-black);
+      background: var(--background);
+      color: var(--color);
+      opacity: var(--opacity);
+      pointer-events: var(--pointer-events);
       font: inherit;
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      cursor: pointer;
+      cursor: var(--cursor);
 
       &:last-child {
         border-right: 0;
@@ -257,11 +266,12 @@
       span {
         position: relative;
         z-index: 1;
+        text-decoration: var(--decoration);
       }
 
       &:has(input:checked) {
-        background: var(--background-darken);
-        color: var(--black);
+        --background: var(--background-darken);
+        --color: var(--black);
       }
     }
   }

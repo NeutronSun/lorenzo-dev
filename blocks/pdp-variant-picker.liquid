@@ -6,17 +6,25 @@
 
 {% liquid
   assign picker_product = product | default: closest.product
+  assign preselect_variant = block.settings.preselect_variant
 %}
 
 <div class="pdp-variant-picker" {{ block.shopify_attributes }}>
-  {% render 'variant-picker', product: picker_product %}
+  {% render 'variant-picker', product: picker_product, preselect_variant: preselect_variant %}
 </div>
 
 {% schema %}
 {
   "name": "Variant picker",
   "tag": null,
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "preselect_variant",
+      "label": "Preselect variant",
+      "default": false
+    }
+  ],
   "presets": [
     {
       "name": "Variant picker",

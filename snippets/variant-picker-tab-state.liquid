@@ -1,0 +1,64 @@
+{%- doc -%}
+  @param {product} product
+  @param {variant} [selected]
+  @param {number} option_index - 1, 2, or 3
+  @param {string} value - option value for this tab
+{%- enddoc -%}
+
+{%- liquid
+  assign match_count = 0
+  assign has_available = false
+
+  for r in product.variants
+    assign matches = true
+
+    if option_index == 1
+      if r.option1 != value
+        assign matches = false
+      endif
+
+      if matches and product.options.size > 1 and selected.option2 != blank and r.option2 != selected.option2
+        assign matches = false
+      endif
+
+      if matches and product.options.size > 2 and selected.option3 != blank and r.option3 != selected.option3
+        assign matches = false
+      endif
+    elsif option_index == 2
+      if r.option2 != value
+        assign matches = false
+      endif
+
+      if matches and selected.option1 != blank and r.option1 != selected.option1
+        assign matches = false
+      endif
+
+      if matches and product.options.size > 2 and selected.option3 != blank and r.option3 != selected.option3
+        assign matches = false
+      endif
+    else
+      if r.option3 != value
+        assign matches = false
+      endif
+
+      if matches and selected.option1 != blank and r.option1 != selected.option1
+        assign matches = false
+      endif
+
+      if matches and selected.option2 != blank and r.option2 != selected.option2
+        assign matches = false
+      endif
+    endif
+
+    unless matches
+      continue
+    endunless
+
+    assign match_count = match_count | plus: 1
+
+    if r.available
+      assign has_available = true
+    endif
+  endfor
+-%}
+{%- if match_count == 0 -%}unavailable{%- elsif has_available -%}available{%- else -%}sold-out{%- endif -%}

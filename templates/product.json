@@ -139,7 +139,9 @@
                 "pdp_variant_picker_hhXYL8": {
                   "type": "pdp-variant-picker",
                   "name": "Variant picker",
-                  "settings": {},
+                  "settings": {
+                    "preselect_variant": false
+                  },
                   "blocks": {}
                 },
                 "pdp_siblings_qjqWC8": {
