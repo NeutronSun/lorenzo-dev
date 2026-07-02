@@ -11,9 +11,7 @@
 <section class="pdp-product-configurator panel config" {{ block.shopify_attributes }}>
   <h2 class="font-mono">/Configure</h2>
 
-  {% content_for 'block', type: 'pdp-variant-picker', id: 'variant-picker', product: picker_product %}
-  {% content_for 'block', type: 'pdp-siblings', id: 'siblings', product: picker_product %}
-  {% content_for 'block', type: 'pdp-buy-button', id: 'buy-button', product: picker_product %}
+  {% content_for 'blocks' %}
 </section>
 
 {% stylesheet %}
