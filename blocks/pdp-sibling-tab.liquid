@@ -1,5 +1,5 @@
 {% doc %}
-  PDP sibling tab: label + panel shell rendered in Liquid; chips filled by pdp-siblings JS.
+  PDP sibling tab: label in tablist (SSR), panel in template for JS.
 
   @param {product} product - Product object
 {% enddoc %}
@@ -23,13 +23,7 @@
   endif
 %}
 
-<div
-  class="sibling-tab"
-  data-id="{{ block.id }}"
-  data-tag="{{ resolved_tag | escape }}"
-  data-label="{{ tab_label | escape }}"
-  {% if prefix == blank or resolved_tag == blank %}hidden{% endif %}
->
+{% if resolved_tag != blank %}
   <label class="tab" role="tab" {{ block.shopify_attributes }}>
     <input
       type="radio"
@@ -38,10 +32,14 @@
     <span>{{ tab_label }}</span>
   </label>
 
-  <div class="panel" data-tab="{{ block.id }}" data-tag="{{ resolved_tag | escape }}" hidden>
-    <div class="values"></div>
-  </div>
-</div>
+  <template ref="panelTemplates[]">
+    <div class="panel" data-tab="{{ block.id }}" data-tag="{{ resolved_tag | escape }}" hidden>
+      <div class="values"></div>
+    </div>
+  </template>
+{% else %}
+  <div hidden {{ block.shopify_attributes }}></div>
+{% endif %}
 
 {% schema %}
 {

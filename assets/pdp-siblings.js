@@ -24,7 +24,8 @@ import { TemplateHandler } from '@theme/utilities';
  * @property {HTMLFieldSetElement} group
  * @property {HTMLElement} tablist
  * @property {HTMLElement} panels
- * @property {HTMLElement} blocksSource
+ * @property {HTMLElement} loadingPanel
+ * @property {HTMLTemplateElement[]} panelTemplates
  */
 
 /**
@@ -36,8 +37,6 @@ class PdpSiblings extends HTMLComponent {
 
   renderId = 0;
   currentProduct = null;
-  loadingTab = null;
-  loadingPanel = null;
 
   get currentHandle() {
     return this.dataset.currentHandle || '';
@@ -60,65 +59,48 @@ class PdpSiblings extends HTMLComponent {
       this.currentProduct = JSON.parse(this.refs.currentProduct.textContent || 'null');
     }
 
-    this.hydrateBlocks();
-    this.setFirstTabLoading(true);
+    this.hydratePanels();
     this.render();
   }
 
-  hydrateBlocks() {
-    const source = this.refs.blocksSource;
-    const tablist = this.refs.tablist;
+  hydratePanels() {
     const panels = this.refs.panels;
+    const templates = this.refs.panelTemplates;
 
-    if (!(source instanceof HTMLElement)) return;
-    if (!(tablist instanceof HTMLElement)) return;
     if (!(panels instanceof HTMLElement)) return;
+    if (!Array.isArray(templates)) return;
 
-    for (const block of [...source.children]) {
-      if (!(block instanceof HTMLElement)) continue;
+    for (const template of templates) {
+      if (!(template instanceof HTMLTemplateElement)) continue;
 
-      const tab = block.querySelector('label.tab');
-      const panel = block.querySelector('.panel');
+      const panel = template.content.firstElementChild?.cloneNode(true);
 
-      tab instanceof HTMLLabelElement && tablist.appendChild(tab);
       panel instanceof HTMLElement && panels.appendChild(panel);
     }
-
-    source.remove();
   }
 
-  setFirstTabLoading(active) {
-    const tablist = this.refs.tablist;
-    const panels = this.refs.panels;
+  revealTabs(activeTabs) {
+    const firstInput = activeTabs[0]?.tab.querySelector('input[type="radio"]');
 
-    if (!(tablist instanceof HTMLElement)) return;
-    if (!(panels instanceof HTMLElement)) return;
+    firstInput instanceof HTMLInputElement && (firstInput.checked = true);
 
-    if (active) {
-      const panel = panels.querySelector('.panel[data-tag]');
-
-      if (!(panel instanceof HTMLElement)) return;
-
-      const id = panel.dataset.tab || '';
-      const tab = tablist.querySelector(`input[value="${id}"]`)?.closest('label.tab');
-      const input = tab?.querySelector('input[type="radio"]');
-
-      this.loadingPanel = panel;
-      this.loadingTab = tab instanceof HTMLLabelElement ? tab : null;
-
-      panel.removeAttribute('hidden');
-      panel.classList.add('loading');
-      this.loadingTab?.classList.add('loading');
-
-      input instanceof HTMLInputElement && (input.checked = true);
-
-      return;
+    for (const [index, config] of activeTabs.entries()) {
+      config.panel.toggleAttribute('hidden', index !== 0);
     }
 
-    this.loadingPanel?.classList.remove('loading');
-    this.loadingTab?.classList.remove('loading');
-    this.loadingPanel = null;
-    this.loadingTab = null;
+    this.refs.loadingPanel instanceof HTMLElement && this.refs.loadingPanel.remove();
+
+    const tablist = this.refs.tablist;
+
+    tablist instanceof HTMLElement && tablist.removeAttribute('hidden');
+    this.isLoading = false;
+    this.bindPanelSync(activeTabs[0].id);
+  }
+
+  hidePicker() {
+    this.refs.loadingPanel instanceof HTMLElement && this.refs.loadingPanel.remove();
+    this.isLoading = false;
+    this.hidden = true;
   }
 
   /** @returns {PdpSiblingTabConfig[]} */
@@ -128,7 +110,7 @@ class PdpSiblings extends HTMLComponent {
 
     if (!(panels instanceof HTMLElement)) return configs;
 
-    for (const panel of panels.querySelectorAll('.panel')) {
+    for (const panel of panels.querySelectorAll('.panel[data-tag]')) {
       if (!(panel instanceof HTMLElement)) continue;
 
       const tag = panel.dataset.tag?.trim() || '';
@@ -168,8 +150,7 @@ class PdpSiblings extends HTMLComponent {
     const tabConfigs = this.getTabConfigs();
 
     if (!tabConfigs.length) {
-      this.isLoading = false;
-      this.hidden = true;
+      this.hidePicker();
       return;
     }
 
@@ -188,37 +169,23 @@ class PdpSiblings extends HTMLComponent {
       const tab = this.buildTab(config, productGroups[index]);
 
       if (!tab) {
-        config.tab.hidden = true;
-        config.panel.hidden = true;
+        config.tab.toggleAttribute('hidden', true);
+        config.panel.toggleAttribute('hidden', true);
         continue;
       }
 
       this.fillPanel(config.panel, tab.products);
-      config.tab.hidden = false;
-      config.panel.hidden = false;
+      config.tab.removeAttribute('hidden');
       activeTabs.push(config);
     }
 
-    this.setFirstTabLoading(false);
-
     if (!activeTabs.length) {
-      this.isLoading = false;
-      this.hidden = true;
+      this.hidePicker();
       return;
     }
 
-    const firstInput = activeTabs[0].tab.querySelector('input[type="radio"]');
-
-    firstInput instanceof HTMLInputElement && (firstInput.checked = true);
-
-    for (const [index, config] of activeTabs.entries()) {
-      config.panel.toggleAttribute('hidden', index !== 0);
-    }
-
-    this.isLoading = false;
     this.hidden = false;
-
-    this.bindPanelSync(activeTabs[0].id);
+    this.revealTabs(activeTabs);
   }
 
   /**
@@ -271,10 +238,15 @@ class PdpSiblings extends HTMLComponent {
     if (!(panels instanceof HTMLElement)) return;
 
     const syncPanels = (value) => {
-      for (const panel of panels.querySelectorAll('.panel')) {
-        if (!(panel instanceof HTMLElement) || panel.hidden) continue;
+      for (const panel of panels.querySelectorAll('.panel[data-tag]')) {
+        if (!(panel instanceof HTMLElement)) continue;
 
-        panel.toggleAttribute('hidden', panel.dataset.tab !== value);
+        const id = panel.dataset.tab || '';
+        const tab = tablist.querySelector(`input[value="${id}"]`)?.closest('label.tab');
+
+        if (!(tab instanceof HTMLLabelElement) || tab.hasAttribute('hidden')) continue;
+
+        panel.toggleAttribute('hidden', id !== value);
       }
     };
 

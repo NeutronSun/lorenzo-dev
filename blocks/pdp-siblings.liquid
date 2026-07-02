@@ -47,10 +47,13 @@
         <span>{{ block.settings.label_color }}</span>
         <span>{{ block.settings.label_variants }}</span>
       </div>
-      <div class="tabs font-mono" role="tablist" ref="tablist"></div>
-      <div class="panels" ref="panels"></div>
-      <div ref="blocksSource" hidden>
+      <div class="tabs font-mono" role="tablist" ref="tablist" hidden>
         {% content_for 'blocks' %}
+      </div>
+      <div class="panels" ref="panels">
+        <div class="panel loading-panel" ref="loadingPanel">
+          <div class="values"></div>
+        </div>
       </div>
     </fieldset>
   </div>
@@ -132,26 +135,34 @@
       border-color: var(--black);
     }
 
-    label.tab.loading span {
-      display: inline-block;
-      min-width: 48px;
-      color: transparent;
-      background: var(--background-darken);
-    }
-
-    .panel.loading .values {
+    &[aria-busy='true'] .panel:not([hidden]) .values,
+    &[aria-busy='true'] .panel.loading-panel .values {
       display: flex;
       gap: 8px;
     }
 
-    .panel.loading .values::before,
-    .panel.loading .values::after {
+    &[aria-busy='true'] .panel:not([hidden]) .values::before,
+    &[aria-busy='true'] .panel:not([hidden]) .values::after,
+    &[aria-busy='true'] .panel.loading-panel .values::before,
+    &[aria-busy='true'] .panel.loading-panel .values::after {
       content: '';
       flex: 0 0 auto;
       width: 72px;
       height: 32px;
       border: 1px solid var(--border-color);
       background: var(--background-darken);
+    }
+
+    .tabs[hidden] {
+      display: none;
+    }
+
+    &[aria-busy='true'] .panel[data-tag] {
+      display: none;
+    }
+
+    label.tab[hidden] {
+      display: none;
     }
   }
 
