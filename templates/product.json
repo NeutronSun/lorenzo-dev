@@ -125,15 +125,15 @@
           "static": true,
           "settings": {},
           "blocks": {
-            "heading": {
+            "pdp_heading_HtKMcC": {
               "type": "pdp-heading",
-              "static": true,
+              "name": "PDP Heading",
               "settings": {},
               "blocks": {}
             },
-            "configurator": {
+            "pdp_product_configurator_JPrwKy": {
               "type": "pdp-product-configurator",
-              "static": true,
+              "name": "Product configurator",
               "settings": {},
               "blocks": {
                 "variant-picker": {
@@ -150,40 +150,7 @@
                     "label_color": "Color",
                     "label_variants": "Variants"
                   },
-                  "blocks": {
-                    "sibling-tab-tema": {
-                      "type": "pdp-sibling-tab",
-                      "settings": {
-                        "tag": "Tema_",
-                        "use_tag_value_as_label": true,
-                        "label": "Tema"
-                      },
-                      "blocks": {}
-                    },
-                    "sibling-tab-fusion": {
-                      "type": "pdp-sibling-tab",
-                      "settings": {
-                        "tag": "Fusion_",
-                        "use_tag_value_as_label": false,
-                        "label": "Fusion"
-                      },
-                      "blocks": {}
-                    },
-                    "sibling-tab-universe": {
-                      "type": "pdp-sibling-tab",
-                      "settings": {
-                        "tag": "Universe_",
-                        "use_tag_value_as_label": true,
-                        "label": "Universe"
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "sibling-tab-tema",
-                    "sibling-tab-fusion",
-                    "sibling-tab-universe"
-                  ]
+                  "blocks": {}
                 },
                 "buy-button": {
                   "type": "pdp-buy-button",
@@ -194,14 +161,18 @@
               },
               "block_order": []
             },
-            "bundle": {
+            "pdp_bundle_qicFRh": {
               "type": "pdp-bundle",
-              "static": true,
+              "name": "Bundle",
               "settings": {},
               "blocks": {}
             }
           },
-          "block_order": []
+          "block_order": [
+            "pdp_heading_HtKMcC",
+            "pdp_product_configurator_JPrwKy",
+            "pdp_bundle_qicFRh"
+          ]
         }
       },
       "settings": {}
@@ -281,6 +252,5 @@
     "product_breadcrumb_Nf69nK",
     "main",
     "product_recommendations_carousel_zgrpCX"
-    
   ]
 }
