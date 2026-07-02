@@ -257,7 +257,7 @@
                   "static": true,
                   "settings": {
                     "match_prefix": "Tema_",
-                    "siblings_limit": 10
+                    "siblings_limit": 7
                   },
                   "blocks": {}
                 }
