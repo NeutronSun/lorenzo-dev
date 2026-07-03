@@ -3,7 +3,7 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { ColorSibling } from '@theme/color-sibling';
+import { ColorSibling } from '@theme/ColorSibling';
 import { TemplateHandler } from '@theme/utilities';
 
 /**

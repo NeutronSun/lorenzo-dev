@@ -1,5 +1,5 @@
 {% doc %}
-  Renders PDP buy button and shipping note.
+  Renders buy button and shipping note.
 
   @param {product} product - Product object
 {% enddoc %}
@@ -9,7 +9,7 @@
   assign current_variant = picker_product.selected_or_first_available_variant
 %}
 
-<div class="pdp-buy-button" {{ block.shopify_attributes }}>
+<div class="buy-button-block" {{ block.shopify_attributes }}>
   <product-form on:submit="onSubmit">
     {% form 'product', picker_product %}
       <input type="hidden" name="id" value="{{ current_variant.id }}">
@@ -26,12 +26,12 @@
 </div>
 
 {% stylesheet %}
-  .pdp-buy-button product-form {
+  .buy-button-block product-form {
     display: block;
     padding: 16px 20px 8px;
   }
 
-  .pdp-buy-button .add {
+  .buy-button-block .add {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,16 +48,16 @@
     cursor: pointer;
   }
 
-  .pdp-buy-button .add:disabled {
+  .buy-button-block .add:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .pdp-buy-button .add svg {
+  .buy-button-block .add svg {
     flex: 0 0 auto;
   }
 
-  .pdp-buy-button .shipping {
+  .buy-button-block .shipping {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,8 +70,8 @@
   }
 
   @media screen and (max-width: 749px) {
-    .pdp-buy-button product-form,
-    .pdp-buy-button .shipping {
+    .buy-button-block product-form,
+    .buy-button-block .shipping {
       display: none;
     }
   }

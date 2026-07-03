@@ -1,5 +1,5 @@
 {% doc %}
-  Renders PDP variant picker.
+  Renders variant picker block wrapper.
 
   @param {product} product - Product object
 {% enddoc %}
@@ -9,7 +9,7 @@
   assign preselect_variant = block.settings.preselect_variant
 %}
 
-<div class="pdp-variant-picker" {{ block.shopify_attributes }}>
+<div class="variant-picker-block" {{ block.shopify_attributes }}>
   {% render 'variant-picker', product: picker_product, preselect_variant: preselect_variant %}
 </div>
 

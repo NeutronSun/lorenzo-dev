@@ -180,6 +180,43 @@ class TemplateClass extends HTMLComponent {
 ```
 - come per il JS, qualcosa di diverso sarà canellato.
 
+## Naming
+
+### Global vs scoped
+
+| Livello | Regola handle | Display name (schema) |
+|---|---|---|
+| Block type | `kebab-case`; prefisso dominio solo se scoped | sentence case; generico se global |
+| Snippet | stesso schema del componente che wrappa | n/a |
+| Section | `kebab-case`; prefisso se feature-specifica | `t:general.*` se template Shopify, altrimenti sentence case |
+| JS file | PascalCase se 1 classe/CE principale | n/a |
+| JS class | PascalCase | n/a |
+| Custom element tag | kebab-case (sempre) | n/a |
+
+**Global** (riusabile ovunque, niente prefisso dominio sul block type): `variant-picker`, `buy-button`, `product-card-*`, `filters`, `text`, `group`, `breadcrumb`, `schema-*`.
+
+**Scoped** (solo nel dominio, prefisso esplicito): `pdp-gallery`, `pdp-product-info`, `pdp-dossier-*`, `pdp-siblings`, `pdp-bundle`, snippet `pdp-dossier-panel`, section `product-breadcrumb`.
+
+**Shopify** (vincolati dal template): section `product`, `collection`, `cart` — non rinominare.
+
+Se il componente delega a snippet/CE globali, il block e' un thin wrapper editor senza prefisso `pdp-`.
+
+### Block wrapper CSS
+
+Se il block type coincide col custom element tag, il wrapper usa suffisso `-block` (es. `.variant-picker-block`, `.buy-button-block`) per non collidere col selettore del CE.
+
+### JavaScript
+
+- **PascalCase** (`VariantPicker.js`): un file per classe principale o custom element registrato.
+- **kebab-case** (`utilities.js`, `events.js`, `global.js`): barrel multi-export o entrypoint.
+- Import map: alias `@theme/` = PascalCase del file (`@theme/VariantPicker` → `VariantPicker.js`).
+
+### Checklist pre-rename
+
+1. `rg 'type_handle' templates/ blocks/` per trovare riferimenti schema.
+2. Verificare se il componente e' global o scoped prima di aggiungere/rimuovere prefissi.
+3. Aggiornare `docs/20-feature-map.md` dopo ogni rename di handle.
+
 ## Riuso
 
 - Prima di creare un file, cerca componenti e classi esistenti con `rg`.
@@ -209,7 +246,7 @@ class TemplateClass extends HTMLComponent {
 - Richiede Invoker Commands nativi (`command` event); niente fallback click.
 - `dialog-opener` solo per target senza `<dialog>` nativo, es. menu mobile header (`header-menu`).
 
-Esempio del pattern (simmetria + reattivita' + evento nativo), da `assets/dialog.js`:
+Esempio del pattern (simmetria + reattivita' + evento nativo), da `assets/DialogComponent.js`:
 
 ```js
 // Apertura/chiusura programmatiche: stesso meccanismo, trigger event con check sul name

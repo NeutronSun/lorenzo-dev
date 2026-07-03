@@ -57,7 +57,7 @@
             },
             "pdp_dossier_description_ByQMxb": {
               "type": "pdp-dossier-description",
-              "name": "PDP Dossier Description",
+              "name": "Notes",
               "settings": {
                 "text": "{{ closest.product.description }}",
                 "mobile_order": 1,
@@ -66,8 +66,8 @@
               "blocks": {}
             },
             "pdp_card_stats_kkDj3i": {
-              "type": "pdp-card-stats",
-              "name": "PDP Card Stats",
+              "type": "pdp-dossier-stats",
+              "name": "Stats",
               "settings": {
                 "mobile_order": 3,
                 "open_by_default": false
@@ -76,7 +76,7 @@
             },
             "pdp_dossier_tech_BkgHXF": {
               "type": "pdp-dossier-tech",
-              "name": "PDP Dossier Technical",
+              "name": "Technical",
               "settings": {
                 "mobile_order": 4,
                 "open_by_default": false
@@ -84,7 +84,7 @@
               "blocks": {
                 "pdp_dossier_tech_row_RyPxG8": {
                   "type": "pdp-dossier-tech-row",
-                  "name": "PDP Dossier Technical Row",
+                  "name": "Row",
                   "settings": {
                     "label": "Material",
                     "value": "{{ closest.product.metafields.valeverce.material | metafield_text }}"
@@ -93,7 +93,7 @@
                 },
                 "pdp_dossier_tech_row_mrdxGq": {
                   "type": "pdp-dossier-tech-row",
-                  "name": "PDP Dossier Technical Row",
+                  "name": "Row",
                   "settings": {
                     "label": "Weight",
                     "value": "{{ closest.product.metafields.valeverce.weight | metafield_text }}"
@@ -127,17 +127,17 @@
           "blocks": {
             "pdp_heading_HtKMcC": {
               "type": "pdp-heading",
-              "name": "PDP Heading",
+              "name": "Heading",
               "settings": {},
               "blocks": {}
             },
             "pdp_product_configurator_JPrwKy": {
               "type": "pdp-product-configurator",
-              "name": "Product configurator",
+              "name": "Configurator",
               "settings": {},
               "blocks": {
                 "pdp_variant_picker_hhXYL8": {
-                  "type": "pdp-variant-picker",
+                  "type": "variant-picker",
                   "name": "Variant picker",
                   "settings": {
                     "preselect_variant": false
@@ -155,7 +155,7 @@
                   "blocks": {
                     "pdp_sibling_tab_a4hhqk": {
                       "type": "pdp-sibling-tab",
-                      "name": "Sibling tab",
+                      "name": "Tab",
                       "settings": {
                         "tag": "Tema_",
                         "use_tag_value_as_label": true,
@@ -165,7 +165,7 @@
                     },
                     "pdp_sibling_tab_DmN4kM": {
                       "type": "pdp-sibling-tab",
-                      "name": "Sibling tab",
+                      "name": "Tab",
                       "settings": {
                         "tag": "Universe_",
                         "use_tag_value_as_label": true,
@@ -175,7 +175,7 @@
                     },
                     "pdp_sibling_tab_Y3yRhb": {
                       "type": "pdp-sibling-tab",
-                      "name": "Sibling tab",
+                      "name": "Tab",
                       "settings": {
                         "tag": "Fusion_",
                         "use_tag_value_as_label": false,
@@ -191,7 +191,7 @@
                   ]
                 },
                 "pdp_buy_button_fLHDXY": {
-                  "type": "pdp-buy-button",
+                  "type": "buy-button",
                   "name": "Buy button",
                   "settings": {},
                   "blocks": {}

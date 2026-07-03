@@ -8,27 +8,30 @@ File principali:
 - `sections/product-breadcrumb.liquid`
 - `blocks/pdp-product-dossier.liquid`
 - `blocks/pdp-dossier-edition.liquid`
-- `blocks/pdp-card-stats.liquid`
+- `blocks/pdp-dossier-stats.liquid`
 - `blocks/pdp-dossier-description.liquid`
 - `blocks/pdp-dossier-tech.liquid`
 - `blocks/pdp-dossier-tech-row.liquid`
 - `blocks/pdp-gallery.liquid`
 - `blocks/pdp-product-info.liquid`
+- `blocks/variant-picker.liquid`
+- `blocks/buy-button.liquid`
 - `blocks/pdp-sibling-tab.liquid`
 - `snippets/pdp-valerio-trait.liquid`
-- `assets/product.js`
-- `assets/pdp-siblings.js`
+- `assets/ProductPage.js`
+- `assets/VariantPicker.js`
+- `assets/PdpSiblings.js`
 
-La PDP e' composta da tre blocchi dentro `product-page`: dossier, gallery e info. Le altezze sticky/mobile sono coordinate da `assets/product.js` tramite CSS custom properties, non da layout JS invasivo.
+La PDP e' composta da tre blocchi dentro `product-page`: dossier, gallery e info. Le altezze sticky/mobile sono coordinate da `assets/ProductPage.js` tramite CSS custom properties, non da layout JS invasivo.
 
 Il dossier (`pdp-product-dossier`) compone nested blocks via `{% content_for 'blocks' %}`:
 
 - `pdp-dossier-edition` — season, number, series
-- `pdp-card-stats` — combat, meters (health/mana/energy), tratti valerio
+- `pdp-dossier-stats` — combat, meters (health/mana/energy), tratti valerio
 - `pdp-dossier-description` — note prodotto
 - `pdp-dossier-tech` — righe tecniche (`pdp-dossier-tech-row`)
 
-Gli orb valerio sono renderizzati dal snippet `pdp-valerio-trait` dentro `pdp-card-stats`.
+Gli orb valerio sono renderizzati dal snippet `pdp-valerio-trait` dentro `pdp-dossier-stats`.
 
 Quando aggiungi una parte PDP, preferisci un block se deve essere gestibile in editor. Usa snippet solo per un frammento interno riusabile.
 
@@ -36,13 +39,14 @@ Quando aggiungi una parte PDP, preferisci un block se deve essere gestibile in e
 
 File principali:
 
-- `assets/color-sibling.js`
-- `assets/pdp-siblings.js`
-- `assets/product-card.js`
+- `assets/ColorSibling.js`
+- `assets/PdpSiblings.js`
+- `assets/ProductCard.js`
+- `assets/ProductCardSwatches.js`
 - `blocks/pdp-sibling-tab.liquid`
 - `snippets/product-card-swatches.liquid`
 
-`GraphQL` in `assets/graphql.js` centralizza config Storefront, headers e fetch. `ColorSibling` e' l'helper per siblings: query per tag, mapping e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici: usa `ColorSibling.get(tag, limit)` o `GraphQL.request(payload, label)` per altre query.
+`GraphQL` in `assets/GraphQL.js` centralizza config Storefront, headers e fetch. `ColorSibling` e' l'helper per siblings: query per tag, mapping e cache `sessionStorage`. Non duplicare fetch GraphQL in componenti specifici: usa `ColorSibling.get(tag, limit)` o `GraphQL.request(payload, label)` per altre query.
 
 `pdp-siblings` legge tab da blocchi `pdp-sibling-tab` (solo tag + label) e fa N query via `ColorSibling`. Template e chip restano in `pdp-product-info`.
 
@@ -56,7 +60,9 @@ File principali:
 - `snippets/product-card-info.liquid`
 - `snippets/product-card-swatches.liquid`
 - `templates/product.card.liquid`
-- `assets/product-card.js`
+- `assets/ProductCard.js`
+- `assets/ProductCardSwatches.js`
+- `assets/ProductCardLabels.js`
 
 Le card cambiano sibling caricando il partial `view=card` e sostituendo refs specifici. Mantieni questo modello: fetch HTML, `DOMParser`, `updateRef`, cache breve in `sessionStorage`.
 
@@ -69,7 +75,8 @@ File principali:
 - `snippets/filters.liquid`
 - `templates/collection.grid.liquid`
 - `templates/collection.filters.liquid`
-- `assets/collection.js`
+- `assets/CollectionFilters.js`
+- `assets/ProductGrid.js`
 
 I filtri pubblicano `OnFiltersApplyEvent`; la griglia ascolta e aggiorna HTML via partial view. Prima di aggiungere nuovi stati JS, verifica se un input, un attributo o CSS `:has()` bastano.
 
@@ -80,7 +87,11 @@ File principali:
 - `snippets/cart-drawer.liquid`
 - `sections/cart-drawer.liquid`
 - `snippets/cart-line-price.liquid`
-- `assets/cart.js`
+- `assets/CartHandler.js`
+- `assets/CartDrawer.js`
+- `assets/ProductForm.js`
+- `assets/CartItem.js`
+- `assets/CartMoney.js`
 
 `CartHandler` centralizza Ajax Cart API e pubblica eventi cart. `cart-drawer` ascolta gli eventi e aggiorna count, body e totals. Non fare fetch cart diretto fuori da `CartHandler` se puoi estenderlo.
 
@@ -90,7 +101,7 @@ File principali:
 
 - `blocks/pdp-product-info.liquid`
 - `snippets/bundle-fusion-line-item.liquid`
-- `assets/cart.js`
+- `assets/PDPBundle.js`
 
 `pdp-bundle` legge JSON da `ref="bundleData"` e aggiunge piu' item con proprieta' `_bundleId`. Le righe cart bundle usano `bundle-fusion-line-item`. Mantieni il collegamento via proprieta' cart, non tramite stato globale JS.
 
@@ -98,8 +109,9 @@ File principali:
 
 File principali:
 
-- `assets/dialog.js`
-- `assets/header.js`
+- `assets/DialogComponent.js`
+- `assets/DialogOpener.js`
+- `assets/StickyHeader.js`
 - `sections/header.liquid`
 - `snippets/header-menu.liquid`
 - `assets/components.css`
@@ -113,7 +125,7 @@ Modalita' non-modale: l'attributo `non-modal` sull'host (`<dialog-component name
 
 File principali:
 
-- `assets/deferred-section.js`
+- `assets/DeferredSection.js`
 - `assets/swiper-element-bundle.min.js`
 - `snippets/swiper.liquid`
 - `snippets/deferred-section-skeleton.liquid`
