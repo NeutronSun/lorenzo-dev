@@ -1,0 +1,92 @@
+{% doc %}
+  Renders buy button and shipping note.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+  assign current_variant = picker_product.selected_or_first_available_variant
+%}
+
+<div class="buy-button-block" {{ block.shopify_attributes }}>
+  <product-form on:submit="onSubmit">
+    {% form 'product', picker_product %}
+      <input type="hidden" name="id" value="{{ current_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+
+      <button type="submit" class="add font-mono" {% unless current_variant.available %}disabled{% endunless %}>
+        {% render 'icon-bag', size: 16 %}
+        <span>{% if  product.available %}Add to bag{% else %}Sold out{% endif %}</span>
+      </button>
+    {% endform %}
+  </product-form>
+
+  <p class="shipping font-mono">Free EU shipping &middot; 30-day returns</p>
+</div>
+
+{% stylesheet %}
+  .buy-button-block product-form {
+    display: block;
+    padding: 16px 20px 8px;
+  }
+
+  .buy-button-block .add {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--black);
+    background: var(--black);
+    color: var(--white);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .buy-button-block .add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .buy-button-block .add svg {
+    flex: 0 0 auto;
+  }
+
+  .buy-button-block .shipping {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 20px 18px;
+    color: var(--secondary-black);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 749px) {
+    .buy-button-block product-form,
+    .buy-button-block .shipping {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Buy button",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Buy button",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{% doc %}
+  Renders PDP product configurator panel.
+
+  @param {product} product - Product object
+{% enddoc %}
+
+{% liquid
+  assign picker_product = product | default: closest.product
+%}
+
+<section class="pdp-product-configurator panel config" {{ block.shopify_attributes }}>
+  <h2 class="font-mono">/Configure</h2>
+
+  {% content_for 'blocks' %}
+</section>
+
+{% stylesheet %}
+  .pdp-product-configurator.panel.config {
+    display: grid;
+  }
+
+  .pdp-product-configurator > h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Configurator",
+  "tag": null,
+  "blocks": [
+    { "type": "variant-picker" },
+    { "type": "pdp-siblings" },
+    { "type": "buy-button" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Configurator",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

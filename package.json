@@ -6,7 +6,7 @@
   },
   "scripts": {
     "check": "shopify theme check",
-    "store:dev-only": "shopify theme dev -e store",
+    "store:dev-only": "shopify theme dev -e store --theme-editor-sync",
     "store:dev": "npm-run-all -p store:dev-only",
     "store:share": "shopify theme share -e store",
     "prod:pull": "shopify theme pull -e prod",

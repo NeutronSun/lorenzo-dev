@@ -26,85 +26,95 @@
             "lng": "50.2"
           },
           "blocks": {
-            "schema_opening_hours_3inRGh": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Sunday",
-                "opens": "09:00",
-                "closes": "18:00"
+            "schema_store_opening_hours": {
+              "type": "schema-store-opening-hours",
+              "name": "Opening hours",
+              "settings": {},
+              "blocks": {
+                "schema_opening_hours_3inRGh": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Sunday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_YeEnTC": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Saturday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_zyEmeR": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Friday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_cmDmek": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Thursday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_TEdEGJ": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Wednesday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_CK8Htt": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Tuesday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                },
+                "schema_opening_hours_pkeiFw": {
+                  "type": "schema-opening-hours",
+                  "name": "Opening hours",
+                  "settings": {
+                    "day": "Monday",
+                    "opens": "09:00",
+                    "closes": "18:00"
+                  },
+                  "blocks": {}
+                }
               },
-              "blocks": {}
-            },
-            "schema_opening_hours_YeEnTC": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Saturday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
-            },
-            "schema_opening_hours_zyEmeR": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Friday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
-            },
-            "schema_opening_hours_cmDmek": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Thursday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
-            },
-            "schema_opening_hours_TEdEGJ": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Wednesday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
-            },
-            "schema_opening_hours_CK8Htt": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Tuesday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
-            },
-            "schema_opening_hours_pkeiFw": {
-              "type": "schema-opening-hours",
-              "name": "Opening Hours",
-              "settings": {
-                "day": "Monday",
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "blocks": {}
+              "block_order": [
+                "schema_opening_hours_3inRGh",
+                "schema_opening_hours_YeEnTC",
+                "schema_opening_hours_zyEmeR",
+                "schema_opening_hours_cmDmek",
+                "schema_opening_hours_TEdEGJ",
+                "schema_opening_hours_CK8Htt",
+                "schema_opening_hours_pkeiFw"
+              ]
             }
           },
           "block_order": [
-            "schema_opening_hours_3inRGh",
-            "schema_opening_hours_YeEnTC",
-            "schema_opening_hours_zyEmeR",
-            "schema_opening_hours_cmDmek",
-            "schema_opening_hours_TEdEGJ",
-            "schema_opening_hours_CK8Htt",
-            "schema_opening_hours_pkeiFw"
+            "schema_store_opening_hours"
           ]
         }
       },

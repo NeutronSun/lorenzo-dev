@@ -3,9 +3,9 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { ColorSibling } from '@theme/color-sibling';
+import { ColorSibling } from '@theme/ColorSibling';
 import { OnSiblingChangeEvent } from '@theme/events';
-import { MetaobjectsHandler } from '@theme/metaobjects-handler';
+import { MetaobjectsHandler } from '@theme/MetaobjectsHandler';
 import { CacheHandler, HtmlUtils, TemplateHandler, UrlUtils } from '@theme/utilities';
 
 /**

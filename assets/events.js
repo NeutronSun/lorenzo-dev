@@ -68,7 +68,7 @@ export class OnDialogClosedEvent extends ThemeEvent {
   }
 }
 
-/** @import {ShopifyCart} from '@theme/cart' */
+/** @import {ShopifyCart} from '@theme/Cart' */
 
 /** Dispatched while a cart Ajax request is in flight. */
 export class OnCartLoadingEvent extends ThemeEvent {

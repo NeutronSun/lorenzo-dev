@@ -3,18 +3,18 @@
  */
 
 import { CSSUtils } from "@theme/utilities";
-import "@theme/header";
-import "@theme/dialog";
-import "@theme/search";
-import "@theme/localization";
-import "@theme/collection";
-import "@theme/cart";
-import "@theme/product";
-import "@theme/color-sibling";
-import "@theme/pdp-siblings";
-import "@theme/product-card";
-import "@theme/deferred-section";
-import "@theme/metaobjects-handler";
+import "@theme/StickyHeader";
+import "@theme/Dialog";
+import "@theme/Search";
+import "@theme/Localization";
+import "@theme/Collection";
+import "@theme/Cart";
+import "@theme/Product";
+import "@theme/ColorSibling";
+import "@theme/PdpSiblings";
+import "@theme/ProductCard";
+import "@theme/DeferredSection";
+import "@theme/MetaobjectsHandler";
 
 console.log(`
                       __
@@ -30,4 +30,3 @@ console.log(`
   ███████║╚██████╔╝██║ ╚████║   ██║   ██╔╝ ██╗
   ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝
 `);
-

@@ -1,0 +1,11 @@
+---
+description: Convenzioni CSS del tema — mobile-first, nested, CSS-first
+globs: assets/**/*.css,**/*.{css,liquid}
+alwaysApply: false
+---
+
+# Theme CSS
+
+Segui [docs/agents/css-expert.md](docs/agents/css-expert.md) e [docs/12-css.md](docs/12-css.md).
+
+Mobile-first, flex-first, stato via `:has()`/attributi (no classi JS). Nested `{% stylesheet %}` con padre scoped. Drawer: `.drawer` + `.from-*` in `components.css`. Wrapper `-block` se block type = CE tag.

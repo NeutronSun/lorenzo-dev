@@ -2,7 +2,7 @@
  * Predictive search dialog and query normalization for collection/search forms.
  */
 
-import { DialogComponent } from '@theme/dialog';
+import { DialogComponent } from '@theme/Dialog';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
 class SearchQuery {
@@ -25,7 +25,7 @@ class SearchQuery {
 }
 
 /**
- * @typedef {import('@theme/dialog').DialogComponentRefs & {
+ * @typedef {import('@theme/Dialog').DialogComponentRefs & {
  *   input: HTMLInputElement,
  *   suggestions: HTMLElement,
  *   products: HTMLElement

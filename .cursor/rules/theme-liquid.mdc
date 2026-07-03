@@ -1,0 +1,11 @@
+---
+description: Convenzioni Liquid e HTML del tema Shopify
+globs: blocks/**/*.liquid,sections/**/*.liquid,snippets/**/*.liquid,layout/**/*.liquid
+alwaysApply: false
+---
+
+# Theme Liquid
+
+Segui [docs/agents/liquid-expert.md](docs/agents/liquid-expert.md) e [docs/13-liquid-html.md](docs/13-liquid-html.md).
+
+Block-first con `{% content_for 'block' %}`. CE markup: `ref` + `on:*`. Dialog: `commandfor` + Invoker Commands (no `on:click` su open/close). Naming kebab-case; Liquid/filtri prima di JS.

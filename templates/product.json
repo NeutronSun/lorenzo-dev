@@ -57,7 +57,7 @@
             },
             "pdp_dossier_description_ByQMxb": {
               "type": "pdp-dossier-description",
-              "name": "PDP Dossier Description",
+              "name": "Notes",
               "settings": {
                 "text": "{{ closest.product.description }}",
                 "mobile_order": 1,
@@ -66,8 +66,8 @@
               "blocks": {}
             },
             "pdp_card_stats_kkDj3i": {
-              "type": "pdp-card-stats",
-              "name": "PDP Card Stats",
+              "type": "pdp-dossier-stats",
+              "name": "Stats",
               "settings": {
                 "mobile_order": 3,
                 "open_by_default": false
@@ -76,7 +76,7 @@
             },
             "pdp_dossier_tech_BkgHXF": {
               "type": "pdp-dossier-tech",
-              "name": "PDP Dossier Technical",
+              "name": "Technical",
               "settings": {
                 "mobile_order": 4,
                 "open_by_default": false
@@ -84,7 +84,7 @@
               "blocks": {
                 "pdp_dossier_tech_row_RyPxG8": {
                   "type": "pdp-dossier-tech-row",
-                  "name": "PDP Dossier Technical Row",
+                  "name": "Row",
                   "settings": {
                     "label": "Material",
                     "value": "{{ closest.product.metafields.valeverce.material | metafield_text }}"
@@ -93,7 +93,7 @@
                 },
                 "pdp_dossier_tech_row_mrdxGq": {
                   "type": "pdp-dossier-tech-row",
-                  "name": "PDP Dossier Technical Row",
+                  "name": "Row",
                   "settings": {
                     "label": "Weight",
                     "value": "{{ closest.product.metafields.valeverce.weight | metafield_text }}"
@@ -123,44 +123,97 @@
         "info": {
           "type": "pdp-product-info",
           "static": true,
-          "settings": {
-            "siblings_limit": 250,
-            "label_color": "Color",
-            "label_variants": "Variants"
-          },
+          "settings": {},
           "blocks": {
-            "sibling-tab-tema": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Tema_",
-                "use_tag_value_as_label": true,
-                "label": "Tema"
-              },
+            "pdp_heading_HtKMcC": {
+              "type": "pdp-heading",
+              "name": "Heading",
+              "settings": {},
               "blocks": {}
             },
-            "sibling-tab-fusion": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Fusion_",
-                "use_tag_value_as_label": false,
-                "label": "Fusion"
+            "pdp_product_configurator_JPrwKy": {
+              "type": "pdp-product-configurator",
+              "name": "Configurator",
+              "settings": {},
+              "blocks": {
+                "pdp_variant_picker_hhXYL8": {
+                  "type": "variant-picker",
+                  "name": "Variant picker",
+                  "settings": {
+                    "preselect_variant": false
+                  },
+                  "blocks": {}
+                },
+                "pdp_siblings_qjqWC8": {
+                  "type": "pdp-siblings",
+                  "name": "Siblings",
+                  "settings": {
+                    "siblings_limit": 250,
+                    "label_color": "Color",
+                    "label_variants": "Variants"
+                  },
+                  "blocks": {
+                    "pdp_sibling_tab_a4hhqk": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Tab",
+                      "settings": {
+                        "tag": "Tema_",
+                        "use_tag_value_as_label": true,
+                        "label": ""
+                      },
+                      "blocks": {}
+                    },
+                    "pdp_sibling_tab_DmN4kM": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Tab",
+                      "settings": {
+                        "tag": "Universe_",
+                        "use_tag_value_as_label": true,
+                        "label": ""
+                      },
+                      "blocks": {}
+                    },
+                    "pdp_sibling_tab_Y3yRhb": {
+                      "type": "pdp-sibling-tab",
+                      "name": "Tab",
+                      "settings": {
+                        "tag": "Fusion_",
+                        "use_tag_value_as_label": false,
+                        "label": "Fusion"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "pdp_sibling_tab_a4hhqk",
+                    "pdp_sibling_tab_DmN4kM",
+                    "pdp_sibling_tab_Y3yRhb"
+                  ]
+                },
+                "pdp_buy_button_fLHDXY": {
+                  "type": "buy-button",
+                  "name": "Buy button",
+                  "settings": {},
+                  "blocks": {}
+                }
               },
-              "blocks": {}
+              "block_order": [
+                "pdp_variant_picker_hhXYL8",
+                "pdp_siblings_qjqWC8",
+                "pdp_buy_button_fLHDXY"
+              ]
             },
-            "sibling-tab-universe": {
-              "type": "pdp-sibling-tab",
-              "settings": {
-                "tag": "Universe_",
-                "use_tag_value_as_label": true,
-                "label": "Universe"
-              },
+            "pdp_bundle_qicFRh": {
+              "type": "pdp-bundle",
+              "name": "Bundle",
+              "settings": {},
               "blocks": {}
             }
           },
           "block_order": [
-            "sibling-tab-tema",
-            "sibling-tab-fusion",
-            "sibling-tab-universe"
+            "pdp_heading_HtKMcC",
+            "pdp_product_configurator_JPrwKy",
+            "pdp_bundle_qicFRh"
           ]
         }
       },
@@ -204,7 +257,7 @@
                   "static": true,
                   "settings": {
                     "match_prefix": "Tema_",
-                    "siblings_limit": 10
+                    "siblings_limit": 7
                   },
                   "blocks": {}
                 }

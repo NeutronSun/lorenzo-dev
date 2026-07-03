@@ -1,5 +1,5 @@
 {% doc %}
-  Renders PDP card stats panel.
+  Renders PDP dossier stats panel.
 {% enddoc %}
 
 {% liquid
@@ -85,7 +85,7 @@
 
 {% render 'pdp-dossier-panel',
   title: '/Stats',
-  panel_class: 'pdp-card-stats',
+  panel_class: 'pdp-dossier-stats',
   panel_id: block.id,
   mobile_order: mobile_order,
   open_by_default: block.settings.open_by_default,
@@ -140,7 +140,7 @@
     }
   }
 
-  .pdp-card-stats {
+  .pdp-dossier-stats {
     --meter-duration: 1.4s;
     --meter-fluid-duration: 3.6s;
     --meter-sheen-duration: 2.8s;
@@ -447,7 +447,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pdp-card-stats .meter {
+    .pdp-dossier-stats .meter {
       --meter-count: var(--meter-value);
       animation: card-meter-count 0.01s ease-out forwards;
 
@@ -473,7 +473,7 @@
 
 {% schema %}
 {
-  "name": "PDP Card Stats",
+  "name": "Stats",
   "tag": null,
   "settings": [
     {
@@ -491,7 +491,7 @@
   ],
   "presets": [
     {
-      "name": "PDP Card Stats",
+      "name": "Stats",
       "category": "Product"
     }
   ]

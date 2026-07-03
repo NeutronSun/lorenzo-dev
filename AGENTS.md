@@ -2,12 +2,29 @@
 
 ## Prima di toccare codice
 
-Leggi questi file in ordine:
+Leggi in ordine:
 
 1. [docs/00-project-context.md](docs/00-project-context.md)
-2. [docs/10-conventions.md](docs/10-conventions.md)
-3. [docs/20-feature-map.md](docs/20-feature-map.md)
-4. [docs/30-checklists.md](docs/30-checklists.md)
+2. [docs/10-conventions.md](docs/10-conventions.md) — indice
+3. Guida di dominio in base al task:
+   - JS → [docs/11-javascript.md](docs/11-javascript.md)
+   - CSS → [docs/12-css.md](docs/12-css.md)
+   - Liquid/HTML → [docs/13-liquid-html.md](docs/13-liquid-html.md)
+4. Feature end-to-end → [docs/40-component-recipes.md](docs/40-component-recipes.md)
+5. Indice file → [docs/20-feature-map.md](docs/20-feature-map.md)
+6. Review / verifica → [docs/30-checklists.md](docs/30-checklists.md)
+
+## Routing agenti
+
+| Task | Profilo |
+|---|---|
+| Modifica JS (`assets/*.js`, CE, fetch) | [docs/agents/javascript-expert.md](docs/agents/javascript-expert.md) |
+| Modifica CSS (stylesheet, layout, stato) | [docs/agents/css-expert.md](docs/agents/css-expert.md) |
+| Modifica Liquid (blocks, sections, snippets) | [docs/agents/liquid-expert.md](docs/agents/liquid-expert.md) |
+| Nuova feature / dialog / PDP / cart / filtri | [docs/agents/components-expert.md](docs/agents/components-expert.md) |
+| Review pre-merge / "e' fatto bene?" | [docs/agents/reviewer.md](docs/agents/reviewer.md) |
+
+Indice profili: [docs/agents/README.md](docs/agents/README.md)
 
 Questo repository e' un tema Shopify. Le modifiche devono restare mirate, conservative e coerenti con Liquid, CSS nativo, JavaScript vanilla e Custom Elements gia' presenti.
 
@@ -25,7 +42,7 @@ Questo repository e' un tema Shopify. Le modifiche devono restare mirate, conser
 - Un solo percorso: niente fallback per browser non supportati salvo richiesta esplicita (il tema mira a browser moderni).
 - API simmetriche: se l'apertura usa un meccanismo (es. trigger event con check sul `name`), anche la chiusura usa lo stesso; mai un lato diretto e l'altro a evento.
 - Reattivita' invece di iterazione: invece di un metodo che fa `querySelectorAll` e cicla i fratelli per agire su di loro, fai reagire ogni componente a un evento e agire su se stesso.
-- Implementa il minimo che soddisfa la richiesta: niente configurabilita', opzioni, selettori parametrizzabili o hook speculativi non chiesti.
+- Implementa il minimo che soddisfa la richiesta: niente configurabilita', opzioni, selettori parametrizzati o hook speculativi non chiesti.
 - Niente wrapper di indirezione inutili: se un metodo si limita a chiamarne altri due, inline.
 - Nel nuovo JS non usare `try/catch`: preferisci early return, fallback vuoti e controlli espliciti.
 - Usa sempre `async/await`, mai `.then()`.

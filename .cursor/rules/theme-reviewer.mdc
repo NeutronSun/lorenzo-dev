@@ -1,0 +1,12 @@
+---
+description: Reviewer tema Shopify — checklist e convenzioni pre-merge
+alwaysApply: true
+---
+
+# Theme Reviewer
+
+Prima di considerare una modifica completa, verifica contro [docs/agents/reviewer.md](docs/agents/reviewer.md) e [docs/30-checklists.md](docs/30-checklists.md).
+
+Punti critici: modifica mirata, riuso helper esistenti (`ColorSibling`, `CartHandler`), `ref` + `on:*` su CE, CSS-first, dialog con Invoker Commands, no `.then()`/`try/catch`/refactor non richiesti.
+
+Output review: lista violazioni con file, regola e fix suggerito — oppure conferma conforme.

@@ -3,7 +3,7 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { DialogComponent } from '@theme/dialog';
+import { DialogComponent } from '@theme/Dialog';
 import { OnFiltersApplyEvent } from '@theme/events';
 import { TemplateHandler, UrlUtils } from '@theme/utilities';
 

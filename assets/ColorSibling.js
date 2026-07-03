@@ -2,7 +2,7 @@
  * Storefront API helper for product color siblings.
  */
 
-import { GraphQL } from '@theme/graphql';
+import { GraphQL } from '@theme/GraphQL';
 import { CacheHandler } from '@theme/utilities';
 
 /**
