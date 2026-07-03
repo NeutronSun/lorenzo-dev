@@ -2,7 +2,7 @@
  * Predictive search dialog and query normalization for collection/search forms.
  */
 
-import { DialogComponent } from '@theme/DialogComponent';
+import { DialogComponent } from '@theme/Dialog';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
 class SearchQuery {
@@ -25,7 +25,7 @@ class SearchQuery {
 }
 
 /**
- * @typedef {import('@theme/DialogComponent').DialogComponentRefs & {
+ * @typedef {import('@theme/Dialog').DialogComponentRefs & {
  *   input: HTMLInputElement,
  *   suggestions: HTMLElement,
  *   products: HTMLElement
@@ -332,4 +332,23 @@ class SearchDialog extends DialogComponent {
 
 if (!customElements.get('search-dialog')) {
   customElements.define('search-dialog', SearchDialog);
+}
+
+/**
+ * @typedef {Object} SearchFormRefs
+ * @property {HTMLInputElement} query
+ */
+
+/** @extends {HTMLComponent<SearchFormRefs>} */
+class SearchForm extends HTMLComponent {
+  /** @param {SubmitEvent} event */
+  handleSubmit(event) {
+    if (!this.refs.query) return;
+
+    this.refs.query.value = SearchQuery.toPrefix(this.refs.query.value);
+  }
+}
+
+if (!customElements.get('search-form')) {
+  customElements.define('search-form', SearchForm);
 }

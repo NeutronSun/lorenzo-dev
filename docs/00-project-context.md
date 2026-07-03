@@ -39,7 +39,7 @@ Stack reale del repo:
 
 - `layout/theme.liquid` e' il wrapper principale: carica CSS, JS, meta tags, header group, dialog group, footer group e `content_for_layout`.
 - `snippets/theme-js.liquid` definisce gli alias `@theme/*`, preload dei moduli e carica `assets/global.js`.
-- `assets/global.js` registra i moduli PascalCase via import map (`StickyHeader`, `DialogComponent`, `CollectionFilters`, `CartHandler`, `ProductPage`, `PdpSiblings`, `ProductCard`, …).
+- `assets/global.js` registra i moduli PascalCase via import map (`StickyHeader`, `Dialog`, `Collection`, `Cart`, `Product`, `PdpSiblings`, `ProductCard`, …).
 - `snippets/variables-js.liquid` espone `window.Theme` con routes/template/traduzioni e `window.storefront` con endpoint GraphQL.
 - `sections/` compone pagine e aree principali.
 - `blocks/` contiene componenti configurabili Shopify; sono la prima scelta quando la feature deve essere componibile.
@@ -53,14 +53,14 @@ PDP:
 - `sections/product.liquid` monta tre blocchi: dossier, gallery e info.
 - `blocks/pdp-product-info.liquid` contiene prezzo, form, variant picker e bundle fusion.
 - `blocks/pdp-product-info.liquid` monta `pdp-siblings` con tab configurabili via `pdp-sibling-tab`.
-- `assets/ProductPage.js` calcola variabili CSS dinamiche per altezze sticky/mobile.
+- `assets/Product.js` calcola variabili CSS dinamiche per altezze sticky/mobile.
 - `assets/PdpSiblings.js` costruisce tab e chips usando `ColorSibling`.
 
 Collection:
 
 - `sections/collection.liquid` monta filtro e `product-grid`.
 - `templates/collection.grid.liquid` e `templates/collection.filters.liquid` sono partial render per aggiornamenti async.
-- `assets/CollectionFilters.js` e `assets/ProductGrid.js` gestiscono eventi filtro, fetch HTML e replace del contenuto.
+- `assets/Collection.js` gestisce eventi filtro, fetch HTML e replace del contenuto.
 
 Product card:
 
@@ -71,7 +71,7 @@ Product card:
 Cart e bundle:
 
 - `snippets/cart-drawer.liquid` e `sections/cart-drawer.liquid` renderizzano il drawer.
-- `assets/CartHandler.js`, `assets/ProductForm.js`, `assets/CartDrawer.js`, `assets/PDPBundle.js`, `assets/CartItem.js`, `assets/CartMoney.js`
+- `assets/Cart.js` contiene `CartHandler`, `product-form`, `cart-drawer`, `pdp-bundle`, `cart-item`, `cart-money`.
 - `snippets/bundle-fusion-line-item.liquid` renderizza le righe bundle nel cart.
 
 ## Principio operativo

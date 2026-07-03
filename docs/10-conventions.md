@@ -207,9 +207,9 @@ Se il block type coincide col custom element tag, il wrapper usa suffisso `-bloc
 
 ### JavaScript
 
-- **PascalCase** (`VariantPicker.js`): un file per classe principale o custom element registrato.
+- **PascalCase** per file di dominio (`ProductCard.js`, `Cart.js`, `Dialog.js`): un file raggruppa le classi/CE dello stesso dominio.
 - **kebab-case** (`utilities.js`, `events.js`, `global.js`): barrel multi-export o entrypoint.
-- Import map: alias `@theme/` = PascalCase del file (`@theme/VariantPicker` → `VariantPicker.js`).
+- Import map: alias `@theme/` = PascalCase del modulo (`@theme/ProductCard` → `ProductCard.js`).
 
 ### Checklist pre-rename
 
@@ -246,7 +246,7 @@ Se il block type coincide col custom element tag, il wrapper usa suffisso `-bloc
 - Richiede Invoker Commands nativi (`command` event); niente fallback click.
 - `dialog-opener` solo per target senza `<dialog>` nativo, es. menu mobile header (`header-menu`).
 
-Esempio del pattern (simmetria + reattivita' + evento nativo), da `assets/DialogComponent.js`:
+Esempio del pattern (simmetria + reattivita' + evento nativo), da `assets/Dialog.js`:
 
 ```js
 // Apertura/chiusura programmatiche: stesso meccanismo, trigger event con check sul name

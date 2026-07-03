@@ -3,7 +3,7 @@
  */
 
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { DialogComponent } from '@theme/DialogComponent';
+import { DialogComponent } from '@theme/Dialog';
 import { OnDialogClosedEvent, OnDialogOpenedEvent } from '@theme/events';
 import { CSSUtils } from '@theme/utilities';
 

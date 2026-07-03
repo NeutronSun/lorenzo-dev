@@ -1,8 +1,47 @@
+/**
+ * Collection filters and product grid: async partial updates via Liquid views.
+ */
+
 import { HTMLComponent } from '@theme/HTMLComponent';
-import { DialogComponent } from '@theme/DialogComponent';
+import { DialogComponent } from '@theme/Dialog';
 import { OnFiltersApplyEvent } from '@theme/events';
 import { TemplateHandler, UrlUtils } from '@theme/utilities';
-import { CollectionPartial } from '@theme/CollectionPartial';
+
+/** URL builders for collection filter and grid Liquid partials. */
+class CollectionPartial {
+  static VIEW = Object.freeze({
+    FILTERS: 'filters',
+  });
+
+  static SELECTOR = Object.freeze({
+    FILTERS: 'collection-filters',
+    GRID: 'product-grid',
+  });
+
+  /**
+   * Builds a collection filter partial URL with search params and view name.
+   * @param {URLSearchParams} params
+   * @param {string} view
+   * @returns {URL}
+   */
+  static buildUrl(params, view) {
+    const url = UrlUtils.withSearchParams(window.location.href, params);
+
+    return UrlUtils.withView(url, view);
+  }
+
+  /**
+   * Builds a collection grid partial URL via section rendering.
+   * @param {URLSearchParams} params
+   * @param {string} sectionId
+   * @returns {URL}
+   */
+  static buildGridUrl(params, sectionId) {
+    const url = UrlUtils.withSearchParams(window.location.href, params);
+
+    return UrlUtils.withSectionId(url, sectionId);
+  }
+}
 
 /**
  * @typedef {Object} FiltersRefs
@@ -199,6 +238,82 @@ class Filters extends HTMLComponent {
   }
 }
 
+/**
+ * @typedef {Record<string, Element | Element[]>} ProductGridRefs
+ */
+
+/**
+ * Collection product grid with async partial updates on filter changes.
+ * @extends {HTMLComponent<ProductGridRefs>}
+ */
+class ProductGrid extends HTMLComponent {
+  constructor() {
+    super();
+
+    this.onFilter = this.onFilter.bind(this);
+    this.onPopState = this.onPopState.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
+    window.addEventListener('popstate', this.onPopState);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(OnFiltersApplyEvent.TYPE, this.onFilter);
+    window.removeEventListener('popstate', this.onPopState);
+    super.disconnectedCallback();
+  }
+
+  /**
+   * @param {OnFiltersApplyEvent} event
+   */
+  async onFilter(event) {
+    if (!event.params) return;
+
+    const rendered = await this.render(event.params);
+
+    rendered && this.updateUrl(event.params);
+  }
+
+  onPopState() {
+    this.render(new URLSearchParams(window.location.search));
+  }
+
+  /**
+   * @param {URLSearchParams} params
+   * @returns {Promise<boolean>}
+   */
+  async render(params) {
+    const sectionId = this.dataset.sectionId;
+
+    if (!sectionId) return false;
+
+    const url = CollectionPartial.buildGridUrl(params, sectionId);
+    const nextGrid = await TemplateHandler.fetch(url, CollectionPartial.SELECTOR.GRID);
+
+    if (!(nextGrid instanceof HTMLElement)) return false;
+
+    this.innerHTML = nextGrid.innerHTML;
+
+    return true;
+  }
+
+  /**
+   * @param {URLSearchParams} params
+   */
+  updateUrl(params) {
+    const url = UrlUtils.withSearchParams(window.location.href, params);
+
+    history.pushState({}, '', url.toString());
+  }
+}
+
 if (!customElements.get('collection-filters')) {
   customElements.define('collection-filters', Filters);
+}
+
+if (!customElements.get('product-grid')) {
+  customElements.define('product-grid', ProductGrid);
 }

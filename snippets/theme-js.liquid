@@ -4,34 +4,21 @@
   {
     "imports": {
       "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
-      "@theme/events": "{{ 'events.js' | asset_url }}",
-      "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}",
       "@theme/GraphQL": "{{ 'GraphQL.js' | asset_url }}",
-      "@theme/ColorSibling": "{{ 'ColorSibling.js' | asset_url }}",
-      "@theme/MetaobjectsHandler": "{{ 'MetaobjectsHandler.js' | asset_url }}",
-      "@theme/CollectionPartial": "{{ 'CollectionPartial.js' | asset_url }}",
-      "@theme/DialogComponent": "{{ 'DialogComponent.js' | asset_url }}",
-      "@theme/DialogOpener": "{{ 'DialogOpener.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
       "@theme/StickyHeader": "{{ 'StickyHeader.js' | asset_url }}",
-      "@theme/SearchDialog": "{{ 'SearchDialog.js' | asset_url }}",
-      "@theme/SearchForm": "{{ 'SearchForm.js' | asset_url }}",
-      "@theme/LocalizationForm": "{{ 'LocalizationForm.js' | asset_url }}",
-      "@theme/CollectionFilters": "{{ 'CollectionFilters.js' | asset_url }}",
-      "@theme/ProductGrid": "{{ 'ProductGrid.js' | asset_url }}",
-      "@theme/CartHandler": "{{ 'CartHandler.js' | asset_url }}",
-      "@theme/ProductForm": "{{ 'ProductForm.js' | asset_url }}",
-      "@theme/CartDrawer": "{{ 'CartDrawer.js' | asset_url }}",
-      "@theme/CartPage": "{{ 'CartPage.js' | asset_url }}",
-      "@theme/PDPBundle": "{{ 'PDPBundle.js' | asset_url }}",
-      "@theme/CartItem": "{{ 'CartItem.js' | asset_url }}",
-      "@theme/CartMoney": "{{ 'CartMoney.js' | asset_url }}",
-      "@theme/ProductPage": "{{ 'ProductPage.js' | asset_url }}",
-      "@theme/VariantPicker": "{{ 'VariantPicker.js' | asset_url }}",
+      "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}",
+      "@theme/Dialog": "{{ 'Dialog.js' | asset_url }}",
+      "@theme/Search": "{{ 'Search.js' | asset_url }}",
+      "@theme/Localization": "{{ 'Localization.js' | asset_url }}",
+      "@theme/Collection": "{{ 'Collection.js' | asset_url }}",
+      "@theme/Cart": "{{ 'Cart.js' | asset_url }}",
+      "@theme/Product": "{{ 'Product.js' | asset_url }}",
+      "@theme/ColorSibling": "{{ 'ColorSibling.js' | asset_url }}",
       "@theme/PdpSiblings": "{{ 'PdpSiblings.js' | asset_url }}",
       "@theme/ProductCard": "{{ 'ProductCard.js' | asset_url }}",
-      "@theme/ProductCardSwatches": "{{ 'ProductCardSwatches.js' | asset_url }}",
-      "@theme/ProductCardLabels": "{{ 'ProductCardLabels.js' | asset_url }}",
-      "@theme/DeferredSection": "{{ 'DeferredSection.js' | asset_url }}"
+      "@theme/DeferredSection": "{{ 'DeferredSection.js' | asset_url }}",
+      "@theme/MetaobjectsHandler": "{{ 'MetaobjectsHandler.js' | asset_url }}"
     }
   }
 </script>
@@ -64,37 +51,37 @@
 >
 <link
   rel="modulepreload"
-  href="{{ 'DialogComponent.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
   href="{{ 'StickyHeader.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
   rel="modulepreload"
-  href="{{ 'SearchDialog.js' | asset_url }}"
+  href="{{ 'Dialog.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
   rel="modulepreload"
-  href="{{ 'LocalizationForm.js' | asset_url }}"
+  href="{{ 'Search.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
   rel="modulepreload"
-  href="{{ 'CollectionFilters.js' | asset_url }}"
+  href="{{ 'Localization.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
   rel="modulepreload"
-  href="{{ 'CartHandler.js' | asset_url }}"
+  href="{{ 'Collection.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
   rel="modulepreload"
-  href="{{ 'ProductPage.js' | asset_url }}"
+  href="{{ 'Cart.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'Product.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
