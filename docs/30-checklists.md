@@ -39,7 +39,7 @@
 - Se serve un selettore univoco, usare anche attributi tipo `[data-title]`, `[data-state]`, `[data-tab]`.
 - Testo e controlli non si sovrappongono su mobile e desktop.
 - Link, bottoni e immagini restano accessibili.
-- Dialog: `commandfor` = `id` del `<dialog>` (stesso valore del `name` del component). Solo `<button type="button">`. Mai `on:click` sullo stesso bottone. Mai `non-modal`.
+- Dialog: `commandfor` = `id` del `<dialog>` (stesso valore del `name` del component). Solo `<button type="button">`. Mai `on:click` sullo stesso bottone. Drawer (cart, localization, filtri): `non-modal` sull'host; search e altri modali: senza `non-modal`.
 - Dialog programmatici: `DialogComponent.showModal(name)` / `requestClose(name)` per add-to-cart, ⌘F search, submit filtri.
 
 ## Verifica

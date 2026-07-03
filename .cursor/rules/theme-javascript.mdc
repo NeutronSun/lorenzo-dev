@@ -1,0 +1,11 @@
+---
+description: Convenzioni JavaScript e Custom Elements del tema
+globs: assets/**/*.js
+alwaysApply: false
+---
+
+# Theme JavaScript
+
+Segui [docs/agents/javascript-expert.md](docs/agents/javascript-expert.md) e [docs/11-javascript.md](docs/11-javascript.md).
+
+CE → estendi `HTMLComponent`; markup con `ref` e `on:*`; override `onScroll`/`onResize` (no listener globali manuali). File dominio PascalCase; `async/await`; no `try/catch`; eventi reattivi; fetch via helper esistenti.
