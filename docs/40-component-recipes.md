@@ -116,9 +116,10 @@ flowchart TB
   dossier --> desc[pdp-dossier-description]
   dossier --> tech[pdp-dossier-tech]
   stats --> trait[pdp-valerio-trait snippet]
-  info --> vp[variant-picker block]
-  info --> bb[buy-button block]
-  info --> sib[pdp-siblings + pdp-sibling-tab]
+  info --> configurator[pdp-product-configurator]
+  configurator --> vp[variant-picker snippet inline]
+  configurator --> sib[pdp-siblings + pdp-sibling-tab]
+  configurator --> bb[buy-button block]
   info --> bundle[pdp-bundle]
 ```
 
@@ -179,15 +180,30 @@ flowchart TB
 
 ### File
 
-- `blocks/variant-picker.liquid` — wrapper `.variant-picker-block`
+- `blocks/pdp-product-configurator.liquid` — render inline con `source: 'pdp'`
+- `blocks/variant-picker.liquid` — wrapper globale (senza source)
 - `snippets/variant-picker.liquid` — markup opzioni
+- `sections/product.liquid` — setting `preselect_variant`
+- `assets/Product.js` — `VariantPicker`, `OnVariantSelectedEvent`, section rendering
 
-### Ricetta
+### Ricetta PDP
 
-1. Block thin wrapper con `{% render 'variant-picker', product: product %}`.
-2. Stato selezione: input nativi (`radio`/`select`) + CSS `:has(:checked)` dove possibile.
-3. Aggiornamento variant id nel form prodotto via `change`/`input` — evita JS se Liquid + attributi bastano.
-4. Setting `preselect_variant` nel schema block.
+1. Section `product` risolve `variant` una volta (`selected_variant`, fallback first available se preselect ON).
+2. Configurator: `{% render 'variant-picker', variant: variant, source: 'pdp' %}`.
+3. Block figli: `assign current_variant = variant | default: closest.variant` — niente logica preselect locale.
+4. Selezione completa → `OnVariantSelectedEvent` → section render aggiorna `price`, `galleryPrice`, `buyButton`.
+5. Bootstrap JS: `data-preselect-variant-id` quando preselect ON e URL senza variant.
+6. Default-only: picker nascosto; `selected_variant` da Shopify.
+
+### Buy button stati
+
+| Stato | Condizione |
+|---|---|
+| `select-size` | Multi-variante, `current_variant` blank |
+| `sold-out` | Variante selezionata, non disponibile |
+| `add` | Variante selezionata e disponibile |
+
+`current_variant` nei block PDP = `variant | default: closest.variant` (risolto in section).
 
 ---
 

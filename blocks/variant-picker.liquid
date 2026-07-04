@@ -2,29 +2,23 @@
   Renders variant picker block wrapper.
 
   @param {product} product - Product object
+  @param {variant} [variant] - Resolved in parent section when available
 {% enddoc %}
 
 {% liquid
   assign picker_product = product | default: closest.product
-  assign preselect_variant = block.settings.preselect_variant
+  assign variant = variant | default: closest.variant
 %}
 
 <div class="variant-picker-block" {{ block.shopify_attributes }}>
-  {% render 'variant-picker', product: picker_product, preselect_variant: preselect_variant %}
+  {% render 'variant-picker', product: picker_product, variant: variant %}
 </div>
 
 {% schema %}
 {
   "name": "Variant picker",
   "tag": null,
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "preselect_variant",
-      "label": "Preselect variant",
-      "default": false
-    }
-  ],
+  "settings": [],
   "presets": [
     {
       "name": "Variant picker",

@@ -108,6 +108,40 @@ Apertura programmatica: `DialogComponent.showModal('cart-drawer')` da JS (es. po
 
 `{% form 'localization' %}` in `localization-drawer`; host `localization-form` con `on:input="handleInput"`.
 
+## Variante prodotto e preselect
+
+**Un solo posto risolve la variante:** [`sections/product.liquid`](../sections/product.liquid).
+
+```liquid
+{% liquid
+  assign variant = product.selected_variant
+  if variant == blank and section.settings.preselect_variant
+    assign variant = product.selected_or_first_available_variant
+  endif
+%}
+
+{% content_for 'block', type: 'pdp-gallery', id: 'gallery', product: product, variant: variant %}
+```
+
+I block e snippet figli ricevono `variant` — **non** ricalcolano preselect:
+
+```liquid
+assign current_variant = variant | default: closest.variant
+```
+
+Setting `preselect_variant` solo sulla section product. Bootstrap JS: `data-preselect-variant-id` su `product-page` quando preselect ON e nessun `?variant=`.
+
+## Variant picker — source via Liquid
+
+`data-source` **mai** in block settings. Il caller passa il param:
+
+```liquid
+{% render 'variant-picker', product: product, variant: variant, source: 'pdp' %}
+```
+
+PDP: [`blocks/pdp-product-configurator.liquid`](../blocks/pdp-product-configurator.liquid) passa `variant` dal `closest`. Block globale [`blocks/variant-picker.liquid`](../blocks/variant-picker.liquid) senza source.
+
+
 ## `{% doc %}` nei componenti riusabili
 
 ```liquid

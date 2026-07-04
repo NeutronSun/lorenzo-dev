@@ -2,22 +2,55 @@
   Renders buy button and shipping note.
 
   @param {product} product - Product object
+  @param {variant} [variant] - Resolved in sections/product.liquid
 {% enddoc %}
 
 {% liquid
   assign picker_product = product | default: closest.product
-  assign current_variant = picker_product.selected_or_first_available_variant
+  assign current_variant = variant | default: closest.variant
+
+  if picker_product.has_only_default_variant
+    assign current_variant = picker_product.selected_variant
+
+    if current_variant.available
+      assign button_state = 'add'
+    else
+      assign button_state = 'sold-out'
+    endif
+  elsif current_variant == blank
+    assign button_state = 'select-size'
+  elsif current_variant.available
+    assign button_state = 'add'
+  else
+    assign button_state = 'sold-out'
+  endif
 %}
 
-<div class="buy-button-block" {{ block.shopify_attributes }}>
+<div class="buy-button-block" ref="buyButton" {{ block.shopify_attributes }}>
   <product-form on:submit="onSubmit">
     {% form 'product', picker_product %}
-      <input type="hidden" name="id" value="{{ current_variant.id }}">
+      <input
+        type="hidden"
+        name="id"
+        {% if button_state == 'add' and current_variant != blank %}
+          value="{{ current_variant.id }}"
+        {% else %}
+          disabled
+        {% endif %}>
+
       <input type="hidden" name="quantity" value="1">
 
-      <button type="submit" class="add font-mono" {% unless current_variant.available %}disabled{% endunless %}>
+      <button
+        type="submit"
+        class="add font-mono"
+        data-button-state="{{ button_state }}"
+        {% unless button_state == 'add' %}disabled{% endunless %}>
+
         {% render 'icon-bag', size: 16 %}
-        <span>{% if  product.available %}Add to bag{% else %}Sold out{% endif %}</span>
+
+        <span class="label" data-label="select-size">Select size</span>
+        <span class="label" data-label="sold-out">Sold out</span>
+        <span class="label" data-label="add">Add to bag</span>
       </button>
     {% endform %}
   </product-form>
@@ -55,6 +88,31 @@
 
   .buy-button-block .add svg {
     flex: 0 0 auto;
+  }
+
+  .buy-button-block .add .label {
+    display: none;
+  }
+
+  .buy-button-block .add[data-button-state="select-size"] .label[data-label="select-size"],
+  .buy-button-block .add[data-button-state="sold-out"] .label[data-label="sold-out"],
+  .buy-button-block .add[data-button-state="add"] .label[data-label="add"] {
+    display: block;
+  }
+
+  .pdp-product-configurator:has(variant-picker:not([complete])) .buy-button-block .add[data-button-state="add"] .label[data-label="add"],
+  .pdp-product-configurator:has(variant-picker:not([complete])) .buy-button-block .add[data-button-state="sold-out"] .label[data-label="sold-out"] {
+    display: none;
+  }
+
+  .pdp-product-configurator:has(variant-picker:not([complete])) .buy-button-block .add .label[data-label="select-size"] {
+    display: block;
+  }
+
+  .pdp-product-configurator:has(variant-picker:not([complete])) .buy-button-block .add {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .buy-button-block .shipping {

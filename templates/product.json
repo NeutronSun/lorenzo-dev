@@ -38,6 +38,9 @@
     },
     "main": {
       "type": "product",
+      "settings": {
+        "preselect_variant": false
+      },
       "blocks": {
         "dossier": {
           "type": "pdp-product-dossier",
@@ -136,14 +139,6 @@
               "name": "Configurator",
               "settings": {},
               "blocks": {
-                "pdp_variant_picker_hhXYL8": {
-                  "type": "variant-picker",
-                  "name": "Variant picker",
-                  "settings": {
-                    "preselect_variant": false
-                  },
-                  "blocks": {}
-                },
                 "pdp_siblings_qjqWC8": {
                   "type": "pdp-siblings",
                   "name": "Siblings",
@@ -198,7 +193,6 @@
                 }
               },
               "block_order": [
-                "pdp_variant_picker_hhXYL8",
                 "pdp_siblings_qjqWC8",
                 "pdp_buy_button_fLHDXY"
               ]
@@ -216,8 +210,7 @@
             "pdp_bundle_qicFRh"
           ]
         }
-      },
-      "settings": {}
+      }
     },
     "product_recommendations_carousel_zgrpCX": {
       "type": "product-recommendations-carousel",

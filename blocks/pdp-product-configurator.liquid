@@ -2,14 +2,18 @@
   Renders PDP product configurator panel.
 
   @param {product} product - Product object
+  @param {variant} [variant] - Resolved in sections/product.liquid
 {% enddoc %}
 
 {% liquid
   assign picker_product = product | default: closest.product
+  assign variant = variant | default: closest.variant
 %}
 
 <section class="pdp-product-configurator panel config" {{ block.shopify_attributes }}>
   <h2 class="font-mono">/Configure</h2>
+
+  {% render 'variant-picker', product: picker_product, variant: variant, source: 'pdp' %}
 
   {% content_for 'blocks' %}
 </section>
@@ -40,7 +44,6 @@
   "name": "Configurator",
   "tag": null,
   "blocks": [
-    { "type": "variant-picker" },
     { "type": "pdp-siblings" },
     { "type": "buy-button" }
   ],

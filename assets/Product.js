@@ -1,8 +1,9 @@
 /**
- * PDP layout: computes sticky card height from header, breadcrumb, and viewport.
+ * PDP layout, variant selection, and section rendering for price and buy button.
  */
 
-import { CSSUtils } from '@theme/utilities';
+import { OnVariantSelectedEvent } from '@theme/events';
+import { CSSUtils, TemplateHandler, UrlUtils } from '@theme/utilities';
 import { HTMLComponent } from '@theme/HTMLComponent';
 
 /**
@@ -38,17 +39,13 @@ import { HTMLComponent } from '@theme/HTMLComponent';
  */
 
 /**
- * @typedef {Object} VariantSelectedDetail
- * @property {ProductVariant} variant
- * @property {string} source
+ * @extends {HTMLComponent}
  */
-
-/**
- * @extends {HTMLElement}
- */
-class ProductPage extends HTMLElement {
+class ProductPage extends HTMLComponent {
   static MOBILE_MEDIA = '(max-width: 749px)';
   static DEFAULT_SPACING = 20;
+  static REF_NAMES = ['price', 'galleryPrice', 'buyButton'];
+  static SECTION_SELECTOR = 'product-page';
 
   /** @returns {Element | null} */
   get dossier() {
@@ -78,46 +75,101 @@ class ProductPage extends HTMLElement {
   constructor() {
     super();
 
-    this.resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => this.updateLayout()) : null;
-    this.onResize = this.onResize.bind(this);
+    this.requestId = 0;
+    this.layoutObserver = 'ResizeObserver' in window ? new ResizeObserver(() => this.updateLayout()) : null;
+    this.onVariantSelected = this.onVariantSelected.bind(this);
   }
 
   connectedCallback() {
-    this.observe();
+    super.connectedCallback();
+
+    this.observeLayout();
     this.updateLayout();
-    window.addEventListener('resize', this.onResize);
-    document.addEventListener('variant-selected', this.onVariantSelected);
-    window.visualViewport?.addEventListener('resize', this.onResize);
+    document.addEventListener(OnVariantSelectedEvent.TYPE, this.onVariantSelected);
+
+    const defaultVariantId = this.dataset.defaultVariantId;
+
+    defaultVariantId && this.selectDefaultVariant(defaultVariantId);
+
+    const preselectId = this.dataset.preselectVariantId;
+    const url = new URL(window.location.href);
+
+    preselectId && !url.searchParams.get('variant') && this.selectDefaultVariant(preselectId);
   }
 
   disconnectedCallback() {
-    this.resizeObserver?.disconnect();
-    window.removeEventListener('resize', this.onResize);
-    window.visualViewport?.removeEventListener('resize', this.onResize);
+    document.removeEventListener(OnVariantSelectedEvent.TYPE, this.onVariantSelected);
+    this.layoutObserver?.disconnect();
+
+    super.disconnectedCallback();
+  }
+
+  /** @param {string} variantId */
+  selectDefaultVariant(variantId) {
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('variant', variantId);
+    window.history.replaceState({}, '', url.toString());
+    this.renderSection(Number(variantId));
   }
 
   /** Starts observing layout-affecting elements for size changes. */
-  observe() {
-    this.resizeObserver?.observe(this);
+  observeLayout() {
+    this.layoutObserver?.observe(this);
 
-    this.dossier instanceof HTMLElement && this.resizeObserver?.observe(this.dossier);
-    this.gallery instanceof HTMLElement && this.resizeObserver?.observe(this.gallery);
-    this.info instanceof HTMLElement && this.resizeObserver?.observe(this.info);
-    this.breadcrumb instanceof HTMLElement && this.resizeObserver?.observe(this.breadcrumb);
+    this.dossier instanceof HTMLElement && this.layoutObserver?.observe(this.dossier);
+    this.gallery instanceof HTMLElement && this.layoutObserver?.observe(this.gallery);
+    this.info instanceof HTMLElement && this.layoutObserver?.observe(this.info);
+    this.breadcrumb instanceof HTMLElement && this.layoutObserver?.observe(this.breadcrumb);
   }
 
-  /** Recomputes layout when the viewport or observed elements resize. */
   onResize() {
     this.updateLayout();
   }
 
-  /** @param {CustomEvent<VariantSelectedDetail>} event */
+  /** @param {OnVariantSelectedEvent} event */
   onVariantSelected(event) {
-    const { variant, source } = event.detail;
-    
+    if (!(event instanceof OnVariantSelectedEvent)) return;
+    if (event.source !== this.dataset.source) return;
+
     const url = new URL(window.location.href);
-    url.searchParams.set('variant', String(variant.id));
+
+    url.searchParams.set('variant', String(event.variant.id));
     window.history.pushState({}, '', url.toString());
+    this.renderSection(event.variant.id);
+  }
+
+  /**
+   * @param {number} variantId
+   * @returns {Promise<boolean>}
+   */
+  async renderSection(variantId) {
+    const sectionId = this.dataset.sectionId;
+
+    if (!sectionId) return false;
+
+    const requestId = this.requestId + 1;
+
+    this.requestId = requestId;
+
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('variant', String(variantId));
+
+    const sectionUrl = UrlUtils.withSectionId(url, sectionId);
+    const section =
+      (await TemplateHandler.fetch(sectionUrl, ProductPage.SECTION_SELECTOR))
+      ?? (await TemplateHandler.fetch(sectionUrl, `#shopify-section-${sectionId} ${ProductPage.SECTION_SELECTOR}`));
+
+    if (!this.isConnected) return false;
+    if (requestId !== this.requestId) return false;
+    if (!(section instanceof HTMLElement)) return false;
+
+    TemplateHandler.replaceRefs(this, section, ProductPage.REF_NAMES);
+    this.updateRefs();
+    this.updateLayout();
+
+    return true;
   }
 
   /** Writes PDP layout custom properties from current viewport and element sizes. */
@@ -138,7 +190,6 @@ class ProductPage extends HTMLElement {
   }
 
   /**
-   * Reads a numeric CSS custom property from the document root.
    * @param {string} property
    * @param {number} fallback
    * @returns {number}
@@ -148,7 +199,6 @@ class ProductPage extends HTMLElement {
   }
 
   /**
-   * Reads a numeric CSS custom property from an element.
    * @param {string} property
    * @param {number} fallback
    * @param {HTMLElement} [element]
@@ -176,7 +226,6 @@ class ProductPage extends HTMLElement {
   }
 
   /**
-   * Computes the sticky top offset for the gallery card.
    * @param {number} spacing
    * @returns {number}
    */
@@ -185,7 +234,7 @@ class ProductPage extends HTMLElement {
 
     if (this.isMobile) return breadcrumbHeight + spacing;
 
-    return this.getRootNumber('--header-height', 0) + spacing  + spacing;
+    return this.getRootNumber('--header-height', 0) + spacing + spacing;
   }
 }
 
@@ -193,17 +242,18 @@ if (!customElements.get('product-page')) {
   customElements.define('product-page', ProductPage);
 }
 
-
-
-// @ts-ignore
+/**
+ * @extends {HTMLComponent}
+ */
 export class VariantPicker extends HTMLComponent {
   /** @type {('option1' | 'option2' | 'option3')[]} */
-  static OPTION_KEYS = ["option1", "option2", "option3"];
+  static OPTION_KEYS = ['option1', 'option2', 'option3'];
 
-  get selectedValues() {
-    return this.refs.options
-      .map((fieldset) => fieldset.querySelector("input:checked")?.value || null)
-      .filter(Boolean);
+  /** @returns {(string | null)[]} */
+  get selectedCombo() {
+    const options = Array.isArray(this.refs.options) ? this.refs.options : [];
+
+    return options.map((fieldset) => fieldset.querySelector('input:checked')?.value || null);
   }
 
   constructor() {
@@ -225,29 +275,44 @@ export class VariantPicker extends HTMLComponent {
   onChange() {
     this.updateOptionStates();
 
+    const complete = this.isSelectionComplete();
+
+    this.toggleAttribute('complete', complete);
+
+    if (!complete) return;
+
     const variant = this.getSelectedVariant();
+
     if (!variant) return;
 
     document.dispatchEvent(
-      new CustomEvent("variant-selected", {
-        detail: {
-          variant: variant,
-          source: "variant-picker",
-        },
-        bubbles: true,
-        composed: true,
+      new OnVariantSelectedEvent({
+        variant,
+        source: this.dataset.source || '',
       }),
     );
   }
 
-  updateOptionStates() {
-    const fieldsets = this.refs.options;
-    const selected = this.selectedValues;
+  /** @returns {boolean} */
+  isSelectionComplete() {
+    const options = this.refs.options;
 
-    for (const fieldset of fieldsets) {
+    if (!Array.isArray(options) || !options.length) return false;
+
+    return options.every((fieldset) => fieldset.querySelector('input:checked'));
+  }
+
+  updateOptionStates() {
+    const options = Array.isArray(this.refs.options) ? this.refs.options : [];
+
+    if (!options.length) return;
+
+    const selected = this.selectedCombo;
+
+    for (const fieldset of options) {
       const optionIndex = Number(fieldset.dataset.option) - 1;
 
-      for (const label of fieldset.querySelectorAll("label.tab")) {
+      for (const label of fieldset.querySelectorAll('label.tab')) {
         const input = label.querySelector('input[type="radio"]');
 
         const combo = selected.slice();
@@ -260,19 +325,18 @@ export class VariantPicker extends HTMLComponent {
 
   /** @returns {ProductVariant | undefined} */
   getSelectedVariant() {
-    const [option1, option2, option3] = this.selectedValues;
+    if (!this.isSelectionComplete()) return undefined;
 
-    const option3Fallback = this.variants.find((variant) => variant.option1 === option1 && variant.option2 === option2 && variant.option3 === option3);
-    if (option3Fallback) 
-      return option3Fallback;
+    const values = this.selectedCombo;
+    const options = this.refs.options;
 
-    const option2Fallback = this.variants.find((variant) => variant.option1 === option1 && variant.option2 === option2);
-    if (option2Fallback) 
-      return option2Fallback;
+    return this.variants.find((variant) =>
+      options.every((fieldset, index) => {
+        const key = VariantPicker.OPTION_KEYS[Number(fieldset.dataset.option) - 1];
 
-    const option1Fallback = this.variants.find((variant) => variant.option1 === option1);
-    if (option1Fallback) 
-      return option1Fallback;
+        return variant[key] === values[index];
+      }),
+    );
   }
 
   /**
@@ -282,14 +346,13 @@ export class VariantPicker extends HTMLComponent {
   getOptionState(combo) {
     const matches = this.variants.filter((variant) =>
       VariantPicker.OPTION_KEYS.every(
-        (key, i) => !combo[i] || variant[key] === combo[i],
+        (key, index) => !combo[index] || variant[key] === combo[index],
       ),
     );
 
-    if (!matches.length) return "unavailable";
-    return matches.some((variant) => variant.available)
-      ? "available"
-      : "sold-out";
+    if (!matches.length) return 'unavailable';
+
+    return matches.some((variant) => variant.available) ? 'available' : 'sold-out';
   }
 }
 

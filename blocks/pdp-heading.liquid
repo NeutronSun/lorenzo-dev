@@ -2,26 +2,35 @@
   Renders PDP product heading: meta, title, and price.
 
   @param {product} product - Product object
+  @param {variant} [variant] - Resolved in sections/product.liquid
 {% enddoc %}
 
 {% liquid
   assign picker_product = product | default: closest.product
-  assign current_variant = picker_product.selected_or_first_available_variant
+  assign current_variant = variant | default: closest.variant
   assign macro_category = picker_product.metafields.valeverce.macro_category.value | default: picker_product.metafields.valeverce.macro_category
 %}
 
 <section class="pdp-heading panel heading" {{ block.shopify_attributes }}>
   <div class="meta font-mono">
     <span>{{ macro_category | default: picker_product.type }}</span>
-    <span>{{ current_variant.sku | default: picker_product.handle }}</span>
+    {% if current_variant != blank %}
+      <span>{{ current_variant.sku | default: picker_product.handle }}</span>
+    {% else %}
+      <span>{{ picker_product.handle }}</span>
+    {% endif %}
   </div>
 
   <h1>{{ picker_product.title }}</h1>
 
-  <div class="price-row">
-    <span class="price">{{ current_variant.price | money }}</span>
-    <span class="rate font-mono">or 3x {{ current_variant.price | divided_by: 3 | money }}</span>
-  </div>
+  {% if current_variant != blank %}
+    <div class="price-row" ref="price">
+      <span class="price">{{ current_variant.price | money }}</span>
+      <span class="rate font-mono">or 3x {{ current_variant.price | divided_by: 3 | money }}</span>
+    </div>
+  {% else %}
+    <div class="price-row" ref="price"></div>
+  {% endif %}
 </section>
 
 {% stylesheet %}

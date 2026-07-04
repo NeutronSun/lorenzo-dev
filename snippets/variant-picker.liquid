@@ -1,55 +1,52 @@
 {% doc %}
   @param {product} product
-  @param {boolean} [preselect_variant] - Preselect variant on load, default false
+  @param {variant} [variant] - Resolved in sections/product.liquid
+  @param {string} [source] - Event source (e.g. pdp), set via Liquid only
 {% enddoc %}
 
-{% liquid
-  assign preselect_variant = preselect_variant | default: false, allow_false: true
+{% unless product.has_only_default_variant %}
+  {% assign selected = variant %}
 
-  if preselect_variant
-    assign selected = product.selected_or_first_available_variant
-  endif
-%}
+  <variant-picker{% if source != blank %} data-source="{{ source }}"{% endif %}>
+    {% render 'variant-picker-option', product: product, selected: selected, option_index: 1 %}
 
-<variant-picker>
-  {% render 'variant-picker-option', product: product, selected: selected, option_index: 1, preselect_variant: preselect_variant %}
+    {% if product.options.size > 1 %}
+      {% render 'variant-picker-option', product: product, selected: selected, option_index: 2 %}
+    {% endif %}
 
-  {% if product.options.size > 1 %}
-    {% render 'variant-picker-option', product: product, selected: selected, option_index: 2, preselect_variant: preselect_variant %}
-  {% endif %}
+    {% if product.options.size > 2 %}
+      {% render 'variant-picker-option', product: product, selected: selected, option_index: 3 %}
+    {% endif %}
 
-  {% if product.options.size > 2 %}
-    {% render 'variant-picker-option', product: product, selected: selected, option_index: 3, preselect_variant: preselect_variant %}
-  {% endif %}
+    <script type="application/json" ref="variants">
+      {{ product.variants | json }}
+    </script>
+  </variant-picker>
 
-  <script type="application/json" ref="variants">
-    {{ product.variants | json }}
-  </script>
-</variant-picker>
+  {% stylesheet %}
+    variant-picker {
+      --option-disabled-opacity: 0.35;
+    }
 
-{% stylesheet %}
-  variant-picker {
-    --option-disabled-opacity: 0.35;
-  }
+    variant-picker label.tab[data-option-state="unavailable"] {
+      --opacity: var(--option-disabled-opacity);
+      --pointer-events: none;
+      --cursor: not-allowed;
+    }
 
-  variant-picker label.tab[data-option-state="unavailable"] {
-    --opacity: var(--option-disabled-opacity);
-    --pointer-events: none;
-    --cursor: not-allowed;
-  }
+    variant-picker label.tab[data-option-state="available"] {
+      --opacity: 1;
+      --color: var(--black);
+      --pointer-events: auto;
+      --cursor: pointer;
+    }
 
-  variant-picker label.tab[data-option-state="available"] {
-    --opacity: 1;
-    --color: var(--black);
-    --pointer-events: auto;
-    --cursor: pointer;
-  }
-
-  variant-picker label.tab[data-option-state="sold-out"] {
-    --opacity: 1;
-    --color: var(--black);
-    --decoration: line-through;
-    --pointer-events: auto;
-    --cursor: pointer;
-  }
-{% endstylesheet %}
+    variant-picker label.tab[data-option-state="sold-out"] {
+      --opacity: 1;
+      --color: var(--black);
+      --decoration: line-through;
+      --pointer-events: auto;
+      --cursor: pointer;
+    }
+  {% endstylesheet %}
+{% endunless %}

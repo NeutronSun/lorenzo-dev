@@ -158,6 +158,21 @@ export class OnFiltersApplyEvent extends ThemeEvent {
   }
 }
 
+/** Dispatched when a variant picker completes a full variant selection. */
+export class OnVariantSelectedEvent extends ThemeEvent {
+  static TYPE = 'variant:selected';
+
+  /**
+   * @param {{ variant: { id: number, available: boolean }, source: string }} detail
+   */
+  constructor(detail) {
+    super(OnVariantSelectedEvent.TYPE, ThemeEvent.OPTIONS);
+
+    this.variant = detail.variant;
+    this.source = detail.source;
+  }
+}
+
 /** Dispatched when a product card color sibling is selected. */
 export class OnSiblingChangeEvent extends ThemeEvent {
   static TYPE = 'sibling:change';

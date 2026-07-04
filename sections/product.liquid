@@ -2,11 +2,28 @@
   Product page section without breadcrumb.
 {% endcomment %}
 
-<product-page class="section">
+{% liquid
+  assign variant = product.selected_variant
+
+  if variant == blank and section.settings.preselect_variant
+    assign variant = product.selected_or_first_available_variant
+  endif
+%}
+
+<product-page
+  class="section"
+  data-section-id="{{ section.id }}"
+  data-source="pdp"
+  {% if product.has_only_default_variant %}
+    data-default-variant-id="{{ product.selected_variant.id }}"
+  {% elsif section.settings.preselect_variant and product.selected_variant == blank %}
+    data-preselect-variant-id="{{ product.selected_or_first_available_variant.id }}"
+  {% endif %}
+>
   <div class="layout page-width">
-    {% content_for 'block', type: 'pdp-product-dossier', id: 'dossier', product: product %}
-    {% content_for 'block', type: 'pdp-gallery', id: 'gallery', product: product %}
-    {% content_for 'block', type: 'pdp-product-info', id: 'info', product: product %}
+    {% content_for 'block', type: 'pdp-product-dossier', id: 'dossier', product: product, variant: variant %}
+    {% content_for 'block', type: 'pdp-gallery', id: 'gallery', product: product, variant: variant %}
+    {% content_for 'block', type: 'pdp-product-info', id: 'info', product: product, variant: variant %}
   </div>
 </product-page>
 
@@ -104,7 +121,14 @@
     { "type": "pdp-gallery" },
     { "type": "pdp-product-info" }
   ],
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "preselect_variant",
+      "label": "Preselect variant",
+      "default": false
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

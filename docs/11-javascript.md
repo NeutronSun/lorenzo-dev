@@ -214,6 +214,18 @@ document.addEventListener(OnCartUpdateEvent.TYPE, this.onCartEvent);
 
 Non ciclare fratelli: ogni dialog ascolta `dialog:opened` e si chiude da solo (`onSiblingOpened` in `Dialog.js`).
 
+### Variant selection PDP
+
+```js
+// VariantPicker dispatch
+document.dispatchEvent(new OnVariantSelectedEvent({ variant, source: this.dataset.source }));
+
+// ProductPage ascolta se event.source === dataset.source
+```
+
+- `data-source` sul CE valorizzato dal Liquid caller (`source: 'pdp'`), non da block settings.
+- `data-preselect-variant-id` su `product-page` quando section `preselect_variant` ON e nessuna variante in URL → `selectDefaultVariant` al connect (replaceState + section render).
+
 ## Fetch e update parziali
 
 | Caso | Pattern |

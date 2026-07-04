@@ -2,15 +2,13 @@
   @param {product} product
   @param {variant} [selected]
   @param {number} option_index - 1, 2, or 3
-  @param {boolean} [preselect_variant] - default false
 {% enddoc %}
 
 {% liquid
-  assign preselect_variant = preselect_variant | default: false, allow_false: true
   assign option_position = option_index | minus: 1
   assign option_name = product.options[option_position]
 
-  if preselect_variant and selected
+  if selected
     case option_index
       when 1
         assign selected_value = selected.option1
@@ -50,7 +48,7 @@
             type="radio"
             name="option-{{ option_index }}"
             value="{{ option_value }}"
-            {% if preselect_variant and option_value == selected_value %}checked{% endif %}>
+            {% if selected and option_value == selected_value %}checked{% endif %}>
 
           <span>{{ option_value }}</span>
         </label>
