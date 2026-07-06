@@ -15,6 +15,13 @@
  * @extends {HTMLElement}
  */
 export class HTMLComponent extends HTMLElement {
+  static MOBILE_MEDIA = '(max-width: 749px)';
+
+  /** @returns {boolean} */
+  static isMobile() {
+    return window.matchMedia(HTMLComponent.MOBILE_MEDIA).matches;
+  }
+
   /**
    * References collected from children with the `ref` attribute.
    *
@@ -256,6 +263,25 @@ export class HTMLComponent extends HTMLElement {
     if (!(next instanceof Element)) return;
 
     current.replaceWith(next);
+    this.updateRefs();
+  }
+
+  /**
+   * @param {HTMLElement} source
+   * @param {readonly string[]} refNames
+   */
+  replaceRefs(source, refNames) {
+    const nextRefs = HTMLComponent.getRefs(source);
+    const currentRefs = HTMLComponent.getRefs(this);
+
+    for (const name of refNames) {
+      const current = currentRefs[name];
+      const next = nextRefs[name];
+
+      current instanceof Element && next instanceof Element && current.replaceWith(next);
+    }
+
+    this.updateRefs();
   }
 
   /**

@@ -42,34 +42,12 @@ import { HTMLComponent } from '@theme/HTMLComponent';
  * @extends {HTMLComponent}
  */
 class ProductPage extends HTMLComponent {
-  static MOBILE_MEDIA = '(max-width: 749px)';
-  static DEFAULT_SPACING = 20;
   static REF_NAMES = ['price', 'galleryPrice', 'buyButton'];
   static SECTION_SELECTOR = 'product-page';
 
   /** @returns {Element | null} */
-  get dossier() {
-    return this.querySelector('[ref="dossier"]');
-  }
-
-  /** @returns {Element | null} */
-  get gallery() {
-    return this.querySelector('[ref="gallery"]');
-  }
-
-  /** @returns {Element | null} */
-  get info() {
-    return this.querySelector('[ref="info"]');
-  }
-
-  /** @returns {Element | null} */
   get breadcrumb() {
     return document.querySelector('.breadcrumb-wrapper');
-  }
-
-  /** @returns {boolean} */
-  get isMobile() {
-    return window.matchMedia(ProductPage.MOBILE_MEDIA).matches;
   }
 
   constructor() {
@@ -113,13 +91,12 @@ class ProductPage extends HTMLComponent {
     this.renderSection(Number(variantId));
   }
 
-  /** Starts observing layout-affecting elements for size changes. */
   observeLayout() {
     this.layoutObserver?.observe(this);
 
-    this.dossier instanceof HTMLElement && this.layoutObserver?.observe(this.dossier);
-    this.gallery instanceof HTMLElement && this.layoutObserver?.observe(this.gallery);
-    this.info instanceof HTMLElement && this.layoutObserver?.observe(this.info);
+    this.refs.dossier instanceof HTMLElement && this.layoutObserver?.observe(this.refs.dossier);
+    this.refs.gallery instanceof HTMLElement && this.layoutObserver?.observe(this.refs.gallery);
+    this.refs.info instanceof HTMLElement && this.layoutObserver?.observe(this.refs.info);
     this.breadcrumb instanceof HTMLElement && this.layoutObserver?.observe(this.breadcrumb);
   }
 
@@ -165,64 +142,27 @@ class ProductPage extends HTMLComponent {
     if (requestId !== this.requestId) return false;
     if (!(section instanceof HTMLElement)) return false;
 
-    TemplateHandler.replaceRefs(this, section, ProductPage.REF_NAMES);
-    this.updateRefs();
+    this.replaceRefs(section, ProductPage.REF_NAMES);
     this.updateLayout();
 
     return true;
   }
 
-  /** Writes PDP layout custom properties from current viewport and element sizes. */
   updateLayout() {
-    const gallery = this.gallery;
+    const gallery = this.refs.gallery;
 
     if (!(gallery instanceof HTMLElement)) return;
 
-    const spacing = this.getRootNumber('--spacing', ProductPage.DEFAULT_SPACING);
-    const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-    const top = this.isMobile ? spacing : this.getStickyTop(spacing);
-    const availableHeight = this.getViewportHeight() - top - spacing;
+    const spacing = CSSUtils.getNumber(CSSUtils.VAR.SPACING, this);
+    const breadcrumb = this.breadcrumb;
+    const breadcrumbHeight = breadcrumb instanceof HTMLElement ? breadcrumb.offsetHeight : 0;
+    const top = HTMLComponent.isMobile() ? spacing : this.getStickyTop(spacing);
+    const availableHeight = CSSUtils.getViewportHeight() - top - spacing;
     const height = Math.max(0, availableHeight);
 
-    CSSUtils.setValue('--breadcrumb-height', breadcrumbHeight, this);
-    CSSUtils.setValue('--pdp-card-height', height, this);
-    CSSUtils.setValue('--sticky-top', top, this);
-  }
-
-  /**
-   * @param {string} property
-   * @param {number} fallback
-   * @returns {number}
-   */
-  getRootNumber(property, fallback) {
-    return this.getNumber(property, fallback);
-  }
-
-  /**
-   * @param {string} property
-   * @param {number} fallback
-   * @param {HTMLElement} [element]
-   * @returns {number}
-   */
-  getNumber(property, fallback, element = document.documentElement) {
-    const value = Number(CSSUtils.getProperty(property, element));
-
-    return Number.isFinite(value) && value > 0 ? value : fallback;
-  }
-
-  /**
-   * @param {Element | null} element
-   * @returns {number}
-   */
-  getElementHeight(element) {
-    if (!(element instanceof HTMLElement)) return 0;
-
-    return element.offsetHeight;
-  }
-
-  /** @returns {number} */
-  getViewportHeight() {
-    return window.visualViewport?.height || window.innerHeight;
+    CSSUtils.setValue(CSSUtils.VAR.BREADCRUMB_HEIGHT, breadcrumbHeight, this);
+    CSSUtils.setValue(CSSUtils.VAR.PDP_CARD_HEIGHT, height, this);
+    CSSUtils.setValue(CSSUtils.VAR.STICKY_TOP, top, this);
   }
 
   /**
@@ -230,11 +170,7 @@ class ProductPage extends HTMLComponent {
    * @returns {number}
    */
   getStickyTop(spacing) {
-    const breadcrumbHeight = this.getElementHeight(this.breadcrumb);
-
-    if (this.isMobile) return breadcrumbHeight + spacing;
-
-    return this.getRootNumber('--header-height', 0) + spacing + spacing;
+    return CSSUtils.getNumber(CSSUtils.VAR.HEADER_HEIGHT) + spacing + spacing;
   }
 }
 

@@ -6,6 +6,14 @@ import { HTMLComponent } from './HTMLComponent.js';
 
 /** CSS layout and visibility helpers for sticky headers and scroll-driven UI. */
 export class CSSUtils {
+  static VAR = Object.freeze({
+    SPACING: '--spacing',
+    HEADER_HEIGHT: '--header-height',
+    BREADCRUMB_HEIGHT: '--breadcrumb-height',
+    PDP_CARD_HEIGHT: '--pdp-card-height',
+    STICKY_TOP: '--sticky-top',
+  });
+
   /**
    * Whether an element is currently stuck at its CSS `top` offset.
    * @param {HTMLElement} element
@@ -25,6 +33,23 @@ export class CSSUtils {
    */
   static getProperty(property, element = document.documentElement) {
     return getComputedStyle(element).getPropertyValue(property).trim().replace('px', '');
+  }
+
+  /**
+   * @param {string} property
+   * @param {HTMLElement} [element]
+   * @param {number} [fallback]
+   * @returns {number}
+   */
+  static getNumber(property, element = document.documentElement, fallback = 0) {
+    const value = Number(CSSUtils.getProperty(property, element));
+
+    return Number.isFinite(value) && value > 0 ? value : fallback;
+  }
+
+  /** @returns {number} */
+  static getViewportHeight() {
+    return window.visualViewport?.height || window.innerHeight;
   }
 
   /**
@@ -207,6 +232,11 @@ export class TemplateHandler {
    * @param {readonly string[]} refNames
    */
   static replaceRefs(target, source, refNames) {
+    if (target instanceof HTMLComponent) {
+      target.replaceRefs(source, refNames);
+      return;
+    }
+
     const refs = HTMLComponent.getRefs(source);
 
     for (const name of refNames) {

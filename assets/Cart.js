@@ -655,7 +655,6 @@ class CartPage extends HTMLComponent {
     if (!(section instanceof HTMLElement)) return false;
 
     TemplateHandler.replaceRefs(this, section, CartPage.REF_NAMES);
-    this.updateRefs();
     this.toggleAttribute('empty', (this.cart.item_count || 0) === 0);
 
     return true;
