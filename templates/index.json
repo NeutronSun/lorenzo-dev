@@ -16,55 +16,9 @@
         "clerk_publishable_key": "pk_live_Y2xlcmsuc2Fmam5lc3QuY29tJA",
         "privacy_url": "/pages/privacy"
       }
-    },
-    "section_mKq6XF": {
-      "type": "section",
-      "blocks": {
-        "group_EwPD9U": {
-          "type": "group",
-          "name": "Group",
-          "settings": {
-            "direction": "vertical",
-            "align_items": "flex-start",
-            "justify_content": "flex-start",
-            "vertical_on_mobile": true,
-            "layout_override_mobile": false,
-            "direction_mobile": "vertical",
-            "align_items_mobile": "flex-start",
-            "justify_content_mobile": "flex-start",
-            "gap": 16,
-            "padding": 0,
-            "width": "fill",
-            "width_percent": 50,
-            "width_override_mobile": false,
-            "width_mobile": "fill",
-            "width_percent_mobile": 50,
-            "height": "full-screen",
-            "height_override_mobile": false,
-            "height_mobile": "auto",
-            "enable_background_image": true,
-            "background_image": "shopify://shop_images/7.png",
-            "background_size": "cover"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "group_EwPD9U"
-      ],
-      "name": "Section",
-      "settings": {
-        "default_spacing": true,
-        "padding_top_mobile": 0,
-        "padding_bottom_mobile": 0,
-        "padding_top_desktop": 0,
-        "padding_bottom_desktop": 0,
-        "has_inner_dialog": false
-      }
     }
   },
   "order": [
-    "clerk_auth_jmJL3U",
-    "section_mKq6XF"
+    "clerk_auth_jmJL3U"
   ]
 }
