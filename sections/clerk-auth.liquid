@@ -1,0 +1,363 @@
+{%- liquid
+  assign auth_path = request.path
+-%}
+
+email: {{ customer.email }}
+{{ customer.id }}
+<clerk-auth
+  class="clerk-auth-section"
+  data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
+  data-return-to="{{ '/account' | url_encode }}"
+  data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
+  data-auth-path="{{ auth_path | escape }}"
+>
+  <div class="clerk-auth">
+    <div id="clerk-captcha"></div>
+
+    <div class="clerk-auth__oauth" ref="oauthPanel">
+      <button
+        type="button"
+        class="clerk-auth__oauth-btn"
+        data-oauth="oauth_google"
+        ref="oauthButtons[]"
+        on:click="onOAuthClick"
+      >
+        Continua con Google
+      </button>
+      <button
+        type="button"
+        class="clerk-auth__oauth-btn"
+        data-oauth="oauth_github"
+        ref="oauthButtons[]"
+        on:click="onOAuthClick"
+      >
+        Continua con GitHub
+      </button>
+      <button
+        type="button"
+        class="clerk-auth__oauth-btn"
+        data-oauth="oauth_discord"
+        ref="oauthButtons[]"
+        on:click="onOAuthClick"
+      >
+        Continua con Discord
+      </button>
+    </div>
+
+    <p class="clerk-auth__error" ref="rootError" hidden></p>
+    <p class="clerk-auth__divider">oppure scegli un flusso</p>
+
+    <clerk-sign-in
+      class="clerk-auth__flow"
+      data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
+      data-return-to="{{ routes.account_url | escape }}"
+      data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
+    >
+      <section class="clerk-auth__card">
+        <h2>Accedi</h2>
+        <p class="clerk-auth__error" ref="error" hidden></p>
+
+        <form
+          class="clerk-auth__form"
+          data-form="start"
+          ref="startForm"
+          on:submit="onSubmit"
+          novalidate
+        >
+          <label class="clerk-auth__field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+
+          <button type="submit" class="clerk-auth__submit" data-submit>
+            Invia codice per accedere
+          </button>
+        </form>
+
+        <form
+          class="clerk-auth__form"
+          data-form="verify"
+          ref="verifyForm"
+          on:submit="onSubmit"
+          hidden
+          novalidate
+        >
+          <p class="clerk-auth__hint">Inserisci il codice ricevuto via email.</p>
+
+          <label class="clerk-auth__field">
+            <span>Codice di verifica</span>
+            <input
+              type="text"
+              name="code"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              required
+            >
+          </label>
+
+          <button type="submit" class="clerk-auth__submit" data-submit>
+            Verifica accesso
+          </button>
+
+          <button
+            type="button"
+            class="clerk-auth__secondary"
+            ref="resendButton"
+            on:click="onResendClick"
+          >
+            Invia nuovamente il codice
+          </button>
+
+          <button type="button" class="clerk-auth__link" on:click="onBack">
+            Torna al login
+          </button>
+        </form>
+      </section>
+    </clerk-sign-in>
+
+    <clerk-sign-up
+      class="clerk-auth__flow"
+      data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
+      data-return-to="{{ routes.account_url | escape }}"
+      data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
+    >
+      <section class="clerk-auth__card">
+        <h2>Registrati</h2>
+        <p class="clerk-auth__error" ref="error" hidden></p>
+
+        <form
+          class="clerk-auth__form"
+          data-form="start"
+          ref="startForm"
+          on:submit="onSubmit"
+          novalidate
+        >
+          <label class="clerk-auth__field">
+            <span>Nome</span>
+            <input type="text" name="firstName" autocomplete="given-name" required>
+          </label>
+
+          <label class="clerk-auth__field">
+            <span>Cognome</span>
+            <input type="text" name="lastName" autocomplete="family-name" required>
+          </label>
+
+          <label class="clerk-auth__field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+
+          <button type="submit" class="clerk-auth__submit" data-submit>
+            Invia codice per registrarti
+          </button>
+        </form>
+
+        <form
+          class="clerk-auth__form"
+          data-form="verify"
+          ref="verifyForm"
+          on:submit="onSubmit"
+          hidden
+          novalidate
+        >
+          <p class="clerk-auth__hint">Inserisci il codice ricevuto via email.</p>
+
+          <label class="clerk-auth__field">
+            <span>Codice di verifica</span>
+            <input
+              type="text"
+              name="code"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              required
+            >
+          </label>
+
+          <button type="submit" class="clerk-auth__submit" data-submit>
+            Verifica registrazione
+          </button>
+
+          <button
+            type="button"
+            class="clerk-auth__secondary"
+            ref="resendButton"
+            on:click="onResendClick"
+          >
+            Invia nuovamente il codice
+          </button>
+
+          <button type="button" class="clerk-auth__link" on:click="onBack">
+            Torna alla registrazione
+          </button>
+        </form>
+
+        <form
+          class="clerk-auth__form"
+          data-form="complete"
+          ref="completeForm"
+          on:submit="onSubmit"
+          hidden
+          novalidate
+        >
+          <p class="clerk-auth__hint">Completa i dati richiesti per terminare la registrazione.</p>
+
+          <label class="clerk-auth__field">
+            <span>Nome</span>
+            <input type="text" name="firstName" autocomplete="given-name">
+          </label>
+
+          <label class="clerk-auth__field">
+            <span>Cognome</span>
+            <input type="text" name="lastName" autocomplete="family-name">
+          </label>
+
+          <button type="submit" class="clerk-auth__submit" data-submit>
+            Completa registrazione
+          </button>
+
+          <button type="button" class="clerk-auth__link" on:click="onBack">
+            Torna alla registrazione
+          </button>
+        </form>
+      </section>
+    </clerk-sign-up>
+  </div>
+</clerk-auth>
+
+{% stylesheet %}
+  .clerk-auth-section {
+    display: block;
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .clerk-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  .clerk-auth__oauth,
+  .clerk-auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .clerk-auth__flow,
+  .clerk-auth__card {
+    display: block;
+  }
+
+  .clerk-auth__card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+
+  .clerk-auth__card h2 {
+    margin: 0;
+  }
+
+  .clerk-auth__oauth-btn,
+  .clerk-auth__submit,
+  .clerk-auth__secondary {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .clerk-auth__oauth-btn,
+  .clerk-auth__secondary {
+    border-color: #ccc;
+    background: #fff;
+    color: #111;
+  }
+
+  .clerk-auth__divider,
+  .clerk-auth__hint,
+  .clerk-auth__error {
+    margin: 0;
+  }
+
+  .clerk-auth__divider,
+  .clerk-auth__hint {
+    color: #666;
+    font-size: 0.875rem;
+  }
+
+  .clerk-auth__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .clerk-auth__field input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    font: inherit;
+  }
+
+  .clerk-auth__submit:disabled,
+  .clerk-auth__secondary:disabled,
+  .clerk-auth__oauth-btn:disabled,
+  .clerk-auth__link:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .clerk-auth__link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #111;
+    text-decoration: underline;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .clerk-auth__error {
+    padding: 0.75rem;
+    border: 1px solid #c00;
+    background: #fff5f5;
+    color: #c00;
+  }
+
+  .clerk-auth__error[hidden],
+  .clerk-auth__form[hidden] {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Clerk Auth",
+  "tag": "section",
+  "class": "section-clerk-auth",
+  "settings": [
+    {
+      "type": "text",
+      "id": "clerk_publishable_key",
+      "label": "Clerk publishable key",
+      "info": "Use the Clerk Publishable Key only. Never paste the Secret Key."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Clerk Auth"
+    }
+  ]
+}
+{% endschema %}

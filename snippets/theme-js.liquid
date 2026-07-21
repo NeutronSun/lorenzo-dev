@@ -4,7 +4,7 @@
   {
     "imports": {
       "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
-      "@theme/graphql": "{{ 'graphql.js' | asset_url }}",
+      "@theme/GraphQL": "{{ 'graphql.js' | asset_url }}",
       "@theme/events": "{{ 'events.js' | asset_url }}",
       "@theme/header": "{{ 'header.js' | asset_url }}",
       "@theme/HTMLComponent": "{{ 'HTMLComponent.js' | asset_url }}",
@@ -18,12 +18,23 @@
       "@theme/pdp-siblings": "{{ 'pdp-siblings.js' | asset_url }}",
       "@theme/product-card": "{{ 'product-card.js' | asset_url }}",
       "@theme/deferred-section": "{{ 'deferred-section.js' | asset_url }}",
-      "@theme/metaobjects-handler": "{{ 'metaobjects-handler.js' | asset_url }}"
+      "@theme/metaobjects-handler": "{{ 'metaobjects-handler.js' | asset_url }}",
+      "@theme/clerk-auth": "{{ 'clerk-auth.js' | asset_url }}",
+      "@theme/clerk-auth-provider": "{{ 'clerk-auth-provider.js' | asset_url }}",
     }
   }
 </script>
 
-
+<link
+  rel="modulepreload"
+  href="{{ 'clerk-auth.js' | asset_url }}"
+  fetchpriority="low"
+>
+<link
+  rel="modulepreload"
+  href="{{ 'clerk-auth-provider.js' | asset_url }}"
+  fetchpriority="low"
+>
 <link
   rel="modulepreload"
   href="{{ 'utilities.js' | asset_url }}"
