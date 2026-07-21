@@ -19,6 +19,75 @@
     "update": "Update",
     "remove": "Remove"
   },
+  "clerk": {
+    "tabs": {
+      "login": "Sign in",
+      "sign_up": "Sign up"
+    },
+    "oauth": {
+      "continue_with": "Continue with {{provider}}",
+      "divider": "or continue with email"
+    },
+    "login": {
+      "title": "Sign in",
+      "submit_start": "Send sign-in code",
+      "submit_verify": "Verify sign-in",
+      "back": "Back to sign in",
+      "hint_verify": "Enter the code sent to your email."
+    },
+    "sign_up": {
+      "title": "Sign up",
+      "submit_start": "Send sign-up code",
+      "submit_verify": "Verify sign-up",
+      "submit_complete": "Complete sign-up",
+      "back": "Back to sign up",
+      "hint_verify": "Enter the code sent to your email.",
+      "hint_complete": "Complete the required details to finish signing up."
+    },
+    "fields": {
+      "email": "Email",
+      "code": "Verification code",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "gender": "Gender",
+      "gender_placeholder": "Select gender",
+      "gender_male": "Male",
+      "gender_female": "Female",
+      "gender_other": "Other",
+      "gender_prefer_not_to_say": "Prefer not to say",
+      "preferred_pm": "Preferred PM",
+      "preferred_pm_placeholder": "Select a PM",
+      "preferred_pm_davide": "Davide",
+      "preferred_pm_valerio": "Valerio",
+      "preferred_pm_simone": "Simone AMS Master TL",
+      "privacy_agree": "I agree to the",
+      "privacy_link": "Privacy Policy"
+    },
+    "resend": "Resend code",
+    "errors": {
+      "default": "Something went wrong. Please try again.",
+      "missing_key": "Clerk publishable key is missing from the section settings.",
+      "load_failed": "Unable to load Clerk. Check the publishable key and your network.",
+      "missing_email": "Enter a valid email address.",
+      "missing_code": "Enter the verification code from your email.",
+      "missing_name": "Enter your first and last name to sign up.",
+      "missing_gender": "Select your gender to sign up.",
+      "missing_preferred_pm": "Select your preferred PM to sign up.",
+      "missing_privacy": "Accept the privacy policy to sign up.",
+      "incomplete": "Authentication is incomplete. Finish the required steps and try again.",
+      "session_not_ready": "Clerk session is not ready. Please try again in a moment.",
+      "session_not_persisted": "Clerk created a local session but did not attach it to the persisted client.",
+      "missing_login_hint": "Email is missing. Unable to complete Shopify login.",
+      "email_code_disabled": "Email code is not enabled for login in Clerk.",
+      "second_factor_unsupported": "Clerk requires a second factor that this form does not support.",
+      "requirements": "Complete the required details to finish signing up.",
+      "loading": "Loading...",
+      "login_not_initialized": "Clerk login is not initialized.",
+      "sign_up_not_initialized": "Clerk sign-up is not initialized.",
+      "popup_blocked": "Allow popups for this site to continue with social login.",
+      "popup_closed": "The social login window was closed before authentication finished."
+    }
+  },
   "customers": {
     "login": {
       "email": "Email",

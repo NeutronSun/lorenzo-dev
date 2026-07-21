@@ -15,6 +15,7 @@ import "@theme/pdp-siblings";
 import "@theme/product-card";
 import "@theme/deferred-section";
 import "@theme/metaobjects-handler";
+import "@theme/clerk-auth";
 
 console.log(`
                       __
@@ -30,4 +31,3 @@ console.log(`
   ███████║╚██████╔╝██║ ╚████║   ██║   ██╔╝ ██╗
   ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝
 `);
-

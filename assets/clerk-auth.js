@@ -1,519 +1,29 @@
 import { HTMLComponent } from '@theme/HTMLComponent';
+import { HtmlUtils } from '@theme/utilities';
 import {
-  ClerkSignInProvider,
-  ClerkSignUpProvider,
-} from '@theme/ClerkAuthProvider';
-
-class ClerkAuthRuntime {
-  static CLERK_JS_VERSION = '6';
-  static LOAD_TIMEOUT_MS = 15000;
-  static DEFAULT_ERROR = 'Si è verificato un errore. Riprova.';
-  static DEFAULT_LOGIN_PATH = '/customer_authentication/login';
-  static DEFAULT_RETURN_TO = '/account';
-  static MISSING_KEY_MESSAGE =
-    'Clerk publishable key mancante nelle impostazioni della sezione.';
-  static LOAD_FAILED_MESSAGE =
-    'Impossibile caricare ClerkJS. Controlla la publishable key e la rete.';
-  static SESSION_NOT_READY_MESSAGE =
-    'Sessione Clerk non pronta. Riprova tra un momento.';
-  static BRIDGE_NOT_AVAILABLE_MESSAGE =
-    'Sincronizzazione Clerk-Shopify non disponibile.';
-  static MISSING_LOGIN_HINT =
-    'Email mancante per completare il login Shopify.';
-  static clerkPromise = null;
-
-  static noopNavigate() {}
-
-  static getErrorMessage(error) {
-    return (
-      error?.errors?.[0]?.longMessage ||
-      error?.errors?.[0]?.message ||
-      error?.message ||
-      ClerkAuthRuntime.DEFAULT_ERROR
-    );
-  }
-
-  static deriveFrontendApi(publishableKey) {
-    const parts = publishableKey.split('_');
-    if (parts.length < 3) {
-      throw new Error(ClerkAuthRuntime.MISSING_KEY_MESSAGE);
-    }
-
-    try {
-      return atob(parts[2]).slice(0, -1);
-    } catch {
-      throw new Error(ClerkAuthRuntime.MISSING_KEY_MESSAGE);
-    }
-  }
-
-  static getDatasetValue(element, key) {
-    const ownValue = element?.dataset?.[key]?.trim();
-    if (ownValue) return ownValue;
-
-    const root = element?.closest?.('clerk-auth');
-    return root?.dataset?.[key]?.trim() || '';
-  }
-
-  static getPublishableKey(element) {
-    return ClerkAuthRuntime.getDatasetValue(element, 'clerkPublishableKey');
-  }
-
-  static getShopifyConfig(element) {
-    return {
-      loginPath: ClerkAuthRuntime.getDatasetValue(
-        element,
-        'shopifyLoginPath',
-      ),
-      returnTo: ClerkAuthRuntime.getDatasetValue(element, 'returnTo'),
-    };
-  }
-
-  static async getClerk(publishableKey) {
-    if (!publishableKey) {
-      throw new Error(ClerkAuthRuntime.MISSING_KEY_MESSAGE);
-    }
-
-    if (window.Clerk?.client) return window.Clerk;
-    if (ClerkAuthRuntime.clerkPromise) {
-      return ClerkAuthRuntime.clerkPromise;
-    }
-
-    ClerkAuthRuntime.clerkPromise = ClerkAuthRuntime.loadClerk(
-      publishableKey,
-    ).catch((error) => {
-      ClerkAuthRuntime.clerkPromise = null;
-      throw error;
-    });
-
-    return ClerkAuthRuntime.clerkPromise;
-  }
-
-  static async loadClerk(publishableKey) {
-    await ClerkAuthRuntime.injectClerkScript(publishableKey);
-
-    let clerk = window.Clerk;
-    if (!clerk) {
-      throw new Error(ClerkAuthRuntime.LOAD_FAILED_MESSAGE);
-    }
-
-    if (typeof clerk === 'function') {
-      clerk = new clerk(publishableKey);
-      window.Clerk = clerk;
-    }
-
-    if (typeof clerk.load !== 'function') {
-      throw new Error(ClerkAuthRuntime.LOAD_FAILED_MESSAGE);
-    }
-
-    // The custom form lives on the primary application. Account Portal URLs
-    // must not be passed as signInUrl/signUpUrl here.
-    await clerk.load();
-    return clerk;
-  }
-
-  static injectClerkScript(publishableKey) {
-    if (window.Clerk) return Promise.resolve();
-
-    const frontendApi = ClerkAuthRuntime.deriveFrontendApi(publishableKey);
-    const src =
-      'https://' +
-      frontendApi +
-      '/npm/@clerk/clerk-js@' +
-      ClerkAuthRuntime.CLERK_JS_VERSION +
-      '/dist/clerk.browser.js';
-
-    return new Promise((resolve, reject) => {
-      const existing = document.querySelector(
-        'script[data-clerk-auth-loader]',
-      );
-      if (existing) {
-        if (window.Clerk) {
-          resolve();
-          return;
-        }
-
-        existing.addEventListener('load', resolve, { once: true });
-        existing.addEventListener(
-          'error',
-          () => reject(new Error(ClerkAuthRuntime.LOAD_FAILED_MESSAGE)),
-          { once: true },
-        );
-        return;
-      }
-
-      const timeoutId = setTimeout(() => {
-        reject(new Error(ClerkAuthRuntime.LOAD_FAILED_MESSAGE));
-      }, ClerkAuthRuntime.LOAD_TIMEOUT_MS);
-      const script = document.createElement('script');
-
-      script.src = src;
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      script.dataset.clerkPublishableKey = publishableKey;
-      script.dataset.clerkAuthLoader = '';
-      script.onload = () => {
-        clearTimeout(timeoutId);
-        resolve();
-      };
-      script.onerror = () => {
-        clearTimeout(timeoutId);
-        reject(new Error(ClerkAuthRuntime.LOAD_FAILED_MESSAGE));
-      };
-      document.head.appendChild(script);
-    });
-  }
-
-  static normalizeReturnTo(returnTo) {
-    if (!returnTo) return ClerkAuthRuntime.DEFAULT_RETURN_TO;
-
-    if (returnTo.startsWith('http://') || returnTo.startsWith('https://')) {
-      const url = new URL(returnTo);
-      return url.pathname + url.search || ClerkAuthRuntime.DEFAULT_RETURN_TO;
-    }
-
-    return returnTo.startsWith('/') ? returnTo : '/' + returnTo;
-  }
-
-  static normalizeLoginPath(loginPath) {
-    const url = new URL(
-      loginPath || ClerkAuthRuntime.DEFAULT_LOGIN_PATH,
-      window.location.origin,
-    );
-
-    if (url.origin !== window.location.origin) {
-      return ClerkAuthRuntime.DEFAULT_LOGIN_PATH;
-    }
-
-    return url.pathname + url.search;
-  }
-
-  static buildShopifyLoginUrl(email, config = {}) {
-    const url = new URL(
-      ClerkAuthRuntime.normalizeLoginPath(config.loginPath),
-      window.location.origin,
-    );
-
-    url.searchParams.set('login_hint', email);
-    url.searchParams.set(
-      'return_to',
-      ClerkAuthRuntime.normalizeReturnTo(config.returnTo),
-    );
-    return url;
-  }
-
-  static getUserEmail(clerk, fallback = '') {
-    return (
-      fallback ||
-      clerk?.user?.primaryEmailAddress?.emailAddress ||
-      clerk?.user?.emailAddresses?.[0]?.emailAddress ||
-      clerk?.session?.user?.primaryEmailAddress?.emailAddress ||
-      clerk?.session?.user?.emailAddresses?.[0]?.emailAddress ||
-      ''
-    );
-  }
-
-  static getSessionId(attempt) {
-    return (
-      attempt?.createdSessionId ||
-      attempt?.sessionId ||
-      attempt?.existingSessionId ||
-      attempt?.existingSession?.sessionId ||
-      ''
-    );
-  }
-
-  static getActiveSession(clerk, sessionId = '') {
-    if (clerk?.session?.id && (!sessionId || clerk.session.id === sessionId)) {
-      return clerk.session;
-    }
-
-    const sessions = [
-      ...(clerk?.client?.activeSessions || []),
-      ...(clerk?.client?.signedInSessions || []),
-    ];
-
-    return (
-      sessions.find((session) => session.id === sessionId) ||
-      sessions[0] ||
-      null
-    );
-  }
-
-  static async activateSession(clerk, attempt, email, config = {}) {
-    const sessionId = ClerkAuthRuntime.getSessionId(attempt);
-    if (!sessionId || typeof clerk.setActive !== 'function') {
-      throw new Error(ClerkAuthRuntime.SESSION_NOT_READY_MESSAGE);
-    }
-
-    await ClerkAuthRuntime.bridgeToShopify(
-      clerk,
-      email,
-      config,
-      sessionId,
-    );
-  }
-
-  static async bridgeToShopify(
-    clerk,
-    email,
-    config = {},
-    sessionId = '',
-  ) {
-    if (!clerk?.client || typeof clerk.setActive !== 'function') {
-      throw new Error(ClerkAuthRuntime.SESSION_NOT_READY_MESSAGE);
-    }
-
-    const resolvedSessionId =
-      sessionId ||
-      clerk.session?.id ||
-      clerk.client.lastActiveSessionId ||
-      '';
-
-    if (!resolvedSessionId) {
-      throw new Error(ClerkAuthRuntime.SESSION_NOT_READY_MESSAGE);
-    }
-
-    // Persist the exact session created by SignIn/SignUp first. Do not navigate
-    // inside setActive(): Shopify must only be opened after Clerk confirms that
-    // the session belongs to the server-side client represented by __client.
-    await clerk.setActive({ session: resolvedSessionId });
-
-    if (typeof clerk.client.fetch === 'function') {
-      await clerk.client.fetch();
-    }
-
-    const persistedSession = clerk.client.sessions?.find(
-      (currentSession) => currentSession.id === resolvedSessionId,
-    );
-
-    if (!persistedSession || persistedSession.currentTask) {
-      throw new Error(
-        'Clerk ha creato la sessione localmente, ma non l\'ha associata al client persistito.',
-      );
-    }
-
-    await persistedSession.getToken?.();
-
-    const loginHint = ClerkAuthRuntime.getUserEmail(
-      { session: persistedSession, user: persistedSession.user },
-      email,
-    );
-    if (!loginHint) {
-      throw new Error(ClerkAuthRuntime.MISSING_LOGIN_HINT);
-    }
-
-    const redirectUrl = ClerkAuthRuntime.buildShopifyLoginUrl(
-      loginHint,
-      config,
-    );
-    
-    //window.location.assign(redirectUrl.toString());
-  }
-
-  static hasOAuthReturnParams() {
-    const url = new URL(window.location.href);
-    return (
-      ['__clerk_status', '__clerk_created_session', 'rotating_token_nonce'].some(
-        (param) => url.searchParams.has(param),
-      ) || url.hash.includes('__clerk')
-    );
-  }
-
-  static clearOAuthReturnParams() {
-    const url = new URL(window.location.href);
-    for (const param of [
-      '__clerk_status',
-      '__clerk_created_session',
-      'rotating_token_nonce',
-    ]) {
-      url.searchParams.delete(param);
-    }
-
-    if (url.hash.includes('__clerk')) url.hash = '';
-
-    window.history.replaceState(
-      {},
-      document.title,
-      url.pathname + url.search + url.hash,
-    );
-  }
-}
-
-class OAuthProvider {
-  static REGISTRY = new Map();
-  static STRATEGY = '';
-
-  get strategy() {
-    return this.constructor.STRATEGY;
-  }
-
-  static register(ProviderClass) {
-    OAuthProvider.REGISTRY.set(ProviderClass.STRATEGY, new ProviderClass());
-  }
-
-  static get(strategy) {
-    return OAuthProvider.REGISTRY.get(strategy);
-  }
-
-  async authenticate(clerk, redirectUrl) {
-    await clerk.client.signIn.authenticateWithRedirect({
-      strategy: this.strategy,
-      redirectUrl,
-      redirectUrlComplete: redirectUrl,
-      continueSignUp: true,
-    });
-  }
-}
-
-class GoogleOAuthProvider extends OAuthProvider {
-  static STRATEGY = 'oauth_google';
-}
-
-class GitHubOAuthProvider extends OAuthProvider {
-  static STRATEGY = 'oauth_github';
-}
-
-class DiscordOAuthProvider extends OAuthProvider {
-  static STRATEGY = 'oauth_discord';
-}
-
-OAuthProvider.register(GoogleOAuthProvider);
-OAuthProvider.register(GitHubOAuthProvider);
-OAuthProvider.register(DiscordOAuthProvider);
-
-class ClerkAuth extends HTMLComponent {
-  static AUTH_PATH = '/';
-
-  constructor() {
-    super();
-    this.clerk = null;
-    this.isRedirecting = false;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.oauthButtons = this.refs.oauthButtons || [];
-    this.errorEl = this.refs.rootError;
-    this.bootstrap();
-  }
-
-  async bootstrap() {
-    try {
-      this.clerk = await ClerkAuthRuntime.getClerk(
-        ClerkAuthRuntime.getPublishableKey(this),
-      );
-
-      if (ClerkAuthRuntime.hasOAuthReturnParams()) {
-        await this.finishOAuthReturn();
-      }
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    }
-  }
-
-  getConfig() {
-    return ClerkAuthRuntime.getShopifyConfig(this);
-  }
-
-  getAuthPageUrl() {
-    return (
-      window.location.origin +
-      (ClerkAuthRuntime.getDatasetValue(this, 'authPath') ||
-        ClerkAuth.AUTH_PATH)
-    );
-  }
-
-  async onOAuthClick(event, button) {
-    if (this.isRedirecting || !button?.dataset.oauth) return;
-
-    try {
-      this.setOAuthLoading(true);
-      const provider = OAuthProvider.get(button.dataset.oauth);
-      if (!provider) {
-        this.setOAuthLoading(false);
-        return;
-      }
-
-      this.clerk =
-        this.clerk ||
-        (await ClerkAuthRuntime.getClerk(
-          ClerkAuthRuntime.getPublishableKey(this),
-        ));
-      await provider.authenticate(this.clerk, this.getAuthPageUrl());
-      this.isRedirecting = true;
-    } catch (error) {
-      this.setOAuthLoading(false);
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    }
-  }
-
-  async finishOAuthReturn() {
-    const authPageUrl = this.getAuthPageUrl();
-    await this.clerk.handleRedirectCallback(
-      {
-        continueSignUpUrl: authPageUrl,
-        signInUrl: authPageUrl,
-        signUpUrl: authPageUrl,
-        firstFactorUrl: authPageUrl,
-        secondFactorUrl: authPageUrl,
-        signInForceRedirectUrl: authPageUrl,
-        signUpForceRedirectUrl: authPageUrl,
-        signInFallbackRedirectUrl: authPageUrl,
-        signUpFallbackRedirectUrl: authPageUrl,
-      },
-      ClerkAuthRuntime.noopNavigate,
-    );
-
-    ClerkAuthRuntime.clearOAuthReturnParams();
-
-    if (!this.clerk.session) {
-      const signUp = this.clerk.client.signUp;
-      const signUpElement = this.querySelector('clerk-sign-up');
-      if (signUp?.status === 'missing_requirements' && signUpElement) {
-        await signUpElement.continueOAuth(signUp);
-        return;
-      }
-
-      throw new Error(ClerkAuthRuntime.DEFAULT_ERROR);
-    }
-
-    await ClerkAuthRuntime.bridgeToShopify(
-      this.clerk,
-      ClerkAuthRuntime.getUserEmail(this.clerk),
-      this.getConfig(),
-    );
-  }
-
-  setOAuthLoading(isLoading) {
-    for (const button of this.oauthButtons) button.disabled = isLoading;
-  }
-
-  showError(message) {
-    if (!this.errorEl) return;
-    this.errorEl.textContent = message;
-    this.errorEl.hidden = false;
-  }
-}
-
-class ClerkFlowComponent extends HTMLComponent {
-  static LOADING_LABEL = 'Caricamento...';
-  static MISSING_EMAIL_MESSAGE = 'Inserisci un indirizzo email valido.';
-  static MISSING_CODE_MESSAGE = 'Inserisci il codice ricevuto via email.';
+  ClerkUtils,
+  ClerkErrorHandler,
+  ClerkLoginApi,
+  ClerkSignUpApi,
+} from '@theme/clerk-auth-provider';
+
+class ClerkProvider extends HTMLComponent {
   static RESEND_DISABLE_MS = 3000;
 
   constructor() {
     super();
     this.clerk = null;
-    this.provider = null;
+    this.api = null;
     this.email = '';
     this.isRedirecting = false;
     this.resendTimer = null;
     this.buttonLabels = new WeakMap();
+    this.errors = null;
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.cacheElements();
+    this.errors = new ClerkErrorHandler(this.refs.error);
     this.bootstrap();
   }
 
@@ -523,39 +33,160 @@ class ClerkFlowComponent extends HTMLComponent {
     super.disconnectedCallback();
   }
 
-  async getClerk() {
-    if (this.clerk?.client) return this.clerk;
-
-    this.clerk = await ClerkAuthRuntime.getClerk(
-      ClerkAuthRuntime.getPublishableKey(this),
-    );
-    return this.clerk;
+  buildApi() {
+    return null;
   }
 
-  getConfig() {
-    return ClerkAuthRuntime.getShopifyConfig(this);
+  collectStartPayload() {
+    return null;
   }
 
-  async activateSession(attempt) {
-    await ClerkAuthRuntime.activateSession(
+  get forms() {
+    return [this.refs.startForm, this.refs.verifyForm].filter(Boolean);
+  }
+
+  async bootstrap() {
+    try {
+      this.clerk = await ClerkUtils.getClerk(ClerkUtils.getPublishableKey(this));
+      this.api = this.buildApi();
+      this.showStartForm();
+    } catch (error) {
+      this.errors.show(error);
+    }
+  }
+
+  async onSubmit(event) {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || !this.contains(form)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.errors.clear();
+
+    if (form === this.refs.startForm) {
+      await this.startEmailCode(form);
+      return;
+    }
+
+    if (form === this.refs.verifyForm) {
+      await this.verifyEmailCode(form);
+      return;
+    }
+
+    form === this.refs.completeForm && (await this.handleComplete(form));
+  }
+
+  async startEmailCode(form) {
+    const payload = this.collectStartPayload(form);
+    if (!payload) return;
+
+    try {
+      this.setLoading(true, form);
+      this.email =
+        typeof payload === 'string'
+          ? payload
+          : payload.emailAddress || payload.email || '';
+      const attempt = await this.api.startEmailCode(payload);
+      await this.afterStartEmailCode(attempt);
+    } catch (error) {
+      this.errors.show(error);
+    } finally {
+      !this.isRedirecting && this.setLoading(false, form);
+    }
+  }
+
+  async afterStartEmailCode() {
+    this.showVerifyForm();
+  }
+
+  async verifyEmailCode(form) {
+    const code = String(new FormData(form).get('code') || '').trim();
+    if (!code) {
+      this.errors.show(ClerkUtils.t('errors.missing_code'));
+      return;
+    }
+
+    try {
+      this.setLoading(true, form);
+      const attempt = await this.api.verifyEmailCode(code);
+      await this.afterVerifyEmailCode(attempt, form);
+    } catch (error) {
+      this.errors.show(error);
+    } finally {
+      !this.isRedirecting && this.setLoading(false, form);
+    }
+  }
+
+  async afterVerifyEmailCode(attempt) {
+    if (attempt.status === 'complete') {
+      await this.finishWithShopify(attempt);
+      return;
+    }
+
+    throw new Error(ClerkUtils.t('errors.incomplete'));
+  }
+
+  async handleComplete() {}
+
+  async finishWithShopify(attempt) {
+    const sessionId = ClerkUtils.getSessionId(attempt);
+    await ClerkUtils.bridgeToShopify(
       this.clerk,
-      attempt,
       this.email,
-      this.getConfig(),
+      ClerkUtils.getShopifyConfig(this),
+      sessionId,
     );
     this.isRedirecting = true;
   }
 
-  clearError() {
-    if (!this.errorEl) return;
-    this.errorEl.textContent = '';
-    this.errorEl.hidden = true;
+  async onResendClick() {
+    this.errors.clear();
+
+    try {
+      this.setButtonLoading(this.refs.resendButton, true);
+      this.refs.resendButton && (this.refs.resendButton.disabled = true);
+      await this.api.resendEmailCode();
+
+      this.resendTimer && clearTimeout(this.resendTimer);
+      this.resendTimer = setTimeout(() => {
+        if (!this.refs.resendButton || this.isRedirecting) return;
+        this.refs.resendButton.disabled = false;
+        this.setButtonLoading(this.refs.resendButton, false);
+      }, ClerkProvider.RESEND_DISABLE_MS);
+    } catch (error) {
+      this.errors.show(error);
+      if (this.refs.resendButton && !this.isRedirecting) {
+        this.refs.resendButton.disabled = false;
+        this.setButtonLoading(this.refs.resendButton, false);
+      }
+    }
   }
 
-  showError(message) {
-    if (!this.errorEl || this.isRedirecting) return;
-    this.errorEl.textContent = message;
-    this.errorEl.hidden = false;
+  onBack() {
+    this.api?.reset();
+    this.email = '';
+    this.refs.startForm?.reset();
+    this.refs.verifyForm?.reset();
+    this.refs.completeForm?.reset();
+    this.showStartForm();
+  }
+
+  showStartForm() {
+    this.showForm(this.refs.startForm);
+  }
+
+  showVerifyForm() {
+    this.showForm(this.refs.verifyForm);
+  }
+
+  showCompleteForm() {
+    this.showForm(this.refs.completeForm);
+  }
+
+  showForm(form) {
+    for (const currentForm of this.forms) {
+      currentForm.hidden = currentForm !== form;
+    }
   }
 
   setLoading(isLoading, form = null) {
@@ -569,31 +200,10 @@ class ClerkFlowComponent extends HTMLComponent {
       submit && this.setButtonLoading(submit, isLoading);
       submit && (submit.disabled = isLoading);
 
-      for (const input of currentForm.querySelectorAll('input, button')) {
-        input !== this.resendButton && (input.disabled = isLoading);
-      }
-    }
-  }
-
-  async onResendClick() {
-    this.clearError();
-
-    try {
-      this.setButtonLoading(this.resendButton, true);
-      this.resendButton && (this.resendButton.disabled = true);
-      await this.provider.resend();
-
-      this.resendTimer && clearTimeout(this.resendTimer);
-      this.resendTimer = setTimeout(() => {
-        if (!this.resendButton || this.isRedirecting) return;
-        this.resendButton.disabled = false;
-        this.setButtonLoading(this.resendButton, false);
-      }, ClerkFlowComponent.RESEND_DISABLE_MS);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-      if (this.resendButton && !this.isRedirecting) {
-        this.resendButton.disabled = false;
-        this.setButtonLoading(this.resendButton, false);
+      for (const input of currentForm.querySelectorAll(
+        'input, select, button',
+      )) {
+        input !== this.refs.resendButton && (input.disabled = isLoading);
       }
     }
   }
@@ -604,239 +214,149 @@ class ClerkFlowComponent extends HTMLComponent {
     !this.buttonLabels.has(button) &&
       this.buttonLabels.set(button, button.textContent);
     button.textContent = isLoading
-      ? ClerkFlowComponent.LOADING_LABEL
+      ? ClerkUtils.t('errors.loading')
       : this.buttonLabels.get(button);
   }
-
-  showForm(form) {
-    for (const currentForm of this.forms) {
-      currentForm.hidden = currentForm !== form;
-    }
-  }
 }
 
-class ClerkSignIn extends ClerkFlowComponent {
-  static INCOMPLETE_STATUS_MESSAGE =
-    'Autenticazione incompleta. Completa i passaggi richiesti e riprova.';
-
-  async bootstrap() {
-    try {
-      this.clerk = await this.getClerk();
-      this.provider = new ClerkSignInProvider(this.clerk);
-      this.showForm(this.startForm);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    }
+class ClerkLogin extends ClerkProvider {
+  buildApi() {
+    return new ClerkLoginApi(this.clerk);
   }
 
-  cacheElements() {
-    this.startForm = this.refs.startForm;
-    this.verifyForm = this.refs.verifyForm;
-    this.forms = [this.startForm, this.verifyForm];
-    this.errorEl = this.refs.error;
-    this.resendButton = this.refs.resendButton;
-  }
-
-  async onSubmit(event) {
-    const form = event.target;
-    if (!(form instanceof HTMLFormElement) || !this.contains(form)) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    this.clearError();
-
-    if (form === this.startForm) {
-      await this.handleStart(form);
-      return;
-    }
-
-    await this.handleVerify(form);
-  }
-
-  async handleStart(form) {
+  collectStartPayload(form) {
     const email = String(new FormData(form).get('email') || '').trim();
     if (!email) {
-      this.showError(ClerkFlowComponent.MISSING_EMAIL_MESSAGE);
+      this.errors.show(ClerkUtils.t('errors.missing_email'));
+      return null;
+    }
+
+    return email;
+  }
+
+  async afterVerifyEmailCode(attempt, form) {
+    if (attempt.status === 'complete') {
+      await this.finishWithShopify(attempt);
       return;
     }
 
-    try {
-      this.setLoading(true, form);
-      this.email = email;
-      await this.provider.start(email);
-      this.showForm(this.verifyForm);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    } finally {
-      !this.isRedirecting && this.setLoading(false, form);
-    }
-  }
-
-  async handleVerify(form) {
-    const code = String(new FormData(form).get('code') || '').trim();
-    if (!code) {
-      this.showError(ClerkFlowComponent.MISSING_CODE_MESSAGE);
+    if (
+      attempt.status === 'needs_second_factor' ||
+      attempt.status === 'needs_client_trust'
+    ) {
+      form.reset();
       return;
     }
 
-    try {
-      this.setLoading(true, form);
-      const signIn = await this.provider.verify(code);
-      if (signIn.status === 'complete') {
-        await this.activateSession(signIn);
-        return;
-      }
-
-      if (
-        signIn.status === 'needs_second_factor' ||
-        signIn.status === 'needs_client_trust'
-      ) {
-        form.reset();
-        return;
-      }
-
-      throw new Error(ClerkSignIn.INCOMPLETE_STATUS_MESSAGE);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    } finally {
-      !this.isRedirecting && this.setLoading(false, form);
-    }
-  }
-
-  onBack() {
-    this.provider?.reset();
-    this.email = '';
-    this.startForm?.reset();
-    this.verifyForm?.reset();
-    this.showForm(this.startForm);
+    throw new Error(ClerkUtils.t('errors.incomplete'));
   }
 }
 
-class ClerkSignUp extends ClerkFlowComponent {
-  static INCOMPLETE_STATUS_MESSAGE =
-    'Autenticazione incompleta. Completa i passaggi richiesti e riprova.';
-  static MISSING_NAME_MESSAGE = 'Inserisci nome e cognome per registrarti.';
-  static REQUIREMENTS_MESSAGE =
-    'Completa i dati richiesti per terminare la registrazione.';
+class ClerkSignUp extends ClerkProvider {
+  static GENDERS = Object.freeze([
+    'male',
+    'female',
+    'other',
+    'prefer_not_to_say',
+  ]);
+  static PREFERRED_PMS = Object.freeze(['davide', 'valerio', 'simone']);
 
-  async bootstrap() {
-    try {
-      this.clerk = await this.getClerk();
-      this.provider = new ClerkSignUpProvider(this.clerk);
-      this.showForm(this.startForm);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    }
+  get forms() {
+    return [
+      this.refs.startForm,
+      this.refs.verifyForm,
+      this.refs.completeForm,
+    ].filter(Boolean);
   }
 
-  cacheElements() {
-    this.startForm = this.refs.startForm;
-    this.verifyForm = this.refs.verifyForm;
-    this.completeForm = this.refs.completeForm;
-    this.forms = [this.startForm, this.verifyForm, this.completeForm];
-    this.errorEl = this.refs.error;
-    this.resendButton = this.refs.resendButton;
+  buildApi() {
+    return new ClerkSignUpApi(this.clerk);
   }
 
-  async onSubmit(event) {
-    const form = event.target;
-    if (!(form instanceof HTMLFormElement) || !this.contains(form)) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    this.clearError();
-
-    if (form === this.startForm) {
-      await this.handleStart(form);
-      return;
-    }
-
-    if (form === this.verifyForm) {
-      await this.handleVerify(form);
-      return;
-    }
-
-    await this.handleComplete(form);
-  }
-
-  async handleStart(form) {
+  collectStartPayload(form) {
     const formData = new FormData(form);
     const firstName = String(formData.get('firstName') || '').trim();
     const lastName = String(formData.get('lastName') || '').trim();
     const emailAddress = String(formData.get('email') || '').trim();
+    const gender = String(formData.get('gender') || '').trim();
+    const preferredPm = String(formData.get('preferredPm') || '').trim();
+    const privacyAccepted = formData.get('privacy') === '1';
+
     if (!firstName || !lastName) {
-      this.showError(ClerkSignUp.MISSING_NAME_MESSAGE);
-      return;
+      this.errors.show(ClerkUtils.t('errors.missing_name'));
+      return null;
     }
+
     if (!emailAddress) {
-      this.showError(ClerkFlowComponent.MISSING_EMAIL_MESSAGE);
-      return;
+      this.errors.show(ClerkUtils.t('errors.missing_email'));
+      return null;
     }
 
-    try {
-      this.setLoading(true, form);
-      this.email = emailAddress;
-      const signUp = await this.provider.start({
-        firstName,
-        lastName,
-        emailAddress,
-      });
-
-      if (signUp.status === 'complete') {
-        await this.activateSession(signUp);
-        return;
-      }
-
-      if (signUp.unverifiedFields?.includes('email_address')) {
-        this.showForm(this.verifyForm);
-        return;
-      }
-
-      if (signUp.status === 'missing_requirements') {
-        this.showForm(this.completeForm);
-        return;
-      }
-
-      throw new Error(ClerkSignUp.INCOMPLETE_STATUS_MESSAGE);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    } finally {
-      !this.isRedirecting && this.setLoading(false, form);
+    if (!ClerkSignUp.GENDERS.includes(gender)) {
+      this.errors.show(ClerkUtils.t('errors.missing_gender'));
+      return null;
     }
+
+    if (!ClerkSignUp.PREFERRED_PMS.includes(preferredPm)) {
+      this.errors.show(ClerkUtils.t('errors.missing_preferred_pm'));
+      return null;
+    }
+
+    if (!privacyAccepted) {
+      this.errors.show(ClerkUtils.t('errors.missing_privacy'));
+      return null;
+    }
+
+    return {
+      firstName,
+      lastName,
+      emailAddress,
+      unsafeMetadata: {
+        gender,
+        preferredPm,
+        privacyAccepted: true,
+        privacyAcceptedAt: new Date().toISOString(),
+      },
+    };
   }
 
-  async handleVerify(form) {
-    const code = String(new FormData(form).get('code') || '').trim();
-    if (!code) {
-      this.showError(ClerkFlowComponent.MISSING_CODE_MESSAGE);
+  async afterStartEmailCode(attempt) {
+    if (attempt.status === 'complete') {
+      await this.finishWithShopify(attempt);
       return;
     }
 
-    try {
-      this.setLoading(true, form);
-      const signUp = await this.provider.verify(code);
-      if (signUp.status === 'complete') {
-        await this.activateSession(signUp);
-        return;
-      }
-
-      if (signUp.status === 'missing_requirements') {
-        this.showForm(this.completeForm);
-        return;
-      }
-
-      throw new Error(ClerkSignUp.INCOMPLETE_STATUS_MESSAGE);
-    } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
-    } finally {
-      !this.isRedirecting && this.setLoading(false, form);
+    if (attempt.unverifiedFields?.includes('email_address')) {
+      this.showVerifyForm();
+      return;
     }
+
+    if (attempt.status === 'missing_requirements') {
+      this.showCompleteForm();
+      return;
+    }
+
+    throw new Error(ClerkUtils.t('errors.incomplete'));
+  }
+
+  async afterVerifyEmailCode(attempt) {
+    if (attempt.status === 'complete') {
+      await this.finishWithShopify(attempt);
+      return;
+    }
+
+    if (attempt.status === 'missing_requirements') {
+      this.showCompleteForm();
+      return;
+    }
+
+    throw new Error(ClerkUtils.t('errors.incomplete'));
   }
 
   async handleComplete(form) {
-    const signUp = this.provider.signUp;
+    const signUp = this.api.signUp;
     if (!signUp) {
-      this.showError(ClerkSignUp.REQUIREMENTS_MESSAGE);
+      this.errors.show(ClerkUtils.t('errors.requirements'));
       return;
     }
 
@@ -865,41 +385,199 @@ class ClerkSignUp extends ClerkFlowComponent {
     }
 
     if (!Object.keys(update).length) {
-      this.showError(ClerkSignUp.REQUIREMENTS_MESSAGE);
+      this.errors.show(ClerkUtils.t('errors.requirements'));
       return;
     }
 
     try {
       this.setLoading(true, form);
-      const updatedSignUp = await this.provider.update(update);
+      const updatedSignUp = await this.api.update(update);
       if (updatedSignUp.status === 'complete') {
-        await this.activateSession(updatedSignUp);
+        await this.finishWithShopify(updatedSignUp);
         return;
       }
 
-      this.showError(ClerkSignUp.REQUIREMENTS_MESSAGE);
+      this.errors.show(ClerkUtils.t('errors.requirements'));
     } catch (error) {
-      this.showError(ClerkAuthRuntime.getErrorMessage(error));
+      this.errors.show(error);
     } finally {
       !this.isRedirecting && this.setLoading(false, form);
     }
   }
 
   async continueOAuth(signUp) {
-    this.clerk = await this.getClerk();
-    this.provider = this.provider || new ClerkSignUpProvider(this.clerk);
-    this.provider.setAttempt(signUp);
-    this.email = ClerkAuthRuntime.getUserEmail(this.clerk, signUp.emailAddress);
-    this.showForm(this.completeForm);
+    this.clerk =
+      this.clerk ||
+      (await ClerkUtils.getClerk(ClerkUtils.getPublishableKey(this)));
+    this.api = this.api || new ClerkSignUpApi(this.clerk);
+    this.api.setAttempt(signUp);
+    this.email = ClerkUtils.getUserEmail(this.clerk, signUp.emailAddress);
+    this.showCompleteForm();
+  }
+}
+
+class ClerkAuth extends HTMLComponent {
+  static VIEW_LOGIN = 'login';
+  static VIEW_SIGN_UP = 'sign-up';
+
+  constructor() {
+    super();
+    this.clerk = null;
+    this.isRedirecting = false;
+    this.errors = null;
   }
 
-  onBack() {
-    this.provider?.reset();
-    this.email = '';
-    this.startForm?.reset();
-    this.verifyForm?.reset();
-    this.completeForm?.reset();
-    this.showForm(this.startForm);
+  connectedCallback() {
+    super.connectedCallback();
+    this.errors = new ClerkErrorHandler(this.refs.rootError);
+    !this.dataset.view && (this.dataset.view = ClerkAuth.VIEW_LOGIN);
+    this.bootstrap();
+  }
+
+  async bootstrap() {
+    try {
+      this.clerk = await ClerkUtils.getClerk(ClerkUtils.getPublishableKey(this));
+      this.syncOAuthButtons();
+
+      ClerkUtils.hasOAuthReturnParams() && (await this.finishOAuthReturn());
+    } catch (error) {
+      this.errors.show(error);
+    }
+  }
+
+  syncOAuthButtons() {
+    const panel = this.refs.oauthPanel;
+    if (!panel) return;
+
+    const enabled = ClerkUtils.getEnabledOAuthStrategies(this.clerk);
+    const parts = [];
+
+    for (const strategy of enabled) {
+      parts.push(
+        `<button type="button" class="clerk-auth__oauth-btn" data-oauth="${HtmlUtils.escape(strategy)}" ref="oauthButtons[]" on:click="onOAuthClick">${HtmlUtils.escape(ClerkUtils.getOAuthLabel(strategy))}</button>`,
+      );
+    }
+
+    panel.innerHTML = parts.join('');
+    this.updateRefs();
+
+    const hasOAuth = enabled.length > 0;
+    panel.hidden = !hasOAuth;
+    this.refs.oauthDivider && (this.refs.oauthDivider.hidden = !hasOAuth);
+  }
+
+  onViewClick(event, button) {
+    const view = button?.dataset.view;
+    if (!view) return;
+
+    this.dataset.view = view;
+
+    for (const tab of this.refs.viewTabs || []) {
+      tab.setAttribute(
+        'aria-pressed',
+        tab.dataset.view === view ? 'true' : 'false',
+      );
+    }
+  }
+
+  getAuthPageUrl() {
+    return (
+      window.location.origin +
+      (ClerkUtils.getDatasetValue(this, 'authPath') || ClerkUtils.AUTH_PATH)
+    );
+  }
+
+  async onOAuthClick(event, button) {
+    if (this.isRedirecting || !button?.dataset.oauth) return;
+
+    const popup = ClerkUtils.openOAuthPopup();
+    if (!popup) {
+      this.errors.show(ClerkUtils.t('errors.popup_blocked'));
+      return;
+    }
+
+    try {
+      this.setOAuthLoading(true);
+      this.errors.clear();
+      this.clerk =
+        this.clerk ||
+        (await ClerkUtils.getClerk(ClerkUtils.getPublishableKey(this)));
+
+      const result = await ClerkUtils.authenticateOAuth(
+        this.clerk,
+        button.dataset.oauth,
+        this.getAuthPageUrl(),
+        popup,
+      );
+
+      await this.finishOAuthResult(result);
+    } catch (error) {
+      !popup.closed && popup.close();
+      this.setOAuthLoading(false);
+      this.errors.show(error);
+    }
+  }
+
+  async finishOAuthResult(result) {
+    if (result?.type === ClerkUtils.OAUTH_RESULT_SESSION) {
+      await ClerkUtils.bridgeToShopify(
+        this.clerk,
+        ClerkUtils.getUserEmail(this.clerk),
+        ClerkUtils.getShopifyConfig(this),
+        result.session?.id,
+      );
+      this.isRedirecting = true;
+      return;
+    }
+
+    await this.finishOAuthReturn(result?.reloadResource);
+  }
+
+  async finishOAuthReturn(reloadResource = '') {
+    const authPageUrl = this.getAuthPageUrl();
+    const intent =
+      reloadResource || ClerkUtils.getOAuthReloadResource() || undefined;
+    const restoreNavigate = ClerkUtils.suppressAuthPageNavigate(
+      this.clerk,
+      authPageUrl,
+    );
+
+    try {
+      await this.clerk.handleRedirectCallback(
+        ClerkUtils.buildOAuthCallbackParams(authPageUrl, intent),
+        ClerkUtils.noopNavigate,
+      );
+
+      ClerkUtils.clearOAuthReturnParams();
+
+      if (!this.clerk.session) {
+        const signUp = this.clerk.client.signUp;
+        const signUpElement = this.querySelector('clerk-sign-up');
+        if (signUp?.status === 'missing_requirements' && signUpElement) {
+          this.dataset.view = ClerkAuth.VIEW_SIGN_UP;
+          this.setOAuthLoading(false);
+          await signUpElement.continueOAuth(signUp);
+          return;
+        }
+
+        throw new Error(ClerkUtils.t('errors.default'));
+      }
+
+      await ClerkUtils.bridgeToShopify(
+        this.clerk,
+        ClerkUtils.getUserEmail(this.clerk),
+        ClerkUtils.getShopifyConfig(this),
+      );
+      this.isRedirecting = true;
+    } finally {
+      restoreNavigate();
+    }
+  }
+
+  setOAuthLoading(isLoading) {
+    for (const button of this.refs.oauthButtons || []) {
+      button.disabled = isLoading;
+    }
   }
 }
 
@@ -907,8 +585,8 @@ if (!customElements.get('clerk-auth')) {
   customElements.define('clerk-auth', ClerkAuth);
 }
 
-if (!customElements.get('clerk-sign-in')) {
-  customElements.define('clerk-sign-in', ClerkSignIn);
+if (!customElements.get('clerk-login')) {
+  customElements.define('clerk-login', ClerkLogin);
 }
 
 if (!customElements.get('clerk-sign-up')) {

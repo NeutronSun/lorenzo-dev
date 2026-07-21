@@ -14,7 +14,35 @@
     },
     translations: {
       cart_checkout: {{ 'cart.checkout' | t | json }},
-      cart_remove: {{ 'cart.remove' | t | json }}
+      cart_remove: {{ 'cart.remove' | t | json }},
+      clerk: {
+        oauth: {
+          continue_with: {{ 'clerk.oauth.continue_with' | t | json }}
+        },
+        errors: {
+          default: {{ 'clerk.errors.default' | t | json }},
+          missing_key: {{ 'clerk.errors.missing_key' | t | json }},
+          load_failed: {{ 'clerk.errors.load_failed' | t | json }},
+          missing_email: {{ 'clerk.errors.missing_email' | t | json }},
+          missing_code: {{ 'clerk.errors.missing_code' | t | json }},
+          missing_name: {{ 'clerk.errors.missing_name' | t | json }},
+          missing_gender: {{ 'clerk.errors.missing_gender' | t | json }},
+          missing_preferred_pm: {{ 'clerk.errors.missing_preferred_pm' | t | json }},
+          incomplete: {{ 'clerk.errors.incomplete' | t | json }},
+          missing_privacy: {{ 'clerk.errors.missing_privacy' | t | json }},
+          session_not_ready: {{ 'clerk.errors.session_not_ready' | t | json }},
+          session_not_persisted: {{ 'clerk.errors.session_not_persisted' | t | json }},
+          missing_login_hint: {{ 'clerk.errors.missing_login_hint' | t | json }},
+          email_code_disabled: {{ 'clerk.errors.email_code_disabled' | t | json }},
+          second_factor_unsupported: {{ 'clerk.errors.second_factor_unsupported' | t | json }},
+          requirements: {{ 'clerk.errors.requirements' | t | json }},
+          loading: {{ 'clerk.errors.loading' | t | json }},
+          login_not_initialized: {{ 'clerk.errors.login_not_initialized' | t | json }},
+          sign_up_not_initialized: {{ 'clerk.errors.sign_up_not_initialized' | t | json }},
+          popup_blocked: {{ 'clerk.errors.popup_blocked' | t | json }},
+          popup_closed: {{ 'clerk.errors.popup_closed' | t | json }}
+        }
+      }
     }
   };
 

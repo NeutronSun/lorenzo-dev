@@ -2,10 +2,9 @@
   assign auth_path = request.path
 -%}
 
-email: {{ customer.email }}
-{{ customer.id }}
 <clerk-auth
   class="clerk-auth-section"
+  data-view="login"
   data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
   data-return-to="{{ '/account' | url_encode }}"
   data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
@@ -14,47 +13,44 @@ email: {{ customer.email }}
   <div class="clerk-auth">
     <div id="clerk-captcha"></div>
 
-    <div class="clerk-auth__oauth" ref="oauthPanel">
+    <div class="clerk-auth__switcher" role="tablist">
       <button
         type="button"
-        class="clerk-auth__oauth-btn"
-        data-oauth="oauth_google"
-        ref="oauthButtons[]"
-        on:click="onOAuthClick"
+        class="clerk-auth__tab"
+        data-view="login"
+        ref="viewTabs[]"
+        aria-pressed="true"
+        on:click="onViewClick"
       >
-        Continua con Google
+        {{ 'clerk.tabs.login' | t }}
       </button>
       <button
         type="button"
-        class="clerk-auth__oauth-btn"
-        data-oauth="oauth_github"
-        ref="oauthButtons[]"
-        on:click="onOAuthClick"
+        class="clerk-auth__tab"
+        data-view="sign-up"
+        ref="viewTabs[]"
+        aria-pressed="false"
+        on:click="onViewClick"
       >
-        Continua con GitHub
-      </button>
-      <button
-        type="button"
-        class="clerk-auth__oauth-btn"
-        data-oauth="oauth_discord"
-        ref="oauthButtons[]"
-        on:click="onOAuthClick"
-      >
-        Continua con Discord
+        {{ 'clerk.tabs.sign_up' | t }}
       </button>
     </div>
 
-    <p class="clerk-auth__error" ref="rootError" hidden></p>
-    <p class="clerk-auth__divider">oppure scegli un flusso</p>
+    <div class="clerk-auth__oauth" ref="oauthPanel" hidden></div>
 
-    <clerk-sign-in
+    <p class="clerk-auth__error" ref="rootError" hidden></p>
+    <p class="clerk-auth__divider" ref="oauthDivider" hidden>
+      {{ 'clerk.oauth.divider' | t }}
+    </p>
+
+    <clerk-login
       class="clerk-auth__flow"
       data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
       data-return-to="{{ routes.account_url | escape }}"
       data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
     >
       <section class="clerk-auth__card">
-        <h2>Accedi</h2>
+        <h2>{{ 'clerk.login.title' | t }}</h2>
         <p class="clerk-auth__error" ref="error" hidden></p>
 
         <form
@@ -65,12 +61,12 @@ email: {{ customer.email }}
           novalidate
         >
           <label class="clerk-auth__field">
-            <span>Email</span>
+            <span>{{ 'clerk.fields.email' | t }}</span>
             <input type="email" name="email" autocomplete="email" required>
           </label>
 
           <button type="submit" class="clerk-auth__submit" data-submit>
-            Invia codice per accedere
+            {{ 'clerk.login.submit_start' | t }}
           </button>
         </form>
 
@@ -82,10 +78,10 @@ email: {{ customer.email }}
           hidden
           novalidate
         >
-          <p class="clerk-auth__hint">Inserisci il codice ricevuto via email.</p>
+          <p class="clerk-auth__hint">{{ 'clerk.login.hint_verify' | t }}</p>
 
           <label class="clerk-auth__field">
-            <span>Codice di verifica</span>
+            <span>{{ 'clerk.fields.code' | t }}</span>
             <input
               type="text"
               name="code"
@@ -96,7 +92,7 @@ email: {{ customer.email }}
           </label>
 
           <button type="submit" class="clerk-auth__submit" data-submit>
-            Verifica accesso
+            {{ 'clerk.login.submit_verify' | t }}
           </button>
 
           <button
@@ -105,15 +101,15 @@ email: {{ customer.email }}
             ref="resendButton"
             on:click="onResendClick"
           >
-            Invia nuovamente il codice
+            {{ 'clerk.resend' | t }}
           </button>
 
           <button type="button" class="clerk-auth__link" on:click="onBack">
-            Torna al login
+            {{ 'clerk.login.back' | t }}
           </button>
         </form>
       </section>
-    </clerk-sign-in>
+    </clerk-login>
 
     <clerk-sign-up
       class="clerk-auth__flow"
@@ -122,7 +118,7 @@ email: {{ customer.email }}
       data-shopify-login-path="{{ routes.storefront_login_url | escape }}"
     >
       <section class="clerk-auth__card">
-        <h2>Registrati</h2>
+        <h2>{{ 'clerk.sign_up.title' | t }}</h2>
         <p class="clerk-auth__error" ref="error" hidden></p>
 
         <form
@@ -133,22 +129,57 @@ email: {{ customer.email }}
           novalidate
         >
           <label class="clerk-auth__field">
-            <span>Nome</span>
+            <span>{{ 'clerk.fields.first_name' | t }}</span>
             <input type="text" name="firstName" autocomplete="given-name" required>
           </label>
 
           <label class="clerk-auth__field">
-            <span>Cognome</span>
+            <span>{{ 'clerk.fields.last_name' | t }}</span>
             <input type="text" name="lastName" autocomplete="family-name" required>
           </label>
 
           <label class="clerk-auth__field">
-            <span>Email</span>
+            <span>{{ 'clerk.fields.email' | t }}</span>
             <input type="email" name="email" autocomplete="email" required>
           </label>
 
+          <label class="clerk-auth__field">
+            <span>{{ 'clerk.fields.gender' | t }}</span>
+            <select name="gender" required>
+              <option value="">{{ 'clerk.fields.gender_placeholder' | t }}</option>
+              <option value="male">{{ 'clerk.fields.gender_male' | t }}</option>
+              <option value="female">{{ 'clerk.fields.gender_female' | t }}</option>
+              <option value="other">{{ 'clerk.fields.gender_other' | t }}</option>
+              <option value="prefer_not_to_say">{{ 'clerk.fields.gender_prefer_not_to_say' | t }}</option>
+            </select>
+          </label>
+
+          <label class="clerk-auth__field">
+            <span>{{ 'clerk.fields.preferred_pm' | t }}</span>
+            <select name="preferredPm" required>
+              <option value="">{{ 'clerk.fields.preferred_pm_placeholder' | t }}</option>
+              <option value="davide">{{ 'clerk.fields.preferred_pm_davide' | t }}</option>
+              <option value="valerio">{{ 'clerk.fields.preferred_pm_valerio' | t }}</option>
+              <option value="simone">{{ 'clerk.fields.preferred_pm_simone' | t }}</option>
+            </select>
+          </label>
+
+          <label class="clerk-auth__check">
+            <input type="checkbox" name="privacy" value="1" required>
+            <span>
+              {{ 'clerk.fields.privacy_agree' | t }}
+              <a
+                href="{{ section.settings.privacy_url | default: '/pages/privacy' | escape }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ 'clerk.fields.privacy_link' | t }}
+              </a>
+            </span>
+          </label>
+
           <button type="submit" class="clerk-auth__submit" data-submit>
-            Invia codice per registrarti
+            {{ 'clerk.sign_up.submit_start' | t }}
           </button>
         </form>
 
@@ -160,10 +191,10 @@ email: {{ customer.email }}
           hidden
           novalidate
         >
-          <p class="clerk-auth__hint">Inserisci il codice ricevuto via email.</p>
+          <p class="clerk-auth__hint">{{ 'clerk.sign_up.hint_verify' | t }}</p>
 
           <label class="clerk-auth__field">
-            <span>Codice di verifica</span>
+            <span>{{ 'clerk.fields.code' | t }}</span>
             <input
               type="text"
               name="code"
@@ -174,7 +205,7 @@ email: {{ customer.email }}
           </label>
 
           <button type="submit" class="clerk-auth__submit" data-submit>
-            Verifica registrazione
+            {{ 'clerk.sign_up.submit_verify' | t }}
           </button>
 
           <button
@@ -183,11 +214,11 @@ email: {{ customer.email }}
             ref="resendButton"
             on:click="onResendClick"
           >
-            Invia nuovamente il codice
+            {{ 'clerk.resend' | t }}
           </button>
 
           <button type="button" class="clerk-auth__link" on:click="onBack">
-            Torna alla registrazione
+            {{ 'clerk.sign_up.back' | t }}
           </button>
         </form>
 
@@ -199,24 +230,24 @@ email: {{ customer.email }}
           hidden
           novalidate
         >
-          <p class="clerk-auth__hint">Completa i dati richiesti per terminare la registrazione.</p>
+          <p class="clerk-auth__hint">{{ 'clerk.sign_up.hint_complete' | t }}</p>
 
           <label class="clerk-auth__field">
-            <span>Nome</span>
+            <span>{{ 'clerk.fields.first_name' | t }}</span>
             <input type="text" name="firstName" autocomplete="given-name">
           </label>
 
           <label class="clerk-auth__field">
-            <span>Cognome</span>
+            <span>{{ 'clerk.fields.last_name' | t }}</span>
             <input type="text" name="lastName" autocomplete="family-name">
           </label>
 
           <button type="submit" class="clerk-auth__submit" data-submit>
-            Completa registrazione
+            {{ 'clerk.sign_up.submit_complete' | t }}
           </button>
 
           <button type="button" class="clerk-auth__link" on:click="onBack">
-            Torna alla registrazione
+            {{ 'clerk.sign_up.back' | t }}
           </button>
         </form>
       </section>
@@ -225,121 +256,186 @@ email: {{ customer.email }}
 </clerk-auth>
 
 {% stylesheet %}
-  .clerk-auth-section {
+  clerk-auth {
     display: block;
     width: 100%;
     padding: 2rem 1rem;
-  }
 
-  .clerk-auth {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    max-width: 500px;
-    margin-inline: auto;
-  }
+    &[data-view='login'] clerk-sign-up {
+      display: none;
+    }
 
-  .clerk-auth__oauth,
-  .clerk-auth__form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-  }
+    &[data-view='sign-up'] clerk-login {
+      display: none;
+    }
 
-  .clerk-auth__flow,
-  .clerk-auth__card {
-    display: block;
-  }
+    .clerk-auth {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 500px;
+      margin-inline: auto;
+    }
 
-  .clerk-auth__card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
-  }
+    .clerk-auth__switcher {
+      display: flex;
+      gap: 0.5rem;
+    }
 
-  .clerk-auth__card h2 {
-    margin: 0;
-  }
+    .clerk-auth__tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #111;
+      font: inherit;
+      cursor: pointer;
+      text-align: center;
 
-  .clerk-auth__oauth-btn,
-  .clerk-auth__submit,
-  .clerk-auth__secondary {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border: 1px solid #111;
-    background: #111;
-    color: #fff;
-    font: inherit;
-    cursor: pointer;
-    text-align: center;
-  }
+      &[aria-pressed='true'] {
+        border-color: #111;
+        background: #111;
+        color: #fff;
+      }
+    }
 
-  .clerk-auth__oauth-btn,
-  .clerk-auth__secondary {
-    border-color: #ccc;
-    background: #fff;
-    color: #111;
-  }
+    .clerk-auth__oauth,
+    .clerk-auth__form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
 
-  .clerk-auth__divider,
-  .clerk-auth__hint,
-  .clerk-auth__error {
-    margin: 0;
-  }
+    .clerk-auth__flow,
+    .clerk-auth__card {
+      display: block;
+    }
 
-  .clerk-auth__divider,
-  .clerk-auth__hint {
-    color: #666;
-    font-size: 0.875rem;
-  }
+    .clerk-auth__card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
 
-  .clerk-auth__field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
+      h2 {
+        margin: 0;
+      }
+    }
 
-  .clerk-auth__field input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    font: inherit;
-  }
+    .clerk-auth__oauth-btn,
+    .clerk-auth__submit,
+    .clerk-auth__secondary {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+      text-align: center;
+    }
 
-  .clerk-auth__submit:disabled,
-  .clerk-auth__secondary:disabled,
-  .clerk-auth__oauth-btn:disabled,
-  .clerk-auth__link:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+    .clerk-auth__oauth-btn,
+    .clerk-auth__secondary {
+      border-color: #ccc;
+      background: #fff;
+      color: #111;
+    }
 
-  .clerk-auth__link {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: #111;
-    text-decoration: underline;
-    font: inherit;
-    cursor: pointer;
-    text-align: left;
-  }
+    .clerk-auth__divider,
+    .clerk-auth__hint,
+    .clerk-auth__error {
+      margin: 0;
+    }
 
-  .clerk-auth__error {
-    padding: 0.75rem;
-    border: 1px solid #c00;
-    background: #fff5f5;
-    color: #c00;
-  }
+    .clerk-auth__divider,
+    .clerk-auth__hint {
+      color: #666;
+      font-size: 0.875rem;
+    }
 
-  .clerk-auth__error[hidden],
-  .clerk-auth__form[hidden] {
-    display: none;
+    .clerk-auth__field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        font: inherit;
+      }
+    }
+
+    .clerk-auth__check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+
+      input {
+        margin-block-start: 0.2rem;
+      }
+
+      a {
+        color: inherit;
+      }
+    }
+
+    .clerk-auth__submit:disabled,
+    .clerk-auth__secondary:disabled,
+    .clerk-auth__oauth-btn:disabled,
+    .clerk-auth__link:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .clerk-auth__link {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #111;
+      text-decoration: underline;
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .clerk-auth__error {
+      padding: 0.75rem;
+      border: 1px solid #c00;
+      background: #fff5f5;
+      color: #c00;
+    }
+
+    .clerk-auth__error[hidden],
+    .clerk-auth__form[hidden],
+    .clerk-auth__oauth[hidden],
+    .clerk-auth__divider[hidden],
+    .clerk-auth__oauth-btn[hidden] {
+      display: none;
+    }
   }
 {% endstylesheet %}
+
+{%- if section.settings.clerk_publishable_key != blank -%}
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-ui
+    src="https://clerk.safjnest.com/npm/@clerk/ui@1/dist/ui.browser.js"
+  ></script>
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-js
+    data-clerk-publishable-key="{{ section.settings.clerk_publishable_key | escape }}"
+    src="https://clerk.safjnest.com/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+  ></script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -352,6 +448,13 @@ email: {{ customer.email }}
       "id": "clerk_publishable_key",
       "label": "Clerk publishable key",
       "info": "Use the Clerk Publishable Key only. Never paste the Secret Key."
+    },
+    {
+      "type": "text",
+      "id": "privacy_url",
+      "label": "Privacy policy URL",
+      "info": "Linked from the required privacy checkbox on sign-up.",
+      "default": "/pages/privacy"
     }
   ],
   "presets": [
