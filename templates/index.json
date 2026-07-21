@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "schema_org_HQcyLR": {
       "type": "schema-org",
@@ -23,7 +23,11 @@
             "country": "it",
             "phone": "3298236955",
             "lat": "44.4",
-            "lng": "50.2"
+            "lng": "50.2",
+            "price_range": "€€",
+            "payment_accepted": "Cash, Credit Card, PayPal",
+            "currencies_accepted": "EUR",
+            "area_served": "IT"
           },
           "blocks": {
             "schema_opening_hours_3inRGh": {
@@ -32,7 +36,9 @@
               "settings": {
                 "day": "Sunday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -42,7 +48,9 @@
               "settings": {
                 "day": "Saturday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -52,7 +60,9 @@
               "settings": {
                 "day": "Friday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -62,7 +72,9 @@
               "settings": {
                 "day": "Thursday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -72,7 +84,9 @@
               "settings": {
                 "day": "Wednesday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -82,7 +96,9 @@
               "settings": {
                 "day": "Tuesday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             },
@@ -92,7 +108,9 @@
               "settings": {
                 "day": "Monday",
                 "opens": "09:00",
-                "closes": "18:00"
+                "closes": "18:00",
+                "valid_from": "",
+                "valid_through": ""
               },
               "blocks": {}
             }
@@ -113,6 +131,7 @@
       ],
       "name": "Organization Schema",
       "settings": {
+        "debug": false,
         "org_name": "lorenzo dev store",
         "org_logo": "shopify://shop_images/ChatGPT_Image_3_giu_2026_11_42_03.png",
         "org_email": "lorenzo.sanseverino@cooder.it",
@@ -120,7 +139,18 @@
         "org_description": "the best shopify theme",
         "instagram": "shopify://collections/common",
         "facebook": "shopify://blogs/news",
-        "tiktok": "shopify://blogs/news"
+        "tiktok": "shopify://blogs/news",
+        "youtube": "",
+        "x": "",
+        "linkedin": ""
+      }
+    },
+    "clerk_auth_jmJL3U": {
+      "type": "clerk-auth",
+      "name": "Clerk Auth",
+      "settings": {
+        "clerk_publishable_key": "pk_live_Y2xlcmsuc2Fmam5lc3QuY29tJA",
+        "privacy_url": "/pages/privacy"
       }
     },
     "main": {
@@ -350,6 +380,7 @@
   },
   "order": [
     "schema_org_HQcyLR",
+    "clerk_auth_jmJL3U",
     "main",
     "css_features"
   ]
