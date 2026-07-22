@@ -316,6 +316,11 @@ class ClerkSignUp extends ClerkProvider {
         preferredPm,
         privacyAccepted: true,
         privacyAcceptedAt: new Date().toISOString(),
+        userMetadata: ClerkUtils.buildUserMetadataTags({
+          gender,
+          preferredPm,
+          privacyAccepted: true,
+        }),
       },
     };
   }

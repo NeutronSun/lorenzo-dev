@@ -11,6 +11,9 @@ export class ClerkUtils {
   static OAUTH_RESULT_CALLBACK = 'callback';
   static OAUTH_STRATEGY_PREFIX = 'oauth_';
   static OAUTH_PROVIDER_TOKEN = '{{provider}}';
+  static TAG_GENDER_PREFIX = 'gender:';
+  static TAG_PM_PREFIX = 'pm:';
+  static TAG_PRIVACY = 'privacy:accepted';
   static OAUTH_RETURN_PARAMS = Object.freeze([
     '__clerk_status',
     '__clerk_created_session',
@@ -237,6 +240,49 @@ export class ClerkUtils {
       : template + ' ' + name;
   }
 
+  /**
+   * @param {{ gender?: string, preferredPm?: string, privacyAccepted?: boolean }} source
+   * @returns {string[]}
+   */
+  static buildUserMetadataTags(source = {}) {
+    const tags = [];
+
+    source.gender &&
+      tags.push(ClerkUtils.TAG_GENDER_PREFIX + source.gender);
+    source.preferredPm &&
+      tags.push(ClerkUtils.TAG_PM_PREFIX + source.preferredPm);
+    source.privacyAccepted && tags.push(ClerkUtils.TAG_PRIVACY);
+
+    return tags;
+  }
+
+  /**
+   * Writes userMetadata tags onto the Clerk user after creation.
+   * Uses unsafeMetadata (Frontend API). publicMetadata requires Backend API.
+   * @param {object} clerk
+   */
+  static async applyUserMetadata(clerk) {
+    const user = clerk?.user || clerk?.session?.user;
+    if (!user || typeof user.updateMetadata !== 'function') return;
+
+    const metadata = user.unsafeMetadata || {};
+    const tags = ClerkUtils.buildUserMetadataTags(metadata);
+    if (!tags.length) return;
+
+    const existing = metadata.userMetadata;
+    if (
+      Array.isArray(existing) &&
+      existing.length === tags.length &&
+      existing.every((tag, index) => tag === tags[index])
+    ) {
+      return;
+    }
+
+    await user.updateMetadata({
+      unsafeMetadata: { userMetadata: tags },
+    });
+  }
+
   static openOAuthPopup() {
     return window.open(
       'about:blank',
@@ -438,9 +484,10 @@ export class ClerkUtils {
     }
 
     await persistedSession.getToken?.();
+    await ClerkUtils.applyUserMetadata(clerk);
 
     const loginHint = ClerkUtils.getUserEmail(
-      { session: persistedSession, user: persistedSession.user },
+      { session: persistedSession, user: persistedSession.user || clerk.user },
       email,
     );
     if (!loginHint) {
